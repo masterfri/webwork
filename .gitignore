@@ -1,0 +1,4 @@
+assets/*
+uploads/*
+protected/runtime/*
+protected/config/main.php

@@ -1,0 +1,28 @@
+<?php
+
+return array(
+	'Assigned' => 'Назначена',
+	'Assignments' => 'Assignments',
+	'Comments' => 'Comments',
+	'Complexity' => 'Сложность',
+	'Created by' => 'Создал',
+	'Date Sheduled' => 'Дата начала',
+	'Description' => 'Описание',
+	'Due Date' => 'Срок сдачи',
+	'Estimate' => 'Оценка времени',
+	'Milestone' => 'Веха',
+	'Name' => 'Название',
+	'Phase' => 'Фаза',
+	'Priority' => 'Приоритет',
+	'Project' => 'Project',
+	'Risk of Regression' => 'Риск регрессии',
+	'Tags' => 'Тэги',
+	'Date Created' => 'Дата создания',
+	'Critical' => 'Критический',
+	'Urgent' => 'Срочный',
+	'High' => 'Высокий',
+	'Medium' => 'Средний',
+	'Low' => 'Низкий',
+	'On hold' => 'Приостановлено',
+	'None' => 'Нет',
+);
