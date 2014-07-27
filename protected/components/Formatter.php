@@ -36,4 +36,18 @@ class Formatter extends CFormatter
 		}
 		return is_array($value) ? implode(', ', $value) : $value;
 	}
+	
+	protected function normalizeDateValue($time)
+	{
+		if (is_string($time)) {
+			if (ctype_digit($time) || ($time{0}=='-' && ctype_digit(substr($time, 1)))) {
+				return (int) $time;
+			} elseif ('0000-00-00' != $time && '0000-00-00 00:00:00' != $time) {
+				return strtotime($time);
+			} else {
+				return 0;
+			}
+		}
+		return (int) $time;
+	}
 }
