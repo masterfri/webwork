@@ -30,7 +30,12 @@ class DatePicker extends CInputWidget
 			$value = $this->value;
 		}
 		
-		$fvalue = ('' == $value || '0000-00-00' == $value) ? '' : date($this->format, strtotime($value));
+		if ('0000-00-00' == $value || '' == $value) {
+			$value = '';
+			$fvalue = '';
+		} else {
+			$fvalue = date($this->format, strtotime($value));
+		}
 		
 		echo CHtml::openTag('div', array(
 			'class' => 'input-group',
