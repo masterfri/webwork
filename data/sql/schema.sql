@@ -201,6 +201,20 @@ CREATE TABLE `rate` (
 ) AUTO_INCREMENT=1 CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
+-- Table structure for Subscription model
+--
+CREATE TABLE `subscription` (
+	`id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+	`last_view_time` DATETIME DEFAULT NULL COMMENT "Last view time",
+	`task_id` INTEGER UNSIGNED DEFAULT NULL COMMENT "Task, many-to-one relation, foreign key refers to Task",
+	`user_id` INTEGER UNSIGNED DEFAULT NULL COMMENT "User, many-to-one relation, foreign key refers to User",
+	KEY `idx_last_view_time` (`last_view_time`),
+	KEY `idx_task_id` (`task_id`),
+	KEY `idx_user_id` (`user_id`),
+	PRIMARY KEY (`id`)
+) AUTO_INCREMENT=1 CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
 -- Table structure for Tag model
 --
 CREATE TABLE `tag` (
@@ -319,6 +333,8 @@ ALTER TABLE `payment` ADD CONSTRAINT `fk_task_id` FOREIGN KEY (`task_id`) REFERE
 ALTER TABLE `payment` ADD CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
 ALTER TABLE `project` ADD CONSTRAINT `fk_created_by_id` FOREIGN KEY (`created_by_id`) REFERENCES `user` (`id`);
 ALTER TABLE `rate` ADD CONSTRAINT `fk_created_by_id` FOREIGN KEY (`created_by_id`) REFERENCES `user` (`id`);
+ALTER TABLE `subscription` ADD CONSTRAINT `fk_task_id` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`);
+ALTER TABLE `subscription` ADD CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
 ALTER TABLE `tag` ADD CONSTRAINT `fk_created_by_id` FOREIGN KEY (`created_by_id`) REFERENCES `user` (`id`);
 ALTER TABLE `task` ADD CONSTRAINT `fk_assigned_id` FOREIGN KEY (`assigned_id`) REFERENCES `user` (`id`);
 ALTER TABLE `task` ADD CONSTRAINT `fk_created_by_id` FOREIGN KEY (`created_by_id`) REFERENCES `user` (`id`);

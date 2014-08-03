@@ -10,6 +10,16 @@ $this->breadcrumbs = array(
 
 $this->menu = array(
 	array(
+		'label' => '<i class="glyphicon glyphicon-eye-open"></i> ' . Yii::t('admin.crud', 'Watch'), 
+		'url' => array('watch', 'id' => $model->id),
+		'visible' => Yii::app()->user->checkAccess('view_task') && $model->user_subscription === null,
+	),
+	array(
+		'label' => '<i class="glyphicon glyphicon-eye-close"></i> ' . Yii::t('admin.crud', 'Unwatch'), 
+		'url' => array('unwatch', 'id' => $model->id),
+		'visible' => Yii::app()->user->checkAccess('view_task') && $model->user_subscription !== null,
+	),
+	array(
 		'label' => '<i class="glyphicon glyphicon-plus"></i> ' . Yii::t('admin.crud', 'Create Task'), 
 		'url' => array('create', 'project' => $model->project->id),
 		'visible' => Yii::app()->user->checkAccess('create_task'),
@@ -57,7 +67,10 @@ $this->menu = array(
 			),
 			'date_sheduled:date',
 			'due_date:date',
-			'phase',
+			array(
+				'name' => 'phase',
+				'value' => $model->getPhase(),
+			),
 			'assigned',
 			'time_created:datetime',
 			'created_by',

@@ -46,6 +46,11 @@ class Project extends CActiveRecord
 	{
 		return array(
 			'assignments' => array(self::HAS_MANY, 'Assignment', 'project_id'),
+			'user_assignment' => array(self::HAS_ONE, 'Assignment', 'project_id', 
+				'on' => 'user_assignment.user_id = :current_user_id',
+				'params' => array(
+					':current_user_id' => Yii::app()->user->id,
+				)),
 			'created_by' => array(self::BELONGS_TO, 'User', 'created_by_id'),
 			'milestones' => array(self::HAS_MANY, 'Milestone', 'project_id'),
 			'count_milestones' => array(self::STAT, 'Milestone', 'project_id'),
@@ -86,9 +91,11 @@ class Project extends CActiveRecord
 	{
 		return array(
 			'member' => array(
-				'join' => 'INNER JOIN {{assignment}} assignment ON assignment.project_id = project.id AND assignment.user_id = :current_user_id',
-				'params' => array(
-					':current_user_id' => Yii::app()->user->id,
+				'with' => array(
+					'user_assignment' => array(
+						'select' => false,
+						'joinType' => 'INNER JOIN',
+					)
 				),
 			),
 		);

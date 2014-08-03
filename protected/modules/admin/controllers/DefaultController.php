@@ -4,8 +4,33 @@ class DefaultController extends AdminController
 {
 	public function actionIndex()
 	{
+		$model = $this->createSearchModel('Task');
+		$provider = $model->search(array(
+			'scopes' => array(
+				'assigned',
+			),
+		));
 		$this->layout = 'admin.views.layouts.dashboard';
-		$this->render('index');
+		$this->render('index', array(
+			'model' => $model,
+			'provider' => $provider,
+		));
+	}
+	
+	public function actionUpdated()
+	{
+		$model = $this->createSearchModel('Task');
+		$provider = $model->search(array(
+			'scopes' => array(
+				'member', 
+				'updated',
+			),
+		));
+		$this->layout = 'admin.views.layouts.dashboard';
+		$this->render('updated', array(
+			'model' => $model,
+			'provider' => $provider,
+		));
 	}
 	
 	public function actionNew()

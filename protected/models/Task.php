@@ -57,6 +57,7 @@ class Task extends CActiveRecord
 			'project_id' => Yii::t('task', 'Project'),
 			'project' => Yii::t('task', 'Project'),
 			'regression_risk' => Yii::t('task', 'Risk of Regression'),
+			'subscriptions' => Yii::t('task', 'Subscriptions'),
 			'tags' => Yii::t('task', 'Tags'),
 			'time_created' => Yii::t('task', 'Date Created'),
 		);
@@ -99,10 +100,21 @@ class Task extends CActiveRecord
 		return array(
 			'assigned' => array(self::BELONGS_TO, 'User', 'assigned_id'),
 			'assignments' => array(self::HAS_MANY, 'Assignment', 'task_id'),
+			'user_assignment' => array(self::HAS_ONE, 'Assignment', 'task_id',
+				'on' => 'user_assignment.user_id = :current_user_id',
+				'params' => array(
+					':current_user_id' => Yii::app()->user->id,
+				)),
 			'comments' => array(self::HAS_MANY, 'Comment', 'task_id', 'order' => 'comments.time_created'),
 			'created_by' => array(self::BELONGS_TO, 'User', 'created_by_id'),
 			'milestone' => array(self::BELONGS_TO, 'Milestone', 'milestone_id'),
 			'project' => array(self::BELONGS_TO, 'Project', 'project_id'),
+			'subscriptions' => array(self::HAS_MANY, 'Subscription', 'task_id'),
+			'user_subscription' => array(self::HAS_ONE, 'Subscription', 'task_id',
+				'on' => 'user_subscription.user_id = :current_user_id',
+				'params' => array(
+					':current_user_id' => Yii::app()->user->id,
+				)),
 			'tags' => array(self::MANY_MANY, 'Tag', '{{task_tag_tags}}(task_id,tag_id)'),
 		);
 	}
@@ -129,6 +141,10 @@ class Task extends CActiveRecord
 					'created_by',
 					'milestone',
 					'project',
+					'subscriptions' => array(
+						'cascadeDelete' => true,
+						'quickDelete' => true,
+					),
 					'tags',
 				),
 			),
@@ -184,11 +200,26 @@ class Task extends CActiveRecord
 					':phase_on_hold' => self::PHASE_ON_HOLD,
 				),
 			),
+			'scheduled' => array(
+				'condition' => 'task.phase = :phase_scheduled',
+				'params' => array(
+					':phase_scheduled' => self::PHASE_SCHEDULED,
+				),
+			),
 			'outstanding' => array(
 				'condition' => 'task.due_date != "0000-00-00" AND task.due_date >= DATE(NOW())',
 			),
 			'expired' => array(
 				'condition' => 'task.due_date != "0000-00-00" AND task.due_date < DATE(NOW())',
+			),
+			'updated' => array(
+				'condition' => 'user_subscription.last_view_time < task.time_updated',
+				'with' => array(
+					'user_subscription' => array(
+						'select' => false,
+						'joinType' => 'INNER JOIN',
+					)
+				),
 			),
 		);
 	}
@@ -270,5 +301,49 @@ class Task extends CActiveRecord
 	public function getPriority()
 	{
 		return array_key_exists($this->priority, self::getListPriorities()) ? self::$priorities[$this->priority] : '';
+	}
+	
+	public function getPhase()
+	{
+		switch ($this->phase) {
+			case self::PHASE_CREATED:
+				return Yii::t('task', 'New');
+			case self::PHASE_SCHEDULED:
+				return Yii::t('task', 'Scheduled');
+			case self::PHASE_IN_PROGRESS:
+				return Yii::t('task', 'In progress');
+			case self::PHASE_PENDING:
+				return Yii::t('task', 'Pending');
+			case self::PHASE_NEW_ITERATION:
+				return Yii::t('task', 'New iteration');
+			case self::PHASE_CLOSED:
+				return Yii::t('task', 'Closed');
+			case self::PHASE_ON_HOLD:
+				return Yii::t('task', 'On-hold');
+		}
+		return '';
+	}
+	
+	public function subscribe($user_id)
+	{
+		$model = Subscription::model()->find('task_id = ? AND user_id = ?', array($this->id, $user_id));
+		if ($model === null) {
+			$model = new Subscription();
+			$model->task_id = $this->id;
+			$model->user_id = $user_id;
+			$model->last_view_time = '0000-00-00 00:00:00';
+			$model->save();
+		}
+		return $model;
+	}
+	
+	public function unsubscribe($user_id)
+	{
+		Subscription::model()->deleteAll('task_id = ? AND user_id = ?', array($this->id, $user_id));
+	}
+	
+	public function unsubscribeAll()
+	{
+		Subscription::model()->deleteAll('task_id = ?', array($this->id));
 	}
 }

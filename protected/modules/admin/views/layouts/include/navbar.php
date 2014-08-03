@@ -12,7 +12,7 @@
 	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 		<?php echo CHtml::link('<i class="glyphicon glyphicon-off"></i> ' . Yii::t('admin.crud', 'Logout'), array('/admin/default/logout'), array('class' => 'btn btn-default navbar-btn pull-right logout-btn')) ?>
 		
-		<p class="pull-right navbar-text">
+		<p class="pull-right navbar-text visible-lg">
 			<i class="glyphicon glyphicon-user"></i> <?php echo  Yii::t('admin.crud', 'You are logged as'); ?> <b><?php echo Yii::app()->user->name; ?></b>
 		</p>
 		

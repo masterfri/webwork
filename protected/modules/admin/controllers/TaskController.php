@@ -56,10 +56,19 @@ class TaskController extends AdminController
 		$task = $this->loadModel($id, 'Task');
 		$comment = new Comment('create');
 		
+		if ($task->user_subscription !== null) {
+			$task->user_subscription->markAsSeen();
+		}
+		
 		if (isset($_POST['Comment'])) {
 			$comment->attributes = $_POST['Comment'];
 			$comment->task = $task;
 			if ($comment->save()) {
+				$task->time_updated = date('Y-m-d H:i:s');
+				$task->update(array('time_updated'));
+				if ($task->user_subscription === null) {
+					$task->subscribe(Yii::app()->user->id);
+				}
 				$this->redirect(array('view', 'id' => $task->id, '#' => 'comment-' . $comment->id));
 			}
 		}
@@ -68,6 +77,24 @@ class TaskController extends AdminController
 			'model' => $task,
 			'comment' => $comment,
 		));
+	}
+	
+	public function actionWatch($id)
+	{
+		$model = $this->loadModel($id, 'Task');
+		$model->subscribe(Yii::app()->user->id);
+		if(!isset($_GET['ajax'])) {
+			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('view', 'id' => $model->id));
+		}
+	}
+	
+	public function actionUnwatch($id)
+	{
+		$model = $this->loadModel($id, 'Task');
+		$model->unsubscribe(Yii::app()->user->id);
+		if(!isset($_GET['ajax'])) {
+			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('view', 'id' => $model->id));
+		}
 	}
 
 	public function filters()
@@ -86,7 +113,7 @@ class TaskController extends AdminController
 				'roles' => array('create_task'),
 			),
 			array('allow',
-				'actions' => array('view', 'index'),
+				'actions' => array('view', 'index', 'watch', 'unwatch'),
 				'roles' => array('view_task'),
 			),
 			array('allow',
