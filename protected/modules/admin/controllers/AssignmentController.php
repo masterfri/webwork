@@ -21,7 +21,7 @@ class AssignmentController extends AdminController
 	{
 		$project = $this->loadModel($project, 'Project');
 		$model = new Assignment('create');
-		$model->project = $project;
+		$model->project_id = $project->id;
 		if ($this->saveModel($model)) {
 			$this->redirect(array('view', 'id' => $model->id));
 		}

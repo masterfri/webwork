@@ -8,6 +8,7 @@ class DefaultController extends AdminController
 		$provider = $model->search(array(
 			'scopes' => array(
 				'assigned',
+				'scheduled',
 			),
 		));
 		$this->layout = 'admin.views.layouts.dashboard';
