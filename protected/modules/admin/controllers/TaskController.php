@@ -61,15 +61,18 @@ class TaskController extends AdminController
 		}
 		
 		if (isset($_POST['Comment'])) {
-			$comment->attributes = $_POST['Comment'];
-			$comment->task = $task;
-			if ($comment->save()) {
-				$task->time_updated = date('Y-m-d H:i:s');
-				$task->update(array('time_updated'));
-				if ($task->user_subscription === null) {
-					$task->subscribe(Yii::app()->user->id);
+			$action = isset($_POST['action']) ? $_POST['action'] : Task::ACTION_COMMENT;
+			if ($task->getIsActionAvailable($action)) {
+				$comment->attributes = $_POST['Comment'];
+				$comment->task = $task;
+				$comment->action = $action;
+				if ($comment->save()) {
+					$task->doAction($action);
+					if ($task->user_subscription === null) {
+						$task->subscribe(Yii::app()->user->id);
+					}
+					$this->redirect(array('view', 'id' => $task->id, '#' => 'comment-' . $comment->id));
 				}
-				$this->redirect(array('view', 'id' => $task->id, '#' => 'comment-' . $comment->id));
 			}
 		}
 		

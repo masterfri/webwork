@@ -21,9 +21,72 @@ class Task extends CActiveRecord
 	const PHASE_NEW_ITERATION = 5;
 	const PHASE_CLOSED = 6;
 	const PHASE_ON_HOLD = 7;
+	
+	const ACTION_COMMENT = 'comment';
+	const ACTION_START_WORK = 'start-work';
+	const ACTION_COMPLETE_WORK = 'complete-work';
+	const ACTION_RETURN = 'return';
+	const ACTION_CLOSE = 'close';
+	const ACTION_PUT_ON_HOLD = 'put-on-hold';
+	const ACTION_REOPEN = 'reopen';
+	const ACTION_RESUME = 'resume';
 
 	protected static $regression_risks;
 	protected static $priorities;
+	
+	protected static $action_graph = array(
+		self::ACTION_COMMENT => array(
+			self::PHASE_CREATED,
+			self::PHASE_SCHEDULED,
+			self::PHASE_IN_PROGRESS,
+			self::PHASE_PENDING,
+			self::PHASE_NEW_ITERATION,
+			self::PHASE_ON_HOLD,
+		),
+		self::ACTION_START_WORK => array(
+			self::PHASE_CREATED,
+			self::PHASE_SCHEDULED,
+			self::PHASE_PENDING,
+			self::PHASE_NEW_ITERATION,
+		),
+		self::ACTION_COMPLETE_WORK => array(
+			self::PHASE_IN_PROGRESS,
+		),
+		self::ACTION_RETURN => array(
+			self::PHASE_PENDING,
+		),
+		self::ACTION_CLOSE => array(
+			self::PHASE_CREATED,
+			self::PHASE_SCHEDULED,
+			self::PHASE_IN_PROGRESS,
+			self::PHASE_PENDING,
+			self::PHASE_NEW_ITERATION,
+			self::PHASE_ON_HOLD,
+		),
+		self::ACTION_PUT_ON_HOLD => array(
+			self::PHASE_CREATED,
+			self::PHASE_SCHEDULED,
+			self::PHASE_IN_PROGRESS,
+			self::PHASE_PENDING,
+			self::PHASE_NEW_ITERATION,
+		),
+		self::ACTION_REOPEN => array(
+			self::PHASE_CLOSED,
+		),
+		self::ACTION_RESUME => array(
+			self::PHASE_ON_HOLD,
+		),
+	);
+	
+	protected static $phase_graph = array(
+		self::ACTION_START_WORK => self::PHASE_IN_PROGRESS,
+		self::ACTION_COMPLETE_WORK => self::PHASE_PENDING,
+		self::ACTION_RETURN => self::PHASE_NEW_ITERATION,
+		self::ACTION_CLOSE => self::PHASE_CLOSED,
+		self::ACTION_PUT_ON_HOLD => self::PHASE_ON_HOLD,
+		self::ACTION_REOPEN => self::PHASE_NEW_ITERATION,
+		self::ACTION_RESUME => self::PHASE_NEW_ITERATION,
+	);
 	
 	public static function model($className=__CLASS__)
 	{
@@ -324,6 +387,12 @@ class Task extends CActiveRecord
 		return '';
 	}
 	
+	public function getIsActionAvailable($action)
+	{
+		return 	array_key_exists($action, self::$action_graph) &&
+				in_array($this->phase, self::$action_graph[$action]);
+	}
+	
 	public function subscribe($user_id)
 	{
 		$model = Subscription::model()->find('task_id = ? AND user_id = ?', array($this->id, $user_id));
@@ -345,5 +414,14 @@ class Task extends CActiveRecord
 	public function unsubscribeAll()
 	{
 		Subscription::model()->deleteAll('task_id = ?', array($this->id));
+	}
+	
+	public function doAction($action)
+	{
+		if (array_key_exists($action, self::$phase_graph)) {
+			$this->phase = self::$phase_graph[$action];
+		}
+		$this->time_updated = date('Y-m-d H:i:s');
+		$this->update(array('time_updated', 'phase'));
 	}
 }

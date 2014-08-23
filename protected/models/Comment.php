@@ -65,27 +65,17 @@ class Comment extends CActiveRecord
 		);
 	}
 	
-	public function search($params=array())
+	public function getActionExplanation()
 	{
-		$criteria = new CDbCriteria($params);
-		return new CActiveDataProvider($this, array(
-			'criteria' => $criteria,
-		));
-	}
-	
-	public function __toString()
-	{
-		return $this->getDisplayName();
-	}
-	
-	public function getDisplayName()
-	{
-		return "#".$this->primaryKey;
-	}
-	
-	public static function getList()
-	{
-		$criteria = new CDbCriteria();
-		return CHtml::listData(self::model()->findAll($criteria), 'id', 'displayName');
+		switch ($this->action) {
+			case Task::ACTION_CLOSE: return '{author} closed this task {date}';
+			case Task::ACTION_COMPLETE_WORK: return '{author} completed work on this task {date}';
+			case Task::ACTION_PUT_ON_HOLD: return '{author} put this task on-hold {date}';
+			case Task::ACTION_REOPEN: return '{author} opened this task {date}';
+			case Task::ACTION_RESUME: return '{author} resumed this task {date}';
+			case Task::ACTION_RETURN: return '{author} did not accept this task {date}';
+			case Task::ACTION_START_WORK: return '{author} started work on this task {date}';
+			default: return '{author} commented {date}';
+		}
 	}
 }

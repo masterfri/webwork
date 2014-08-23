@@ -1,7 +1,7 @@
 <?php foreach($task->comments as $comment): ?>
-	<div class="panel panel-default" id="comment-<?php echo $comment->id; ?>">
+	<div class="panel panel-default action-<?php echo $comment->action; ?>" id="comment-<?php echo $comment->id; ?>">
 		<div class="panel-heading">
-			<?php echo Yii::t('admin.crud', '{author} commented {date}', array(
+			<?php echo Yii::t('admin.crud', $comment->getActionExplanation(), array(
 				'{author}' => CHtml::encode(CHtml::value($comment, 'created_by.displayName')),
 				'{date}' => Yii::app()->format->formatDateTime($comment->time_created),
 			)); ?>
