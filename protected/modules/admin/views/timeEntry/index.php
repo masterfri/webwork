@@ -13,6 +13,11 @@ $this->menu = array(
 		'visible' => Yii::app()->user->checkAccess('create_time_entry'),
 	),
 	array(
+		'label' => '<i class="glyphicon glyphicon-time"></i> ' . Yii::t('admin.crud', 'Daily Time Report'), 
+		'url' => array('daily'),
+		'visible' => Yii::app()->user->checkAccess('daily_time_report'),
+	),
+	array(
 		'label' => '<i class="glyphicon glyphicon-search"></i> ' . Yii::t('admin.crud', 'Search'), 
 		'url' => '#',
 		'linkOptions' => array(

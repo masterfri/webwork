@@ -17,37 +17,42 @@
 	)); ?>
 	
 	<?php echo $form->errorSummary($model, null, null, array('class' => 'alert alert-danger')); ?>
+	
+	<?php if (!$short): ?>
 
-	<div class="form-group">
-		<?php echo $form->labelEx($model, 'project_id', array('class'=>'col-sm-3 control-label')); ?>
-		<div class="col-sm-9">
-			<?php echo $form->dropdownList($model, 'project_id', Project::getList(), array(
-				'class' => 'form-control',
-				'prompt' => Yii::t('admin.crud', 'Select Value'),
-			)); ?> 
-			<?php echo $form->error($model, 'project_id', array('class'=>'help-inline')); ?>
+		<div class="form-group">
+			<?php echo $form->labelEx($model, 'project_id', array('class'=>'col-sm-3 control-label')); ?>
+			<div class="col-sm-9">
+				<?php echo $form->dropdownList($model, 'project_id', Project::getList(), array(
+					'class' => 'form-control',
+					'prompt' => Yii::t('admin.crud', 'Select Value'),
+				)); ?> 
+				<?php echo $form->error($model, 'project_id', array('class'=>'help-inline')); ?>
+			</div>
 		</div>
-	</div>
-	<div class="form-group">
-		<?php echo $form->labelEx($model, 'task_id', array('class'=>'col-sm-3 control-label')); ?>
-		<div class="col-sm-9">
-			<?php echo $form->dropdownList($model, 'task_id', Task::getList(), array(
-				'class' => 'form-control',
-				'prompt' => Yii::t('admin.crud', 'Select Value'),
-			)); ?> 
-			<?php echo $form->error($model, 'task_id', array('class'=>'help-inline')); ?>
+		<div class="form-group">
+			<?php echo $form->labelEx($model, 'task_id', array('class'=>'col-sm-3 control-label')); ?>
+			<div class="col-sm-9">
+				<?php echo $form->dropdownList($model, 'task_id', Task::getList(), array(
+					'class' => 'form-control',
+					'prompt' => Yii::t('admin.crud', 'Select Value'),
+				)); ?> 
+				<?php echo $form->error($model, 'task_id', array('class'=>'help-inline')); ?>
+			</div>
 		</div>
-	</div>
-	<div class="form-group">
-		<?php echo $form->labelEx($model, 'user_id', array('class'=>'col-sm-3 control-label')); ?>
-		<div class="col-sm-9">
-			<?php echo $form->dropdownList($model, 'user_id', User::getList(), array(
-				'class' => 'form-control',
-				'prompt' => Yii::t('admin.crud', 'Select Value'),
-			)); ?> 
-			<?php echo $form->error($model, 'user_id', array('class'=>'help-inline')); ?>
+		<div class="form-group">
+			<?php echo $form->labelEx($model, 'user_id', array('class'=>'col-sm-3 control-label')); ?>
+			<div class="col-sm-9">
+				<?php echo $form->dropdownList($model, 'user_id', User::getList(), array(
+					'class' => 'form-control',
+					'prompt' => Yii::t('admin.crud', 'Select Value'),
+				)); ?> 
+				<?php echo $form->error($model, 'user_id', array('class'=>'help-inline')); ?>
+			</div>
 		</div>
-	</div>
+		
+	<?php endif; ?>
+	
 	<div class="form-group">
 		<?php echo $form->labelEx($model, 'activity_id', array('class'=>'col-sm-3 control-label')); ?>
 		<div class="col-sm-9">

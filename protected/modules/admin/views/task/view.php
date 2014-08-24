@@ -20,6 +20,11 @@ $this->menu = array(
 		'visible' => Yii::app()->user->checkAccess('view_task') && $model->user_subscription !== null,
 	),
 	array(
+		'label' => '<i class="glyphicon glyphicon-time"></i> ' . Yii::t('admin.crud', 'Report Time'), 
+		'url' => array('timeEntry/report', 'task' => $model->id),
+		'visible' => Yii::app()->user->checkAccess('report_time_entry'),
+	),
+	array(
 		'label' => '<i class="glyphicon glyphicon-plus"></i> ' . Yii::t('admin.crud', 'Create Task'), 
 		'url' => array('create', 'project' => $model->project->id),
 		'visible' => Yii::app()->user->checkAccess('create_task'),

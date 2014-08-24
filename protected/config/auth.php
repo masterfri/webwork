@@ -334,9 +334,21 @@ return array(
 		'bizRule' => null,
 		'data' => null
 	),
+	'daily_time_report' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Dialy time report',
+		'bizRule' => null,
+		'data' => null
+	),
 	'create_time_entry' => array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'Create time entry',
+		'bizRule' => null,
+		'data' => null
+	),
+	'report_time_entry' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Report time entry',
 		'bizRule' => null,
 		'data' => null
 	),
@@ -416,7 +428,9 @@ return array(
 			'update_task',
 			'delete_task',
 			'view_time_entry',
+			'daily_time_report',
 			'create_time_entry',
+			'report_time_entry',
 			'update_time_entry',
 			'delete_time_entry',
 			'client',
