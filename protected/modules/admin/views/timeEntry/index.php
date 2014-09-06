@@ -59,8 +59,8 @@ $this->menu = array(
 				'class' => 'ButtonColumn',
 				'deleteConfirmation' => Yii::t('admin.crud', 'Are you sure you want to delete this time entry?'),
 				'template' => '{view}'.
-					(Yii::app()->user->checkAccess('update_time_entry') ? '{update}' : '').
-					(Yii::app()->user->checkAccess('delete_time_entry') ? '{delete}' : ''),
+					(Yii::app()->user->checkAccess('update_time_entry') ? ' {update}' : '').
+					(Yii::app()->user->checkAccess('delete_time_entry') ? ' {delete}' : ''),
 			),
 		),
 	)); ?>

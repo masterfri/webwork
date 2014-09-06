@@ -226,6 +226,15 @@ return array(
 		'bizRule' => null,
 		'data' => null
 	),
+	'view_shared_project' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'View shared project',
+		'bizRule' => 'return !isset($params["project"]) || ($params["project"] === "*" ? false : $params["project"]->isUserAssigned($params["userId"]));',
+		'data' => null,
+		'children' => array(
+			'view_project',
+		),
+	),
 	'create_project' => array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'Create project',
@@ -238,11 +247,29 @@ return array(
 		'bizRule' => null,
 		'data' => null
 	),
+	'update_shared_project' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Update shared project',
+		'bizRule' => 'return !isset($params["project"]) || ($params["project"] === "*" ? false : $params["project"]->isUserAssigned($params["userId"], array(Assignment::ROLE_OWNER, Assignment::ROLE_MANAGER)));',
+		'data' => null,
+		'children' => array(
+			'update_project',
+		),
+	),
 	'delete_project' => array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'Delete project',
 		'bizRule' => null,
 		'data' => null
+	),
+	'delete_shared_project' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Delete shared project',
+		'bizRule' => 'return !isset($params["project"]) || ($params["project"] === "*" ? false : $params["project"]->isUserAssigned($params["userId"], Assignment::ROLE_OWNER));',
+		'data' => null,
+		'children' => array(
+			'delete_project',
+		),
 	),
 	/**
 	 * Rate 
@@ -378,6 +405,9 @@ return array(
 		'description' => 'Участник',
 		'children' => array(
 			'guest',
+			'view_shared_project',
+			'update_shared_project',
+			'view_milestone',
 		),
 		'bizRule' => null,
 		'data' => null
@@ -387,6 +417,9 @@ return array(
 		'description' => 'Клиент',
 		'children' => array(
 			'user',
+			'create_milestone',
+			'update_milestone',
+			'delete_milestone',
 		),
 		'bizRule' => null,
 		'data' => null
@@ -415,6 +448,9 @@ return array(
 		'children' => array(
 			'developer',
 			'tester',
+			'create_milestone',
+			'update_milestone',
+			'delete_milestone',
 		),
 		'bizRule' => null,
 		'data' => null
@@ -423,6 +459,10 @@ return array(
 		'type' => CAuthItem::TYPE_ROLE,
 		'description' => 'Менеджер',
 		'children' => array(
+			'view_project',
+			'create_project',
+			'update_project',
+			'delete_project',
 			'view_task',
 			'create_task',
 			'update_task',
@@ -467,18 +507,10 @@ return array(
 			'create_invoice',
 			'update_invoice',
 			'delete_invoice',
-			'view_milestone',
-			'create_milestone',
-			'update_milestone',
-			'delete_milestone',
 			'view_payment',
 			'create_payment',
 			'update_payment',
 			'delete_payment',
-			'view_project',
-			'create_project',
-			'update_project',
-			'delete_project',
 			'view_rate',
 			'create_rate',
 			'update_rate',

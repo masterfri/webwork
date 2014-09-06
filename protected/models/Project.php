@@ -107,7 +107,6 @@ class Project extends CActiveRecord
 		$criteria->alias = 'project';
 		$criteria->compare('project.name', $this->name, true);
 		$criteria->with = array('count_milestones', 'count_tasks');
-		
 		return new CActiveDataProvider($this, array(
 			'criteria' => $criteria,
 		));
@@ -127,5 +126,22 @@ class Project extends CActiveRecord
 	{
 		$criteria = new CDbCriteria();
 		return CHtml::listData(self::model()->findAll($criteria), 'id', 'displayName');
+	}
+	
+	public function isUserAssigned($user_id, $role=null)
+	{
+		if ($user_id) {
+			if ($user_id == Yii::app()->user->id) {
+				$assignment = $this->user_assignment;
+			} else {
+				$assignment = Assignment::model()->find('user_id = ? AND project_id = ?', array($user_id, $this->id));
+			}
+			if ($assignment) {
+				if ($role === null || (is_array($role) ? in_array($assignment->role, $role) : $role == $assignment->role)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }

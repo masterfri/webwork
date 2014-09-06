@@ -49,8 +49,8 @@ $this->menu = array(
 				'class' => 'ButtonColumn',
 				'deleteConfirmation' => Yii::t('admin.crud', 'Are you sure you want to delete this tag?'),
 				'template' => '{view}'.
-					(Yii::app()->user->checkAccess('update_tag') ? '{update}' : '').
-					(Yii::app()->user->checkAccess('delete_tag') ? '{delete}' : ''),
+					(Yii::app()->user->checkAccess('update_tag') ? ' {update}' : '').
+					(Yii::app()->user->checkAccess('delete_tag') ? ' {delete}' : ''),
 			),
 		),
 	)); ?>

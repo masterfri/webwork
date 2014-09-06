@@ -5,6 +5,9 @@ class MilestoneController extends AdminController
 	public function actionIndex($project)
 	{
 		$project = $this->loadModel($project, 'Project');
+		if (!Yii::app()->user->checkAccess('view_project', array('project' => $project))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
 		$model = $this->createSearchModel('Milestone');
 		$provider = $model->search(array(
 			'condition' => 'project_id = :project_id',
@@ -20,6 +23,9 @@ class MilestoneController extends AdminController
 	public function actionCreate($project)
 	{
 		$project = $this->loadModel($project, 'Project');
+		if (!Yii::app()->user->checkAccess('view_project', array('project' => $project))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
 		$model = new Milestone('create');
 		$model->project = $project;
 		if ($this->saveModel($model)) {
@@ -34,6 +40,9 @@ class MilestoneController extends AdminController
 	public function actionUpdate($id)
 	{
 		$model = $this->loadModel($id, 'Milestone');
+		if (!Yii::app()->user->checkAccess('view_project', array('project' => $model->project))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
 		if ($this->saveModel($model)) {
 			$this->redirect(array('view', 'id' => $model->id));
 		}
@@ -45,6 +54,9 @@ class MilestoneController extends AdminController
 	public function actionDelete($id)
 	{
 		$model = $this->loadModel($id, 'Milestone');
+		if (!Yii::app()->user->checkAccess('view_project', array('project' => $model->project))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
 		$model->delete();
 		if(!isset($_GET['ajax'])) {
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index', 'project' => $model->project_id));
@@ -53,8 +65,12 @@ class MilestoneController extends AdminController
 	
 	public function actionView($id)
 	{
+		$model = $this->loadModel($id, 'Milestone');
+		if (!Yii::app()->user->checkAccess('view_project', array('project' => $model->project))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
 		$this->render('view', array(
-			'model' => $this->loadModel($id, 'Milestone'),
+			'model' => $model,
 		));
 	}
 

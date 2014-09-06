@@ -35,8 +35,8 @@ $this->menu = array(
 				'class' => 'ButtonColumn',
 				'deleteConfirmation' => Yii::t('admin.crud', 'Are you sure you want to delete this invoice?'),
 				'template' => '{view}'.
-					(Yii::app()->user->checkAccess('update_invoice') ? '{update}' : '').
-					(Yii::app()->user->checkAccess('delete_invoice') ? '{delete}' : ''),
+					(Yii::app()->user->checkAccess('update_invoice') ? ' {update}' : '').
+					(Yii::app()->user->checkAccess('delete_invoice') ? ' {delete}' : ''),
 			),
 		),
 	)); ?>

@@ -53,8 +53,8 @@ $this->menu = array(
 				'class' => 'ButtonColumn',
 				'deleteConfirmation' => Yii::t('admin.crud', 'Are you sure you want to delete this user?'),
 				'template' => '{view}'.
-					(Yii::app()->user->checkAccess('update_user') ? '{update}' : '').
-					(Yii::app()->user->checkAccess('delete_user') ? '{delete}' : ''),
+					(Yii::app()->user->checkAccess('update_user') ? ' {update}' : '').
+					(Yii::app()->user->checkAccess('delete_user') ? ' {delete}' : ''),
 			),
 		),
 	)); ?>

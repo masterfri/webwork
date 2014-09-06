@@ -21,7 +21,7 @@ $this->menu = array(
 	array(
 		'label' => '<i class="glyphicon glyphicon-wrench"></i> ' . Yii::t('admin.crud', 'Manage Project'), 
 		'url'=>array('index'),
-		'visible' => Yii::app()->user->checkAccess('view_project'),
+		'visible' => Yii::app()->user->checkAccess('view_project', array('project' => $model)),
 	),
 );
 

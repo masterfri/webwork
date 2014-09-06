@@ -30,7 +30,7 @@ $this->menu = array(
 	array(
 		'label' => '<i class="glyphicon glyphicon-pencil"></i> ' . Yii::t('admin.crud', 'Update Project'), 
 		'url' => array('update', 'id' => $model->id),
-		'visible' => Yii::app()->user->checkAccess('update_project'),
+		'visible' => Yii::app()->user->checkAccess('update_project', array('project' => $model)),
 	),
 	array(
 		'label' => '<i class="glyphicon glyphicon-trash"></i> ' . Yii::t('admin.crud', 'Delete Project'), 
@@ -39,7 +39,7 @@ $this->menu = array(
 			'submit' => array('delete', 'id' => $model->id),
 			'confirm' => Yii::t('admin.crud', 'Are you sure you want to delete this project?'),
 		),
-		'visible' => Yii::app()->user->checkAccess('delete_project'),
+		'visible' => Yii::app()->user->checkAccess('delete_project', array('project' => $model)),
 	),
 	array(
 		'label' => '<i class="glyphicon glyphicon-wrench"></i> ' . Yii::t('admin.crud', 'Manage Project'), 

@@ -48,18 +48,26 @@ $this->menu = array(
 				'name' => 'count_milestones',
 				'value' => 'CHtml::link($data->count_milestones, array("milestone/index", "project" => $data->id), array("class" => "btn btn-xs btn-default"))',
 				'type' => 'raw',
+				'visible' => Yii::app()->user->checkAccess('view_milestone'),
 			),
 			array(
 				'name' => 'count_tasks',
 				'value' => 'CHtml::link($data->count_tasks, array("task/index", "project" => $data->id), array("class" => "btn btn-xs btn-default"))',
 				'type' => 'raw',
+				'visible' => Yii::app()->user->checkAccess('view_task'),
 			),
 			array(
 				'class' => 'ButtonColumn',
 				'deleteConfirmation' => Yii::t('admin.crud', 'Are you sure you want to delete this project?'),
-				'template' => '{view}'.
-					(Yii::app()->user->checkAccess('update_project') ? '{update}' : '').
-					(Yii::app()->user->checkAccess('delete_project') ? '{delete}' : ''),
+				'template' => '{view} {update} {delete}',
+				'buttons' => array(
+					'update' => array(
+						'visible' => 'Yii::app()->user->checkAccess("update_project", array("project" => $data))',
+					),
+					'delete' => array(
+						'visible' => 'Yii::app()->user->checkAccess("delete_project", array("project" => $data))',
+					),
+				),
 			),
 		),
 	)); ?>

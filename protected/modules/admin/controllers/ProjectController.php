@@ -6,6 +6,9 @@ class ProjectController extends AdminController
 	{
 		$model = $this->createSearchModel('Project');
 		$provider = $model->search();
+		if (!Yii::app()->user->checkAccess('view_project', array('project' => '*'))) {
+			$provider->criteria->scopes[] = 'member';
+		}
 		$this->render('index', array(
 			'model' => $model,
 			'provider' => $provider,
@@ -26,6 +29,9 @@ class ProjectController extends AdminController
 	public function actionUpdate($id)
 	{
 		$model = $this->loadModel($id, 'Project');
+		if (!Yii::app()->user->checkAccess('update_project', array('project' => $model))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
 		if ($this->saveModel($model)) {
 			$this->redirect(array('view', 'id' => $model->id));
 		}
@@ -37,6 +43,9 @@ class ProjectController extends AdminController
 	public function actionDelete($id)
 	{
 		$model = $this->loadModel($id, 'Project');
+		if (!Yii::app()->user->checkAccess('delete_project', array('project' => $model))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
 		$model->delete();
 		if(!isset($_GET['ajax'])) {
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
@@ -45,6 +54,10 @@ class ProjectController extends AdminController
 	
 	public function actionView($id)
 	{
+		$model = $this->loadModel($id, 'Project');
+		if (!Yii::app()->user->checkAccess('view_project', array('project' => $model))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
 		$this->render('view', array(
 			'model' => $this->loadModel($id, 'Project'),
 		));

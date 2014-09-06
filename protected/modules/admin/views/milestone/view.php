@@ -4,7 +4,7 @@ $this->pageHeading = Yii::t('admin.crud', 'Milestone Information');
 
 $this->breadcrumbs = array(
 	Yii::t('admin.crud', 'Project') => Yii::app()->user->checkAccess('view_project') ? array('project/index') : false, 
-	CHtml::encode($model->project->name) => Yii::app()->user->checkAccess('view_project') ? array('project/view', 'id' => $model->project->id) : false, 
+	CHtml::encode($model->project->name) => Yii::app()->user->checkAccess('view_project', array('project' => $model->project)) ? array('project/view', 'id' => $model->project->id) : false, 
 	Yii::t('admin.crud', 'Milestone') => Yii::app()->user->checkAccess('view_milestone') ? array('index', 'project' => $model->project->id) : false, 
 );
 

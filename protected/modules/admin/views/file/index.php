@@ -68,8 +68,8 @@ $this->menu = array(
 					'class' => 'ButtonColumn',
 					'deleteConfirmation' => Yii::t('admin.crud', 'Are you sure you want to delete this file?'),
 					'template' => '{view}'.
-						(Yii::app()->user->checkAccess('update_file') ? '{update}' : '').
-						(Yii::app()->user->checkAccess('delete_file') ? '{delete}' : ''),
+						(Yii::app()->user->checkAccess('update_file') ? ' {update}' : '').
+						(Yii::app()->user->checkAccess('delete_file') ? ' {delete}' : ''),
 				),
 			),
 		)); ?>
