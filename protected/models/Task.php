@@ -298,6 +298,14 @@ class Task extends CActiveRecord
 		return false;
 	}
 	
+	protected function afterSave()
+	{
+		if ($this->getIsNewRecord()) {
+			$this->subscribeTeam();
+		}
+		parent::afterSave();
+	}
+	
 	public function search($params=array())
 	{
 		$criteria = new CDbCriteria($params);
@@ -414,6 +422,13 @@ class Task extends CActiveRecord
 	public function unsubscribeAll()
 	{
 		Subscription::model()->deleteAll('task_id = ?', array($this->id));
+	}
+	
+	protected function subscribeTeam()
+	{
+		foreach ($this->project->assignments as $assignment) {
+			$this->subscribe($assignment->user_id);
+		}
 	}
 	
 	public function doAction($action)

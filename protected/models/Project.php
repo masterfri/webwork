@@ -101,6 +101,14 @@ class Project extends CActiveRecord
 		);
 	}
 	
+	protected function afterSave()
+	{
+		if ($this->getIsNewRecord()) {
+			$this->assignOwner();
+		}
+		parent::afterSave();
+	}
+	
 	public function search($params=array())
 	{
 		$criteria = new CDbCriteria($params);
@@ -143,5 +151,14 @@ class Project extends CActiveRecord
 			}
 		}
 		return false;
+	}
+	
+	protected function assignOwner()
+	{
+		$assignment = new Assignment('create');
+		$assignment->project_id = $this->id;
+		$assignment->user_id = Yii::app()->user->id;
+		$assignment->role = Assignment::ROLE_OWNER;
+		$assignment->save();
 	}
 }
