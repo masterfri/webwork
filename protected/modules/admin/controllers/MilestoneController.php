@@ -5,7 +5,7 @@ class MilestoneController extends AdminController
 	public function actionIndex($project)
 	{
 		$project = $this->loadModel($project, 'Project');
-		if (!Yii::app()->user->checkAccess('view_project', array('project' => $project))) {
+		if (!Yii::app()->user->checkAccess('view_milestone', array('project' => $project))) {
 			throw new CHttpException(403, 'Forbidden');
 		}
 		$model = $this->createSearchModel('Milestone');
@@ -23,7 +23,7 @@ class MilestoneController extends AdminController
 	public function actionCreate($project)
 	{
 		$project = $this->loadModel($project, 'Project');
-		if (!Yii::app()->user->checkAccess('view_project', array('project' => $project))) {
+		if (!Yii::app()->user->checkAccess('create_milestone', array('project' => $project))) {
 			throw new CHttpException(403, 'Forbidden');
 		}
 		$model = new Milestone('create');
@@ -40,7 +40,7 @@ class MilestoneController extends AdminController
 	public function actionUpdate($id)
 	{
 		$model = $this->loadModel($id, 'Milestone');
-		if (!Yii::app()->user->checkAccess('view_project', array('project' => $model->project))) {
+		if (!Yii::app()->user->checkAccess('update_milestone', array('milestone' => $model))) {
 			throw new CHttpException(403, 'Forbidden');
 		}
 		if ($this->saveModel($model)) {
@@ -54,7 +54,7 @@ class MilestoneController extends AdminController
 	public function actionDelete($id)
 	{
 		$model = $this->loadModel($id, 'Milestone');
-		if (!Yii::app()->user->checkAccess('view_project', array('project' => $model->project))) {
+		if (!Yii::app()->user->checkAccess('delete_milestone', array('milestone' => $model))) {
 			throw new CHttpException(403, 'Forbidden');
 		}
 		$model->delete();
@@ -66,7 +66,7 @@ class MilestoneController extends AdminController
 	public function actionView($id)
 	{
 		$model = $this->loadModel($id, 'Milestone');
-		if (!Yii::app()->user->checkAccess('view_project', array('project' => $model->project))) {
+		if (!Yii::app()->user->checkAccess('view_milestone', array('milestone' => $model))) {
 			throw new CHttpException(403, 'Forbidden');
 		}
 		$this->render('view', array(

@@ -12,7 +12,7 @@ $this->menu = array(
 	array(
 		'label' => '<i class="glyphicon glyphicon-plus"></i> ' . Yii::t('admin.crud', 'Create Milestone'), 
 		'url' => array('create', 'project' => $project->id),
-		'visible' => Yii::app()->user->checkAccess('create_milestone'),
+		'visible' => Yii::app()->user->checkAccess('create_milestone', array('project' => $project)),
 	),
 	array(
 		'label' => '<i class="glyphicon glyphicon-arrow-left"></i> ' . Yii::t('admin.crud', 'Back to Project'), 
@@ -55,9 +55,15 @@ $this->menu = array(
 			array(
 				'class' => 'ButtonColumn',
 				'deleteConfirmation' => Yii::t('admin.crud', 'Are you sure you want to delete this milestone?'),
-				'template' => '{view}'.
-					(Yii::app()->user->checkAccess('update_milestone') ? ' {update}' : '').
-					(Yii::app()->user->checkAccess('delete_milestone') ? ' {delete}' : ''),
+				'template' => '{view} {update} {delete}',
+				'buttons' => array(
+					'update' => array(
+						'visible' => 'Yii::app()->user->checkAccess("update_milestone", array("milestone" => $data))',
+					),
+					'delete' => array(
+						'visible' => 'Yii::app()->user->checkAccess("delete_milestone", array("milestone" => $data))',
+					),
+				),
 			),
 		),
 	)); ?>

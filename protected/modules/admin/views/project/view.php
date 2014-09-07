@@ -15,17 +15,17 @@ $this->menu = array(
 	array(
 		'label' => '<i class="glyphicon glyphicon-user"></i> ' . Yii::t('admin.crud', 'Assignment'), 
 		'url' => array('assignment/index', 'project' => $model->id),
-		'visible' => Yii::app()->user->checkAccess('view_assignment'),
+		'visible' => Yii::app()->user->checkAccess('view_assignment', array('project' => $model)),
 	),
 	array(
 		'label' => '<i class="glyphicon glyphicon-calendar"></i> ' . Yii::t('admin.crud', 'Milestone'), 
 		'url' => array('milestone/index', 'project' => $model->id),
-		'visible' => Yii::app()->user->checkAccess('view_milestone'),
+		'visible' => Yii::app()->user->checkAccess('view_milestone', array('project' => $model)),
 	),
 	array(
 		'label' => '<i class="glyphicon glyphicon-list"></i> ' . Yii::t('admin.crud', 'Task'), 
 		'url' => array('task/index', 'project' => $model->id),
-		'visible' => Yii::app()->user->checkAccess('view_task'),
+		'visible' => Yii::app()->user->checkAccess('view_task', array('project' => $model)),
 	),
 	array(
 		'label' => '<i class="glyphicon glyphicon-pencil"></i> ' . Yii::t('admin.crud', 'Update Project'), 

@@ -5,6 +5,9 @@ class AssignmentController extends AdminController
 	public function actionIndex($project, $task=0)
 	{
 		$project = $this->loadModel($project, 'Project');
+		if (!Yii::app()->user->checkAccess('view_assignment', array('project' => $project))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
 		$model = $this->createSearchModel('Assignment');
 		$provider = $model->search(array(
 			'condition' => 'project_id = :project_id',
@@ -20,6 +23,9 @@ class AssignmentController extends AdminController
 	public function actionCreate($project, $task=0)
 	{
 		$project = $this->loadModel($project, 'Project');
+		if (!Yii::app()->user->checkAccess('create_assignment', array('project' => $project))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
 		$model = new Assignment('create');
 		$model->project_id = $project->id;
 		if ($this->saveModel($model)) {
@@ -34,6 +40,9 @@ class AssignmentController extends AdminController
 	public function actionUpdate($id)
 	{
 		$model = $this->loadModel($id, 'Assignment');
+		if (!Yii::app()->user->checkAccess('update_assignment', array('assignment' => $model))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
 		if ($this->saveModel($model)) {
 			$this->redirect(array('view', 'id' => $model->id));
 		}
@@ -45,6 +54,9 @@ class AssignmentController extends AdminController
 	public function actionDelete($id)
 	{
 		$model = $this->loadModel($id, 'Assignment');
+		if (!Yii::app()->user->checkAccess('delete_assignment', array('assignment' => $model))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
 		$model->delete();
 		if(!isset($_GET['ajax'])) {
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index', 'project' => $model->project_id));
@@ -53,8 +65,12 @@ class AssignmentController extends AdminController
 	
 	public function actionView($id)
 	{
+		$model = $this->loadModel($id, 'Assignment');
+		if (!Yii::app()->user->checkAccess('view_assignment', array('assignment' => $model))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
 		$this->render('view', array(
-			'model' => $this->loadModel($id, 'Assignment'),
+			'model' => $model,
 		));
 	}
 
