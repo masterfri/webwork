@@ -17,6 +17,9 @@ class Menu extends CMenu
 			if($this->encodeLabel) {
 				$items[$i]['label'] = CHtml::encode($item['label']);
 			}
+			if (isset($item['counter']) && $item['counter'] > 0) {
+				$items[$i]['label'] .= ' <span class="badge">' . $item['counter'] . '</span>';
+			}
 			$hasActiveChild = false;
 			if(isset($item['items'])) {
 				$items[$i]['items'] = $this->normalizeItems($item['items'], $route, $hasActiveChild);

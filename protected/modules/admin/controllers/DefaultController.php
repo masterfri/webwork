@@ -2,15 +2,12 @@
 
 class DefaultController extends AdminController
 {
+	protected $emptyModel;
+	
 	public function actionIndex()
 	{
 		$model = $this->createSearchModel('Task');
-		$provider = $model->search(array(
-			'scopes' => array(
-				'assigned',
-				'scheduled',
-			),
-		));
+		$provider = $this->getDataScheduled($model);
 		$this->layout = 'admin.views.layouts.dashboard';
 		$this->render('index', array(
 			'model' => $model,
@@ -21,12 +18,7 @@ class DefaultController extends AdminController
 	public function actionUpdated()
 	{
 		$model = $this->createSearchModel('Task');
-		$provider = $model->search(array(
-			'scopes' => array(
-				'member', 
-				'updated',
-			),
-		));
+		$provider = $this->getDataUpdated($model);
 		$this->layout = 'admin.views.layouts.dashboard';
 		$this->render('updated', array(
 			'model' => $model,
@@ -37,12 +29,7 @@ class DefaultController extends AdminController
 	public function actionNew()
 	{
 		$model = $this->createSearchModel('Task');
-		$provider = $model->search(array(
-			'scopes' => array(
-				'member', 
-				'new',
-			),
-		));
+		$provider = $this->getDataNew($model);
 		$this->layout = 'admin.views.layouts.dashboard';
 		$this->render('new', array(
 			'model' => $model,
@@ -53,11 +40,7 @@ class DefaultController extends AdminController
 	public function actionMy()
 	{
 		$model = $this->createSearchModel('Task');
-		$provider = $model->search(array(
-			'scopes' => array(
-				'my', 
-			),
-		));
+		$provider = $this->getDataMy($model);
 		$this->layout = 'admin.views.layouts.dashboard';
 		$this->render('my', array(
 			'model' => $model,
@@ -68,12 +51,7 @@ class DefaultController extends AdminController
 	public function actionPending()
 	{
 		$model = $this->createSearchModel('Task');
-		$provider = $model->search(array(
-			'scopes' => array(
-				'member', 
-				'pending',
-			),
-		));
+		$provider = $this->getDataPending($model);
 		$this->layout = 'admin.views.layouts.dashboard';
 		$this->render('pending', array(
 			'model' => $model,
@@ -84,12 +62,7 @@ class DefaultController extends AdminController
 	public function actionExpired()
 	{
 		$model = $this->createSearchModel('Task');
-		$provider = $model->search(array(
-			'scopes' => array(
-				'member', 
-				'expired',
-			),
-		));
+		$provider = $this->getDataExpired($model);
 		$this->layout = 'admin.views.layouts.dashboard';
 		$this->render('expired', array(
 			'model' => $model,
@@ -100,12 +73,7 @@ class DefaultController extends AdminController
 	public function actionCompleted()
 	{
 		$model = $this->createSearchModel('Task');
-		$provider = $model->search(array(
-			'scopes' => array(
-				'member', 
-				'closed',
-			),
-		));
+		$provider = $this->getDataCompleted($model);
 		$this->layout = 'admin.views.layouts.dashboard';
 		$this->render('completed', array(
 			'model' => $model,
@@ -116,17 +84,94 @@ class DefaultController extends AdminController
 	public function actionHold()
 	{
 		$model = $this->createSearchModel('Task');
-		$provider = $model->search(array(
-			'scopes' => array(
-				'member', 
-				'on_hold',
-			),
-		));
+		$provider = $this->getDataOnHold($model);
 		$this->layout = 'admin.views.layouts.dashboard';
 		$this->render('on_hold', array(
 			'model' => $model,
 			'provider' => $provider,
 		));
+	}
+	
+	public function getDataScheduled($model=null)
+	{
+		return $this->getData(array(
+			'assigned',
+			'scheduled',
+		), $model);
+	}
+	
+	public function getDataUpdated($model=null)
+	{
+		return $this->getData(array(
+			'member', 
+			'updated',
+		), $model);
+	}
+	
+	public function getDataNew($model=null)
+	{
+		return $this->getData(array(
+			'member', 
+			'new',
+		), $model);
+	}
+	
+	public function getDataMy($model=null)
+	{
+		return $this->getData(array(
+			'my',
+		), $model);
+	}
+	
+	public function getDataPending($model=null)
+	{
+		return $this->getData(array(
+			'member', 
+			'pending',
+		), $model);
+	}
+	
+	public function getDataExpired($model=null)
+	{
+		return $this->getData(array(
+			'member', 
+			'expired',
+		), $model);
+	}
+	
+	public function getDataCompleted($model=null)
+	{
+		return $this->getData(array(
+			'member', 
+			'closed',
+		), $model);
+	}
+	
+	public function getDataOnHold($model=null)
+	{
+		return $this->getData(array(
+			'member', 
+			'on_hold',
+		), $model);
+	}
+	
+	protected function getData($scopes, $model=null)
+	{
+		if (null === $model) {
+			$model = $this->getEmptyModel();
+		}
+		return $model->search(array(
+			'scopes' => $scopes,
+		));
+	}
+	
+	protected function getEmptyModel()
+	{
+		if (null === $this->emptyModel) {
+			$this->emptyModel = new Task();
+			$this->emptyModel->unsetAttributes();
+		}
+		return $this->emptyModel;
 	}
 	
 	public function actionLogin()

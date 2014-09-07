@@ -363,25 +363,25 @@ return array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'View rate',
 		'bizRule' => null,
-		'data' => null
+		'data' => null,
 	),
 	'create_rate' => array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'Create rate',
 		'bizRule' => null,
-		'data' => null
+		'data' => null,
 	),
 	'update_rate' => array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'Edit rate',
 		'bizRule' => null,
-		'data' => null
+		'data' => null,
 	),
 	'delete_rate' => array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'Delete rate',
 		'bizRule' => null,
-		'data' => null
+		'data' => null,
 	),
 	/**
 	 * Tag 
@@ -390,25 +390,25 @@ return array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'View tag',
 		'bizRule' => null,
-		'data' => null
+		'data' => null,
 	),
 	'create_tag' => array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'Create tag',
 		'bizRule' => null,
-		'data' => null
+		'data' => null,
 	),
 	'update_tag' => array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'Edit tag',
 		'bizRule' => null,
-		'data' => null
+		'data' => null,
 	),
 	'delete_tag' => array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'Delete tag',
 		'bizRule' => null,
-		'data' => null
+		'data' => null,
 	),
 	/**
 	 * Task 
@@ -417,25 +417,66 @@ return array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'View task',
 		'bizRule' => null,
-		'data' => null
+		'data' => null,
 	),
 	'create_task' => array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'Create task',
 		'bizRule' => null,
-		'data' => null
+		'data' => null,
 	),
 	'update_task' => array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'Edit task',
 		'bizRule' => null,
-		'data' => null
+		'data' => null,
 	),
 	'delete_task' => array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'Delete task',
 		'bizRule' => null,
-		'data' => null
+		'data' => null,
+	),
+	'view_shared_task' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'View shared task',
+		'bizRule' => 'return (!isset($params["project"]) && !isset($params["task"])) || 
+							 (isset($params["project"]) && $params["project"]->isUserAssigned($params["userId"])) ||
+							 (isset($params["task"]) && ($params["task"] === "*" ? false : $params["task"]->project->isUserAssigned($params["userId"])));',
+		'data' => null,
+		'children' => array(
+			'view_task',
+		),
+	),
+	'create_shared_task' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Create shared task',
+		'bizRule' => 'return (!isset($params["project"])) || 
+							 ($params["project"]->isUserAssigned($params["userId"], array(Assignment::ROLE_OWNER, Assignment::ROLE_MANAGER)));',
+		'data' => null,
+		'children' => array(
+			'create_task',
+		),
+	),
+	'update_shared_task' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Edit shared task',
+		'bizRule' => 'return (!isset($params["task"])) || 
+							 (isset($params["task"]) && ($params["task"] === "*" ? false : $params["task"]->project->isUserAssigned($params["userId"], array(Assignment::ROLE_OWNER, Assignment::ROLE_MANAGER))));',
+		'data' => null,
+		'children' => array(
+			'update_task',
+		),
+	),
+	'delete_shared_task' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Delete shared task',
+		'bizRule' => 'return (!isset($params["task"])) || 
+							 (isset($params["task"]) && ($params["task"] === "*" ? false : $params["task"]->project->isUserAssigned($params["userId"], array(Assignment::ROLE_OWNER, Assignment::ROLE_MANAGER))));',
+		'data' => null,
+		'children' => array(
+			'delete_task',
+		),
 	),
 	/**
 	 * TimeEntry 
@@ -444,37 +485,37 @@ return array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'View time entry',
 		'bizRule' => null,
-		'data' => null
+		'data' => null,
 	),
 	'daily_time_report' => array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'Dialy time report',
 		'bizRule' => null,
-		'data' => null
+		'data' => null,
 	),
 	'create_time_entry' => array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'Create time entry',
 		'bizRule' => null,
-		'data' => null
+		'data' => null,
 	),
 	'report_time_entry' => array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'Report time entry',
 		'bizRule' => null,
-		'data' => null
+		'data' => null,
 	),
 	'update_time_entry' => array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'Edit time entry',
 		'bizRule' => null,
-		'data' => null
+		'data' => null,
 	),
 	'delete_time_entry' => array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'Delete time entry',
 		'bizRule' => null,
-		'data' => null
+		'data' => null,
 	),
 	/**
 	 * Basic roles
@@ -496,6 +537,10 @@ return array(
 			'create_shared_milestone',
 			'update_shared_milestone',
 			'delete_shared_milestone',
+			'view_shared_task',
+			'create_shared_task',
+			'update_shared_task',
+			'delete_shared_task',
 		),
 		'bizRule' => null,
 		'data' => null
@@ -560,6 +605,7 @@ return array(
 			'report_time_entry',
 			'update_time_entry',
 			'delete_time_entry',
+			'view_milestone',
 			'create_milestone',
 			'update_milestone',
 			'delete_milestone',
@@ -567,6 +613,18 @@ return array(
 			'create_assignment',
 			'update_assignment',
 			'delete_assignment',
+			'view_invoice',
+			'create_invoice',
+			'update_invoice',
+			'delete_invoice',
+			'view_payment',
+			'create_payment',
+			'update_payment',
+			'delete_payment',
+			'view_rate',
+			'create_rate',
+			'update_rate',
+			'delete_rate',
 			'client',
 			'teamlead',
 		),
@@ -593,18 +651,6 @@ return array(
 			'create_file_category',
 			'update_file_category',
 			'delete_file_category',
-			'view_invoice',
-			'create_invoice',
-			'update_invoice',
-			'delete_invoice',
-			'view_payment',
-			'create_payment',
-			'update_payment',
-			'delete_payment',
-			'view_rate',
-			'create_rate',
-			'update_rate',
-			'delete_rate',
 			'view_tag',
 			'create_tag',
 			'update_tag',

@@ -5,6 +5,9 @@ class TaskController extends AdminController
 	public function actionIndex($project, $milestone=null)
 	{
 		$project = $this->loadModel($project, 'Project');
+		if (!Yii::app()->user->checkAccess('view_task', array('project' => $project))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
 		$model = $this->createSearchModel('Task');
 		$provider = $model->search(array(
 			'condition' => 'project_id = :project_id',
@@ -20,6 +23,9 @@ class TaskController extends AdminController
 	public function actionCreate($project)
 	{
 		$project = $this->loadModel($project, 'Project');
+		if (!Yii::app()->user->checkAccess('create_task', array('project' => $project))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
 		$model = new Task('create');
 		$model->project = $project;
 		if ($this->saveModel($model)) {
@@ -34,6 +40,9 @@ class TaskController extends AdminController
 	public function actionUpdate($id)
 	{
 		$model = $this->loadModel($id, 'Task');
+		if (!Yii::app()->user->checkAccess('update_task', array('task' => $model))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
 		if ($this->saveModel($model)) {
 			$this->redirect(array('view', 'id' => $model->id));
 		}
@@ -45,6 +54,9 @@ class TaskController extends AdminController
 	public function actionDelete($id)
 	{
 		$model = $this->loadModel($id, 'Task');
+		if (!Yii::app()->user->checkAccess('delete_task', array('task' => $model))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
 		$model->delete();
 		if(!isset($_GET['ajax'])) {
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index', 'project' => $model->project_id));
@@ -54,6 +66,10 @@ class TaskController extends AdminController
 	public function actionView($id)
 	{
 		$task = $this->loadModel($id, 'Task');
+		if (!Yii::app()->user->checkAccess('view_task', array('task' => $task))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
+		
 		$comment = new Comment('create');
 		
 		if ($task->user_subscription !== null) {

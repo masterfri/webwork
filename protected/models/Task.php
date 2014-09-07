@@ -218,9 +218,10 @@ class Task extends CActiveRecord
 	{
 		return array(
 			'my' => array(
-				'condition' => 'task.created_by_id = :current_user_id',
+				'condition' => 'task.created_by_id = :current_user_id AND task.phase != :phase_closed',
 				'params' => array(
 					':current_user_id' => Yii::app()->user->id,
+					':phase_closed' => self::PHASE_CLOSED,
 				),
 			),
 			'assigned' => array(
@@ -264,9 +265,10 @@ class Task extends CActiveRecord
 				),
 			),
 			'scheduled' => array(
-				'condition' => 'task.phase = :phase_scheduled',
+				'condition' => 'task.phase IN(:phase_scheduled, :phase_in_progress)',
 				'params' => array(
 					':phase_scheduled' => self::PHASE_SCHEDULED,
+					':phase_in_progress' => self::PHASE_IN_PROGRESS,
 				),
 			),
 			'outstanding' => array(
