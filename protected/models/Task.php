@@ -295,6 +295,9 @@ class Task extends CActiveRecord
 			if ($this->getIsNewRecord()) {
 				$this->phase = self::PHASE_CREATED;
 			}
+			if ($this->readyToSchedule()) {
+				$this->phase = self::PHASE_SCHEDULED;
+			}
 			return true;
 		}
 		return false;
@@ -436,9 +439,26 @@ class Task extends CActiveRecord
 	public function doAction($action)
 	{
 		if (array_key_exists($action, self::$phase_graph)) {
+			if ($action == self::ACTION_REOPEN) {
+				$this->date_sheduled = '0000-00-00';
+			} elseif ($action == self::ACTION_START_WORK) {
+				if ($this->date_sheduled == '' || $this->date_sheduled == '0000-00-00') {
+					$this->date_sheduled = date('Y-m-d');
+				}
+				$this->assigned_id = Yii::app()->user->id;
+			}
 			$this->phase = self::$phase_graph[$action];
 		}
 		$this->time_updated = date('Y-m-d H:i:s');
-		$this->update(array('time_updated', 'phase'));
+		$this->update(array('time_updated', 'phase', 'date_sheduled', 'assigned_id'));
+	}
+	
+	protected function readyToSchedule()
+	{
+		return ($this->phase == self::PHASE_CREATED || 
+				$this->phase == self::PHASE_NEW_ITERATION) &&
+				$this->assigned !== null &&
+				$this->date_sheduled != '' &&
+				$this->date_sheduled != '0000-00-00';
 	}
 }
