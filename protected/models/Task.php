@@ -23,11 +23,11 @@ class Task extends CActiveRecord
 	const PHASE_ON_HOLD = 7;
 	
 	const ACTION_COMMENT = 'comment';
-	const ACTION_START_WORK = 'start-work';
-	const ACTION_COMPLETE_WORK = 'complete-work';
+	const ACTION_START_WORK = 'start';
+	const ACTION_COMPLETE_WORK = 'complete';
 	const ACTION_RETURN = 'return';
 	const ACTION_CLOSE = 'close';
-	const ACTION_PUT_ON_HOLD = 'put-on-hold';
+	const ACTION_PUT_ON_HOLD = 'hold';
 	const ACTION_REOPEN = 'reopen';
 	const ACTION_RESUME = 'resume';
 

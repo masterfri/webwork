@@ -70,7 +70,7 @@ class TaskController extends AdminController
 			throw new CHttpException(403, 'Forbidden');
 		}
 		
-		$comment = new Comment('create');
+		$comment = new Comment();
 		
 		if ($task->user_subscription !== null) {
 			$task->user_subscription->markAsSeen();
@@ -78,7 +78,8 @@ class TaskController extends AdminController
 		
 		if (isset($_POST['Comment'])) {
 			$action = isset($_POST['action']) ? $_POST['action'] : Task::ACTION_COMMENT;
-			if ($task->getIsActionAvailable($action)) {
+			if (Yii::app()->user->checkAccess("{$action}_task", array('task' => $task))) {
+				$comment->setScenario($action);
 				$comment->attributes = $_POST['Comment'];
 				$comment->task = $task;
 				$comment->action = $action;
@@ -101,6 +102,9 @@ class TaskController extends AdminController
 	public function actionWatch($id)
 	{
 		$model = $this->loadModel($id, 'Task');
+		if (!Yii::app()->user->checkAccess('view_task', array('task' => $model))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
 		$model->subscribe(Yii::app()->user->id);
 		if(!isset($_GET['ajax'])) {
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('view', 'id' => $model->id));
@@ -110,6 +114,9 @@ class TaskController extends AdminController
 	public function actionUnwatch($id)
 	{
 		$model = $this->loadModel($id, 'Task');
+		if (!Yii::app()->user->checkAccess('view_task', array('task' => $model))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
 		$model->unsubscribe(Yii::app()->user->id);
 		if(!isset($_GET['ajax'])) {
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('view', 'id' => $model->id));

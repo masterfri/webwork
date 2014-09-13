@@ -340,7 +340,7 @@ return array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'Update shared project',
 		'bizRule' => 'return (!isset($params["project"])) || 
-							 ($params["project"] === "*" ? false : $params["project"]->isUserAssigned($params["userId"], array(Assignment::ROLE_OWNER, Assignment::ROLE_MANAGER)));',
+							 ($params["project"]->isUserAssigned($params["userId"], array(Assignment::ROLE_OWNER, Assignment::ROLE_MANAGER)));',
 		'data' => null,
 		'children' => array(
 			'update_project',
@@ -350,7 +350,7 @@ return array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'Delete shared project',
 		'bizRule' => 'return (!isset($params["project"])) || 
-							 ($params["project"] === "*" ? false : $params["project"]->isUserAssigned($params["userId"], Assignment::ROLE_OWNER));',
+							 ($params["project"]->isUserAssigned($params["userId"], Assignment::ROLE_OWNER));',
 		'data' => null,
 		'children' => array(
 			'delete_project',
@@ -437,6 +437,62 @@ return array(
 		'bizRule' => null,
 		'data' => null,
 	),
+	'comment_task' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Comment on task',
+		'bizRule' => 'return (!isset($params["task"])) || 
+							 ($params["task"]->getIsActionAvailable(Task::ACTION_COMMENT));',
+		'data' => null,
+	),
+	'start_task' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Start work on task',
+		'bizRule' => 'return (!isset($params["task"])) || 
+							 ($params["task"]->getIsActionAvailable(Task::ACTION_START_WORK));',
+		'data' => null,
+	),
+	'complete_task' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Complete work on task',
+		'bizRule' => 'return (!isset($params["task"])) || 
+							 ($params["task"]->getIsActionAvailable(Task::ACTION_COMPLETE_WORK));',
+		'data' => null,
+	),
+	'return_task' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Return task',
+		'bizRule' => 'return (!isset($params["task"])) || 
+							 ($params["task"]->getIsActionAvailable(Task::ACTION_RETURN));',
+		'data' => null,
+	),
+	'close_task' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Close task',
+		'bizRule' => 'return (!isset($params["task"])) || 
+							 ($params["task"]->getIsActionAvailable(Task::ACTION_CLOSE));',
+		'data' => null,
+	),
+	'hold_task' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Put task on hold',
+		'bizRule' => 'return (!isset($params["task"])) || 
+							 ($params["task"]->getIsActionAvailable(Task::ACTION_PUT_ON_HOLD));',
+		'data' => null,
+	),
+	'reopen_task' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Reopen task',
+		'bizRule' => 'return (!isset($params["task"])) || 
+							 ($params["task"]->getIsActionAvailable(Task::ACTION_REOPEN));',
+		'data' => null,
+	),
+	'resume_task' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Resume task',
+		'bizRule' => 'return (!isset($params["task"])) || 
+							 ($params["task"]->getIsActionAvailable(Task::ACTION_RESUME));',
+		'data' => null,
+	),
 	'view_shared_task' => array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'View shared task',
@@ -462,7 +518,7 @@ return array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'Edit shared task',
 		'bizRule' => 'return (!isset($params["task"])) || 
-							 (isset($params["task"]) && ($params["task"] === "*" ? false : $params["task"]->project->isUserAssigned($params["userId"], array(Assignment::ROLE_OWNER, Assignment::ROLE_MANAGER))));',
+							 ($params["task"]->project->isUserAssigned($params["userId"], array(Assignment::ROLE_OWNER, Assignment::ROLE_MANAGER)));',
 		'data' => null,
 		'children' => array(
 			'update_task',
@@ -472,10 +528,90 @@ return array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'Delete shared task',
 		'bizRule' => 'return (!isset($params["task"])) || 
-							 (isset($params["task"]) && ($params["task"] === "*" ? false : $params["task"]->project->isUserAssigned($params["userId"], array(Assignment::ROLE_OWNER, Assignment::ROLE_MANAGER))));',
+							 ($params["task"]->project->isUserAssigned($params["userId"], array(Assignment::ROLE_OWNER, Assignment::ROLE_MANAGER)));',
 		'data' => null,
 		'children' => array(
 			'delete_task',
+		),
+	),
+	'comment_shared_task' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Comment on shared task',
+		'bizRule' => 'return (!isset($params["task"])) || 
+							 ($params["task"]->project->isUserAssigned($params["userId"]));',
+		'data' => null,
+		'children' => array(
+			'comment_task',
+		),
+	),
+	'start_shared_task' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Start work on shared task',
+		'bizRule' => 'return (!isset($params["task"])) || 
+							 ((!$params["task"]->assigned_id || $params["task"]->assigned_id == $params["userId"]) && $params["task"]->project->isUserAssigned($params["userId"]));',
+		'data' => null,
+		'children' => array(
+			'start_task',
+		),
+	),
+	'complete_shared_task' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Complete work on shared task',
+		'bizRule' => 'return (!isset($params["task"])) || 
+							 ($params["task"]->assigned_id == $params["userId"] && $params["task"]->project->isUserAssigned($params["userId"]));',
+		'data' => null,
+		'children' => array(
+			'complete_task',
+		),
+	),
+	'return_shared_task' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Return shared task',
+		'bizRule' => 'return (!isset($params["task"])) || 
+							 ($params["task"]->project->isUserAssigned($params["userId"], array(Assignment::ROLE_OWNER, Assignment::ROLE_MANAGER)));',
+		'data' => null,
+		'children' => array(
+			'return_task',
+		),
+	),
+	'close_shared_task' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Close shared task',
+		'bizRule' => 'return (!isset($params["task"])) || 
+							 ($params["task"]->project->isUserAssigned($params["userId"], array(Assignment::ROLE_OWNER, Assignment::ROLE_MANAGER)));',
+		'data' => null,
+		'children' => array(
+			'close_task',
+		),
+	),
+	'hold_shared_task' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Put shared task on hold',
+		'bizRule' => 'return (!isset($params["task"])) || 
+							 ($params["task"]->project->isUserAssigned($params["userId"], array(Assignment::ROLE_OWNER, Assignment::ROLE_MANAGER)));',
+		'data' => null,
+		'children' => array(
+			'hold_task',
+		),
+	),
+	'reopen_shared_task' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Reopen shared task',
+		'bizRule' => 'return (!isset($params["task"])) || 
+							 ($params["task"]->project->isUserAssigned($params["userId"], array(Assignment::ROLE_OWNER, Assignment::ROLE_MANAGER)));',
+		'data' => null,
+		'children' => array(
+			'reopen_task',
+		),
+	),
+	'resume_shared_task' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Resume shared task',
+		'bizRule' => 'return (!isset($params["task"])) || 
+							 ($params["task"]->project->isUserAssigned($params["userId"], array(Assignment::ROLE_OWNER, Assignment::ROLE_MANAGER)));',
+		'data' => null,
+		'children' => array(
+			'resume_task',
 		),
 	),
 	/**
@@ -487,21 +623,9 @@ return array(
 		'bizRule' => null,
 		'data' => null,
 	),
-	'daily_time_report' => array(
-		'type' => CAuthItem::TYPE_OPERATION,
-		'description' => 'Dialy time report',
-		'bizRule' => null,
-		'data' => null,
-	),
 	'create_time_entry' => array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'Create time entry',
-		'bizRule' => null,
-		'data' => null,
-	),
-	'report_time_entry' => array(
-		'type' => CAuthItem::TYPE_OPERATION,
-		'description' => 'Report time entry',
 		'bizRule' => null,
 		'data' => null,
 	),
@@ -516,6 +640,49 @@ return array(
 		'description' => 'Delete time entry',
 		'bizRule' => null,
 		'data' => null,
+	),
+	'report_time_entry' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Report time entry',
+		'bizRule' => 'return (!isset($params["task"])) || 
+							 ($params["task"]->project->isUserAssigned($params["userId"]));',
+		'data' => null,
+	),
+	'daily_time_report' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Dialy time report',
+		'bizRule' => null,
+		'data' => null,
+	),
+	'view_my_time_entry' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'View my time entry',
+		'bizRule' => 'return (!isset($params["entry"])) || 
+							 ($params["entry"] === "*" ? false : $params["entry"]->user_id == $params["userId"]);',
+		'data' => null,
+		'children' => array(
+			'view_time_entry',
+		),
+	),
+	'update_my_time_entry' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Edit my time entry',
+		'bizRule' => 'return (!isset($params["entry"])) || 
+							 ($params["entry"] === "*" ? false : $params["entry"]->user_id == $params["userId"]);',
+		'data' => null,
+		'children' => array(
+			'update_time_entry',
+		),
+	),
+	'delete_my_time_entry' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Delete my time entry',
+		'bizRule' => 'return (!isset($params["entry"])) || 
+							 ($params["entry"] === "*" ? false : $params["entry"]->user_id == $params["userId"]);',
+		'data' => null,
+		'children' => array(
+			'delete_time_entry',
+		),
 	),
 	/**
 	 * Basic roles
@@ -541,6 +708,12 @@ return array(
 			'create_shared_task',
 			'update_shared_task',
 			'delete_shared_task',
+			'comment_shared_task',
+			'return_shared_task',
+			'close_shared_task',
+			'hold_shared_task',
+			'reopen_shared_task',
+			'resume_shared_task',
 		),
 		'bizRule' => null,
 		'data' => null
@@ -555,11 +728,27 @@ return array(
 		'bizRule' => null,
 		'data' => null
 	),
+	'worker' => array(
+		'type' => CAuthItem::TYPE_ROLE,
+		'description' => 'Cотрудник',
+		'children' => array(
+			'user',
+			'start_shared_task',
+			'complete_shared_task',
+			'daily_time_report',
+			'report_time_entry',
+			'view_my_time_entry',
+			'update_my_time_entry',
+			'delete_my_time_entry',
+		),
+		'bizRule' => null,
+		'data' => null
+	),
 	'developer' => array(
 		'type' => CAuthItem::TYPE_ROLE,
 		'description' => 'Разработчик',
 		'children' => array(
-			'user',
+			'worker',
 		),
 		'bizRule' => null,
 		'data' => null
@@ -568,7 +757,7 @@ return array(
 		'type' => CAuthItem::TYPE_ROLE,
 		'description' => 'Тестер',
 		'children' => array(
-			'user',
+			'worker',
 		),
 		'bizRule' => null,
 		'data' => null
@@ -599,10 +788,16 @@ return array(
 			'create_task',
 			'update_task',
 			'delete_task',
+			'comment_task',
+			'start_task',
+			'complete_task',
+			'return_task',
+			'close_task',
+			'hold_task',
+			'reopen_task',
+			'resume_task',
 			'view_time_entry',
-			'daily_time_report',
 			'create_time_entry',
-			'report_time_entry',
 			'update_time_entry',
 			'delete_time_entry',
 			'view_milestone',

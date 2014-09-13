@@ -6,6 +6,9 @@ class TimeEntryController extends AdminController
 	{
 		$model = $this->createSearchModel('TimeEntry');
 		$provider = $model->search();
+		if (!Yii::app()->user->checkAccess('view_time_entry', array('entry' => '*'))) {
+			$provider->criteria->scopes[] = 'my';
+		}
 		$sum = $model->getSum($provider->criteria);
 		$this->render('index', array(
 			'model' => $model,
@@ -18,7 +21,7 @@ class TimeEntryController extends AdminController
 	{
 		$model = $this->createSearchModel('TimeEntry');
 		$provider = $model->search(array(
-			'condition' => 't.user_id = :user_id AND DATE(t.date_created) = :today',
+			'condition' => 'time_entry.user_id = :user_id AND DATE(time_entry.date_created) = :today',
 			'params' => array(
 				':user_id' => Yii::app()->user->id,
 				':today' => date('Y-m-d'),
@@ -46,6 +49,9 @@ class TimeEntryController extends AdminController
 	public function actionReport($task)
 	{
 		$task = $this->loadModel($task, 'Task');
+		if (!Yii::app()->user->checkAccess('report_time_entry', array('task' => $task))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
 		$model = new TimeEntry('create');
 		$model->task_id = $task->id;
 		$model->project_id = $task->project_id;
@@ -62,6 +68,9 @@ class TimeEntryController extends AdminController
 	public function actionUpdate($id)
 	{
 		$model = $this->loadModel($id, 'TimeEntry');
+		if (!Yii::app()->user->checkAccess('update_time_entry', array('entry' => $model))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
 		if ($this->saveModel($model)) {
 			$this->redirect(array('view', 'id' => $model->id));
 		}
@@ -73,6 +82,9 @@ class TimeEntryController extends AdminController
 	public function actionDelete($id)
 	{
 		$model = $this->loadModel($id, 'TimeEntry');
+		if (!Yii::app()->user->checkAccess('delete_time_entry', array('entry' => $model))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
 		$model->delete();
 		if(!isset($_GET['ajax'])) {
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
@@ -81,8 +93,12 @@ class TimeEntryController extends AdminController
 	
 	public function actionView($id)
 	{
+		$model = $this->loadModel($id, 'TimeEntry');
+		if (!Yii::app()->user->checkAccess('view_time_entry', array('entry' => $model))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
 		$this->render('view', array(
-			'model' => $this->loadModel($id, 'TimeEntry'),
+			'model' => $model,
 		));
 	}
 

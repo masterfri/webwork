@@ -16,7 +16,7 @@ $this->menu = array(
 	array(
 		'label' => '<i class="glyphicon glyphicon-eye-open"></i> ' . Yii::t('admin.crud', 'View Time Entry'), 
 		'url' => array('view', 'id' => $model->id),
-		'visible' => Yii::app()->user->checkAccess('view_time_entry'),
+		'visible' => Yii::app()->user->checkAccess('view_time_entry', array('entry' => $model)),
 	),
 	array(
 		'label' => '<i class="glyphicon glyphicon-wrench"></i> ' . Yii::t('admin.crud', 'Manage Time Entry'), 

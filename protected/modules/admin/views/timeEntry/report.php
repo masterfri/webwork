@@ -13,7 +13,7 @@ $this->menu = array(
 	array(
 		'label' => '<i class="glyphicon glyphicon-arrow-left"></i> ' . Yii::t('admin.crud', 'Back to Task'), 
 		'url' => array('task/view', 'id' => $task->id),
-		'visible' => Yii::app()->user->checkAccess('view_task'),
+		'visible' => Yii::app()->user->checkAccess('view_task', array('task' => $task)),
 	),
 	array(
 		'label' => '<i class="glyphicon glyphicon-time"></i> ' . Yii::t('admin.crud', 'Daily Time Report'), 

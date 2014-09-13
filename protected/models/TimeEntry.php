@@ -64,6 +64,18 @@ class TimeEntry extends CActiveRecord
 		);
 	}
 	
+	public function scopes()
+	{
+		return array(
+			'my' => array(
+				'condition' => 'time_entry.user_id = :current_user_id',
+				'params' => array(
+					':current_user_id' => Yii::app()->user->id,
+				),
+			),
+		);
+	}
+	
 	public function behaviors()
 	{
 		return array(
@@ -88,15 +100,16 @@ class TimeEntry extends CActiveRecord
 	public function search($params=array())
 	{
 		$criteria = new CDbCriteria($params);
-		$criteria->compare('t.activity_id', $this->activity_id);
-		$criteria->compare('t.project_id', $this->project_id);
-		$criteria->compare('t.task_id', $this->task_id);
-		$criteria->compare('t.user_id', $this->user_id);
+		$criteria->alias = 'time_entry';
+		$criteria->compare('time_entry.activity_id', $this->activity_id);
+		$criteria->compare('time_entry.project_id', $this->project_id);
+		$criteria->compare('time_entry.task_id', $this->task_id);
+		$criteria->compare('time_entry.user_id', $this->user_id);
 		$criteria->with = array('project', 'task', 'user', 'activity');
 		return new CActiveDataProvider($this, array(
 			'criteria' => $criteria,
 			'sort' => array(
-				'defaultOrder' => 't.date_created DESC',
+				'defaultOrder' => 'time_entry.date_created DESC',
 				'attributes' => array(
 					'project' => array(
 						'asc' => 'project.name ASC',
@@ -123,10 +136,11 @@ class TimeEntry extends CActiveRecord
 	public function getSum($params=array())
 	{
 		$criteria = new CDbCriteria($params);
-		$criteria->select = new CDbExpression('SUM(t.`amount`)');
+		$criteria->select = new CDbExpression('SUM(time_entry.`amount`)');
+		$this->applyScopes($criteria);
 		$cb = $this->dbConnection->commandBuilder;
 		$command = $cb->createFindCommand($this->tableName(), $criteria);
-		return $command->queryScalar();
+		return (float) $command->queryScalar();
 	}
 	
 	public function __toString()

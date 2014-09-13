@@ -133,7 +133,7 @@ $this->menu = array(
 			</div>
 			
 			<div class="form-group">
-				<?php if($model->getIsActionAvailable(Task::ACTION_COMMENT)) 
+				<?php if(Yii::app()->user->checkAccess('comment_task', array('task' => $model))) 
 					echo CHtml::tag('button', array(
 						'type' => 'submit',
 						'class' => 'btn btn-primary',
@@ -141,7 +141,7 @@ $this->menu = array(
 						'value' => Task::ACTION_COMMENT,
 					), Yii::t('admin.crud', 'Submit')); ?>
 				
-				<?php if($model->getIsActionAvailable(Task::ACTION_START_WORK)) 
+				<?php if(Yii::app()->user->checkAccess('start_task', array('task' => $model))) 
 					echo CHtml::tag('button', array(
 						'type' => 'submit',
 						'class' => 'btn btn-default',
@@ -149,7 +149,7 @@ $this->menu = array(
 						'value' => Task::ACTION_START_WORK,
 					), Yii::t('admin.crud', 'Start work')); ?>
 					
-				<?php if($model->getIsActionAvailable(Task::ACTION_COMPLETE_WORK)) 
+				<?php if(Yii::app()->user->checkAccess('complete_task', array('task' => $model))) 
 					echo CHtml::tag('button', array(
 						'type' => 'submit',
 						'class' => 'btn btn-default',
@@ -157,7 +157,7 @@ $this->menu = array(
 						'value' => Task::ACTION_COMPLETE_WORK,
 					), Yii::t('admin.crud', 'Complete work')); ?>
 					
-				<?php if($model->getIsActionAvailable(Task::ACTION_RETURN)) 
+				<?php if(Yii::app()->user->checkAccess('return_task', array('task' => $model))) 
 					echo CHtml::tag('button', array(
 						'type' => 'submit',
 						'class' => 'btn btn-default',
@@ -165,7 +165,7 @@ $this->menu = array(
 						'value' => Task::ACTION_RETURN,
 					), Yii::t('admin.crud', 'Return')); ?>
 					
-				<?php if($model->getIsActionAvailable(Task::ACTION_CLOSE)) 
+				<?php if(Yii::app()->user->checkAccess('close_task', array('task' => $model))) 
 					echo CHtml::tag('button', array(
 						'type' => 'submit',
 						'class' => 'btn btn-warning',
@@ -173,7 +173,7 @@ $this->menu = array(
 						'value' => Task::ACTION_CLOSE,
 					), Yii::t('admin.crud', 'Close')); ?>
 					
-				<?php if($model->getIsActionAvailable(Task::ACTION_PUT_ON_HOLD)) 
+				<?php if(Yii::app()->user->checkAccess('hold_task', array('task' => $model))) 
 					echo CHtml::tag('button', array(
 						'type' => 'submit',
 						'class' => 'btn btn-warning',
@@ -181,7 +181,7 @@ $this->menu = array(
 						'value' => Task::ACTION_PUT_ON_HOLD,
 					), Yii::t('admin.crud', 'Put on-hold')); ?>
 					
-				<?php if($model->getIsActionAvailable(Task::ACTION_REOPEN)) 
+				<?php if(Yii::app()->user->checkAccess('reopen_task', array('task' => $model))) 
 					echo CHtml::tag('button', array(
 						'type' => 'submit',
 						'class' => 'btn btn-default',
@@ -189,7 +189,7 @@ $this->menu = array(
 						'value' => Task::ACTION_REOPEN,
 					), Yii::t('admin.crud', 'Reopen')); ?>
 				
-				<?php if($model->getIsActionAvailable(Task::ACTION_RESUME)) 
+				<?php if(Yii::app()->user->checkAccess('resume_task', array('task' => $model))) 
 					echo CHtml::tag('button', array(
 						'type' => 'submit',
 						'class' => 'btn btn-default',

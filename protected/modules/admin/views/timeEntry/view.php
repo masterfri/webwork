@@ -15,7 +15,7 @@ $this->menu = array(
 	array(
 		'label' => '<i class="glyphicon glyphicon-pencil"></i> ' . Yii::t('admin.crud', 'Update Time Entry'), 
 		'url' => array('update', 'id' => $model->id),
-		'visible' => Yii::app()->user->checkAccess('update_time_entry'),
+		'visible' => Yii::app()->user->checkAccess('update_time_entry', array('entry' => $model)),
 	),
 	array(
 		'label' => '<i class="glyphicon glyphicon-trash"></i> ' . Yii::t('admin.crud', 'Delete Time Entry'), 
@@ -24,7 +24,7 @@ $this->menu = array(
 			'submit' => array('delete', 'id' => $model->id),
 			'confirm' => Yii::t('admin.crud', 'Are you sure you want to delete this time entry?'),
 		),
-		'visible' => Yii::app()->user->checkAccess('delete_time_entry'),
+		'visible' => Yii::app()->user->checkAccess('delete_time_entry', array('entry' => $model)),
 	),
 	array(
 		'label' => '<i class="glyphicon glyphicon-wrench"></i> ' . Yii::t('admin.crud', 'Manage Time Entry'), 
@@ -49,7 +49,6 @@ $this->menu = array(
 			'description',
 			'date_created:datetime',
 			'created_by',
- 
 		),
 	)); ?>
 </div>
