@@ -52,7 +52,7 @@ $this->menu = array(
 			'project',
 			'task',
 			'user',
-			'activity',
+			array('class' => 'LinkColumn', 'name' => 'activity'),
 			'amount',
 			'date_created:datetime',
 			array(

@@ -43,7 +43,7 @@ $this->menu = array(
 		'id' => 'project-grid',
 		'dataProvider' => $provider,
 		'columns' => array(
-			'name',
+			array('class' => 'LinkColumn', 'name' => 'name'),
 			array(
 				'name' => 'count_milestones',
 				'value' => 'CHtml::link($data->count_milestones, array("milestone/index", "project" => $data->id), array("class" => "btn btn-xs btn-default"))',

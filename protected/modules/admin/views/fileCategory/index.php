@@ -48,7 +48,7 @@ $this->menu = array(
 		'id' => 'filecategory-grid',
 		'dataProvider' => $provider,
 		'columns' => array(
-			'title',
+			array('class' => 'LinkColumn', 'name' => 'title'),
 			array(
 				'class' => 'ButtonColumn',
 				'deleteConfirmation' => Yii::t('admin.crud', 'Are you sure you want to delete this file category?'),

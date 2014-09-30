@@ -25,7 +25,7 @@ $this->menu = array(
 		'id' => 'activity-grid',
 		'dataProvider' => $provider,
 		'columns' => array(
-			'name',
+			array('class' => 'LinkColumn', 'name' => 'name'),
 			'description',
 			array(
 				'class' => 'ButtonColumn',

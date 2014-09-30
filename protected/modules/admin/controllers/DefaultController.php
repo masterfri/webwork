@@ -8,6 +8,7 @@ class DefaultController extends AdminController
 	{
 		$model = $this->createSearchModel('Task');
 		$provider = $this->getDataScheduled($model);
+		$provider->sort->defaultOrder = 'date_sheduled';
 		$this->layout = 'admin.views.layouts.dashboard';
 		$this->render('index', array(
 			'model' => $model,

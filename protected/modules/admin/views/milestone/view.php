@@ -53,18 +53,15 @@ $this->menu = array(
 			'created_by',
 		),
 	)); ?>
-</div>
-<?php if ('' != $model->description): ?>
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			<h3 class="panel-title"><?php echo Yii::t('milestone', 'Description'); ?></h3>
-		</div>
-		<div class="panel-body">
+	<div class="panel-body">
+		<?php if ('' != $model->description): ?>
 			<?php 
 				$this->beginWidget('CMarkdown'); 
 				echo $model->description;
 				$this->endWidget(); 
 			?>
-		</div>
+		<?php else: ?>
+			<p class="not-set"><?php echo Yii::t('admin.crud', 'No description given'); ?></p>
+		<?php endif; ?>
 	</div>
-<?php endif; ?>
+</div>

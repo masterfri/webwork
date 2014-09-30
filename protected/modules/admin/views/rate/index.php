@@ -43,7 +43,7 @@ $this->menu = array(
 		'id' => 'rate-grid',
 		'dataProvider' => $provider,
 		'columns' => array(
-			'name',
+			array('class' => 'LinkColumn', 'name' => 'name'),
 			'power',
 			array(
 				'class' => 'ButtonColumn',

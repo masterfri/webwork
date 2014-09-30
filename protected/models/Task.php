@@ -7,12 +7,12 @@ class Task extends CActiveRecord
 	const RISK_LOW = 3;
 	const RISK_NONE = 4;
 	
-	const PRIORITY_CRITICAL = 1;
-	const PRIORITY_URGENT = 2;
-	const PRIORITY_HIGH = 3;
-	const PRIORITY_MEDIUM = 4;
-	const PRIORITY_LOW = 5;
-	const PRIORITY_ON_HOLD = 6;
+	const PRIORITY_CRITICAL = 6;
+	const PRIORITY_URGENT = 5;
+	const PRIORITY_HIGH = 4;
+	const PRIORITY_MEDIUM = 3;
+	const PRIORITY_LOW = 2;
+	const PRIORITY_LOWEST = 1;
 	
 	const PHASE_CREATED = 1;
 	const PHASE_SCHEDULED = 2;
@@ -275,7 +275,11 @@ class Task extends CActiveRecord
 				'condition' => 'task.due_date != "0000-00-00" AND task.due_date >= DATE(NOW())',
 			),
 			'expired' => array(
-				'condition' => 'task.due_date != "0000-00-00" AND task.due_date < DATE(NOW())',
+				'condition' => 'task.due_date != "0000-00-00" AND task.due_date < DATE(NOW()) AND task.phase NOT IN(:phase_closed, :phase_on_hold)',
+				'params' => array(
+					':phase_closed' => self::PHASE_CLOSED,
+					':phase_on_hold' => self::PHASE_ON_HOLD,
+				),
 			),
 			'updated' => array(
 				'condition' => 'user_subscription.last_view_time < task.time_updated',
@@ -320,8 +324,19 @@ class Task extends CActiveRecord
 		$criteria->compare('task.phase', $this->phase);
 		$criteria->compare('task.priority', $this->priority);
 		$criteria->compare('task.regression_risk', $this->regression_risk);
+		$criteria->with = array('assigned');
 		return new CActiveDataProvider($this, array(
 			'criteria' => $criteria,
+			'sort' => array(
+				'defaultOrder' => 'task.time_created DESC',
+				'attributes' => array(
+					'assigned' => array(
+						'asc' => 'assigned.real_name ASC',
+						'desc' => 'assigned.real_name DESC',
+					),
+					'*',
+				)
+			),
 		));
 	}
 	
@@ -368,7 +383,7 @@ class Task extends CActiveRecord
 				self::PRIORITY_HIGH => Yii::t('task', 'High'),
 				self::PRIORITY_MEDIUM => Yii::t('task', 'Medium'),
 				self::PRIORITY_LOW => Yii::t('task', 'Low'),
-				self::PRIORITY_ON_HOLD => Yii::t('task', 'On hold'),
+				self::PRIORITY_LOWEST => Yii::t('task', 'Lowest'),
 			);
 		}
 		return self::$priorities;

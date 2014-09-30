@@ -45,11 +45,16 @@ $this->menu = array(
 		'id' => 'task-grid',
 		'dataProvider' => $provider,
 		'columns' => array(
-			'name',
+			array('class' => 'LinkColumn', 'name' => 'name'),
+			array(
+				'name' => 'phase',
+				'value' => '$data->getPhase()',
+			),
 			array(
 				'name' => 'priority',
 				'value' => '$data->getPriority()',
 			),
+			'assigned',
 			'date_sheduled:date',
 			'due_date:date',
 			array(

@@ -10,16 +10,20 @@ table.grid-view .button-column a {
 	padding: 5px;
 }
 table.grid-view .sort-link.desc:after,
-table.grid-view .sort-link.asc:after {
+table.grid-view .sort-link.asc:after,
+.sorter .desc:after,
+.sorter .asc:after {
 	font-family: 'Glyphicons Halflings';
 	-webkit-font-smoothing: antialiased;
 	font-size: 10px;
 	margin-left: 3px;
 }
-table.grid-view .sort-link.asc:after {
+table.grid-view .sort-link.asc:after,
+.sorter .asc:after {
 	content: "\e113";
 }
-table.grid-view .sort-link.desc:after {
+table.grid-view .sort-link.desc:after,
+.sorter .desc:after {
 	content: "\e114";
 }
 table.detailed-view th {
@@ -132,4 +136,180 @@ table.detailed-view .thumbnail {
 }
 .input-group-icon > .btn + .btn {
 	margin-left: 0;
+}
+.sorter {
+	padding: 15px;
+}
+.sorter ul {
+	display: inline-block;
+	margin: 0;
+	padding: 0;
+}
+.sorter ul li {
+	display: inline-block;
+	margin-left: 20px;
+}
+.task-item {
+	padding: 15px;
+	border-bottom: 1px solid #dddddd;
+}
+.task-item:first-child {
+	border-top: 2px solid #dddddd;
+}
+.color-lightblue {
+	color: #5bc0de;
+}
+.color-blue {
+	color: #428bca;
+}
+.color-green {
+	color: #5cb85c;
+}
+.color-red {
+	color: #d9534f;
+}
+.color-yellow {
+	color: #f0ad4e;
+}
+.color-grey {
+	color: #777;
+}
+.color-coral {
+	color: #ff7f50;
+}
+ul.tags {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+ul.tags li {
+	list-style: none;
+	display: inline;
+	padding: .2em .6em .3em;
+	font-size: 75%;
+	font-weight: 700;
+	line-height: 2;
+	color: #fff;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: baseline;
+	border-radius: .25em;
+	margin-right: .3em;
+}
+.task-list ul.tags {
+	margin: .5em 0 0 1.25em;
+}
+.single-task ul.tags {
+	margin-top: .8em;
+}
+@media (max-width: 767px) {
+	.task-list .task-details {
+		padding-top: 15px;
+	}
+}
+.task-detail {
+	font-size: 0.95em;
+}
+.task-detail + .task-detail {
+	margin-top: 0.5em;
+}
+.task-detail .l {
+	color: #999;
+}
+.not-set {
+	color: #999;
+	font-style: italic;
+}
+.task-list .group-date {
+	padding: 10px 15px;
+	background: #eee;
+	border-bottom: 2px solid #dddddd;
+	border-top: 1px solid #dddddd;
+}
+.task-list .group-date:first-child {
+	border-top: 2px solid #dddddd;
+}
+.task-list .task-item:nth-child(odd) {
+	background-color: #f9f9f9;
+}
+@media (max-width: 767px) {
+	.single-task .task-details + .task-details {
+		padding-top: 10px;
+	}
+}
+.single-task .task-creator {
+	color: #777;
+	text-align: right;
+	font-size: 0.9em;
+}
+@media (max-width: 767px) {
+	.single-task .task-creator {
+		padding-top: 10px;
+		text-align: left;
+	}
+}
+.single-task .task-details {
+	border-bottom: 1px solid #dddddd;
+}
+@media (min-width: 767px) {
+	.single-task .task-details {
+		border-right: 1px solid #dddddd;
+		border-bottom: 0;
+		float: left;
+		width: 80%;
+	}
+	.single-task .task-controls {
+		float: right;
+		width: 20%;
+		border-left: 1px solid #dddddd;
+		position: relative;
+		left: -1px;
+	}
+}
+.single-task .task-controls .btn-xs {
+	width: 24px;
+	height: 24px;
+	padding: 4px;
+}
+.task-details > .table-bordered {
+	border: 0;
+}
+.detailed-view.table-bordered > tbody > tr > td:first-child,
+.detailed-view.table-bordered > tbody > tr > th:first-child {
+	border-left: 0;
+}
+.detailed-view.table-bordered > tbody > tr > td:last-child,
+.detailed-view.table-bordered > tbody > tr > th:last-child {
+	border-right: 0;
+}
+.detailed-view.table-bordered > tbody > tr:first-child > td,
+.detailed-view.table-bordered > tbody > tr:first-child > th {
+	border-top: 0;
+}
+.detailed-view.table-bordered > tbody > tr:last-child > td,
+.detailed-view.table-bordered > tbody > tr:last-child > th {
+	border-bottom: 0;
+}
+.detailed-view.table-bordered + .panel-body {
+	border-top: 1px solid #dddddd;
+}
+.detailed-view.table {
+	margin-bottom: 0;
+}
+ul.unstyled, 
+ol.unstyled {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+.single-task .task-controls .panel-body > ul > li {
+	margin-bottom: 10px;
+}
+.single-task .hr {
+	padding-bottom: 10px;
+	border-bottom: 1px solid #dddddd;
+}
+.single-task .task-phase span {
+	margin-left: 6px;
+	margin-right: 6px;
 }

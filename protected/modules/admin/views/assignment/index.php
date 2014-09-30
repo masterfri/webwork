@@ -32,7 +32,7 @@ $this->menu = array(
 		'id' => 'assignment-grid',
 		'dataProvider' => $provider,
 		'columns' => array(
-			'user',
+			array('class' => 'LinkColumn', 'name' => 'user'),
 			array('name' => 'role', 'value' => '$data->getRoleName()'),
 			array(
 				'class' => 'ButtonColumn',

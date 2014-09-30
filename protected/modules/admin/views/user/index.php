@@ -43,7 +43,7 @@ $this->menu = array(
 		'id' => 'user-grid',
 		'dataProvider' => $provider,
 		'columns' => array(
-			'real_name',
+			array('class' => 'LinkColumn', 'name' => 'real_name'),
 			'username',
 			'email',
 			array('name' => 'status', 'value' => '$data->getStatusName()'),

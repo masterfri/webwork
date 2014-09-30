@@ -61,18 +61,15 @@ $this->menu = array(
 			'created_by',
 		),
 	)); ?>
-</div>
-<?php if ('' != $model->scope): ?>
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			<h3 class="panel-title"><?php echo Yii::t('project', 'Scope'); ?></h3>
-		</div>
-		<div class="panel-body">
+	<div class="panel-body">
+		<?php if ('' != $model->scope): ?>
 			<?php 
 				$this->beginWidget('CMarkdown'); 
 				echo $model->scope;
 				$this->endWidget(); 
 			?>
-		</div>
+		<?php else: ?>
+			<p class="not-set"><?php echo Yii::t('admin.crud', 'No description given'); ?></p>
+		<?php endif; ?>
 	</div>
-<?php endif; ?>
+</div>

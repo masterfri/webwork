@@ -50,7 +50,7 @@ $this->menu = array(
 		'id' => 'milestone-grid',
 		'dataProvider' => $provider,
 		'columns' => array(
-			'name',
+			array('class' => 'LinkColumn', 'name' => 'name'),
 			'due_date:date',
 			array(
 				'class' => 'ButtonColumn',

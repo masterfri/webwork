@@ -20,57 +20,33 @@
 		<div class="form-group">
 			<?php echo $form->label($model, 'priority', array('class'=>'col-sm-3 control-label')); ?>
 			<div class="col-sm-9">
-				<?php echo $form->dropdownList($model, 'priority', array(
-					1 => 'Critical',
-					2 => 'Urgent',
-					3 => 'High',
-					4 => 'Medium',
-					5 => 'Low',
-					6 => 'On hold',
-				), array(
-					'class' => 'form-control',
-					'prompt' => '',
-				)); ?> 
+				<?php echo $form->tagField($model, 'priority', Task::getListPriorities()); ?> 
 			</div>
 		</div>
 		<div class="form-group">
 			<?php echo $form->label($model, 'regression_risk', array('class'=>'col-sm-3 control-label')); ?>
 			<div class="col-sm-9">
-				<?php echo $form->dropdownList($model, 'regression_risk', array(
-					1 => 'High',
-					2 => 'Medium',
-					3 => 'Low',
-					4 => 'None',
-				), array(
-					'class' => 'form-control',
-					'prompt' => '',
-				)); ?> 
+				<?php echo $form->tagField($model, 'regression_risk', Task::getListRegressionRisks()); ?> 
 			</div>
 		</div>
 		<div class="form-group">
 			<?php echo $form->label($model, 'phase', array('class'=>'col-sm-3 control-label')); ?>
 			<div class="col-sm-9">
-				<?php echo $form->dropdownList($model, 'phase', array(
-					1 => 'Created',
-					2 => 'Scheduled',
-					3 => 'In Progress',
-					4 => 'Pending',
-					5 => 'New Iteration',
-					6 => 'Closed',
-					7 => 'Paused',
-				), array(
-					'class' => 'form-control',
-					'prompt' => '',
+				<?php echo $form->tagField($model, 'phase', array(
+					Task::PHASE_CREATED => Yii::t('task', 'New'),
+					Task::PHASE_SCHEDULED => Yii::t('task', 'Scheduled'),
+					Task::PHASE_IN_PROGRESS => Yii::t('task', 'In progress'),
+					Task::PHASE_PENDING => Yii::t('task', 'Pending'),
+					Task::PHASE_NEW_ITERATION => Yii::t('task', 'New iteration'),
+					Task::PHASE_CLOSED => Yii::t('task', 'Closed'),
+					Task::PHASE_ON_HOLD => Yii::t('task', 'On-hold'),
 				)); ?> 
 			</div>
 		</div>
 		<div class="form-group">
 			<?php echo $form->label($model, 'assigned_id', array('class'=>'col-sm-3 control-label')); ?>
 			<div class="col-sm-9">
-				<?php echo $form->dropdownList($model, 'assigned_id', User::getList(), array(
-					'class' => 'form-control',
-					'prompt' => '',
-				)); ?> 
+				<?php echo $form->tagField($model, 'assigned_id', User::getList()); ?> 
 			</div>
 		</div>
 		

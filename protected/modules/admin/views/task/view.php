@@ -51,51 +51,101 @@ $this->menu = array(
 );
 
 ?>
-<div class="panel panel-default">
+<div class="panel panel-default single-task">
 	<div class="panel-heading">
-		<h3 class="panel-title"><?php echo CHtml::encode($model->name); ?></h3>
+		<h3 class="panel-title">
+			<?php echo CHtml::encode($model->name); ?>
+			<?php if($model->milestone && Yii::app()->user->checkAccess('view_milestone', array('milestone' => $model->milestone))): ?>
+				:: 
+				<?php echo CHtml::link(CHtml::encode($model->milestone->name), array('milestone/view', 'id' => $model->milestone->id)); ?>
+			<?php endif; ?>
+			<?php if(Yii::app()->user->checkAccess('view_project', array('project' => $model->project))): ?>
+				:: 
+				<?php echo CHtml::link(CHtml::encode($model->project->name), array('project/view', 'id' => $model->project->id)); ?>
+			<?php endif; ?>
+		</h3>
 	</div>
-	<?php $this->widget('DetailView', array(
-		'data' => $model,		
-		'attributes' => array(
-			'tags:array',
-			'milestone',
-			array(
-				'name' => 'priority',
-				'value' => $model->getPriority(),
+	<div class="task-details">
+		<?php $this->widget('DetailView', array(
+			'data' => $model,		
+			'attributes' => array(
+				'complexity',
+				'estimate',
+				array(
+					'name' => 'regression_risk',
+					'value' => $model->getRegressionRisk(),
+				),
+				'date_sheduled:date',
+				'due_date:date',
+				'time_created:datetime',
+				'created_by',
 			),
-			'complexity',
-			'estimate',
-			array(
-				'name' => 'regression_risk',
-				'value' => $model->getRegressionRisk(),
-			),
-			'date_sheduled:date',
-			'due_date:date',
-			array(
-				'name' => 'phase',
-				'value' => $model->getPhase(),
-			),
-			'assigned',
-			'time_created:datetime',
-			'created_by',
-		),
-	)); ?>
-</div>
-<?php if ('' != $model->description): ?>
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			<h3 class="panel-title"><?php echo Yii::t('task', 'Description'); ?></h3>
-		</div>
+		)); ?>
 		<div class="panel-body">
-			<?php 
-				$this->beginWidget('CMarkdown'); 
-				echo $model->description;
-				$this->endWidget(); 
-			?>
+			<?php if ('' != $model->description): ?>
+				<?php 
+					$this->beginWidget('CMarkdown'); 
+					echo $model->description;
+					$this->endWidget(); 
+				?>
+			<?php else: ?>
+				<p class="not-set"><?php echo Yii::t('admin.crud', 'No description given'); ?></p>
+			<?php endif; ?>
 		</div>
 	</div>
-<?php endif; ?>
+	<div class="task-controls">
+		<div class="panel-body">
+			<ul class="unstyled">
+				<li class="task-phase hr">
+					<?php echo ViewHelper::taskPhaseIcon($model); ?>
+					<?php echo CHtml::encode($model->getPhase()); ?>
+				</li>
+				<?php if(!empty($model->tags)): ?>
+					<li class="tags hr">
+						<a class="btn btn-default btn-xs" href="#" title="<?php echo Yii::t('admin.crud', 'Change tags'); ?>">
+							<span class="glyphicon glyphicon-tag"></span>
+						</a>
+						<?php echo Yii::t('task', 'Tags'); ?>
+						<ul class="tags">
+							<?php foreach($model->tags as $tag): ?>
+								<li style="background: <?php echo $tag->color; ?>;">
+									<?php echo CHtml::encode($tag->name); ?>
+								</li>
+							<?php endforeach; ?>
+						</ul>
+					</li>
+				<?php endif; ?>
+				<li>
+					<a class="btn btn-default btn-xs" href="#" title="<?php echo Yii::t('admin.crud', 'Change priority'); ?>">
+						<span class="glyphicon glyphicon-arrow-up"></span>
+					</a>
+					<?php echo ViewHelper::taskPriorityLabel($model); ?>
+				</li>
+				<li class="hr">
+					<a class="btn btn-default btn-xs" href="#" title="<?php echo Yii::t('admin.crud', 'Assign'); ?>">
+						<span class="glyphicon glyphicon-user"></span>
+					</a>
+					<?php if ($model->assigned): ?>
+						<?php echo CHtml::encode($model->assigned); ?>
+					<?php else: ?>
+						<span class="not-set"><?php echo Yii::t('admin.crud', 'Nobody'); ?></span>
+					<?php endif; ?>
+				</li>
+				<li class="timer">
+					<a class="btn btn-default btn-xs" href="#" title="<?php echo Yii::t('admin.crud', 'Add'); ?>">
+						<span class="glyphicon glyphicon-plus"></span>
+					</a>
+					<a class="btn btn-default btn-xs" href="#" title="<?php echo Yii::t('admin.crud', 'Start'); ?>">
+						<span class="glyphicon glyphicon-play"></span>
+					</a>
+					<code>0:00:00</code>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="clearfix"></div>
+</div>
+
 <h3><?php echo Yii::t('admin.crud', 'Disscussion'); ?></h3>
 <?php $this->renderPartial('_comments', array(
 	'task' => $model,

@@ -43,7 +43,7 @@ $this->menu = array(
 		'id' => 'tag-grid',
 		'dataProvider' => $provider,
 		'columns' => array(
-			'name',
+			array('class' => 'LinkColumn', 'name' => 'name'),
 			array('name' => 'color', 'type' => 'raw', 'value' => "sprintf('<div style=\"width: 20px; height: 20px; background: %s; border: 1px solid black; \"></div>', \$data->color)"),
 			array(
 				'class' => 'ButtonColumn',
