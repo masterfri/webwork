@@ -184,17 +184,17 @@ ul.tags {
 }
 ul.tags li {
 	list-style: none;
-	display: inline;
-	padding: .2em .6em .3em;
+	display: inline-block;
+	padding: 0 .6em;
 	font-size: 75%;
 	font-weight: 700;
-	line-height: 2;
+	line-height: 1.7;
 	color: #fff;
 	text-align: center;
 	white-space: nowrap;
 	vertical-align: baseline;
 	border-radius: .25em;
-	margin-right: .3em;
+	margin: .3em .3em 0 0;
 }
 .task-list ul.tags {
 	margin: .5em 0 0 1.25em;
@@ -266,7 +266,7 @@ ul.tags li {
 		left: -1px;
 	}
 }
-.single-task .task-controls .btn-xs {
+.single-task .task-controls .btn-square {
 	width: 24px;
 	height: 24px;
 	padding: 4px;
@@ -312,4 +312,102 @@ ol.unstyled {
 .single-task .task-phase span {
 	margin-left: 6px;
 	margin-right: 6px;
+}
+.dropdown-menu.dropdown-menu-selectable > li > a {
+	padding: 3px 20px 3px 30px;
+	position: relative;
+}
+.dropdown-menu.dropdown-menu-selectable > li.selected > a:before {
+	position: absolute;
+	top: 3px;
+	left: 10px;
+	font-family: 'Glyphicons Halflings';
+	content: '\e013';
+}
+.dropdown-menu.dropdown-menu-selectable > li.button {
+	padding: 10px 10px 5px 10px;
+}
+.dropdown-menu.dropdown-menu-selectable > li > button {
+	width: 100%;
+}
+.tags-menu a span {
+	display: block;
+	padding: 0 .6em;
+	font-size: 75%;
+	font-weight: 700;
+	line-height: 2;
+	color: #fff;
+	white-space: nowrap;
+	vertical-align: baseline;
+	border-radius: .25em;
+	margin-right: .3em;
+}
+.phase-icon {
+	position: relative;
+	top: 1px;
+	display: inline-block;
+	font-family: 'Glyphicons Halflings';
+	-webkit-font-smoothing: antialiased;
+	font-style: normal;
+	font-weight: normal;
+	line-height: 1;
+	-moz-osx-font-smoothing: grayscale;
+}
+.phase-icon.phase-new:before {
+	content: "\2a";
+	color: #5bc0de;
+}
+.phase-icon.phase-scheduled:before {
+	content: "\e109";
+	color: #ff7f50;
+}
+.phase-icon.phase-in-progress:before {
+	content: "\e072";
+	color: #428bca;
+}
+.phase-icon.phase-pending:before {
+	content: "\e034";
+	color: #d9534f;
+}
+.phase-icon.phase-new-iteration:before {
+	content: "\e030";
+	color: #f0ad4e;
+}
+.phase-icon.phase-closed:before {
+	content: "\e013";
+	color: #5cb85c;
+}
+.phase-icon.phase-on-hold:before {
+	content: "\e073";
+	color: #777;
+}
+.priority-label {
+	display: inline;
+	padding: .2em .6em .3em;
+	font-size: 75%;
+	font-weight: bold;
+	line-height: 1;
+	color: #ffffff;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: baseline;
+	border-radius: .25em;
+}
+.priority-label.priority-critical {
+	background-color: #d9534f;
+}
+.priority-label.priority-urgent {
+	background-color: #f0ad4e;
+}
+.priority-label.priority-high {
+	background-color: #428bca;
+}
+.priority-label.priority-medium {
+	background-color: #5bc0de;
+}
+.priority-label.priority-low {
+	background-color: #5cb85c;
+}
+.priority-label.priority-lowest {
+	background-color: #777;
 }

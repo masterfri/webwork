@@ -46,7 +46,7 @@ class TimeEntryController extends AdminController
 		));
 	}
 	
-	public function actionReport($task)
+	public function actionReport($task, $sec=0)
 	{
 		$task = $this->loadModel($task, 'Task');
 		if (!Yii::app()->user->checkAccess('report_time_entry', array('task' => $task))) {
@@ -56,6 +56,9 @@ class TimeEntryController extends AdminController
 		$model->task_id = $task->id;
 		$model->project_id = $task->project_id;
 		$model->user_id = Yii::app()->user->id;
+		if ($sec > 0) {
+			$model->amount = sprintf('%0.2f', $sec / 3600);
+		}
 		if ($this->saveModel($model)) {
 			$this->redirect(array('daily'));
 		}

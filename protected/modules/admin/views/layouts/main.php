@@ -11,6 +11,7 @@
 			$cs = Yii::app()->clientScript;
 			$cs->registerCoreScript('jquery');
 			$cs->registerScriptFile('/rc/bootstrap/js/bootstrap.js', CClientScript::POS_END);
+			$cs->registerScriptFile('/rc/ajax-bindings/ajax-bindings.js', CClientScript::POS_END);
 			$cs->registerScriptFile('/rc/js/admin.js', CClientScript::POS_END);
 		?>
 		

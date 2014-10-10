@@ -35,6 +35,11 @@ $this->menu = array(
 		'visible' => Yii::app()->user->checkAccess('update_task', array('task' => $model)),
 	),
 	array(
+		'label' => '<i class="glyphicon glyphicon-time"></i> ' . Yii::t('admin.crud', 'Estimate Task'), 
+		'url' => array('estimate', 'id' => $model->id),
+		'visible' => Yii::app()->user->checkAccess('update_task', array('task' => $model)),
+	),
+	array(
 		'label' => '<i class="glyphicon glyphicon-trash"></i> ' . Yii::t('admin.crud', 'Delete Task'), 
 		'url' => '#', 
 		'linkOptions' => array(
@@ -97,48 +102,82 @@ $this->menu = array(
 		<div class="panel-body">
 			<ul class="unstyled">
 				<li class="task-phase hr">
-					<?php echo ViewHelper::taskPhaseIcon($model); ?>
+					<?php echo ViewHelper::taskPhaseIcon($model->phase); ?>
 					<?php echo CHtml::encode($model->getPhase()); ?>
 				</li>
-				<?php if(!empty($model->tags)): ?>
-					<li class="tags hr">
-						<a class="btn btn-default btn-xs" href="#" title="<?php echo Yii::t('admin.crud', 'Change tags'); ?>">
-							<span class="glyphicon glyphicon-tag"></span>
-						</a>
-						<?php echo Yii::t('task', 'Tags'); ?>
-						<ul class="tags">
-							<?php foreach($model->tags as $tag): ?>
-								<li style="background: <?php echo $tag->color; ?>;">
-									<?php echo CHtml::encode($tag->name); ?>
-								</li>
-							<?php endforeach; ?>
-						</ul>
-					</li>
-				<?php endif; ?>
+				<li class="tags hr">
+					<?php $this->widget('DropdownMenuSelect', array(
+						'name' => 'tags',
+						'value' => array_map(function($t) { return $t->id; }, $model->tags),
+						'options' => ViewHelper::listTags($model->project->getAvailableTags(), array(
+							'parentTag' => false, 
+							'glue' => false,
+							'itemTag' => 'span',
+						)),
+						'labels' => ViewHelper::listTags($model->project->getAvailableTags(), array(
+							'parentTag' => false, 
+							'glue' => false,
+						)),
+						'emptyLabel' => '<span class="not-set">' . Yii::t('admin.crud', 'Not set') . '</span>',
+						'buttonHtmlOptions' => array('class' => 'btn btn-default btn-xs'),
+						'button' => '<span class="glyphicon glyphicon-tag"></span> ' . Yii::t('admin.crud', 'Change tags'),
+						'multiple' => true,
+						'doneBtnText' => Yii::t('admin.crud', 'Update'),
+						'doneBtnHtmlOptions' => array('class' => 'btn btn-default btn-xs'),
+						'dropdownHtmlOptions' => array('class' => 'tags-menu'),
+						'htmlOptions' => array('class' => 'tags', 'container' => 'ul'),
+						'htmlEncodeOptions' => false,
+						'multipleLabelSeparator' => '',
+					)); ?>
+				</li>
 				<li>
-					<a class="btn btn-default btn-xs" href="#" title="<?php echo Yii::t('admin.crud', 'Change priority'); ?>">
-						<span class="glyphicon glyphicon-arrow-up"></span>
-					</a>
-					<?php echo ViewHelper::taskPriorityLabel($model); ?>
+					<?php $this->widget('DropdownMenuSelect', array(
+						'name' => 'priority',
+						'value' => $model->priority,
+						'options' => Task::getListPriorities(),
+						'labels' => ViewHelper::allPriorityLabels(),
+						'emptyLabel' => '<span class="not-set">' . Yii::t('admin.crud', 'Not set') . '</span>',
+						'buttonHtmlOptions' => array(
+							'class' => 'btn btn-default btn-xs btn-square',
+							'title' => Yii::t('admin.crud', 'Change priority'),
+						),
+						'button' => '<span class="glyphicon glyphicon-arrow-up"></span>',
+					)); ?>
 				</li>
 				<li class="hr">
-					<a class="btn btn-default btn-xs" href="#" title="<?php echo Yii::t('admin.crud', 'Assign'); ?>">
-						<span class="glyphicon glyphicon-user"></span>
-					</a>
-					<?php if ($model->assigned): ?>
-						<?php echo CHtml::encode($model->assigned); ?>
-					<?php else: ?>
-						<span class="not-set"><?php echo Yii::t('admin.crud', 'Nobody'); ?></span>
-					<?php endif; ?>
+					<?php $this->widget('DropdownMenuSelect', array(
+						'name' => 'assignment',
+						'value' => $model->assigned_id,
+						'options' => $model->project->getTeamList(),
+						'emptyLabel' => '<span class="not-set">' . Yii::t('admin.crud', 'Nobody') . '</span>',
+						'emptyOption' => Yii::t('admin.crud', 'Nobody'),
+						'buttonHtmlOptions' => array(
+							'class' => 'btn btn-default btn-xs btn-square',
+							'title' => Yii::t('admin.crud', 'Change assignment'),
+						),
+						'button' => '<span class="glyphicon glyphicon-user"></span>',
+					)); ?>
 				</li>
 				<li class="timer">
-					<a class="btn btn-default btn-xs" href="#" title="<?php echo Yii::t('admin.crud', 'Add'); ?>">
-						<span class="glyphicon glyphicon-plus"></span>
-					</a>
-					<a class="btn btn-default btn-xs" href="#" title="<?php echo Yii::t('admin.crud', 'Start'); ?>">
-						<span class="glyphicon glyphicon-play"></span>
-					</a>
-					<code>0:00:00</code>
+					<form id="timer_form" action="<?php echo $this->createUrl('timeEntry/report'); ?>" method="get">
+						<button type="submit" class="btn btn-default btn-xs btn-square" title="<?php echo Yii::t('admin.crud', 'Report Time'); ?>">
+							<span class="glyphicon glyphicon-plus"></span>
+						</button>
+						<a id="start_timer" class="btn btn-default btn-xs btn-square" href="#" title="<?php echo Yii::t('admin.crud', 'Start'); ?>">
+							<span class="glyphicon glyphicon-play"></span>
+						</a>
+						<a id="stop_timer" class="btn btn-default btn-xs btn-square hidden" href="#" title="<?php echo Yii::t('admin.crud', 'Stop'); ?>">
+							<span class="glyphicon glyphicon-stop"></span>
+						</a>
+						<a id="reset_timer" class="btn btn-default btn-xs btn-square" href="#" title="<?php echo Yii::t('admin.crud', 'Reset'); ?>">
+							<span class="glyphicon glyphicon-remove"></span>
+						</a>
+						<span id="timer_display">
+							<code>0:00:00</code>
+							<input type="hidden" name="sec" value="0" />
+						</span>
+						<input type="hidden" name="task" value="<?php echo $model->id; ?>" />
+					</form>
 				</li>
 			</ul>
 		</div>
@@ -253,3 +292,69 @@ $this->menu = array(
 
 	</div>
 </div>
+
+<?php
+
+$changePriorityUrl = CJSON::encode($this->createUrl('changePriority', array('id' => $model->id)));
+$changeAssignmentUrl = CJSON::encode($this->createUrl('changeAssignment', array('id' => $model->id)));
+$changeTagsUrl = CJSON::encode($this->createUrl('changeTags', array('id' => $model->id)));
+$confirmNavigation = CJSON::encode(Yii::t('admin.crud', 'Your timer is not saved. Do you want to leave page?'));
+$confirmReset = CJSON::encode(Yii::t('admin.crud', 'Are you sure you want to reset timer?'));
+$cs = Yii::app()->clientScript;
+$cs->registerCoreScript('bbq');
+$cs->registerScript('task', 
+<<<EOS
+$('#priority').on('selectitem', function(e, v, l) {
+	var url = $.param.querystring($changePriorityUrl, {priority: v, ajax: 1});
+	$.post(url);
+});
+$('#assignment').on('selectitem', function(e, v, l) {
+	var url = $.param.querystring($changeAssignmentUrl, {user: v, ajax: 1});
+	$.post(url);
+});
+$('#tags').on('selectitem', function(e, v, l) {
+	var url = $.param.querystring($changeTagsUrl, {ajax: 1});
+	$.post(url, {tags: v});
+});
+
+var timer, timer_value = 0;
+$('#start_timer').click(function () {
+	$(this).addClass('hidden');
+	$('#stop_timer').removeClass('hidden');
+	timer = setInterval(function() {
+		timer_value++;
+		var s = timer_value % 60;
+		var m = parseInt(timer_value / 60) % 60;
+		var h = parseInt(timer_value / 3600);
+		$('#timer_display code').text(h + ':' + (m > 9 ? '' : '0') + m + ':' + (s > 9 ? '' : '0') + s);
+		$('#timer_display input').val(timer_value);
+	}, 1000);
+	window.onbeforeunload = function() {
+		return $confirmNavigation;
+	};
+	return false;
+});
+$('#stop_timer').click(function () {
+	$(this).addClass('hidden');
+	$('#start_timer').removeClass('hidden');
+	clearInterval(timer);
+	return false;
+});
+$('#reset_timer').click(function () {
+	if (confirm($confirmReset)) {
+		$('#start_timer').removeClass('hidden');
+		$('#stop_timer').addClass('hidden');
+		clearInterval(timer);
+		window.onbeforeunload = null;
+		timer_value = 0;
+		$('#timer_display code').text('0:00:00');
+		$('#timer_display input').val('0');
+	}
+	return false;
+});
+$('#timer_form').submit(function () {
+	clearInterval(timer);
+	window.onbeforeunload = null;
+});
+EOS
+);

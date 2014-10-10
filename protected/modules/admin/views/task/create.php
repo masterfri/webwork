@@ -26,6 +26,7 @@ $this->menu = array(
 	<div class="panel-body">
 		<?php $this->renderPartial('_form', array(
 			'model' => $model,
+			'project' => $project,
 		)); ?>
 	</div>
 </div>

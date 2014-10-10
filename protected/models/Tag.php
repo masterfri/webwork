@@ -72,17 +72,13 @@ class Tag extends CActiveRecord
 	
 	public function __toString()
 	{
-		return $this->getDisplayName();
-	}
-	
-	public function getDisplayName()
-	{
 		return $this->name;
 	}
 	
 	public static function getList()
 	{
 		$criteria = new CDbCriteria();
-		return CHtml::listData(self::model()->findAll($criteria), 'id', 'displayName');
+		$criteria->order = 'name';
+		return CHtml::listData(self::model()->findAll($criteria), 'id', 'name');
 	}
 }

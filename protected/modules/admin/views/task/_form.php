@@ -39,7 +39,7 @@
 	<div class="form-group">
 		<?php echo $form->labelEx($model, 'tags', array('class'=>'col-sm-3 control-label')); ?>
 		<div class="col-sm-9">
-			<?php echo $form->tagField($model, 'tags', Tag::getList(), array(
+			<?php echo $form->tagField($model, 'tags', $project->getAvailableTagsList(), array(
 				'class' => 'form-control',
 			)); ?> 
 			<?php echo $form->error($model, 'tags', array('class'=>'help-inline')); ?>
@@ -61,6 +61,24 @@
 				'prompt' => Yii::t('admin.crud', 'Select Value'),
 			)); ?> 
 			<?php echo $form->error($model, 'priority', array('class'=>'help-inline')); ?>
+		</div>
+	</div>
+	<div class="form-group">
+		<?php echo $form->labelEx($model, 'assigned_id', array('class'=>'col-sm-3 control-label')); ?>
+		<div class="col-sm-3">
+			<?php echo $form->dropdownList($model, 'assigned_id', $project->getTeamList(), array(
+				'class' => 'form-control',
+				'prompt' => Yii::t('admin.crud', 'Select Value'),
+			)); ?> 
+			<?php echo $form->error($model, 'assigned_id', array('class'=>'help-inline')); ?>
+		</div>
+		<?php echo $form->labelEx($model, 'regression_risk', array('class'=>'col-sm-3 control-label')); ?>
+		<div class="col-sm-3">
+			<?php echo $form->dropdownList($model, 'regression_risk', Task::getListRegressionRisks(), array(
+				'class' => 'form-control',
+				'prompt' => Yii::t('admin.crud', 'Select Value'),
+			)); ?> 
+			<?php echo $form->error($model, 'regression_risk', array('class'=>'help-inline')); ?>
 		</div>
 	</div>
 	<div class="form-group">
@@ -93,24 +111,6 @@
 				'class' => 'form-control datepicker-form-control',
 			)); ?> 
 			<?php echo $form->error($model, 'due_date', array('class'=>'help-inline')); ?>
-		</div>
-	</div>
-	<div class="form-group">
-		<?php echo $form->labelEx($model, 'regression_risk', array('class'=>'col-sm-3 control-label')); ?>
-		<div class="col-sm-3">
-			<?php echo $form->dropdownList($model, 'regression_risk', Task::getListRegressionRisks(), array(
-				'class' => 'form-control',
-				'prompt' => Yii::t('admin.crud', 'Select Value'),
-			)); ?> 
-			<?php echo $form->error($model, 'regression_risk', array('class'=>'help-inline')); ?>
-		</div>
-		<?php echo $form->labelEx($model, 'assigned_id', array('class'=>'col-sm-3 control-label')); ?>
-		<div class="col-sm-3">
-			<?php echo $form->dropdownList($model, 'assigned_id', User::getList(), array(
-				'class' => 'form-control',
-				'prompt' => Yii::t('admin.crud', 'Select Value'),
-			)); ?> 
-			<?php echo $form->error($model, 'assigned_id', array('class'=>'help-inline')); ?>
 		</div>
 	</div>
 	

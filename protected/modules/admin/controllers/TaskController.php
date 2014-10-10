@@ -51,6 +51,78 @@ class TaskController extends AdminController
 		));
 	}
 	
+	public function actionEstimate($id)
+	{
+		$model = $this->loadModel($id, 'Task');
+		if (!Yii::app()->user->checkAccess('update_task', array('task' => $model))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
+		$model->setScenario('estimate');
+		if ($this->saveModel($model)) {
+			$this->redirect(array('view', 'id' => $model->id));
+		}
+		$this->render('estimate', array(
+			'model' => $model,
+		));
+	}
+	
+	public function actionChangePriority($id, $priority)
+	{
+		$model = $this->loadModel($id, 'Task');
+		if (!Yii::app()->user->checkAccess('update_task', array('task' => $model))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
+		$model->setScenario('change-priority');
+		$model->priority = $priority;
+		$model->save();
+		if(isset($_GET['ajax'])) {
+			echo CJSON::encode(array(
+				'status' => 'success',
+				'id' => $model->id,
+			));
+		} else {
+			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('view', 'id' => $model->id));
+		}
+	}
+	
+	public function actionChangeAssignment($id, $user)
+	{
+		$model = $this->loadModel($id, 'Task');
+		if (!Yii::app()->user->checkAccess('update_task', array('task' => $model))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
+		$model->setScenario('change-assignment');
+		$model->assigned_id = $user;
+		$model->save();
+		if(isset($_GET['ajax'])) {
+			echo CJSON::encode(array(
+				'status' => 'success',
+				'id' => $model->id,
+			));
+		} else {
+			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('view', 'id' => $model->id));
+		}
+	}
+	
+	public function actionChangeTags($id)
+	{
+		$model = $this->loadModel($id, 'Task');
+		if (!Yii::app()->user->checkAccess('update_task', array('task' => $model))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
+		$model->setScenario('change-tags');
+		$model->tags = Yii::app()->request->getPost('tags');
+		$model->save();
+		if(isset($_GET['ajax'])) {
+			echo CJSON::encode(array(
+				'status' => 'success',
+				'id' => $model->id,
+			));
+		} else {
+			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('view', 'id' => $model->id));
+		}
+	}
+	
 	public function actionDelete($id)
 	{
 		$model = $this->loadModel($id, 'Task');
@@ -143,7 +215,7 @@ class TaskController extends AdminController
 				'roles' => array('view_task'),
 			),
 			array('allow',
-				'actions' => array('update'),
+				'actions' => array('update', 'changePriority', 'changeAssignment', 'changeTags', 'estimate'),
 				'roles' => array('update_task'),
 			),
 			array('allow',

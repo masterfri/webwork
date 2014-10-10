@@ -33,6 +33,7 @@ class Task extends CActiveRecord
 
 	protected static $regression_risks;
 	protected static $priorities;
+	protected static $phases;
 	
 	protected static $action_graph = array(
 		self::ACTION_COMMENT => array(
@@ -129,26 +130,30 @@ class Task extends CActiveRecord
 	public function rules()
 	{
 		return array(
-			array('	assigned_id,
-					milestone_id,
-					tags', 
-					'safe'),
+			array('	milestone_id', 
+					'safe', 'on' => 'create, update'),
+			array('	tags', 
+					'safe', 'on' => 'create, update, change-tags'),
+			array('	assigned_id', 
+					'safe', 'on' => 'create, update, change-assignment'),
 			array('	complexity,
 					estimate', 
-					'numerical'),
+					'numerical', 'on' => 'create, update, estimate'),
 			array('	date_sheduled,
 					due_date', 
-					'date', 'format' => 'yyyy-MM-dd'),
+					'date', 'format' => 'yyyy-MM-dd', 'on' => 'create, update'),
 			array('	description', 
-					'length', 'max' => 16000),
+					'length', 'max' => 16000, 'on' => 'create, update'),
 			array('	name', 
-					'length', 'max' => 200),
+					'length', 'max' => 200, 'on' => 'create, update'),
 			array('	name', 
-					'required'),
+					'required', 'on' => 'create, update'),
+			array('	complexity', 
+					'required', 'on' => 'estimate'),
 			array('	priority', 
-					'in', 'range' => array(1, 2, 3, 4, 5, 6)),
+					'in', 'range' => array_keys(self::getListPriorities()), 'on' => 'create, update, change-priority'),
 			array('	regression_risk', 
-					'in', 'range' => array(1, 2, 3, 4)),
+					'in', 'range' => array_keys(self::getListRegressionRisks()), 'on' => 'create, update, estimate'),
 			array('	assigned_id,
 					name,
 					phase,
@@ -394,25 +399,25 @@ class Task extends CActiveRecord
 		return array_key_exists($this->priority, self::getListPriorities()) ? self::$priorities[$this->priority] : '';
 	}
 	
+	public static function getListPhases()
+	{
+		if (null === self::$phases) {
+			self::$phases = array(
+				self::PHASE_CREATED => Yii::t('task', 'New'),
+				self::PHASE_SCHEDULED => Yii::t('task', 'Scheduled'),
+				self::PHASE_IN_PROGRESS => Yii::t('task', 'In progress'),
+				self::PHASE_PENDING => Yii::t('task', 'Pending'),
+				self::PHASE_NEW_ITERATION => Yii::t('task', 'New iteration'),
+				self::PHASE_CLOSED => Yii::t('task', 'Closed'),
+				self::PHASE_ON_HOLD => Yii::t('task', 'On-hold'),
+			);
+		}
+		return self::$phases;
+	}
+	
 	public function getPhase()
 	{
-		switch ($this->phase) {
-			case self::PHASE_CREATED:
-				return Yii::t('task', 'New');
-			case self::PHASE_SCHEDULED:
-				return Yii::t('task', 'Scheduled');
-			case self::PHASE_IN_PROGRESS:
-				return Yii::t('task', 'In progress');
-			case self::PHASE_PENDING:
-				return Yii::t('task', 'Pending');
-			case self::PHASE_NEW_ITERATION:
-				return Yii::t('task', 'New iteration');
-			case self::PHASE_CLOSED:
-				return Yii::t('task', 'Closed');
-			case self::PHASE_ON_HOLD:
-				return Yii::t('task', 'On-hold');
-		}
-		return '';
+		return array_key_exists($this->phase, self::getListPhases()) ? self::$phases[$this->phase] : '';
 	}
 	
 	public function getIsActionAvailable($action)

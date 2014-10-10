@@ -136,6 +136,13 @@ class Project extends CActiveRecord
 		return CHtml::listData(self::model()->findAll($criteria), 'id', 'displayName');
 	}
 	
+	public function getTeamList()
+	{
+		$data = CHtml::listData($this->assignments, 'user_id', 'user');
+		asort($data);
+		return $data;
+	}
+	
 	public function isUserAssigned($user_id, $role=null)
 	{
 		if ($user_id) {
@@ -160,5 +167,17 @@ class Project extends CActiveRecord
 		$assignment->user_id = Yii::app()->user->id;
 		$assignment->role = Assignment::ROLE_OWNER;
 		$assignment->save();
+	}
+	
+	public function getAvailableTags()
+	{
+		$criteria = new CDbCriteria();
+		$criteria->order = 'name';
+		return Tag::model()->findAll($criteria);
+	}
+	
+	public function getAvailableTagsList()
+	{
+		return CHtml::listData($this->getAvailableTags(), 'id', 'name');
 	}
 }

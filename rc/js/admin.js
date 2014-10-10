@@ -18,5 +18,5 @@ $(function() {
 		});
 		return false;
 	});
-	
+
 });
