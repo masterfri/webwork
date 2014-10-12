@@ -37,7 +37,7 @@ $this->menu = array(
 	array(
 		'label' => '<i class="glyphicon glyphicon-time"></i> ' . Yii::t('admin.crud', 'Estimate Task'), 
 		'url' => array('estimate', 'id' => $model->id),
-		'visible' => Yii::app()->user->checkAccess('update_task', array('task' => $model)),
+		'visible' => Yii::app()->user->checkAccess('estimate_task', array('task' => $model)),
 	),
 	array(
 		'label' => '<i class="glyphicon glyphicon-trash"></i> ' . Yii::t('admin.crud', 'Delete Task'), 
@@ -101,84 +101,106 @@ $this->menu = array(
 	<div class="task-controls">
 		<div class="panel-body">
 			<ul class="unstyled">
-				<li class="task-phase hr">
+				<li class="task-phase">
 					<?php echo ViewHelper::taskPhaseIcon($model->phase); ?>
 					<?php echo CHtml::encode($model->getPhase()); ?>
 				</li>
-				<li class="tags hr">
-					<?php $this->widget('DropdownMenuSelect', array(
-						'name' => 'tags',
-						'value' => array_map(function($t) { return $t->id; }, $model->tags),
-						'options' => ViewHelper::listTags($model->project->getAvailableTags(), array(
-							'parentTag' => false, 
-							'glue' => false,
-							'itemTag' => 'span',
-						)),
-						'labels' => ViewHelper::listTags($model->project->getAvailableTags(), array(
-							'parentTag' => false, 
-							'glue' => false,
-						)),
-						'emptyLabel' => '<span class="not-set">' . Yii::t('admin.crud', 'Not set') . '</span>',
-						'buttonHtmlOptions' => array('class' => 'btn btn-default btn-xs'),
-						'button' => '<span class="glyphicon glyphicon-tag"></span> ' . Yii::t('admin.crud', 'Change tags'),
-						'multiple' => true,
-						'doneBtnText' => Yii::t('admin.crud', 'Update'),
-						'doneBtnHtmlOptions' => array('class' => 'btn btn-default btn-xs'),
-						'dropdownHtmlOptions' => array('class' => 'tags-menu'),
-						'htmlOptions' => array('class' => 'tags', 'container' => 'ul'),
-						'htmlEncodeOptions' => false,
-						'multipleLabelSeparator' => '',
-					)); ?>
-				</li>
-				<li>
-					<?php $this->widget('DropdownMenuSelect', array(
-						'name' => 'priority',
-						'value' => $model->priority,
-						'options' => Task::getListPriorities(),
-						'labels' => ViewHelper::allPriorityLabels(),
-						'emptyLabel' => '<span class="not-set">' . Yii::t('admin.crud', 'Not set') . '</span>',
-						'buttonHtmlOptions' => array(
-							'class' => 'btn btn-default btn-xs btn-square',
-							'title' => Yii::t('admin.crud', 'Change priority'),
-						),
-						'button' => '<span class="glyphicon glyphicon-arrow-up"></span>',
-					)); ?>
-				</li>
-				<li class="hr">
-					<?php $this->widget('DropdownMenuSelect', array(
-						'name' => 'assignment',
-						'value' => $model->assigned_id,
-						'options' => $model->project->getTeamList(),
-						'emptyLabel' => '<span class="not-set">' . Yii::t('admin.crud', 'Nobody') . '</span>',
-						'emptyOption' => Yii::t('admin.crud', 'Nobody'),
-						'buttonHtmlOptions' => array(
-							'class' => 'btn btn-default btn-xs btn-square',
-							'title' => Yii::t('admin.crud', 'Change assignment'),
-						),
-						'button' => '<span class="glyphicon glyphicon-user"></span>',
-					)); ?>
-				</li>
-				<li class="timer">
-					<form id="timer_form" action="<?php echo $this->createUrl('timeEntry/report'); ?>" method="get">
-						<button type="submit" class="btn btn-default btn-xs btn-square" title="<?php echo Yii::t('admin.crud', 'Report Time'); ?>">
-							<span class="glyphicon glyphicon-plus"></span>
-						</button>
-						<a id="start_timer" class="btn btn-default btn-xs btn-square" href="#" title="<?php echo Yii::t('admin.crud', 'Start'); ?>">
-							<span class="glyphicon glyphicon-play"></span>
-						</a>
-						<a id="stop_timer" class="btn btn-default btn-xs btn-square hidden" href="#" title="<?php echo Yii::t('admin.crud', 'Stop'); ?>">
-							<span class="glyphicon glyphicon-stop"></span>
-						</a>
-						<a id="reset_timer" class="btn btn-default btn-xs btn-square" href="#" title="<?php echo Yii::t('admin.crud', 'Reset'); ?>">
-							<span class="glyphicon glyphicon-remove"></span>
-						</a>
-						<span id="timer_display">
-							<code>0:00:00</code>
-							<input type="hidden" name="sec" value="0" />
-						</span>
-						<input type="hidden" name="task" value="<?php echo $model->id; ?>" />
-					</form>
-				</li>
+				<?php if (Yii::app()->user->checkAccess('update_task_tags', array('task' => $model))): ?>
+					<li class="tags-control hr">
+						<?php $this->widget('DropdownMenuSelect', array(
+							'name' => 'tags',
+							'value' => array_map(function($t) { return $t->id; }, $model->tags),
+							'options' => ViewHelper::listTags($model->project->getAvailableTags(), array(
+								'parentTag' => false, 
+								'glue' => false,
+								'itemTag' => 'span',
+							)),
+							'labels' => ViewHelper::listTags($model->project->getAvailableTags(), array(
+								'parentTag' => false, 
+								'glue' => false,
+							)),
+							'emptyLabel' => '<span class="not-set">' . Yii::t('admin.crud', 'Not set') . '</span>',
+							'buttonHtmlOptions' => array('class' => 'btn btn-default btn-xs'),
+							'button' => '<span class="glyphicon glyphicon-tag"></span> ' . Yii::t('admin.crud', 'Change tags'),
+							'multiple' => true,
+							'doneBtnText' => Yii::t('admin.crud', 'Update'),
+							'doneBtnHtmlOptions' => array('class' => 'btn btn-default btn-xs'),
+							'dropdownHtmlOptions' => array('class' => 'tags-menu'),
+							'htmlOptions' => array('class' => 'tags', 'container' => 'ul'),
+							'htmlEncodeOptions' => false,
+							'multipleLabelSeparator' => '',
+						)); ?>
+					</li>
+				<?php else: ?>
+					<li class="tags-view hr">
+						<?php echo ViewHelper::listTags($model->tags, array('class' => 'tags')); ?>
+					</li>
+				<?php endif; ?>
+				<?php if (Yii::app()->user->checkAccess('update_task_priority', array('task' => $model))): ?>
+					<li class="priority-control hr">
+						<?php $this->widget('DropdownMenuSelect', array(
+							'name' => 'priority',
+							'value' => $model->priority,
+							'options' => Task::getListPriorities(),
+							'labels' => ViewHelper::allPriorityLabels(),
+							'emptyLabel' => '<span class="not-set">' . Yii::t('admin.crud', 'Not set') . '</span>',
+							'buttonHtmlOptions' => array(
+								'class' => 'btn btn-default btn-xs btn-square',
+								'title' => Yii::t('admin.crud', 'Change priority'),
+							),
+							'button' => '<span class="glyphicon glyphicon-arrow-up"></span>',
+						)); ?>
+					</li>
+				<?php else: ?>
+					<li class="priority-view hr">
+						<span class="glyphicon glyphicon-arrow-up"  title="<?php echo Yii::t('task', 'Priority'); ?>"></span>
+						<?php echo ViewHelper::taskPriorityLabel($model->priority); ?>
+					</li>
+				<?php endif; ?>
+				<?php if (Yii::app()->user->checkAccess('update_task_assignment', array('task' => $model))): ?>
+					<li class="assignment-control">
+						<?php $this->widget('DropdownMenuSelect', array(
+							'name' => 'assignment',
+							'value' => $model->assigned_id,
+							'options' => $model->project->getTeamList(),
+							'emptyLabel' => '<span class="not-set">' . Yii::t('admin.crud', 'Nobody') . '</span>',
+							'emptyOption' => Yii::t('admin.crud', 'Nobody'),
+							'buttonHtmlOptions' => array(
+								'class' => 'btn btn-default btn-xs btn-square',
+								'title' => Yii::t('admin.crud', 'Change assignment'),
+							),
+							'button' => '<span class="glyphicon glyphicon-user"></span>',
+						)); ?>
+					</li>
+				<?php else: ?>
+					<li class="assignment-view">
+						<span class="glyphicon glyphicon-user" title="<?php echo Yii::t('task', 'Assigned'); ?>"></span>
+						<?php echo CHtml::encode($model->assigned); ?>
+					</li>
+				<?php endif; ?>
+				<?php if (Yii::app()->user->checkAccess('report_time_entry', array('task' => $model))): ?>
+					<li class="timer hr">
+						<form id="timer_form" action="<?php echo $this->createUrl('timeEntry/report'); ?>" method="get">
+							<button type="submit" class="btn btn-default btn-xs btn-square" title="<?php echo Yii::t('admin.crud', 'Report Time'); ?>">
+								<span class="glyphicon glyphicon-plus"></span>
+							</button>
+							<a id="start_timer" class="btn btn-default btn-xs btn-square" href="#" title="<?php echo Yii::t('admin.crud', 'Start'); ?>">
+								<span class="glyphicon glyphicon-play"></span>
+							</a>
+							<a id="stop_timer" class="btn btn-default btn-xs btn-square hidden" href="#" title="<?php echo Yii::t('admin.crud', 'Stop'); ?>">
+								<span class="glyphicon glyphicon-stop"></span>
+							</a>
+							<a id="reset_timer" class="btn btn-default btn-xs btn-square" href="#" title="<?php echo Yii::t('admin.crud', 'Reset'); ?>">
+								<span class="glyphicon glyphicon-remove"></span>
+							</a>
+							<span id="timer_display">
+								<code>0:00:00</code>
+								<input type="hidden" name="sec" value="0" />
+							</span>
+							<input type="hidden" name="task" value="<?php echo $model->id; ?>" />
+						</form>
+					</li>
+				<?php endif; ?>
 			</ul>
 		</div>
 	</div>

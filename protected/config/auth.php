@@ -431,6 +431,30 @@ return array(
 		'bizRule' => null,
 		'data' => null,
 	),
+	'update_task_tags' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Update task tags',
+		'bizRule' => null,
+		'data' => null,
+	),
+	'update_task_priority' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Update task priority',
+		'bizRule' => null,
+		'data' => null,
+	),
+	'update_task_assignment' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Update task assignment',
+		'bizRule' => null,
+		'data' => null,
+	),
+	'estimate_task' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Estimate task',
+		'bizRule' => null,
+		'data' => null,
+	),
 	'delete_task' => array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'Delete task',
@@ -522,6 +546,46 @@ return array(
 		'data' => null,
 		'children' => array(
 			'update_task',
+		),
+	),
+	'update_shared_task_tags' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Update shared task tags',
+		'bizRule' => 'return (!isset($params["task"])) || 
+							 ($params["task"]->project->isUserAssigned($params["userId"]));',
+		'data' => null,
+		'children' => array(
+			'update_task_tags',
+		),
+	),
+	'update_shared_task_priority' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Update shared task priority',
+		'bizRule' => 'return (!isset($params["task"])) || 
+							 ($params["task"]->project->isUserAssigned($params["userId"], array(Assignment::ROLE_OWNER, Assignment::ROLE_MANAGER)));',
+		'data' => null,
+		'children' => array(
+			'update_task_priority',
+		),
+	),
+	'update_shared_task_assignment' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Update shared task assignment',
+		'bizRule' => 'return (!isset($params["task"])) || 
+							 ($params["task"]->project->isUserAssigned($params["userId"], Assignment::ROLE_MANAGER));',
+		'data' => null,
+		'children' => array(
+			'update_task_assignment',
+		),
+	),
+	'estimate_shared_task' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Estimate shared task',
+		'bizRule' => 'return (!isset($params["task"])) || 
+							 ($params["task"]->project->isUserAssigned($params["userId"]));',
+		'data' => null,
+		'children' => array(
+			'estimate_task',
 		),
 	),
 	'delete_shared_task' => array(
@@ -707,6 +771,9 @@ return array(
 			'view_shared_task',
 			'create_shared_task',
 			'update_shared_task',
+			'update_shared_task_tags',
+			'update_shared_task_priority',
+			'update_shared_task_assignment',
 			'delete_shared_task',
 			'comment_shared_task',
 			'return_shared_task',
@@ -735,6 +802,7 @@ return array(
 			'user',
 			'start_shared_task',
 			'complete_shared_task',
+			'estimate_shared_task',
 			'daily_time_report',
 			'report_time_entry',
 			'view_my_time_entry',
@@ -788,6 +856,10 @@ return array(
 			'create_task',
 			'update_task',
 			'delete_task',
+			'update_task_tags',
+			'update_task_priority',
+			'update_task_assignment',
+			'estimate_task',
 			'comment_task',
 			'start_task',
 			'complete_task',

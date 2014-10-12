@@ -54,7 +54,7 @@ class TaskController extends AdminController
 	public function actionEstimate($id)
 	{
 		$model = $this->loadModel($id, 'Task');
-		if (!Yii::app()->user->checkAccess('update_task', array('task' => $model))) {
+		if (!Yii::app()->user->checkAccess('estimate_task', array('task' => $model))) {
 			throw new CHttpException(403, 'Forbidden');
 		}
 		$model->setScenario('estimate');
@@ -69,7 +69,7 @@ class TaskController extends AdminController
 	public function actionChangePriority($id, $priority)
 	{
 		$model = $this->loadModel($id, 'Task');
-		if (!Yii::app()->user->checkAccess('update_task', array('task' => $model))) {
+		if (!Yii::app()->user->checkAccess('update_task_priority', array('task' => $model))) {
 			throw new CHttpException(403, 'Forbidden');
 		}
 		$model->setScenario('change-priority');
@@ -88,7 +88,7 @@ class TaskController extends AdminController
 	public function actionChangeAssignment($id, $user)
 	{
 		$model = $this->loadModel($id, 'Task');
-		if (!Yii::app()->user->checkAccess('update_task', array('task' => $model))) {
+		if (!Yii::app()->user->checkAccess('update_task_assignment', array('task' => $model))) {
 			throw new CHttpException(403, 'Forbidden');
 		}
 		$model->setScenario('change-assignment');
@@ -107,7 +107,7 @@ class TaskController extends AdminController
 	public function actionChangeTags($id)
 	{
 		$model = $this->loadModel($id, 'Task');
-		if (!Yii::app()->user->checkAccess('update_task', array('task' => $model))) {
+		if (!Yii::app()->user->checkAccess('update_task_tags', array('task' => $model))) {
 			throw new CHttpException(403, 'Forbidden');
 		}
 		$model->setScenario('change-tags');
@@ -215,8 +215,24 @@ class TaskController extends AdminController
 				'roles' => array('view_task'),
 			),
 			array('allow',
-				'actions' => array('update', 'changePriority', 'changeAssignment', 'changeTags', 'estimate'),
+				'actions' => array('update'),
 				'roles' => array('update_task'),
+			),
+			array('allow',
+				'actions' => array('changePriority'),
+				'roles' => array('update_task_priority'),
+			),
+			array('allow',
+				'actions' => array('changeAssignment'),
+				'roles' => array('update_task_assignment'),
+			),
+			array('allow',
+				'actions' => array('changeTags'),
+				'roles' => array('update_task_tags'),
+			),
+			array('allow',
+				'actions' => array('estimate'),
+				'roles' => array('estimate_task'),
 			),
 			array('allow',
 				'actions' => array('delete'),

@@ -199,7 +199,7 @@ ul.tags li {
 .task-list ul.tags {
 	margin: .5em 0 0 1.25em;
 }
-.single-task ul.tags {
+.single-task .tags-control ul.tags {
 	margin-top: .8em;
 }
 @media (max-width: 767px) {
@@ -306,12 +306,17 @@ ol.unstyled {
 	margin-bottom: 10px;
 }
 .single-task .hr {
-	padding-bottom: 10px;
-	border-bottom: 1px solid #dddddd;
+	padding-top: 10px;
+	border-top: 1px solid #dddddd;
 }
-.single-task .task-phase span {
+.single-task .task-phase span.phase-icon,
+.single-task .priority-view span.glyphicon,
+.single-task .assignment-view span.glyphicon {
 	margin-left: 6px;
 	margin-right: 6px;
+}
+.single-task .priority-view span.glyphicon {
+	vertical-align: middle;
 }
 .dropdown-menu.dropdown-menu-selectable > li > a {
 	padding: 3px 20px 3px 30px;
