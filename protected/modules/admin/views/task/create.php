@@ -12,7 +12,11 @@ $this->breadcrumbs = array(
 
 $this->menu = array(
 	array(
-		'label' => '<i class="glyphicon glyphicon-wrench"></i> ' . Yii::t('admin.crud', 'Manage Task'), 
+		'label' => '<i class="glyphicon glyphicon-list-alt"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Manage Task'), 
+			'class' => 'btn btn-default',
+		), 
 		'url' => array('index', 'project' => $project->id),
 		'visible' => Yii::app()->user->checkAccess('view_task', array('project' => $project)),
 	),

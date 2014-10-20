@@ -11,17 +11,29 @@ $this->breadcrumbs = array(
 
 $this->menu = array(
 	array(
-		'label' => '<i class="glyphicon glyphicon-plus"></i> ' . Yii::t('admin.crud', 'Create Task'), 
+		'label' => '<i class="glyphicon glyphicon-plus"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Create Task'), 
+			'class' => 'btn btn-default',
+		), 
 		'url' => array('create', 'project' => $model->project->id),
 		'visible' => Yii::app()->user->checkAccess('create_task', array('project' => $model->project)),
 	),
 	array(
-		'label' => '<i class="glyphicon glyphicon-eye-open"></i> ' . Yii::t('admin.crud', 'View Task'), 
+		'label' => '<i class="glyphicon glyphicon-eye-open"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'View Task'), 
+			'class' => 'btn btn-default',
+		), 
 		'url' => array('view', 'id' => $model->id),
 		'visible' => Yii::app()->user->checkAccess('view_task', array('task' => $model)),
 	),
 	array(
-		'label' => '<i class="glyphicon glyphicon-wrench"></i> ' . Yii::t('admin.crud', 'Manage Task'), 
+		'label' => '<i class="glyphicon glyphicon-list-alt"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Manage Task'), 
+			'class' => 'btn btn-default',
+		), 
 		'url'=>array('index', 'project' => $model->project->id),
 		'visible' => Yii::app()->user->checkAccess('view_task', array('project' => $model->project)),
 	),

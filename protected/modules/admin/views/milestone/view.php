@@ -10,33 +10,66 @@ $this->breadcrumbs = array(
 
 $this->menu = array(
 	array(
-		'label' => '<i class="glyphicon glyphicon-plus"></i> ' . Yii::t('admin.crud', 'Create Milestone'), 
+		'label' => '<i class="glyphicon glyphicon-plus"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Create Milestone'),
+			'class' => 'btn btn-default',
+		),
 		'url' => array('create', 'project' => $model->project->id),
 		'visible' => Yii::app()->user->checkAccess('create_milestone', array('project' => $model->project)),
 	),
 	array(
-		'label' => '<i class="glyphicon glyphicon-list"></i> ' . Yii::t('admin.crud', 'Task'), 
+		'label' => '<i class="glyphicon glyphicon-tasks"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Task'),
+			'class' => 'btn btn-default',
+		),
 		'url' => array('task/index', 'project' => $model->project->id, 'milestone' => $model->id),
 		'visible' => Yii::app()->user->checkAccess('view_task', array('project' => $model->project)),
 	),
 	array(
-		'label' => '<i class="glyphicon glyphicon-pencil"></i> ' . Yii::t('admin.crud', 'Update Milestone'), 
-		'url' => array('update', 'id' => $model->id),
-		'visible' => Yii::app()->user->checkAccess('update_milestone', array('milestone' => $model)),
-	),
-	array(
-		'label' => '<i class="glyphicon glyphicon-trash"></i> ' . Yii::t('admin.crud', 'Delete Milestone'), 
-		'url' => '#', 
+		'label' => '<i class="glyphicon glyphicon-list-alt"></i>', 
 		'linkOptions' => array(
-			'submit' => array('delete', 'id' => $model->id),
-			'confirm' => Yii::t('admin.crud', 'Are you sure you want to delete this milestone?'),
+			'title' => Yii::t('admin.crud', 'Manage Milestone'),
+			'class' => 'btn btn-default',
 		),
-		'visible' => Yii::app()->user->checkAccess('delete_milestone', array('milestone' => $model)),
-	),
-	array(
-		'label' => '<i class="glyphicon glyphicon-wrench"></i> ' . Yii::t('admin.crud', 'Manage Milestone'), 
 		'url' => array('index', 'project' => $model->project->id),
 		'visible' => Yii::app()->user->checkAccess('view_milestone', array('project' => $model->project)),
+	),
+	array(
+		'label' => '<i class="glyphicon glyphicon-arrow-left"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Back to Project'),
+			'class' => 'btn btn-default',
+		),
+		'url' => array('project/view', 'id' => $model->project->id),
+		'visible' => Yii::app()->user->checkAccess('view_project', array('project' => $model->project)),
+	),
+	array(
+		'label' => '<i class="glyphicon glyphicon-cog"></i> <span class="caret"></span>', 
+		'linkOptions' => array(
+			'class' => 'btn btn-default dropdown-toggle',
+			'data-toggle' => 'dropdown',
+		),
+		'itemOptions' => array(
+			'class' => 'dropdown',
+		),
+		'items' => array(
+			array(
+				'label' => '<i class="glyphicon glyphicon-pencil"></i> ' . Yii::t('admin.crud', 'Update Milestone'), 
+				'url' => array('update', 'id' => $model->id),
+				'visible' => Yii::app()->user->checkAccess('update_milestone', array('milestone' => $model)),
+			),
+			array(
+				'label' => '<i class="glyphicon glyphicon-trash"></i> ' . Yii::t('admin.crud', 'Delete Milestone'), 
+				'url' => '#', 
+				'linkOptions' => array(
+					'submit' => array('delete', 'id' => $model->id),
+					'confirm' => Yii::t('admin.crud', 'Are you sure you want to delete this milestone?'),
+				),
+				'visible' => Yii::app()->user->checkAccess('delete_milestone', array('milestone' => $model)),
+			),
+		),
 	),
 );
 

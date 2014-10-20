@@ -32,11 +32,11 @@ class Project extends CActiveRecord
 	{
 		return array(
 			array('	name', 
-					'length', 'max' => 200),
+					'length', 'max' => 200, 'on' => 'create, update'),
 			array('	name', 
-					'required'),
+					'required', 'on' => 'create, update'),
 			array('	scope', 
-					'length', 'max' => 16000),
+					'length', 'max' => 16000, 'on' => 'create, update'),
 			array('	name', 
 					'safe', 'on' => 'search'),
 		);

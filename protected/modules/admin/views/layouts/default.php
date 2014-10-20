@@ -4,7 +4,7 @@
 	
 	<div class="container">
 		<?php $this->renderPartial('admin.views.layouts.include.flash'); ?>
-		<div class="pull-left">
+		<div class="pull-left hidden-xs">
 			<?php $this->widget('zii.widgets.CBreadcrumbs', array(
 				'homeLink' => '<li>' . CHtml::link('<i class="glyphicon glyphicon-home"></i>', array('/admin')) . '</li>',
 				'links' => $this->breadcrumbs,
@@ -21,7 +21,11 @@
 				'encodeLabel' => false,
 				'activateItems' => true,
 				'htmlOptions' => array(
-					'class' => 'nav nav-pills',
+					'class' => 'nav nav-pills context-menu',
+				),
+				'submenuHtmlOptions' => array(
+					'class' => 'dropdown-menu dropdown-menu-right pull-right',
+					'role' => 'menu',
 				),
 			)); ?>
 		</div>

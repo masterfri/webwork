@@ -11,12 +11,20 @@ $this->breadcrumbs = array(
 
 $this->menu = array(
 	array(
-		'label' => '<i class="glyphicon glyphicon-arrow-left"></i> ' . Yii::t('admin.crud', 'Back to Task'), 
+		'label' => '<i class="glyphicon glyphicon-arrow-left"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Back to Task'), 
+			'class' => 'btn btn-default',
+		), 
 		'url' => array('task/view', 'id' => $task->id),
 		'visible' => Yii::app()->user->checkAccess('view_task', array('task' => $task)),
 	),
 	array(
-		'label' => '<i class="glyphicon glyphicon-time"></i> ' . Yii::t('admin.crud', 'Daily Time Report'), 
+		'label' => '<i class="glyphicon glyphicon-time"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Daily Time Report'), 
+			'class' => 'btn btn-default',
+		), 
 		'url' => array('daily'),
 		'visible' => Yii::app()->user->checkAccess('daily_time_report'),
 	),
@@ -25,12 +33,14 @@ $this->menu = array(
 ?>
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<h3 class="panel-title"><?php echo $this->pageHeading; ?></h3>
+		<h3 class="panel-title" data-marker="ajax-title"><?php echo $this->pageHeading; ?></h3>
 	</div>
 	<div class="panel-body">
-		<?php $this->renderPartial('_form', array(
-			'model' => $model,
-			'short' => true,
-		)); ?>
+		<div data-marker="ajax-body">
+			<?php $this->renderPartial('_form_report', array(
+				'model' => $model,
+				'short' => true,
+			)); ?>
+		</div>
 	</div>
 </div>

@@ -8,28 +8,48 @@ $this->breadcrumbs = array(
 
 $this->menu = array(
 	array(
-		'label' => '<i class="glyphicon glyphicon-plus"></i> ' . Yii::t('admin.crud', 'Create Tag'), 
+		'label' => '<i class="glyphicon glyphicon-plus"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Create Tag'), 
+			'class' => 'btn btn-default',
+		), 
 		'url' => array('create'),
 		'visible' => Yii::app()->user->checkAccess('create_tag'),
 	),
 	array(
-		'label' => '<i class="glyphicon glyphicon-pencil"></i> ' . Yii::t('admin.crud', 'Update Tag'), 
-		'url' => array('update', 'id' => $model->id),
-		'visible' => Yii::app()->user->checkAccess('update_tag'),
-	),
-	array(
-		'label' => '<i class="glyphicon glyphicon-trash"></i> ' . Yii::t('admin.crud', 'Delete Tag'), 
-		'url' => '#', 
+		'label' => '<i class="glyphicon glyphicon-list-alt"></i>', 
 		'linkOptions' => array(
-			'submit' => array('delete', 'id' => $model->id),
-			'confirm' => Yii::t('admin.crud', 'Are you sure you want to delete this tag?'),
-		),
-		'visible' => Yii::app()->user->checkAccess('delete_tag'),
-	),
-	array(
-		'label' => '<i class="glyphicon glyphicon-wrench"></i> ' . Yii::t('admin.crud', 'Manage Tag'), 
+			'title' => Yii::t('admin.crud', 'Manage Tag'), 
+			'class' => 'btn btn-default',
+		), 
 		'url' => array('index'),
 		'visible' => Yii::app()->user->checkAccess('view_tag'),
+	),
+	array(
+		'label' => '<i class="glyphicon glyphicon-cog"></i> <span class="caret"></span>', 
+		'linkOptions' => array(
+			'class' => 'btn btn-default dropdown-toggle',
+			'data-toggle' => 'dropdown',
+		),
+		'itemOptions' => array(
+			'class' => 'dropdown',
+		),
+		'items' => array(
+			array(
+				'label' => '<i class="glyphicon glyphicon-pencil"></i> ' . Yii::t('admin.crud', 'Update Tag'), 
+				'url' => array('update', 'id' => $model->id),
+				'visible' => Yii::app()->user->checkAccess('update_tag'),
+			),
+			array(
+				'label' => '<i class="glyphicon glyphicon-trash"></i> ' . Yii::t('admin.crud', 'Delete Tag'), 
+				'url' => '#', 
+				'linkOptions' => array(
+					'submit' => array('delete', 'id' => $model->id),
+					'confirm' => Yii::t('admin.crud', 'Are you sure you want to delete this tag?'),
+				),
+				'visible' => Yii::app()->user->checkAccess('delete_tag'),
+			),
+		),
 	),
 );
 

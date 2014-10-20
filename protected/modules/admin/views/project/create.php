@@ -9,7 +9,11 @@ $this->breadcrumbs = array(
 
 $this->menu = array(
 	array(
-		'label' => '<i class="glyphicon glyphicon-wrench"></i> ' . Yii::t('admin.crud', 'Manage Project'), 
+		'label' => '<i class="glyphicon glyphicon-list-alt"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Manage Project'), 
+			'class' => 'btn btn-default',
+		), 
 		'url' => array('index'),
 		'visible' => Yii::app()->user->checkAccess('view_project'),
 	),

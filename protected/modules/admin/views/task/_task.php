@@ -3,13 +3,14 @@
 		<div class="col-sm-6">
 			<?php echo ViewHelper::taskPhaseIcon($data->phase); ?>
 			<?php echo CHtml::link(CHtml::encode($data->name), array('task/view', 'id' => $data->id)); ?>
-			<?php if($data->milestone && Yii::app()->user->checkAccess('view_milestone', array('milestone' => $data->milestone))): ?>
-				:: 
-				<?php echo CHtml::link(CHtml::encode($data->milestone->name), array('milestone/view', 'id' => $data->milestone->id)); ?>
-			<?php endif; ?>
 			<?php if(Yii::app()->user->checkAccess('view_project', array('project' => $data->project))): ?>
 				:: 
 				<?php echo CHtml::link(CHtml::encode($data->project->name), array('project/view', 'id' => $data->project->id)); ?>
+			<?php endif; ?>
+			<?php if($data->milestone && Yii::app()->user->checkAccess('view_milestone', array('milestone' => $data->milestone))): ?>
+				<small class="milestone">(<span class="glyphicon glyphicon-calendar"></span>
+				<?php echo CHtml::link(CHtml::encode($data->milestone->name), array('milestone/view', 'id' => $data->milestone->id)); ?>)
+				</small>
 			<?php endif; ?>
 			<?php echo ViewHelper::listTags($data->tags, array('class' => 'tags')); ?>
 		</div>

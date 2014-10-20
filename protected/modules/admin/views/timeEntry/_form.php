@@ -17,9 +17,8 @@
 	)); ?>
 	
 	<?php echo $form->errorSummary($model, null, null, array('class' => 'alert alert-danger')); ?>
-	
-	<?php if (!$short): ?>
 
+	<?php if ($model->getIsNewRecord()): ?>
 		<div class="form-group">
 			<?php echo $form->labelEx($model, 'project_id', array('class'=>'col-sm-3 control-label')); ?>
 			<div class="col-sm-9">
@@ -50,7 +49,6 @@
 				<?php echo $form->error($model, 'user_id', array('class'=>'help-inline')); ?>
 			</div>
 		</div>
-		
 	<?php endif; ?>
 	
 	<div class="form-group">

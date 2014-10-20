@@ -59,7 +59,16 @@ class TaskController extends AdminController
 		}
 		$model->setScenario('estimate');
 		if ($this->saveModel($model)) {
-			$this->redirect(array('view', 'id' => $model->id));
+			if($this->isAjax()) {
+				$this->ajaxSuccess(array(
+					'trigger' => 'task.updated',
+				));
+			} else {
+				$this->redirect(array('view', 'id' => $model->id));
+			}
+		}
+		if($this->isAjax()) {
+			$this->layout = 'ajax';
 		}
 		$this->render('estimate', array(
 			'model' => $model,
@@ -75,9 +84,8 @@ class TaskController extends AdminController
 		$model->setScenario('change-priority');
 		$model->priority = $priority;
 		$model->save();
-		if(isset($_GET['ajax'])) {
-			echo CJSON::encode(array(
-				'status' => 'success',
+		if($this->isAjax()) {
+			$this->ajaxSuccess(array(
 				'id' => $model->id,
 			));
 		} else {
@@ -94,9 +102,8 @@ class TaskController extends AdminController
 		$model->setScenario('change-assignment');
 		$model->assigned_id = $user;
 		$model->save();
-		if(isset($_GET['ajax'])) {
-			echo CJSON::encode(array(
-				'status' => 'success',
+		if($this->isAjax()) {
+			$this->ajaxSuccess(array(
 				'id' => $model->id,
 			));
 		} else {
@@ -113,9 +120,8 @@ class TaskController extends AdminController
 		$model->setScenario('change-tags');
 		$model->tags = Yii::app()->request->getPost('tags');
 		$model->save();
-		if(isset($_GET['ajax'])) {
-			echo CJSON::encode(array(
-				'status' => 'success',
+		if($this->isAjax()) {
+			$this->ajaxSuccess(array(
 				'id' => $model->id,
 			));
 		} else {
@@ -163,6 +169,10 @@ class TaskController extends AdminController
 					$this->redirect(array('view', 'id' => $task->id, '#' => 'comment-' . $comment->id));
 				}
 			}
+		}
+		
+		if($this->isAjax()) {
+			$this->layout = 'ajax';
 		}
 		
 		$this->render('view', array(

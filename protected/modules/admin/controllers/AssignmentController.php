@@ -29,7 +29,16 @@ class AssignmentController extends AdminController
 		$model = new Assignment('create');
 		$model->project_id = $project->id;
 		if ($this->saveModel($model)) {
-			$this->redirect(array('view', 'id' => $model->id));
+			if ($this->isAjax()) {
+				$this->ajaxSuccess(array(
+					'trigger' => 'assignment.created',
+				));
+			} else {
+				$this->redirect(array('view', 'id' => $model->id));
+			}
+		}
+		if ($this->isAjax()) {
+			$this->layout = 'ajax';
 		}
 		$this->render('create', array(
 			'model' => $model,
@@ -44,7 +53,16 @@ class AssignmentController extends AdminController
 			throw new CHttpException(403, 'Forbidden');
 		}
 		if ($this->saveModel($model)) {
-			$this->redirect(array('view', 'id' => $model->id));
+			if ($this->isAjax()) {
+				$this->ajaxSuccess(array(
+					'trigger' => 'assignment.updated',
+				));
+			} else {
+				$this->redirect(array('view', 'id' => $model->id));
+			}
+		}
+		if ($this->isAjax()) {
+			$this->layout = 'ajax';
 		}
 		$this->render('update', array(
 			'model' => $model,

@@ -37,14 +37,14 @@ class Assignment extends CActiveRecord
 	{
 		return array(
 			array('	role', 
-					'in', 'range' => array(self::ROLE_OWNER, self::ROLE_SUPERVISOR, self::ROLE_MANAGER, self::ROLE_DOER, self::ROLE_TESTER)),
+					'in', 'range' => array(self::ROLE_OWNER, self::ROLE_SUPERVISOR, self::ROLE_MANAGER, self::ROLE_DOER, self::ROLE_TESTER), 'on' => 'create, update'),
 			array(' role',
-					'validateRole'),
+					'validateRole', 'on' => 'create, update'),
 			array(' user_id',
-					'validateUser'),
+					'validateUser', 'on' => 'create, update'),
 			array('	role,
 					user_id', 
-					'required'),
+					'required', 'on' => 'create, update'),
 		);
 	}
 	

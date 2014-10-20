@@ -63,9 +63,15 @@ class File extends CActiveRecord
 	public function rules()
 	{
 		return array(
-			array('title', 'required', 'on' => 'create, update'),
-			array('category_id', 'safe', 'on' => 'update'),
-			array('title, mime, extension, category_id', 'safe', 'on' => 'search'),
+			array(' title', 
+					'required', 'on' => 'create, update'),
+			array(' category_id', 
+					'safe', 'on' => 'update'),
+			array(' title, 
+					mime, 
+					extension, 
+					category_id', 
+					'safe', 'on' => 'search'),
 		);
 	}
 	

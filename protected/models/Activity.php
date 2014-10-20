@@ -28,11 +28,11 @@ class Activity extends CActiveRecord
 	{
 		return array(
 			array('	description', 
-					'length', 'max' => 16000),
+					'length', 'max' => 16000, 'on' => 'create, update'),
 			array('	name', 
-					'length', 'max' => 200),
+					'length', 'max' => 200, 'on' => 'create, update'),
 			array('	name', 
-					'required'),
+					'required', 'on' => 'create, update'),
 		);
 	}
 	

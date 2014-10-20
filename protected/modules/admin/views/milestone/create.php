@@ -11,9 +11,22 @@ $this->breadcrumbs = array(
 
 $this->menu = array(
 	array(
-		'label' => '<i class="glyphicon glyphicon-wrench"></i> ' . Yii::t('admin.crud', 'Manage Milestone'), 
+		'label' => '<i class="glyphicon glyphicon-list-alt"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Manage Milestone'),
+			'class' => 'btn btn-default',
+		),
 		'url' => array('index', 'project' => $project->id),
 		'visible' => Yii::app()->user->checkAccess('view_milestone', array('project' => $project)),
+	),
+	array(
+		'label' => '<i class="glyphicon glyphicon-arrow-left"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Back to Project'),
+			'class' => 'btn btn-default',
+		),
+		'url' => array('project/view', 'id' => $project->id),
+		'visible' => Yii::app()->user->checkAccess('view_project', array('project' => $project)),
 	),
 );
 

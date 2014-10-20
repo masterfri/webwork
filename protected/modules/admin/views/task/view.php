@@ -10,48 +10,82 @@ $this->breadcrumbs = array(
 
 $this->menu = array(
 	array(
-		'label' => '<i class="glyphicon glyphicon-eye-open"></i> ' . Yii::t('admin.crud', 'Watch'), 
+		'label' => '<i class="glyphicon glyphicon-eye-open"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Watch'), 
+			'class' => 'btn btn-default',
+		), 
 		'url' => array('watch', 'id' => $model->id),
 		'visible' => Yii::app()->user->checkAccess('view_task', array('task' => $model)) && $model->user_subscription === null,
 	),
 	array(
-		'label' => '<i class="glyphicon glyphicon-eye-close"></i> ' . Yii::t('admin.crud', 'Unwatch'), 
+		'label' => '<i class="glyphicon glyphicon-eye-close"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Unwatch'), 
+			'class' => 'btn btn-default',
+		), 
 		'url' => array('unwatch', 'id' => $model->id),
 		'visible' => Yii::app()->user->checkAccess('view_task', array('task' => $model)) && $model->user_subscription !== null,
 	),
 	array(
-		'label' => '<i class="glyphicon glyphicon-time"></i> ' . Yii::t('admin.crud', 'Report Time'), 
-		'url' => array('timeEntry/report', 'task' => $model->id),
-		'visible' => Yii::app()->user->checkAccess('report_time_entry', array('task' => $model)),
-	),
-	array(
-		'label' => '<i class="glyphicon glyphicon-plus"></i> ' . Yii::t('admin.crud', 'Create Task'), 
+		'label' => '<i class="glyphicon glyphicon-plus"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Create Task'), 
+			'class' => 'btn btn-default',
+		), 
 		'url' => array('create', 'project' => $model->project->id),
 		'visible' => Yii::app()->user->checkAccess('create_task', array('project' => $model->project)),
 	),
 	array(
-		'label' => '<i class="glyphicon glyphicon-pencil"></i> ' . Yii::t('admin.crud', 'Update Task'), 
-		'url' => array('update', 'id' => $model->id),
-		'visible' => Yii::app()->user->checkAccess('update_task', array('task' => $model)),
-	),
-	array(
-		'label' => '<i class="glyphicon glyphicon-time"></i> ' . Yii::t('admin.crud', 'Estimate Task'), 
-		'url' => array('estimate', 'id' => $model->id),
-		'visible' => Yii::app()->user->checkAccess('estimate_task', array('task' => $model)),
-	),
-	array(
-		'label' => '<i class="glyphicon glyphicon-trash"></i> ' . Yii::t('admin.crud', 'Delete Task'), 
-		'url' => '#', 
+		'label' => '<i class="glyphicon glyphicon-list-alt"></i>', 
 		'linkOptions' => array(
-			'submit' => array('delete', 'id' => $model->id),
-			'confirm' => Yii::t('admin.crud', 'Are you sure you want to delete this task?'),
-		),
-		'visible' => Yii::app()->user->checkAccess('delete_task', array('task' => $model)),
-	),
-	array(
-		'label' => '<i class="glyphicon glyphicon-wrench"></i> ' . Yii::t('admin.crud', 'Manage Task'), 
+			'title' => Yii::t('admin.crud', 'Manage Task'), 
+			'class' => 'btn btn-default',
+		), 
 		'url' => array('index', 'project' => $model->project->id),
 		'visible' => Yii::app()->user->checkAccess('view_task', array('project' => $model->project)),
+	),
+	array(
+		'label' => '<i class="glyphicon glyphicon-cog"></i> <span class="caret"></span>', 
+		'linkOptions' => array(
+			'class' => 'btn btn-default dropdown-toggle',
+			'data-toggle' => 'dropdown',
+		),
+		'itemOptions' => array(
+			'class' => 'dropdown',
+		),
+		'items' => array(
+			array(
+				'label' => '<i class="glyphicon glyphicon-time"></i> ' . Yii::t('admin.crud', 'Report Time'), 
+				'linkOptions' => array(
+					'data-raise' => 'ajax-modal',
+				),
+				'url' => array('timeEntry/report', 'task' => $model->id),
+				'visible' => Yii::app()->user->checkAccess('report_time_entry', array('task' => $model)),
+			),
+			array(
+				'label' => '<i class="glyphicon glyphicon-pencil"></i> ' . Yii::t('admin.crud', 'Update Task'), 
+				'url' => array('update', 'id' => $model->id),
+				'visible' => Yii::app()->user->checkAccess('update_task', array('task' => $model)),
+			),
+			array(
+				'label' => '<i class="glyphicon glyphicon-time"></i> ' . Yii::t('admin.crud', 'Estimate Task'), 
+				'linkOptions' => array(
+					'data-raise' => 'ajax-modal',
+				),
+				'url' => array('estimate', 'id' => $model->id),
+				'visible' => Yii::app()->user->checkAccess('estimate_task', array('task' => $model)),
+			),
+			array(
+				'label' => '<i class="glyphicon glyphicon-trash"></i> ' . Yii::t('admin.crud', 'Delete Task'), 
+				'url' => '#', 
+				'linkOptions' => array(
+					'submit' => array('delete', 'id' => $model->id),
+					'confirm' => Yii::t('admin.crud', 'Are you sure you want to delete this task?'),
+				),
+				'visible' => Yii::app()->user->checkAccess('delete_task', array('task' => $model)),
+			),
+		),
 	),
 );
 
@@ -72,6 +106,7 @@ $this->menu = array(
 	</div>
 	<div class="task-details">
 		<?php $this->widget('DetailView', array(
+			'id' => 'task-details',
 			'data' => $model,		
 			'attributes' => array(
 				'complexity',
@@ -180,7 +215,7 @@ $this->menu = array(
 				<?php endif; ?>
 				<?php if (Yii::app()->user->checkAccess('report_time_entry', array('task' => $model))): ?>
 					<li class="timer hr">
-						<form id="timer_form" action="<?php echo $this->createUrl('timeEntry/report'); ?>" method="get">
+						<form id="timer_form" action="<?php echo $this->createUrl('timeEntry/report'); ?>" method="get" data-raise="ajax-modal">
 							<button type="submit" class="btn btn-default btn-xs btn-square" title="<?php echo Yii::t('admin.crud', 'Report Time'); ?>">
 								<span class="glyphicon glyphicon-plus"></span>
 							</button>
@@ -338,7 +373,6 @@ $('#tags').on('selectitem', function(e, v, l) {
 	var url = $.param.querystring($changeTagsUrl, {ajax: 1});
 	$.post(url, {tags: v});
 });
-
 var timer, timer_value = 0;
 $('#start_timer').click(function () {
 	$(this).addClass('hidden');
@@ -375,8 +409,18 @@ $('#reset_timer').click(function () {
 	return false;
 });
 $('#timer_form').submit(function () {
+	$('#start_timer').removeClass('hidden');
+	$('#stop_timer').addClass('hidden');
 	clearInterval(timer);
+});
+$(document.body).bind('task.updated', function() {
+	$('#task-details').ajaxUpdate();
+});
+$(document.body).bind('timeentry.created', function() {
 	window.onbeforeunload = null;
+	timer_value = 0;
+	$('#timer_display code').text('0:00:00');
+	$('#timer_display input').val('0');
 });
 EOS
 );

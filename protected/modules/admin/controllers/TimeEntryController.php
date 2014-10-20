@@ -60,7 +60,16 @@ class TimeEntryController extends AdminController
 			$model->amount = sprintf('%0.2f', $sec / 3600);
 		}
 		if ($this->saveModel($model)) {
-			$this->redirect(array('daily'));
+			if($this->isAjax()) {
+				$this->ajaxSuccess(array(
+					'trigger' => 'timeentry.created',
+				));
+			} else {
+				$this->redirect(array('daily'));
+			}
+		}
+		if($this->isAjax()) {
+			$this->layout = 'ajax';
 		}
 		$this->render('report', array(
 			'model' => $model,

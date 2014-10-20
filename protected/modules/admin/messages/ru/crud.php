@@ -174,6 +174,7 @@ return array(
 	'View Time Entry' => 'Просмотреть',
 	'Delete Time Entry' => 'Удалить',
 	'Are you sure you want to delete this time entry?' => 'Вы уверены, что хотите удалить эту временную запись?',
+	'Back to Task' => 'Вернуться к задаче',
 	'Disscussion' => 'Обсуждение',
 	'Add Comment' => 'Добавить комментарий',
 	'Add Comment / Action' => 'Добавить комментарий / действие',

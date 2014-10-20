@@ -31,13 +31,13 @@ class Milestone extends CActiveRecord
 	{
 		return array(
 			array('	description', 
-					'length', 'max' => 16000),
+					'length', 'max' => 16000, 'on' => 'create, update'),
 			array('	due_date', 
-					'date', 'format' => 'yyyy-MM-dd'),
+					'date', 'format' => 'yyyy-MM-dd', 'on' => 'create, update'),
 			array('	name', 
-					'length', 'max' => 200),
+					'length', 'max' => 200, 'on' => 'create, update'),
 			array('	name', 
-					'required'),
+					'required', 'on' => 'create, update'),
 			array('	name', 
 					'safe', 'on' => 'search'),
 		);

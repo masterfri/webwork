@@ -9,7 +9,11 @@ $this->breadcrumbs = array(
 
 $this->menu = array(
 	array(
-		'label' => '<i class="glyphicon glyphicon-wrench"></i> ' . Yii::t('admin.crud', 'Manage File Categories'), 
+		'label' => '<i class="glyphicon glyphicon-list-alt"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Manage File Categories'), 
+			'class' => 'btn btn-default',
+		),
 		'url' => array('index'),
 		'visible' => Yii::app()->user->checkAccess('view_file_category'),
 	),

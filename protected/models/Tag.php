@@ -27,11 +27,11 @@ class Tag extends CActiveRecord
 	{
 		return array(
 			array('	color', 
-					'length', 'max' => 20),
+					'length', 'max' => 20, 'on' => 'create, update'),
 			array('	name', 
-					'length', 'max' => 200),
+					'length', 'max' => 200, 'on' => 'create, update'),
 			array('	name', 
-					'required'),
+					'required', 'on' => 'create, update'),
 			array('	name', 
 					'safe', 'on' => 'search'),
 		);

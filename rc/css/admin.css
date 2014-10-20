@@ -232,6 +232,9 @@ ul.tags li {
 .task-list .task-item:nth-child(odd) {
 	background-color: #f9f9f9;
 }
+.task-list .milestone {
+	color: #999;
+}
 @media (max-width: 767px) {
 	.single-task .task-details + .task-details {
 		padding-top: 10px;
@@ -415,4 +418,26 @@ ol.unstyled {
 }
 .priority-label.priority-lowest {
 	background-color: #777;
+}
+.context-menu {
+	margin-bottom: 20px;
+}
+.context-menu > li > a,
+.context-menu > li > span {
+	font-size: 18px;
+	padding: 8px;
+}
+.context-menu > li + li {
+	margin-left: 5px;
+}
+.context-menu .dropdown-toggle {
+	position: relative;
+	padding-right: 23px;
+}
+.nav.context-menu .caret {
+	border-top-color: #333;
+	border-bottom-color: #333;
+	position: absolute;
+	top: .9em;
+	right: 8px;
 }

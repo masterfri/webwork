@@ -8,7 +8,11 @@ $this->breadcrumbs = array(
 
 $this->menu = array(
 	array(
-		'label' => '<i class="glyphicon glyphicon-plus"></i> ' . Yii::t('admin.crud', 'Create Activity'), 
+		'label' => '<i class="glyphicon glyphicon-plus"></i>',
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Create Activity'), 
+			'class' => 'btn btn-default',
+		), 
 		'url' => array('create'),
 		'visible' => Yii::app()->user->checkAccess('create_activity'),
 	),

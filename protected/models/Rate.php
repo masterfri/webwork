@@ -31,16 +31,16 @@ class Rate extends CActiveRecord
 	{
 		return array(
 			array('	description', 
-					'length', 'max' => 16000),
+					'length', 'max' => 16000, 'on' => 'create, update'),
 			array('	name', 
-					'length', 'max' => 200),
+					'length', 'max' => 200, 'on' => 'create, update'),
 			array('	name,
 					power', 
-					'required'),
+					'required', 'on' => 'create, update'),
 			array('	power', 
-					'numerical'),
+					'numerical', 'on' => 'create, update'),
 			array(' completeMatrix',
-					'safe'),
+					'safe', 'on' => 'create, update'),
 			array('	name', 
 					'safe', 'on' => 'search'),
 		);

@@ -23,9 +23,9 @@ class FileCategory extends CActiveRecord
 	{
 		return array(
 			array('	title', 
-					'length', 'max' => 100),
+					'length', 'max' => 100, 'on' => 'create, update'),
 			array('	title', 
-					'required'),
+					'required', 'on' => 'create, update'),
 			array('	title', 
 					'safe', 'on' => 'search'),
 		);

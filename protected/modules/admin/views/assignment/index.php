@@ -10,12 +10,21 @@ $this->breadcrumbs = array(
 
 $this->menu = array(
 	array(
-		'label' => '<i class="glyphicon glyphicon-plus"></i> ' . Yii::t('admin.crud', 'Create Assignment'), 
+		'label' => '<i class="glyphicon glyphicon-plus"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Create Assignment'), 
+			'class' => 'btn btn-default',
+			'data-raise' => 'ajax-modal',
+		),
 		'url' => array('create', 'project' => $project->id),
 		'visible' => Yii::app()->user->checkAccess('create_assignment', array('project' => $project)),
 	),
 	array(
-		'label' => '<i class="glyphicon glyphicon-arrow-left"></i> ' . Yii::t('admin.crud', 'Back to Project'), 
+		'label' => '<i class="glyphicon glyphicon-arrow-left"></i> ', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Back to Project'), 
+			'class' => 'btn btn-default',
+		),
 		'url' => array('project/view', 'id' => $project->id),
 		'visible' => Yii::app()->user->checkAccess('view_project', array('project' => $project)),
 	),
@@ -32,15 +41,20 @@ $this->menu = array(
 		'id' => 'assignment-grid',
 		'dataProvider' => $provider,
 		'columns' => array(
-			array('class' => 'LinkColumn', 'name' => 'user'),
+			'user',
 			array('name' => 'role', 'value' => '$data->getRoleName()'),
 			array(
 				'class' => 'ButtonColumn',
 				'deleteConfirmation' => Yii::t('admin.crud', 'Are you sure you want to delete this assignment?'),
-				'template' => '{view} {update} {delete}',
+				'template' => '{update} {delete}',
 				'buttons' => array(
 					'update' => array(
 						'visible' => 'Yii::app()->user->checkAccess("update_assignment", array("assignment" => $data))',
+						'options' => array(
+							'data-raise' => 'ajax-modal',
+							'class' => 'btn btn-default btn-sm update',
+							'title' => Yii::t('admin.crud', 'Update'),
+						),
 					),
 					'delete' => array(
 						'visible' => 'Yii::app()->user->checkAccess("delete_assignment", array("assignment" => $data))',
@@ -50,3 +64,11 @@ $this->menu = array(
 		),
 	)); ?>
 </div>
+
+<?php
+
+Yii::app()->clientScript->registerScript('ajax', "
+$(document.body).bind('assignment.created assignment.updated', function() {
+	$.fn.yiiGridView.update('assignment-grid');
+});
+");

@@ -10,20 +10,29 @@ $this->breadcrumbs = array(
 
 $this->menu = array(
 	array(
-		'label' => '<i class="glyphicon glyphicon-plus"></i> ' . Yii::t('admin.crud', 'Create Milestone'), 
+		'label' => '<i class="glyphicon glyphicon-plus"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Create Milestone'),
+			'class' => 'btn btn-default',
+		),
 		'url' => array('create', 'project' => $project->id),
 		'visible' => Yii::app()->user->checkAccess('create_milestone', array('project' => $project)),
 	),
 	array(
-		'label' => '<i class="glyphicon glyphicon-arrow-left"></i> ' . Yii::t('admin.crud', 'Back to Project'), 
+		'label' => '<i class="glyphicon glyphicon-arrow-left"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Back to Project'),
+			'class' => 'btn btn-default',
+		),
 		'url' => array('project/view', 'id' => $project->id),
 		'visible' => Yii::app()->user->checkAccess('view_project', array('project' => $project)),
 	),
 	array(
-		'label' => '<i class="glyphicon glyphicon-search"></i> ' . Yii::t('admin.crud', 'Search'), 
+		'label' => '<i class="glyphicon glyphicon-search"></i>', 
 		'url' => '#',
 		'linkOptions' => array(
-			'class' => 'search-button',
+			'title' => Yii::t('admin.crud', 'Search'),
+			'class' => 'search-button btn btn-default',
 			'data-toggle' => 'search-form',
 		),
 	),

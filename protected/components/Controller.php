@@ -104,4 +104,17 @@ class Controller extends CController
 			return $class::instance()->$optname;
 		}
 	}
+	
+	public function isAjax()
+	{
+		return Yii::app()->request->isAjaxRequest;
+	}
+	
+	public function ajaxSuccess($data=array())
+	{
+		echo CJSON::encode(CMap::mergeArray($data, array(
+			'status' => 'success',
+		)));
+		Yii::app()->end();
+	}
 }

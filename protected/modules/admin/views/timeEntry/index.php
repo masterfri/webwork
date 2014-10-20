@@ -8,20 +8,29 @@ $this->breadcrumbs = array(
 
 $this->menu = array(
 	array(
-		'label' => '<i class="glyphicon glyphicon-plus"></i> ' . Yii::t('admin.crud', 'Create Time Entry'), 
+		'label' => '<i class="glyphicon glyphicon-plus"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Create Time Entry'), 
+			'class' => 'btn btn-default',
+		), 
 		'url' => array('create'),
 		'visible' => Yii::app()->user->checkAccess('create_time_entry'),
 	),
 	array(
-		'label' => '<i class="glyphicon glyphicon-time"></i> ' . Yii::t('admin.crud', 'Daily Time Report'), 
+		'label' => '<i class="glyphicon glyphicon-time"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Daily Time Report'), 
+			'class' => 'btn btn-default',
+		), 
 		'url' => array('daily'),
 		'visible' => Yii::app()->user->checkAccess('daily_time_report'),
 	),
 	array(
-		'label' => '<i class="glyphicon glyphicon-search"></i> ' . Yii::t('admin.crud', 'Search'), 
+		'label' => '<i class="glyphicon glyphicon-search"></i>', 
 		'url' => '#',
 		'linkOptions' => array(
-			'class' => 'search-button',
+			'title' => Yii::t('admin.crud', 'Search'), 
+			'class' => 'search-button btn btn-default',
 			'data-toggle' => 'search-form',
 		),
 	),

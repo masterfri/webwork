@@ -118,20 +118,6 @@
 							'url' => array('/admin/fileCategory'),
 							'visible' => Yii::app()->user->checkAccess('view_file_category'),
 						),
-						/*
-						array(
-							'label' => Yii::t('admin.crud', 'Milestone'),
-							'url' => array('/admin/milestone'),
-							'visible' => Yii::app()->user->checkAccess('view_milestone'),
-						),
-						
-						
-						array(
-							'label' => Yii::t('admin.crud', 'Task'),
-							'url' => array('/admin/task'),
-							'visible' => Yii::app()->user->checkAccess('view_task'),
-						),
-						*/
 					),
 				),
 				array(

@@ -9,17 +9,29 @@ $this->breadcrumbs = array(
 
 $this->menu = array(
 	array(
-		'label' => '<i class="glyphicon glyphicon-plus"></i> ' . Yii::t('admin.crud', 'Create Rate'), 
+		'label' => '<i class="glyphicon glyphicon-plus"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Create Rate'), 
+			'class' => 'btn btn-default',
+		),
 		'url' => array('create'),
 		'visible' => Yii::app()->user->checkAccess('create_rate'),
 	),
 	array(
-		'label' => '<i class="glyphicon glyphicon-eye-open"></i> ' . Yii::t('admin.crud', 'View Rate'), 
+		'label' => '<i class="glyphicon glyphicon-eye-open"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'View Rate'), 
+			'class' => 'btn btn-default',
+		),
 		'url' => array('view', 'id' => $model->id),
 		'visible' => Yii::app()->user->checkAccess('view_rate'),
 	),
 	array(
-		'label' => '<i class="glyphicon glyphicon-wrench"></i> ' . Yii::t('admin.crud', 'Manage Rate'), 
+		'label' => '<i class="glyphicon glyphicon-list-alt"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Manage Rate'), 
+			'class' => 'btn btn-default',
+		),
 		'url'=>array('index'),
 		'visible' => Yii::app()->user->checkAccess('view_rate'),
 	),

@@ -10,15 +10,20 @@ $this->breadcrumbs = array(
 
 $this->menu = array(
 	array(
-		'label' => '<i class="glyphicon glyphicon-plus"></i> ' . Yii::t('admin.crud', 'Create Task'), 
+		'label' => '<i class="glyphicon glyphicon-plus"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Create Task'), 
+			'class' => 'btn btn-default',
+		),
 		'url' => array('create', 'project' => $project->id),
 		'visible' => Yii::app()->user->checkAccess('create_task', array('project' => $project)),
 	),
 	array(
-		'label' => '<i class="glyphicon glyphicon-search"></i> ' . Yii::t('admin.crud', 'Search'), 
+		'label' => '<i class="glyphicon glyphicon-search"></i>', 
 		'url' => '#',
 		'linkOptions' => array(
-			'class' => 'search-button',
+			'title' => Yii::t('admin.crud', 'Search'),
+			'class' => 'search-button btn btn-default',
 			'data-toggle' => 'search-form',
 		),
 	),

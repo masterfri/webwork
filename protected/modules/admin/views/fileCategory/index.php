@@ -8,20 +8,29 @@ $this->breadcrumbs = array(
 
 $this->menu = array(
 	array(
-		'label' => '<i class="glyphicon glyphicon-plus"></i> ' . Yii::t('admin.crud', 'Create File Category'), 
+		'label' => '<i class="glyphicon glyphicon-plus"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Create File Category'), 
+			'class' => 'btn btn-default',
+		),
 		'url' => array('create'),
 		'visible' => Yii::app()->user->checkAccess('create_file_category'),
 	),
 	array(
-		'label' => '<i class="glyphicon glyphicon-file"></i> ' . Yii::t('admin.crud', 'Files'), 
+		'label' => '<i class="glyphicon glyphicon-folder-open"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Files'), 
+			'class' => 'btn btn-default',
+		),
 		'url' => array('file/index'),
 		'visible' => Yii::app()->user->checkAccess('view_file'),
 	),
 	array(
-		'label' => '<i class="glyphicon glyphicon-search"></i> ' . Yii::t('admin.crud', 'Search'), 
+		'label' => '<i class="glyphicon glyphicon-search"></i>', 
 		'url' => '#',
 		'linkOptions' => array(
-			'class' => 'search-button',
+			'title' => Yii::t('admin.crud', 'Search'),
+			'class' => 'search-button btn btn-default',
 			'data-toggle' => 'search-form',
 		),
 	),

@@ -11,19 +11,40 @@ $this->breadcrumbs = array(
 
 $this->menu = array(
 	array(
-		'label' => '<i class="glyphicon glyphicon-plus"></i> ' . Yii::t('admin.crud', 'Create Milestone'), 
+		'label' => '<i class="glyphicon glyphicon-plus"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Create Milestone'),
+			'class' => 'btn btn-default',
+		),
 		'url' => array('create', 'project' => $model->project->id),
 		'visible' => Yii::app()->user->checkAccess('create_milestone', array('project' => $model->project)),
 	),
 	array(
-		'label' => '<i class="glyphicon glyphicon-eye-open"></i> ' . Yii::t('admin.crud', 'View Milestone'), 
+		'label' => '<i class="glyphicon glyphicon-eye-open"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'View Milestone'),
+			'class' => 'btn btn-default',
+		),
 		'url' => array('view', 'id' => $model->id),
 		'visible' => Yii::app()->user->checkAccess('view_milestone', array('milestone' => $model)),
 	),
 	array(
-		'label' => '<i class="glyphicon glyphicon-wrench"></i> ' . Yii::t('admin.crud', 'Manage Milestone'), 
+		'label' => '<i class="glyphicon glyphicon-list-alt"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Manage Milestone'),
+			'class' => 'btn btn-default',
+		),
 		'url'=>array('index', 'project' => $model->project->id),
 		'visible' => Yii::app()->user->checkAccess('view_milestone', array('project' => $model->project)),
+	),
+	array(
+		'label' => '<i class="glyphicon glyphicon-arrow-left"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Back to Project'),
+			'class' => 'btn btn-default',
+		),
+		'url' => array('project/view', 'id' => $model->project->id),
+		'visible' => Yii::app()->user->checkAccess('view_project', array('project' => $model->project)),
 	),
 );
 

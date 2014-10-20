@@ -8,28 +8,48 @@ $this->breadcrumbs = array(
 
 $this->menu = array(
 	array(
-		'label' => '<i class="glyphicon glyphicon-plus"></i> ' . Yii::t('admin.crud', 'Create Activity'), 
+		'label' => '<i class="glyphicon glyphicon-plus"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Create Activity'), 
+			'class' => 'btn btn-default',
+		),
 		'url' => array('create'),
 		'visible' => Yii::app()->user->checkAccess('create_activity'),
 	),
 	array(
-		'label' => '<i class="glyphicon glyphicon-pencil"></i> ' . Yii::t('admin.crud', 'Update Activity'), 
-		'url' => array('update', 'id' => $model->id),
-		'visible' => Yii::app()->user->checkAccess('update_activity'),
-	),
-	array(
-		'label' => '<i class="glyphicon glyphicon-trash"></i> ' . Yii::t('admin.crud', 'Delete Activity'), 
-		'url' => '#', 
+		'label' => '<i class="glyphicon glyphicon-list-alt"></i>', 
 		'linkOptions' => array(
-			'submit' => array('delete', 'id' => $model->id),
-			'confirm' => Yii::t('admin.crud', 'Are you sure you want to delete this activity?'),
+			'title' => Yii::t('admin.crud', 'Manage Activity'), 
+			'class' => 'btn btn-default',
 		),
-		'visible' => Yii::app()->user->checkAccess('delete_activity'),
-	),
-	array(
-		'label' => '<i class="glyphicon glyphicon-wrench"></i> ' . Yii::t('admin.crud', 'Manage Activity'), 
 		'url' => array('index'),
 		'visible' => Yii::app()->user->checkAccess('view_activity'),
+	),
+	array(
+		'label' => '<i class="glyphicon glyphicon-cog"></i> <span class="caret"></span>', 
+		'linkOptions' => array(
+			'class' => 'btn btn-default dropdown-toggle',
+			'data-toggle' => 'dropdown',
+		),
+		'itemOptions' => array(
+			'class' => 'dropdown',
+		),
+		'items' => array(
+			array(
+				'label' => '<i class="glyphicon glyphicon-pencil"></i> ' . Yii::t('admin.crud', 'Update Activity'), 
+				'url' => array('update', 'id' => $model->id),
+				'visible' => Yii::app()->user->checkAccess('update_activity'),
+			),
+			array(
+				'label' => '<i class="glyphicon glyphicon-trash"></i> ' . Yii::t('admin.crud', 'Delete Activity'), 
+				'url' => '#', 
+				'linkOptions' => array(
+					'submit' => array('delete', 'id' => $model->id),
+					'confirm' => Yii::t('admin.crud', 'Are you sure you want to delete this activity?'),
+				),
+				'visible' => Yii::app()->user->checkAccess('delete_activity'),
+			),
+		),
 	),
 );
 
