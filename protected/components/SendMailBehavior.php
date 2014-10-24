@@ -6,7 +6,7 @@ class SendMailBehavior extends CActiveRecordBehavior
 	public $subject;
 	public $template;
 	
-	public function afterSave()
+	public function afterSave($event)
 	{
 		if ($this->owner->getIsNewRecord()) {
 			$email = Html::normalizeOption($this->to);

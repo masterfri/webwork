@@ -441,3 +441,97 @@ ol.unstyled {
 	top: .9em;
 	right: 8px;
 }
+.file-select-container label {
+	position: relative;
+	overflow: hidden;
+}
+.file-select-container input[type=file] {
+	position: absolute;
+	opacity: 0;
+	top: -20px;
+	left: 0;
+	width: 1px;
+	height: 1px;
+}
+.file-select-container .file-select-item {
+	max-width: 200px;
+	text-overflow: ellipsis;
+	display: inline-block;
+	white-space: nowrap;
+	overflow: hidden;
+	padding: 6px 30px;
+	position: relative;
+	margin-right: 5px;
+	vertical-align: middle;
+	border: 1px solid #ccc;
+	background: #eee;
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+}
+.file-select-container .file-select-item .delete {
+	position: absolute;
+	right: 5px;
+	top: 0.4em;
+	padding: 5px;
+	display: block;
+	width: 20px;
+	height: 20px;
+	line-height: 10px;
+	text-align: center;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+.file-select-container .file-select-item .delete:hover {
+	text-decoration: none;
+	background-color: red;
+	color: white;
+}
+.file-select-container .file-select-item:before {
+	content: "\e022";
+	font-family: 'Glyphicons Halflings';
+	font-style: normal;
+	font-weight: 400;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	position: absolute;
+	top: 0.65em;
+	left: 10px;
+}
+.file-select-container .file-select-item[data-type="image/png"]:before,
+.file-select-container .file-select-item[data-type="image/jpeg"]:before,
+.file-select-container .file-select-item[data-type="image/gif"]:before,
+.file-select-container .file-select-item[data-type="image/bmp"]:before {
+	content: "\e060";
+}
+.attachments a {
+	display: inline-block;
+	vertical-align: top;
+}
+.attachments .no-thumb {
+	display: inline-block;
+	width: 150px;
+	height: 100px;
+	text-align: center;
+}
+.attachments .no-thumb > span {
+	display: block;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+.attachments .no-thumb .file-name {
+	padding-top: 20px;
+}
+.attachments .no-thumb .file-size {
+	color: #bbb;
+	font-style: italic;
+	font-size: 0.85em;
+}
+.attachments .no-thumb .file-type {
+	color: #bbb;
+	font-style: italic;
+	font-size: 0.7em;
+}

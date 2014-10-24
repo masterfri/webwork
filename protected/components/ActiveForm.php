@@ -69,6 +69,26 @@ class ActiveForm extends CActiveForm
 		), true);
 	}
 	
+	public function fileSelectField($model, $attribute, $htmlOptions=array())
+	{
+		$options = $this->extractOptions(array(
+			'container' => 'span',
+			'containerCssClass' => 'file-select-container',
+			'itemCssClass' => 'file-select-item',
+			'multiple' => false,
+			'buttonText' => 'Select file',
+			'buttonCssClass' => 'button-wrapper',
+			'maxfiles' => false,
+			'accept' => false,
+		), $htmlOptions);
+
+		return $this->controller->widget('FileSelect', array_merge($options, array(
+			'model' => $model,
+			'attribute' => $attribute,
+			'htmlOptions' => $htmlOptions,
+		)), true);
+	}
+	
 	public function error($model, $attribute, $htmlOptions=array(), $enableAjaxValidation=true, $enableClientValidation=true)
 	{
 		if(!$this->enableAjaxValidation) {
@@ -164,5 +184,19 @@ class ActiveForm extends CActiveForm
 		$this->attributes[$inputID] = $option;
 		
 		return $html;
+	}
+	
+	protected function extractOptions($options, &$source)
+	{
+		$result = array();
+		foreach ($options as $key => $default) {
+			if (isset($source[$key])) {
+				$result[$key] = $source[$key];
+				unset($source[$key]);
+			} else {
+				$result[$key] = $default;
+			}
+		}
+		return $result;
 	}
 }

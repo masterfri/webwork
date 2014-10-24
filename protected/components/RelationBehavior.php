@@ -5,7 +5,7 @@ class RelationBehavior extends CActiveRecordBehavior
 	public $attributes;
 	protected $commandBuilder;
 	
-	public function beforeSave()
+	public function beforeSave($event)
 	{
 		foreach($this->getOwner()->relations() as $name => $relation) {
 			if ($this->getOwner()->hasRelated($name)) {
@@ -21,7 +21,7 @@ class RelationBehavior extends CActiveRecordBehavior
 		}
 	}
 	
-	public function afterSave()
+	public function afterSave($event)
 	{
 		foreach($this->getOwner()->relations() as $name => $relation) {
 			if ($this->getOwner()->hasRelated($name)) {
@@ -43,7 +43,7 @@ class RelationBehavior extends CActiveRecordBehavior
 		}
 	}
 	
-	public function beforeDelete()
+	public function beforeDelete($event)
 	{
 		foreach($this->getOwner()->relations() as $name => $relation) {
 			$params = $this->getAttributeRelationParams($name);

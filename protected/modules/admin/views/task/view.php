@@ -243,114 +243,19 @@ $this->menu = array(
 </div>
 
 <h3><?php echo Yii::t('admin.crud', 'Disscussion'); ?></h3>
-<?php $this->renderPartial('_comments', array(
-	'task' => $model,
-)); ?>
-<div class="panel panel-default">
-	<div class="panel-heading">
-		<h3 class="panel-title"><?php echo Yii::t('admin.crud', 'Add Comment / Action'); ?></h3>
-	</div>
-	<div class="panel-body">
-		<div class="form-content">
-	
-			<?php $form=$this->beginWidget('ActiveForm', array(
-				'id' => 'comment-form',
-				'htmlOptions' => array(
-					'class'=>'form',
-				),
-				'enableClientValidation' => true,
-				'clientOptions' => array(
-					'validateOnSubmit' => true,
-					'afterValidate' => 'js:function(f,d,e) {
-						if (e) $("html, body").animate({scrollTop: $("#comment-form").offset().top - 50}, 1000);
-						return true;
-					}',
-				),
-			)); ?>
-			
-			<?php echo $form->errorSummary($comment, null, null, array('class' => 'alert alert-danger')); ?>
-
-			<div class="form-group">
-				<?php echo $form->labelEx($comment, 'content', array('class'=>'control-label')); ?>
-				<?php echo $form->textArea($comment, 'content', array(
-					'class' => 'form-control',
-				)); ?> 
-				<?php echo $form->error($comment, 'content', array('class'=>'help-inline')); ?>
-			</div>
-			
-			<div class="form-group">
-				<?php if(Yii::app()->user->checkAccess('comment_task', array('task' => $model))) 
-					echo CHtml::tag('button', array(
-						'type' => 'submit',
-						'class' => 'btn btn-primary',
-						'name' => 'action',
-						'value' => Task::ACTION_COMMENT,
-					), Yii::t('admin.crud', 'Submit')); ?>
-				
-				<?php if(Yii::app()->user->checkAccess('start_task', array('task' => $model))) 
-					echo CHtml::tag('button', array(
-						'type' => 'submit',
-						'class' => 'btn btn-default',
-						'name' => 'action',
-						'value' => Task::ACTION_START_WORK,
-					), Yii::t('admin.crud', 'Start work')); ?>
-					
-				<?php if(Yii::app()->user->checkAccess('complete_task', array('task' => $model))) 
-					echo CHtml::tag('button', array(
-						'type' => 'submit',
-						'class' => 'btn btn-default',
-						'name' => 'action',
-						'value' => Task::ACTION_COMPLETE_WORK,
-					), Yii::t('admin.crud', 'Complete work')); ?>
-					
-				<?php if(Yii::app()->user->checkAccess('return_task', array('task' => $model))) 
-					echo CHtml::tag('button', array(
-						'type' => 'submit',
-						'class' => 'btn btn-default',
-						'name' => 'action',
-						'value' => Task::ACTION_RETURN,
-					), Yii::t('admin.crud', 'Return')); ?>
-					
-				<?php if(Yii::app()->user->checkAccess('close_task', array('task' => $model))) 
-					echo CHtml::tag('button', array(
-						'type' => 'submit',
-						'class' => 'btn btn-warning',
-						'name' => 'action',
-						'value' => Task::ACTION_CLOSE,
-					), Yii::t('admin.crud', 'Close')); ?>
-					
-				<?php if(Yii::app()->user->checkAccess('hold_task', array('task' => $model))) 
-					echo CHtml::tag('button', array(
-						'type' => 'submit',
-						'class' => 'btn btn-warning',
-						'name' => 'action',
-						'value' => Task::ACTION_PUT_ON_HOLD,
-					), Yii::t('admin.crud', 'Put on-hold')); ?>
-					
-				<?php if(Yii::app()->user->checkAccess('reopen_task', array('task' => $model))) 
-					echo CHtml::tag('button', array(
-						'type' => 'submit',
-						'class' => 'btn btn-default',
-						'name' => 'action',
-						'value' => Task::ACTION_REOPEN,
-					), Yii::t('admin.crud', 'Reopen')); ?>
-				
-				<?php if(Yii::app()->user->checkAccess('resume_task', array('task' => $model))) 
-					echo CHtml::tag('button', array(
-						'type' => 'submit',
-						'class' => 'btn btn-default',
-						'name' => 'action',
-						'value' => Task::ACTION_RESUME,
-					), Yii::t('admin.crud', 'Resume')); ?>
-			</div>
-
-			<?php $this->endWidget(); ?>
-		</div>
-
-	</div>
+<div id="comments-list">
+	<?php $this->renderPartial('_comments', array(
+		'task' => $model,
+		'comments' => $model->comments,
+	)); ?>
 </div>
 
 <?php
+
+$this->renderPartial('_comment_form', array(
+	'task' => $model,
+	'comment' => $comment,
+)); 
 
 $changePriorityUrl = CJSON::encode($this->createUrl('changePriority', array('id' => $model->id)));
 $changeAssignmentUrl = CJSON::encode($this->createUrl('changeAssignment', array('id' => $model->id)));
@@ -421,6 +326,10 @@ $(document.body).bind('timeentry.created', function() {
 	timer_value = 0;
 	$('#timer_display code').text('0:00:00');
 	$('#timer_display input').val('0');
+});
+$(document.body).bind('comment.created', function(e, r) {
+	$('#comments-list').append(r.comment);
+	$('#comment-form').replaceWith($(r.form).find('#comment-form'));
 });
 EOS
 );

@@ -32,13 +32,15 @@ class Comment extends CActiveRecord
 					'length', 'max' => 16000),
 			array('	content', 
 					'required'),
+			array(' attachments',
+					'safe'),
 		);
 	}
 	
 	public function relations()
 	{
 		return array(
-			'attachments' => array(self::HAS_MANY, 'Attachment', 'comment_id'),
+			'attachments' => array(self::MANY_MANY, 'File', '{{comment_attachment}}(comment_id,file_id)'),
 			'created_by' => array(self::BELONGS_TO, 'User', 'created_by_id'),
 			'task' => array(self::BELONGS_TO, 'Task', 'task_id'),
 		);
@@ -55,11 +57,15 @@ class Comment extends CActiveRecord
 			array(
 				'class' => 'RelationBehavior',
 				'attributes' => array(
-					'attachments' => array(
-						'cascadeDelete' => true,
-					),
+					'attachments',
 					'created_by',
 					'task',
+				),
+			),
+			array(
+				'class' => 'UploadFileBehavior',
+				'attributes' => array(
+					'attachments',
 				),
 			),
 		);

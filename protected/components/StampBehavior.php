@@ -8,7 +8,7 @@ class StampBehavior extends CActiveRecordBehavior
 	public $updated_by_attribute;
 	public $time_format = 'Y-m-d H:i:s';
 	
-	public function beforeSave()
+	public function beforeSave($event)
 	{
 		if ($this->owner->getIsNewRecord()) {
 			if ($this->create_time_attribute) {

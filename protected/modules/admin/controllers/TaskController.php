@@ -147,25 +147,56 @@ class TaskController extends AdminController
 		if (!Yii::app()->user->checkAccess('view_task', array('task' => $task))) {
 			throw new CHttpException(403, 'Forbidden');
 		}
-		
-		$comment = new Comment();
-		
+
 		if ($task->user_subscription !== null) {
 			$task->user_subscription->markAsSeen();
 		}
 		
+		if($this->isAjax()) {
+			$this->layout = 'ajax';
+		}
+		
+		$this->render('view', array(
+			'model' => $task,
+			'comment' => new Comment(),
+		));
+	}
+	
+	public function actionComment($id)
+	{
+		$task = $this->loadModel($id, 'Task');
+		$action = isset($_POST['action_type']) ? $_POST['action_type'] : Task::ACTION_COMMENT;
+		if (!Yii::app()->user->checkAccess("{$action}_task", array('task' => $task))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
+		
+		$comment = new Comment();
+		
 		if (isset($_POST['Comment'])) {
-			$action = isset($_POST['action']) ? $_POST['action'] : Task::ACTION_COMMENT;
-			if (Yii::app()->user->checkAccess("{$action}_task", array('task' => $task))) {
-				$comment->setScenario($action);
-				$comment->attributes = $_POST['Comment'];
-				$comment->task = $task;
-				$comment->action = $action;
-				if ($comment->save()) {
-					$task->doAction($action);
-					if ($task->user_subscription === null) {
-						$task->subscribe(Yii::app()->user->id);
-					}
+			$comment->setScenario($action);
+			$comment->attributes = $_POST['Comment'];
+			$comment->task = $task;
+			$comment->action = $action;
+			if ($comment->save()) {
+				$task->doAction($action);
+				if ($task->user_subscription === null) {
+					$task->subscribe(Yii::app()->user->id);
+				}
+				if($this->isAjax()) {
+					$comment->refresh();
+					$this->ajaxSuccess(array(
+						'trigger' => 'comment.created',
+						'form' => $this->renderPartial('_comment_form', array(
+							'task' => $task,
+							'comment' => new Comment(),
+						), true),
+						'comment' => $this->renderPartial('_comments', array(
+							'task' => $task,
+							'comments' => array($comment),
+						), true),
+					));
+					Yii::app()->end();
+				} else {
 					$this->redirect(array('view', 'id' => $task->id, '#' => 'comment-' . $comment->id));
 				}
 			}
@@ -175,7 +206,7 @@ class TaskController extends AdminController
 			$this->layout = 'ajax';
 		}
 		
-		$this->render('view', array(
+		$this->render('comment', array(
 			'model' => $task,
 			'comment' => $comment,
 		));
@@ -221,7 +252,7 @@ class TaskController extends AdminController
 				'roles' => array('create_task'),
 			),
 			array('allow',
-				'actions' => array('view', 'index', 'watch', 'unwatch'),
+				'actions' => array('view', 'index', 'watch', 'unwatch', 'comment'),
 				'roles' => array('view_task'),
 			),
 			array('allow',
