@@ -39,7 +39,7 @@
 	<div class="form-group">
 		<?php echo $form->labelEx($model, 'tags', array('class'=>'col-sm-3 control-label')); ?>
 		<div class="col-sm-9">
-			<?php echo $form->tagField($model, 'tags', $project->getAvailableTagsList(), array(
+			<?php echo $form->tagField($model, 'tags', $project->getTagList(), array(
 				'class' => 'form-control',
 			)); ?> 
 			<?php echo $form->error($model, 'tags', array('class'=>'help-inline')); ?>
@@ -48,7 +48,7 @@
 	<div class="form-group">
 		<?php echo $form->labelEx($model, 'milestone_id', array('class'=>'col-sm-3 control-label')); ?>
 		<div class="col-sm-3">
-			<?php echo $form->dropdownList($model, 'milestone_id', Milestone::getList(), array(
+			<?php echo $form->dropdownList($model, 'milestone_id', $project->getMilestoneList(), array(
 				'class' => 'form-control',
 				'prompt' => Yii::t('admin.crud', 'Select Value'),
 			)); ?> 

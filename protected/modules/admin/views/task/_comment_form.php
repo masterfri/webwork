@@ -101,5 +101,6 @@
 					'value' => Task::ACTION_RESUME,
 				), Yii::t('admin.crud', 'Resume')); ?>
 		</div>
+		<input type="hidden" name="action_type" value="" id="action_type" />
 	<?php $this->endWidget(); ?>
 </div>

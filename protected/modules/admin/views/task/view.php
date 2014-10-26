@@ -149,12 +149,12 @@ $this->menu = array(
 						<?php $this->widget('DropdownMenuSelect', array(
 							'name' => 'tags',
 							'value' => array_map(function($t) { return $t->id; }, $model->tags),
-							'options' => ViewHelper::listTags($model->project->getAvailableTags(), array(
+							'options' => ViewHelper::listTags($model->project->getTags(), array(
 								'parentTag' => false, 
 								'glue' => false,
 								'itemTag' => 'span',
 							)),
-							'labels' => ViewHelper::listTags($model->project->getAvailableTags(), array(
+							'labels' => ViewHelper::listTags($model->project->getTags(), array(
 								'parentTag' => false, 
 								'glue' => false,
 							)),
@@ -327,6 +327,9 @@ $(document.body).bind('timeentry.created', function() {
 	timer_value = 0;
 	$('#timer_display code').text('0:00:00');
 	$('#timer_display input').val('0');
+});
+$(document.body).on('mousedown', '#comment-form button[type=submit]', function() {
+	$('#action_type').val($(this).attr('value'));
 });
 EOS
 );

@@ -143,6 +143,13 @@ class Project extends CActiveRecord
 		return $data;
 	}
 	
+	public function getMilestoneList()
+	{
+		$data = CHtml::listData($this->milestones, 'id', 'name');
+		asort($data);
+		return $data;
+	}
+	
 	public function isUserAssigned($user_id, $role=null)
 	{
 		if ($user_id) {
@@ -169,15 +176,15 @@ class Project extends CActiveRecord
 		$assignment->save();
 	}
 	
-	public function getAvailableTags()
+	public function getTags()
 	{
 		$criteria = new CDbCriteria();
 		$criteria->order = 'name';
 		return Tag::model()->findAll($criteria);
 	}
 	
-	public function getAvailableTagsList()
+	public function getTagList()
 	{
-		return CHtml::listData($this->getAvailableTags(), 'id', 'name');
+		return CHtml::listData($this->getTags(), 'id', 'name');
 	}
 }
