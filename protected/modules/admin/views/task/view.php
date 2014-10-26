@@ -107,6 +107,10 @@ $this->menu = array(
 	<div class="task-details">
 		<?php $this->widget('DetailView', array(
 			'id' => 'task-details',
+			'htmlOptions' => array(
+				'data-update-on' => 'task.updated',
+				'class' => 'table table-striped table-bordered table-condensed detailed-view',
+			),
 			'data' => $model,		
 			'attributes' => array(
 				'complexity',
@@ -318,18 +322,11 @@ $('#timer_form').submit(function () {
 	$('#stop_timer').addClass('hidden');
 	clearInterval(timer);
 });
-$(document.body).bind('task.updated', function() {
-	$('#task-details').ajaxUpdate();
-});
 $(document.body).bind('timeentry.created', function() {
 	window.onbeforeunload = null;
 	timer_value = 0;
 	$('#timer_display code').text('0:00:00');
 	$('#timer_display input').val('0');
-});
-$(document.body).bind('comment.created', function(e, r) {
-	$('#comments-list').append(r.comment);
-	$('#comment-form').replaceWith($(r.form).find('#comment-form'));
 });
 EOS
 );

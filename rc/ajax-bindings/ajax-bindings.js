@@ -1,8 +1,19 @@
 (function($) {
 	
+	function fireOnload() {
+		var t = $(this);
+		t.trigger(t.data('onload'), [t]);
+	}
+	
+	function postUpdate(element) {
+		element.filter('[data-onload]').each(fireOnload);
+		element.find('[data-onload]').each(fireOnload);
+	}
+	
 	function replaceElement(oldelement, newelement) {
 		var overlay = oldelement.data('overlay');
 		oldelement.replaceWith(newelement);
+		postUpdate(newelement);
 		if (overlay) {
 			oldelement.data('overlay', null);
 			if (overlay.attr('role') == 'cover') {
@@ -67,7 +78,29 @@
 			}
 			if (response.trigger) {
 				$(document.body).trigger(response.trigger, [response]);
-				$('[data-update-after~="' + response.trigger + '"]').ajaxUpdate();
+				$('[data-update-on~="' + response.trigger + '"]').ajaxUpdate();
+			}
+			if (response.update) {
+				$(response.update).each(function() {
+					var method = ('method' in this) ? this.method : 'replace';
+					var content = $(this.content);
+					var dest = $('#' + this.id);
+					if ('append' == method) {
+						dest.append(content);
+						postUpdate(content);
+					} else if ('prepend' == method) {
+						dest.prepend(content);
+						postUpdate(content);
+					} else if ('before' == method) {
+						dest.before(content);
+						postUpdate(content);
+					} else if ('after' == method) {
+						dest.after(content);
+						postUpdate(content);
+					} else {
+						replaceElement(dest, content);
+					}
+				});
 			}
 			if (response.redirect) {
 				location.href = response.redirect;
@@ -87,7 +120,9 @@
 				'<div class="modal-dialog">' +
 					'<div class="modal-content">' +
 						'<div class="modal-header panel-gray">' + 
-							'<button type="button" class="close btn btn-success" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove"></span></button>' +
+							'<button type="button" class="close btn btn-success" data-dismiss="modal">' +
+								'<span aria-hidden="true">&times;</span>' + 
+							'</button>' +
 							'<h3 class="modal-title"></h3>' +
 						'</div>' +
 						'<div class="modal-body" data-submitting="ajax-modal">' +
@@ -128,9 +163,12 @@
 		if (options.source) {
 			data = content.find(options.source);
 			body.append(data);
+			postUpdate(data);
 		} else {
 			data = content.find('[data-marker=ajax-body]');
-			body.append(data.length ? data : content.children());
+			data = data.length ? data : content.children();
+			body.append(data);
+			postUpdate(data);
 		}
 		if (options.titleSource) {
 			data = content.find(options.titleSource);
@@ -240,10 +278,25 @@
 		var settings = {};
 		if (context.is('form')) {
 			settings.type = (context.attr('method') || 'GET').toUpperCase();
-			settings.data = context.serialize();
-			settings.url = context.get(0).action;
+			settings.url = context.attr('action');
+			if ((context.attr('enctype') || '').toLowerCase() == 'multipart/form-data') {
+				var data = new FormData();
+				$(context.serializeArray()).each(function() {
+					data.append(this.name, this.value);
+				});
+				$(context).find('input[type=file]').each(function() {
+					for (var i = 0; i < this.files.length; i++) {
+						data.append(this.name, this.files[i]);
+					}
+				});
+				settings.data = data;
+				settings.processData = false;
+				settings.contentType = false;
+			} else {
+				settings.data = context.serialize();
+			}
 		} else if (context.is('a')) {
-			settings.url = context.get(0).href;
+			settings.url = context.attr('href');
 		} else {
 			settings.url = location.href;
 		}

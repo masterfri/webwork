@@ -1,4 +1,4 @@
-<div class="panel panel-default">
+<div class="panel panel-default" id="comment-form-container">
 	<div class="panel-heading">
 		<h3 class="panel-title"><?php echo Yii::t('admin.crud', 'Add Comment / Action'); ?></h3>
 	</div>

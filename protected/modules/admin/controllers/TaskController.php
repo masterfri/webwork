@@ -186,14 +186,23 @@ class TaskController extends AdminController
 					$comment->refresh();
 					$this->ajaxSuccess(array(
 						'trigger' => 'comment.created',
-						'form' => $this->renderPartial('_comment_form', array(
-							'task' => $task,
-							'comment' => new Comment(),
-						), true),
-						'comment' => $this->renderPartial('_comments', array(
-							'task' => $task,
-							'comments' => array($comment),
-						), true),
+						'update' => array(
+							array(
+								'id' => 'comment-form-container',
+								'content' => $this->renderPartial('_comment_form', array(
+									'task' => $task,
+									'comment' => new Comment(),
+								), true),
+							),
+							array(
+								'id' => 'comments-list',
+								'method' => 'append',
+								'content' => $this->renderPartial('_comments', array(
+									'task' => $task,
+									'comments' => array($comment),
+								), true),
+							),
+						),
 					));
 					Yii::app()->end();
 				} else {

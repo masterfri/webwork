@@ -47,7 +47,9 @@ class FileSelect extends CInputWidget
 		$this->renderSelection($name, $value);
 		echo CHtml::openTag('label', array('class' => $this->buttonCssClass));
 		echo $this->buttonText;
-		echo CHtml::fileField($name, '', $this->htmlOptions);
+		echo CHtml::fileField($name, '', array_merge($this->htmlOptions, array(
+			'data-onload' => 'fileselect.init',
+		)));
 		echo CHtml::closeTag('label');
 		echo CHtml::closeTag($this->container);
 	}
@@ -65,7 +67,10 @@ class FileSelect extends CInputWidget
 			'maxfiles' => $this->maxfiles,
 			'accept' => $this->accept,
 		));
-		$cs->registerScript(__CLASS__. "#{$id}", "$('#{$id}').fileSelect({$options});");
+		$cs->registerScript(__CLASS__. "#{$id}", 
+			"$('#{$id}').fileSelect({$options});".
+			"$(document.body).on('fileselect.init', '#{$id}', function() { $(this).fileSelect({$options}); });"
+		);
 	}
 	
 	protected function renderSelection($name, $value)
