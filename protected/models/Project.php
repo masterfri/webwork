@@ -187,4 +187,20 @@ class Project extends CActiveRecord
 	{
 		return CHtml::listData($this->getTags(), 'id', 'name');
 	}
+	
+	public function getTasks($params=array())
+	{
+		$criteria = new CDbCriteria($params);
+		$criteria->compare('project_id', $this->id);
+		$criteria->order = 'due_date, date_sheduled, priority DESC';
+		return Task::model()->findAll($criteria);
+	}
+	
+	public function getMilestones($params=array())
+	{
+		$criteria = new CDbCriteria($params);
+		$criteria->compare('project_id', $this->id);
+		$criteria->order = 'due_date';
+		return Milestone::model()->findAll($criteria);
+	}
 }

@@ -63,9 +63,11 @@ $this->menu = array(
 		'attributes' => array(
 			'name',
 			array('name' => 'color', 'type' => 'raw', 'value' => sprintf('<div style="width: 20px; height: 20px; background: %s; border: 1px solid black; "></div>', $model->color)),
-			'time_created:datetime',
-			'created_by',
- 
 		),
 	)); ?>
+	<div class="panel-footer foot-details">
+		<?php echo Yii::t('tag', 'Created by'); ?>
+		<?php echo CHtml::encode($model->created_by); ?>,
+		<?php echo Yii::app()->format->formatDatetime($model->time_created); ?>
+	</div>
 </div>

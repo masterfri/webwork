@@ -65,10 +65,13 @@ $this->menu = array(
 			'task',
 			'user',
 			'activity',
-			'amount',
+			'amount:hours',
 			'description',
-			'date_created:datetime',
-			'created_by',
 		),
 	)); ?>
+	<div class="panel-footer foot-details">
+		<?php echo Yii::t('timeEntry', 'Created by'); ?>
+		<?php echo CHtml::encode($model->created_by); ?>,
+		<?php echo Yii::app()->format->formatDatetime($model->date_created); ?>
+	</div>
 </div>

@@ -62,11 +62,14 @@ $this->menu = array(
 		'data' => $model,		
 		'attributes' => array(
 			'description:ntext',
-			'power',
-			'time_created:datetime',
-			'created_by',
+			'power:number',
 		),
 	)); ?>
+	<div class="panel-footer foot-details">
+		<?php echo Yii::t('rate', 'Created by'); ?>
+		<?php echo CHtml::encode($model->created_by); ?>,
+		<?php echo Yii::app()->format->formatDatetime($model->time_created); ?>
+	</div>
 </div>
 
 <?php if (count($rates = $model->getCompleteMatrix())): ?>
@@ -80,7 +83,7 @@ $this->menu = array(
 			<?php foreach ($rates as $rate): ?>
 				<tr>
 					<th><?php echo CHtml::encode($rate->activity->name); ?></th>
-					<td><?php echo CHtml::encode($rate->hour_rate); ?></td>
+					<td><?php echo Yii::app()->format->formatMoney($rate->hour_rate); ?></td>
 				</tr>
 			<?php endforeach; ?>
 		</tbody>

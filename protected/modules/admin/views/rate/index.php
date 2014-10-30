@@ -49,7 +49,7 @@ $this->menu = array(
 		'dataProvider' => $provider,
 		'columns' => array(
 			array('class' => 'LinkColumn', 'name' => 'name'),
-			'power',
+			'power:number',
 			array(
 				'class' => 'ButtonColumn',
 				'deleteConfirmation' => Yii::t('admin.crud', 'Are you sure you want to delete this rate?'),

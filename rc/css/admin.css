@@ -535,3 +535,9 @@ ol.unstyled {
 	font-style: italic;
 	font-size: 0.7em;
 }
+.foot-details {
+	text-align: right;
+	font-style: italic;
+	color: #777;
+	font-size: 0.9em;
+}

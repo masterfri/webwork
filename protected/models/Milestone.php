@@ -82,17 +82,20 @@ class Milestone extends CActiveRecord
 	
 	public function __toString()
 	{
-		return $this->getDisplayName();
-	}
-	
-	public function getDisplayName()
-	{
 		return $this->name;
 	}
 	
 	public static function getList()
 	{
 		$criteria = new CDbCriteria();
-		return CHtml::listData(self::model()->findAll($criteria), 'id', 'displayName');
+		return CHtml::listData(self::model()->findAll($criteria), 'id', 'name');
+	}
+	
+	public function getTasks($params=array())
+	{
+		$criteria = new CDbCriteria($params);
+		$criteria->compare('milestone_id', $this->id);
+		$criteria->order = 'due_date, date_sheduled, priority DESC';
+		return Task::model()->findAll($criteria);
 	}
 }

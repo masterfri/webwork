@@ -21,10 +21,10 @@
 	</div>
 	<div class="form-group">
 		<?php echo $form->labelEx($model, 'amount', array('class'=>'control-label')); ?>
-		<?php echo $form->textField($model, 'amount', array(
+		<?php echo $form->textField($model, 'formattedAmount', array(
 			'class' => 'form-control',
 		)); ?> 
-		<?php echo $form->error($model, 'amount', array('class'=>'help-inline')); ?>
+		<?php echo $form->error($model, 'formattedAmount', array('class'=>'help-inline')); ?>
 	</div>
 	<div class="form-group">
 		<?php echo $form->labelEx($model, 'description', array('class'=>'control-label')); ?>

@@ -54,6 +54,11 @@ $this->menu = array(
 		),
 		'items' => array(
 			array(
+				'label' => '<i class="glyphicon glyphicon-file"></i> ' . Yii::t('admin.crud', 'Specification'), 
+				'url' => array('pdf', 'id' => $model->id),
+				'visible' => Yii::app()->user->checkAccess('view_project', array('project' => $model)),
+			),
+			array(
 				'label' => '<i class="glyphicon glyphicon-user"></i> ' . Yii::t('admin.crud', 'Assignment'), 
 				'url' => array('assignment/index', 'project' => $model->id),
 				'visible' => Yii::app()->user->checkAccess('view_assignment', array('project' => $model)),
@@ -85,8 +90,6 @@ $this->menu = array(
 		'data' => $model,		
 		'attributes' => array(
 			'assignments:array',
-			'date_created:datetime',
-			'created_by',
 		),
 	)); ?>
 	<div class="panel-body">
@@ -99,5 +102,10 @@ $this->menu = array(
 		<?php else: ?>
 			<p class="not-set"><?php echo Yii::t('admin.crud', 'No description given'); ?></p>
 		<?php endif; ?>
+	</div>
+	<div class="panel-footer foot-details">
+		<?php echo Yii::t('project', 'Created by'); ?>
+		<?php echo CHtml::encode($model->created_by); ?>,
+		<?php echo Yii::app()->format->formatDatetime($model->date_created); ?>
 	</div>
 </div>

@@ -37,10 +37,8 @@ class TimeEntry extends CActiveRecord
 			array('	user_id', 
 					'required', 'on' => 'create'),
 			array('	activity_id,
-					amount', 
+					formattedAmount', 
 					'required', 'on' => 'create, update, report'),
-			array('	amount', 
-					'numerical', 'on' => 'create, update, report'),
 			array('	description', 
 					'length', 'max' => 16000, 'on' => 'create, update, report'),
 			array('	project_id,
@@ -144,20 +142,32 @@ class TimeEntry extends CActiveRecord
 		return (float) $command->queryScalar();
 	}
 	
-	public function __toString()
+	public function getFormattedAmount()
 	{
-		return $this->getDisplayName();
+		return Yii::app()->format->formatHours($this->amount);
 	}
 	
-	public function getDisplayName()
+	public function setFormattedAmount($value)
 	{
-		return "#".$this->primaryKey;
+		if (strpos($value, ':') !== false) {
+			list($h, $m) = explode(':', $value);
+			$this->amount = $h + $m / 60;
+		} elseif (strpos($value, 'h') !== false || strpos($value, 'm') !== false) {
+			if (preg_match_all("/(\d+)\s*([hm])/", $value, $matches, PREG_SET_ORDER)) {
+				$total = 0;
+				foreach ($matches as $match) {
+					if ($match[2] == 'h') {
+						$total += $match[1];
+					} elseif ($match[2] == 'm') {
+						$total += $match[1] / 60;
+					}
+				}
+				$this->amount = $total;
+			} else {
+				$this->amount = floatval($value);
+			}
+		} else {
+			$this->amount = floatval($value);
+		}
 	}
-	
-	public static function getList()
-	{
-		$criteria = new CDbCriteria();
-		return CHtml::listData(self::model()->findAll($criteria), 'id', 'displayName');
-	}
-	}
-	
+}

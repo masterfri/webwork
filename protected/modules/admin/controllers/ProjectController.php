@@ -59,7 +59,18 @@ class ProjectController extends AdminController
 			throw new CHttpException(403, 'Forbidden');
 		}
 		$this->render('view', array(
-			'model' => $this->loadModel($id, 'Project'),
+			'model' => $model,
+		));
+	}
+	
+	public function actionPdf($id)
+	{
+		$model = $this->loadModel($id, 'Project');
+		if (!Yii::app()->user->checkAccess('view_project', array('project' => $model))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
+		$this->renderPartial('pdf', array(
+			'model' => $model,
 		));
 	}
 
@@ -79,7 +90,7 @@ class ProjectController extends AdminController
 				'roles' => array('create_project'),
 			),
 			array('allow',
-				'actions' => array('view', 'index'),
+				'actions' => array('view', 'index', 'pdf'),
 				'roles' => array('view_project'),
 			),
 			array('allow',

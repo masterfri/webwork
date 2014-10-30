@@ -99,4 +99,32 @@ class ViewHelper
 		}
 		return '';
 	}
+	
+	public static function formatEstimate($value)
+	{
+		list($min, $max) = array_map(function($v) {
+			if (0 == $v) {
+				return '0';
+			} elseif ($v >= 20) {
+				return strval(round($v));
+			} else {
+				$v = round($v * 4) / 4;
+				return ltrim(strtr($v, array(
+					'.25' => '&frac14;',
+					'.5' => '&frac12;',
+					'.75' => '&frac34;',
+				)), '0');
+			}
+		}, $value);
+		
+		if ($min !== '0') {
+			if ($min == $max) {
+				return Yii::t('admin.crud', '{min} hours', array('{min}' => $min));
+			} else {
+				return Yii::t('admin.crud', '{min} - {max} hours', array('{min}' => $min, '{max}' => $max));
+			}
+		}
+		
+		return Yii::t('admin.crud', 'Not available');
+	}
 }

@@ -55,14 +55,14 @@ $this->menu = array(
 	</div>
 	<?php $this->widget('GridView', array(
 		'id' => 'timeentry-grid',
-		'template' => '{items} <div class="table-totals">' . Yii::t('admin.crud', 'Total') . ': <span>' . $sum . '</span></div> {pager}',
+		'template' => '{items} <div class="table-totals">' . Yii::t('admin.crud', 'Total') . ': <span>' . Yii::app()->format->formatHours($sum) . '</span></div> {pager}',
 		'dataProvider' => $provider,
 		'columns' => array(
 			'project',
 			'task',
 			'user',
 			array('class' => 'LinkColumn', 'name' => 'activity'),
-			'amount',
+			'amount:hours',
 			'date_created:datetime',
 			array(
 				'class' => 'ButtonColumn',

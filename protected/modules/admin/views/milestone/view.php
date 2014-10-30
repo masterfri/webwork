@@ -82,8 +82,6 @@ $this->menu = array(
 		'data' => $model,		
 		'attributes' => array(
 			'due_date:date',
-			'time_created:datetime',
-			'created_by',
 		),
 	)); ?>
 	<div class="panel-body">
@@ -96,5 +94,10 @@ $this->menu = array(
 		<?php else: ?>
 			<p class="not-set"><?php echo Yii::t('admin.crud', 'No description given'); ?></p>
 		<?php endif; ?>
+	</div>
+	<div class="panel-footer foot-details">
+		<?php echo Yii::t('milestone', 'Created by'); ?>
+		<?php echo CHtml::encode($model->created_by); ?>,
+		<?php echo Yii::app()->format->formatDatetime($model->time_created); ?>
 	</div>
 </div>

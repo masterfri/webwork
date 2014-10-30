@@ -113,16 +113,18 @@ $this->menu = array(
 			),
 			'data' => $model,		
 			'attributes' => array(
-				'complexity',
-				'estimate',
+				'complexity:number',
+				array(
+					'name' => 'estimate',
+					'value' => ViewHelper::formatEstimate($model->getEstimateRange()),
+					'type' => 'raw',
+				),
 				array(
 					'name' => 'regression_risk',
 					'value' => $model->getRegressionRisk(),
 				),
 				'date_sheduled:date',
 				'due_date:date',
-				'time_created:datetime',
-				'created_by',
 			),
 		)); ?>
 		<div class="panel-body">
@@ -244,6 +246,11 @@ $this->menu = array(
 		</div>
 	</div>
 	<div class="clearfix"></div>
+	<div class="panel-footer foot-details">
+		<?php echo Yii::t('task', 'Created by'); ?>
+		<?php echo CHtml::encode($model->created_by); ?>,
+		<?php echo Yii::app()->format->formatDatetime($model->time_created); ?>
+	</div>
 </div>
 
 <h3><?php echo Yii::t('admin.crud', 'Disscussion'); ?></h3>

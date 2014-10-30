@@ -26,7 +26,7 @@
 						<?php endif; ?>
 					</div>
 					<div class="date-scheduled task-detail">
-						<span class="l glyphicon glyphicon-calendar" title="<?php echo Yii::t('task', 'Date Sheduled'); ?>"></span>
+						<span class="l glyphicon glyphicon-calendar" title="<?php echo Yii::t('task', 'Date Scheduled'); ?>"></span>
 						<?php if (!empty($data->date_sheduled) && '0000-00-00' != $data->date_sheduled): ?>
 							<?php echo Yii::app()->format->formatDate($data->date_sheduled); ?>
 						<?php else: ?>

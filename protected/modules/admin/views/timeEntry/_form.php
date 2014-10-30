@@ -64,10 +64,10 @@
 	<div class="form-group">
 		<?php echo $form->labelEx($model, 'amount', array('class'=>'col-sm-3 control-label')); ?>
 		<div class="col-sm-9">
-			<?php echo $form->textField($model, 'amount', array(
+			<?php echo $form->textField($model, 'formattedAmount', array(
 				'class' => 'form-control',
 			)); ?> 
-			<?php echo $form->error($model, 'amount', array('class'=>'help-inline')); ?>
+			<?php echo $form->error($model, 'formattedAmount', array('class'=>'help-inline')); ?>
 		</div>
 	</div>
 	<div class="form-group">

@@ -6,7 +6,7 @@ return array(
 	'Comments' => 'Comments',
 	'Complexity' => 'Сложность',
 	'Created by' => 'Создал',
-	'Date Sheduled' => 'Дата начала',
+	'Date Scheduled' => 'Дата начала',
 	'Description' => 'Описание',
 	'Due Date' => 'Срок сдачи',
 	'Estimate' => 'Оценка времени',

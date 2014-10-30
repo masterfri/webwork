@@ -30,6 +30,9 @@ class Task extends CActiveRecord
 	const ACTION_PUT_ON_HOLD = 'hold';
 	const ACTION_REOPEN = 'reopen';
 	const ACTION_RESUME = 'resume';
+	
+	const COMPLEXITY_RATE = 1;
+	const ESTIMATE_RESERVE_RATE = 0.2;
 
 	protected static $regression_risks;
 	protected static $priorities;
@@ -109,7 +112,7 @@ class Task extends CActiveRecord
 			'complexity' => Yii::t('task', 'Complexity'),
 			'created_by_id' => Yii::t('task', 'Created by'),
 			'created_by' => Yii::t('task', 'Created by'),
-			'date_sheduled' => Yii::t('task', 'Date Sheduled'),
+			'date_sheduled' => Yii::t('task', 'Date Scheduled'),
 			'description' => Yii::t('task', 'Description'),
 			'due_date' => Yii::t('task', 'Due Date'),
 			'estimate' => Yii::t('task', 'Estimate'),
@@ -480,5 +483,31 @@ class Task extends CActiveRecord
 				$this->assigned !== null &&
 				$this->date_sheduled != '' &&
 				$this->date_sheduled != '0000-00-00';
+	}
+	
+	public function getEstimate()
+	{
+		if ($this->estimate > 0) {
+			return $this->estimate;
+		} elseif ($this->complexity > 0) {
+			$power = CHtml::value($this, 'assigned.rate.power');
+			if ($power > 0) {
+				return self::COMPLEXITY_RATE * $this->complexity / $power;
+			}
+		}
+		return 0;
+	}
+	
+	public function getEstimateReserve()
+	{
+		return self::ESTIMATE_RESERVE_RATE * $this->getEstimate();
+	}
+	
+	public function getEstimateRange()
+	{
+		return array(
+			$this->getEstimate(),
+			$this->getEstimate() + $this->getEstimateReserve(),
+		);
 	}
 }
