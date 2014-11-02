@@ -13,9 +13,16 @@ $(function() {
 	
 	$(document.body).on('submit', '[role=search-form]', function() {
 		var target = $(this).attr('data-target');
-		$.fn.yiiGridView.update(target, {
-			data: $(this).serialize()
-		});
+		var type = $(this).attr('data-target-type');
+		if ('listview' == type) {
+			$.fn.yiiListView.update(target, {
+				data: $(this).serialize()
+			});
+		} else {
+			$.fn.yiiGridView.update(target, {
+				data: $(this).serialize()
+			});
+		}
 		return false;
 	});
 

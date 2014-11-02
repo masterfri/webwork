@@ -35,6 +35,13 @@ class ActiveForm extends CActiveForm
 	
 	public function tagField($model, $attribute, $data, $htmlOptions=array())
 	{
+		return $this->selectField($model, $attribute, $data, array_merge($htmlOptions, array(
+			'multiple' => true,
+		)));
+	}
+	
+	public function selectField($model, $attribute, $data, $htmlOptions=array())
+	{
 		$cs = Yii::app()->clientScript;
 		$cs->registerScriptFile('/rc/select2/select2.js');
 		$cs->registerCssFile('/rc/select2/select2.css');
@@ -42,13 +49,43 @@ class ActiveForm extends CActiveForm
 		
 		CHtml::resolveNameID($model, $attribute, $htmlOptions);
 		
-		$htmlOptions['multiple'] = true;
 		$htmlOptions['style'] = 'width: 100%;';
 		$id = $htmlOptions['id'];
 		
-		$cs->registerScript("tagField$id", "$('#$id').select2();");
+		$opts = array();
+		$is_remote = false;
+		if (isset($htmlOptions['ajax'])) {
+			$opts = array(
+				'ajax' => array_merge(array(
+					'dataType' => 'json',
+					'quietMillis' => 500,
+					'data' => 'js:function(t, p) { return {query: t, page: p}; }',
+					'results' => 'js:function(d, p) { return {results: d}; }',
+				), $htmlOptions['ajax']),
+			);
+			$is_remote = true;
+			unset($htmlOptions['ajax']);
+			if (isset($htmlOptions['multiple'])) {
+				$opts['multiple'] = true;
+			}
+		}
+		$opts = CJavaScript::encode($opts);
 		
-		return $this->dropdownList($model, $attribute, $data, $htmlOptions);
+		$cs->registerScript("select2{$id}", "$('#{$id}').select2($opts);");
+		
+		if ($is_remote) {
+			if (isset($htmlOptions['multiple'])) {
+				$htmlOptions['value'] = '';
+				$cs->registerScript("select2{$id}split", "$('#{$id}').on('change', function(e) {
+					$(this).next('.select2-hidden-multi').remove();
+					var h = $('<span style=\"display:none;\" class=\"select2-hidden-multi\"></span>').insertAfter(this);
+					$(e.val).each(function() { h.append('<input type=\"hidden\" name=\"{$htmlOptions['name']}[]\" value=\"' + this + '\">'); });
+				});");
+			}
+			return $this->hiddenField($model, $attribute, $htmlOptions);
+		} else {
+			return $this->dropdownList($model, $attribute, $data, $htmlOptions);
+		}
 	}
 	
 	public function colorField($model, $attribute, $htmlOptions=array())

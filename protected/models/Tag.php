@@ -19,6 +19,8 @@ class Tag extends CActiveRecord
 			'created_by_id' => Yii::t('tag', 'Created by'),
 			'created_by' => Yii::t('tag', 'Created by'),
 			'name' => Yii::t('tag', 'Name'),
+			'project' => Yii::t('tag', 'Project'),
+			'project_id' => Yii::t('tag', 'Project'),
 			'time_created' => Yii::t('tag', 'Date Created'),
 		);
 	}
@@ -32,6 +34,8 @@ class Tag extends CActiveRecord
 					'length', 'max' => 200, 'on' => 'create, update'),
 			array('	name', 
 					'required', 'on' => 'create, update'),
+			array(' project_id',
+					'safe', 'on' => 'create, update'),
 			array('	name', 
 					'safe', 'on' => 'search'),
 		);
@@ -41,6 +45,22 @@ class Tag extends CActiveRecord
 	{
 		return array(
 			'created_by' => array(self::BELONGS_TO, 'User', 'created_by_id'),
+			'project' => array(self::BELONGS_TO, 'Project', 'project_id'),
+		);
+	}
+	
+	public function scopes()
+	{
+		return array(
+			'member' => array(
+				'with' => array(
+					'project' => array(
+						'scopes' => array(
+							'member',
+						),
+					),
+				),
+			),
 		);
 	}
 	
@@ -56,6 +76,7 @@ class Tag extends CActiveRecord
 				'class' => 'RelationBehavior',
 				'attributes' => array(
 					'created_by',
+					'project',
 				),
 			),
 		);
@@ -64,9 +85,21 @@ class Tag extends CActiveRecord
 	public function search($params=array())
 	{
 		$criteria = new CDbCriteria($params);
-		$criteria->compare('t.name', $this->name, true);
+		$criteria->alias = 'tag';
+		$criteria->compare('tag.name', $this->name, true);
+		$criteria->with = array('project');
 		return new CActiveDataProvider($this, array(
 			'criteria' => $criteria,
+			'sort' => array(
+				'defaultOrder' => 'tag.name DESC',
+				'attributes' => array(
+					'project' => array(
+						'asc' => 'project.name ASC',
+						'desc' => 'project.name DESC',
+					),
+					'*',
+				)
+			),
 		));
 	}
 	
@@ -75,9 +108,9 @@ class Tag extends CActiveRecord
 		return $this->name;
 	}
 	
-	public static function getList()
+	public static function getList($params=array())
 	{
-		$criteria = new CDbCriteria();
+		$criteria = new CDbCriteria($params);
 		$criteria->order = 'name';
 		return CHtml::listData(self::model()->findAll($criteria), 'id', 'name');
 	}

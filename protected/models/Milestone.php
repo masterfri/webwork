@@ -52,6 +52,21 @@ class Milestone extends CActiveRecord
 		);
 	}
 	
+	public function scopes()
+	{
+		return array(
+			'member' => array(
+				'with' => array(
+					'project' => array(
+						'scopes' => array(
+							'member',
+						),
+					),
+				),
+			),
+		);
+	}
+	
 	public function behaviors()
 	{
 		return array(
@@ -74,7 +89,8 @@ class Milestone extends CActiveRecord
 	public function search($params=array())
 	{
 		$criteria = new CDbCriteria($params);
-		$criteria->compare('t.name', $this->name, true);
+		$criteria->alias = 'milestone';
+		$criteria->compare('milestone.name', $this->name, true);
 		return new CActiveDataProvider($this, array(
 			'criteria' => $criteria,
 		));

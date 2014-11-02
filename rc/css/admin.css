@@ -541,3 +541,16 @@ ol.unstyled {
 	color: #777;
 	font-size: 0.9em;
 }
+.task-list .empty {
+	padding: 20px;
+	display: block;
+	font-style: italic;
+}
+.task-list .btn.search-button {
+	float: right;
+	margin: 10px 20px;
+	padding: 8px;
+}
+.task-list-search .panel-body{
+	border-bottom: 1px solid #ccc;
+}

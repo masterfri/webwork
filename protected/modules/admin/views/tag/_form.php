@@ -28,6 +28,16 @@
 		</div>
 	</div>
 	<div class="form-group">
+		<?php echo $form->labelEx($model, 'project_id', array('class'=>'col-sm-3 control-label')); ?>
+		<div class="col-sm-9">
+			<?php echo $form->dropdownList($model, 'project_id', Project::getList(), array(
+				'class' => 'form-control',
+				'prompt' => Yii::t('admin.crud', 'Select Value'),
+			)); ?> 
+			<?php echo $form->error($model, 'project_id', array('class'=>'help-inline')); ?>
+		</div>
+	</div>
+	<div class="form-group">
 		<?php echo $form->labelEx($model, 'color', array('class'=>'col-sm-3 control-label')); ?>
 		<div class="col-sm-9">
 			<?php echo $form->colorField($model, 'color'); ?> 

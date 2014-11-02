@@ -5,4 +5,5 @@ return array(
 	'Created by' => 'Создал',
 	'Name' => 'Название',
 	'Date Created' => 'Дата создания',
+	'Project' => 'Проект',
 );

@@ -62,6 +62,7 @@ $this->menu = array(
 		'data' => $model,		
 		'attributes' => array(
 			'name',
+			'project',
 			array('name' => 'color', 'type' => 'raw', 'value' => sprintf('<div style="width: 20px; height: 20px; background: %s; border: 1px solid black; "></div>', $model->color)),
 		),
 	)); ?>

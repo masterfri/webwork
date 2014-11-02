@@ -20,6 +20,23 @@ class MilestoneController extends AdminController
 		));
 	}
 	
+	public function actionQuery($query, $project='')
+	{
+		$model = $this->createSearchModel('Milestone');
+		$model->name = $query;
+		$criteria = new CDbCriteria();
+		$criteria->compare('project_id', $project);
+		$criteria->limit = 15;
+		$provider = $model->search($criteria);
+		foreach ($provider->getData() as $milestone) {
+			$list[] = array(
+				'id' => $milestone->id,
+				'text' => $milestone->name,
+			);
+		}
+		echo CJSON::encode($list);
+	}
+	
 	public function actionCreate($project)
 	{
 		$project = $this->loadModel($project, 'Project');
@@ -90,7 +107,7 @@ class MilestoneController extends AdminController
 				'roles' => array('create_milestone'),
 			),
 			array('allow',
-				'actions' => array('view', 'index'),
+				'actions' => array('view', 'index', 'query'),
 				'roles' => array('view_milestone'),
 			),
 			array('allow',

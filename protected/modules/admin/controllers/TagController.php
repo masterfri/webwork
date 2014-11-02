@@ -12,6 +12,23 @@ class TagController extends AdminController
 		));
 	}
 	
+	public function actionQuery($query, $project='')
+	{
+		$model = $this->createSearchModel('Tag');
+		$model->name = $query;
+		$criteria = new CDbCriteria();
+		// $criteria->compare('project_id', $project);
+		$criteria->limit = 15;
+		$provider = $model->search($criteria);
+		foreach ($provider->getData() as $tag) {
+			$list[] = array(
+				'id' => $tag->id,
+				'text' => $tag->name,
+			);
+		}
+		echo CJSON::encode($list);
+	}
+	
 	public function actionCreate()
 	{
 		$model = new Tag('create');
@@ -66,7 +83,7 @@ class TagController extends AdminController
 				'roles' => array('create_tag'),
 			),
 			array('allow',
-				'actions' => array('view', 'index'),
+				'actions' => array('view', 'index', 'query'),
 				'roles' => array('view_tag'),
 			),
 			array('allow',

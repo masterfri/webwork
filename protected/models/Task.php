@@ -158,10 +158,12 @@ class Task extends CActiveRecord
 			array('	regression_risk', 
 					'in', 'range' => array_keys(self::getListRegressionRisks()), 'on' => 'create, update, estimate'),
 			array('	assigned_id,
+					milestone_id,
 					name,
 					phase,
 					priority,
-					regression_risk', 
+					regression_risk,
+					tags', 
 					'safe', 'on' => 'search'),
 		);
 	}
@@ -328,11 +330,24 @@ class Task extends CActiveRecord
 		$criteria = new CDbCriteria($params);
 		$criteria->alias = 'task';
 		$criteria->compare('task.assigned_id', $this->assigned_id);
+		$criteria->compare('task.milestone_id', $this->milestone_id);
 		$criteria->compare('task.name', $this->name, true);
 		$criteria->compare('task.phase', $this->phase);
 		$criteria->compare('task.priority', $this->priority);
 		$criteria->compare('task.regression_risk', $this->regression_risk);
 		$criteria->with = array('assigned');
+		if ($this->hasRelated('tags') && count($this->tags)) {
+			$tmp = new CDbCriteria();
+			$tmp->addInCondition('tags.id', $this->tags);
+			$criteria->with['tags'] = array(
+				'select' => false,
+				'joinType' => 'INNER JOIN',
+				'condition' => $tmp->condition,
+				'params' => $tmp->params,
+				'together' => true,
+			);
+			$criteria->group = 'task.id';
+		}
 		return new CActiveDataProvider($this, array(
 			'criteria' => $criteria,
 			'sort' => array(

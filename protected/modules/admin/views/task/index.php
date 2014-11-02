@@ -38,6 +38,7 @@ $this->menu = array(
 	<div class="panel-body">
 		<?php $this->renderPartial('_search',array(
 			'model' => $model,
+			'project' => $project,
 		)); ?>
 	</div>
 </div>
@@ -46,35 +47,9 @@ $this->menu = array(
 	<div class="panel-heading">
 		<h3 class="panel-title"><?php echo $this->pageHeading; ?></h3>
 	</div>
-	<?php $this->widget('GridView', array(
+	<?php $this->widget('TaskListView', array(
 		'id' => 'task-grid',
 		'dataProvider' => $provider,
-		'columns' => array(
-			array('class' => 'LinkColumn', 'name' => 'name'),
-			array(
-				'name' => 'phase',
-				'value' => '$data->getPhase()',
-			),
-			array(
-				'name' => 'priority',
-				'value' => '$data->getPriority()',
-			),
-			'assigned',
-			'date_sheduled:date',
-			'due_date:date',
-			array(
-				'class' => 'ButtonColumn',
-				'deleteConfirmation' => Yii::t('admin.crud', 'Are you sure you want to delete this task?'),
-				'template' => '{view} {update} {delete}',
-				'buttons' => array(
-					'update' => array(
-						'visible' => 'Yii::app()->user->checkAccess("update_task", array("task" => $data))',
-					),
-					'delete' => array(
-						'visible' => 'Yii::app()->user->checkAccess("delete_task", array("task" => $data))',
-					),
-				),
-			),
-		),
+		'group_by_date' => false,
 	)); ?>
 </div>

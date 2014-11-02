@@ -14,7 +14,7 @@ return array(
 	'Name' => 'Название',
 	'Phase' => 'Фаза',
 	'Priority' => 'Приоритет',
-	'Project' => 'Project',
+	'Project' => 'Проект',
 	'Risk of Regression' => 'Риск регрессии',
 	'Tags' => 'Тэги',
 	'Date Created' => 'Дата создания',

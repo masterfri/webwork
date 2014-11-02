@@ -180,6 +180,8 @@ class Project extends CActiveRecord
 	{
 		$criteria = new CDbCriteria();
 		$criteria->order = 'name';
+		$criteria->addCondition('project_id IN(0, :project_id)');
+		$criteria->params[':project_id'] = $this->id;
 		return Tag::model()->findAll($criteria);
 	}
 	
