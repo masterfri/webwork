@@ -17,7 +17,7 @@ class TagController extends AdminController
 		$model = $this->createSearchModel('Tag');
 		$model->name = $query;
 		$criteria = new CDbCriteria();
-		// $criteria->compare('project_id', $project);
+		$criteria->compare('project_id', $project);
 		$criteria->limit = 15;
 		$provider = $model->search($criteria);
 		foreach ($provider->getData() as $tag) {
@@ -83,8 +83,12 @@ class TagController extends AdminController
 				'roles' => array('create_tag'),
 			),
 			array('allow',
-				'actions' => array('view', 'index', 'query'),
+				'actions' => array('view', 'index'),
 				'roles' => array('view_tag'),
+			),
+			array('allow',
+				'actions' => array('query'),
+				'roles' => array('query_tag'),
 			),
 			array('allow',
 				'actions' => array('update'),

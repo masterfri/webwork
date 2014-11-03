@@ -213,6 +213,12 @@ return array(
 		'bizRule' => null,
 		'data' => null,
 	),
+	'query_milestone' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Query milestone',
+		'bizRule' => null,
+		'data' => null,
+	),
 	'create_milestone' => array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'Create milestone',
@@ -240,6 +246,16 @@ return array(
 		'data' => null,
 		'children' => array(
 			'view_milestone',
+		),
+	),
+	'query_shared_milestone' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Query shared milestone',
+		'bizRule' => 'return (!isset($params["project"])) || 
+							 (isset($params["project"]) && $params["project"] === "*" ? false : $params["project"]->isUserAssigned($params["userId"]));',
+		'data' => null,
+		'children' => array(
+			'query_milestone',
 		),
 	),
 	'create_shared_milestone' => array(
@@ -392,6 +408,12 @@ return array(
 		'bizRule' => null,
 		'data' => null,
 	),
+	'query_tag' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Query tag',
+		'bizRule' => null,
+		'data' => null,
+	),
 	'create_tag' => array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'Create tag',
@@ -409,6 +431,16 @@ return array(
 		'description' => 'Delete tag',
 		'bizRule' => null,
 		'data' => null,
+	),
+	'query_shared_tag' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Query shared tag',
+		'bizRule' => 'return (!isset($params["project"])) || 
+							 ($params["project"] === "*" ? false : $params["project"]->isUserAssigned($params["userId"]));',
+		'data' => null,
+		'children' => array(
+			'query_tag',
+		),
 	),
 	/**
 	 * Task 
@@ -765,6 +797,7 @@ return array(
 			'view_shared_project',
 			'update_shared_project',
 			'view_shared_milestone',
+			'query_shared_milestone',
 			'create_shared_milestone',
 			'update_shared_milestone',
 			'delete_shared_milestone',
@@ -781,6 +814,7 @@ return array(
 			'hold_shared_task',
 			'reopen_shared_task',
 			'resume_shared_task',
+			'query_shared_tag',
 		),
 		'bizRule' => null,
 		'data' => null
@@ -873,6 +907,7 @@ return array(
 			'update_time_entry',
 			'delete_time_entry',
 			'view_milestone',
+			'query_milestone',
 			'create_milestone',
 			'update_milestone',
 			'delete_milestone',
@@ -919,6 +954,7 @@ return array(
 			'update_file_category',
 			'delete_file_category',
 			'view_tag',
+			'query_tag',
 			'create_tag',
 			'update_tag',
 			'delete_tag',
