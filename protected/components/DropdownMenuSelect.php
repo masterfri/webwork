@@ -139,16 +139,18 @@ class DropdownMenuSelect extends CInputWidget
 				'class' => 'divider',
 			), '');
 		}
-		foreach ($this->options as $key => $option) {
-			echo CHtml::openTag('li', array(
-				'role' => 'presentation',
-				'class' => ($this->multiple ? in_array($key, $value) : $key == $value) ? 'selected' : '',
-			));
-			echo CHtml::link($option, 'javascript:void(0)', array(
-				'role' => 'menuitem',
-				'data-value' => CHtml::encode($key),
-			));
-			echo CHtml::closeTag('li');
+		if (!empty($this->options)) {
+			foreach ($this->options as $key => $option) {
+				echo CHtml::openTag('li', array(
+					'role' => 'presentation',
+					'class' => ($this->multiple ? in_array($key, $value) : $key == $value) ? 'selected' : '',
+				));
+				echo CHtml::link($option, 'javascript:void(0)', array(
+					'role' => 'menuitem',
+					'data-value' => CHtml::encode($key),
+				));
+				echo CHtml::closeTag('li');
+			}
 		}
 		if ($this->multiple) {
 			echo CHtml::openTag('li', array(
