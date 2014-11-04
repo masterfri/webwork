@@ -180,10 +180,13 @@ class TaskController extends AdminController
 			if ($comment->save()) {
 				$task->doAction($action);
 				if ($task->user_subscription === null) {
-					$task->subscribe(Yii::app()->user->id);
+					$subscription = $task->subscribe(Yii::app()->user->id);
+				} else {
+					$subscription = $task->user_subscription;
 				}
 				if($this->isAjax()) {
 					$comment->refresh();
+					$subscription->markAsSeen();
 					$this->ajaxSuccess(array(
 						'trigger' => 'comment.created',
 						'update' => array(
