@@ -55,8 +55,12 @@ class Tag extends CActiveRecord
 			'member' => array(
 				'with' => array(
 					'project' => array(
-						'scopes' => array(
-							'member',
+						'select' => false,
+						'condition' => 'tag.project_id = 0 OR NOT ISNULL(user_assignment.project_id)',
+						'with' => array(
+							'user_assignment' => array(
+								'select' => false,
+							),
 						),
 					),
 				),

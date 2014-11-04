@@ -19,14 +19,19 @@ class TagController extends AdminController
 		$criteria = new CDbCriteria();
 		$criteria->compare('project_id', $project);
 		$criteria->limit = 15;
+		$criteria->order = 'tag.name';
+		if (!Yii::app()->user->checkAccess('query_tag', array('project' => '*'))) {
+			$criteria->scopes = array('member');
+		}
 		$provider = $model->search($criteria);
+		$results = array();
 		foreach ($provider->getData() as $tag) {
-			$list[] = array(
+			$results[] = array(
 				'id' => $tag->id,
 				'text' => $tag->name,
 			);
 		}
-		echo CJSON::encode($list);
+		echo CJSON::encode($results);
 	}
 	
 	public function actionCreate()

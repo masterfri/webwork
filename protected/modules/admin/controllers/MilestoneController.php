@@ -27,14 +27,19 @@ class MilestoneController extends AdminController
 		$criteria = new CDbCriteria();
 		$criteria->compare('project_id', $project);
 		$criteria->limit = 15;
+		$criteria->order = 'milestone.name';
+		if (!Yii::app()->user->checkAccess('query_milestone', array('project' => '*'))) {
+			$criteria->scopes = array('member');
+		}
 		$provider = $model->search($criteria);
+		$results = array();
 		foreach ($provider->getData() as $milestone) {
-			$list[] = array(
+			$results[] = array(
 				'id' => $milestone->id,
 				'text' => $milestone->name,
 			);
 		}
-		echo CJSON::encode($list);
+		echo CJSON::encode($results);
 	}
 	
 	public function actionCreate($project)

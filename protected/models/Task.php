@@ -162,6 +162,7 @@ class Task extends CActiveRecord
 					name,
 					phase,
 					priority,
+					project_id,
 					regression_risk,
 					tags', 
 					'safe', 'on' => 'search'),
@@ -334,9 +335,10 @@ class Task extends CActiveRecord
 		$criteria->compare('task.name', $this->name, true);
 		$criteria->compare('task.phase', $this->phase);
 		$criteria->compare('task.priority', $this->priority);
+		$criteria->compare('task.project_id', $this->project_id);
 		$criteria->compare('task.regression_risk', $this->regression_risk);
 		$criteria->with = array('assigned');
-		if ($this->hasRelated('tags') && count($this->tags)) {
+		if ($this->hasRelated('tags') && !empty($this->tags)) {
 			$tmp = new CDbCriteria();
 			$tmp->addInCondition('tags.id', $this->tags);
 			$criteria->with['tags'] = array(

@@ -76,10 +76,12 @@ class ActiveForm extends CActiveForm
 		if ($is_remote) {
 			if (isset($htmlOptions['multiple'])) {
 				$htmlOptions['value'] = '';
+				$name = $htmlOptions['name'];
+				$htmlOptions['name'] = false;
 				$cs->registerScript("select2{$id}split", "$('#{$id}').on('change', function(e) {
 					$(this).next('.select2-hidden-multi').remove();
 					var h = $('<span style=\"display:none;\" class=\"select2-hidden-multi\"></span>').insertAfter(this);
-					$(e.val).each(function() { h.append('<input type=\"hidden\" name=\"{$htmlOptions['name']}[]\" value=\"' + this + '\">'); });
+					$(e.val).each(function() { h.append('<input type=\"hidden\" name=\"{$name}[]\" value=\"' + this + '\">'); });
 				});");
 			}
 			return $this->hiddenField($model, $attribute, $htmlOptions);

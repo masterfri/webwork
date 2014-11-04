@@ -95,7 +95,7 @@ class Project extends CActiveRecord
 					'user_assignment' => array(
 						'select' => false,
 						'joinType' => 'INNER JOIN',
-					)
+					),
 				),
 			),
 		);

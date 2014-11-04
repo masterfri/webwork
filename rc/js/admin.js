@@ -16,10 +16,12 @@ $(function() {
 		var type = $(this).attr('data-target-type');
 		if ('listview' == type) {
 			$.fn.yiiListView.update(target, {
+				url: location.href,
 				data: $(this).serialize()
 			});
 		} else {
 			$.fn.yiiGridView.update(target, {
+				url: location.href,
 				data: $(this).serialize()
 			});
 		}
