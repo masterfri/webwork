@@ -69,24 +69,24 @@ class Activity extends CActiveRecord
 	public function search($params=array())
 	{
 		$criteria = new CDbCriteria($params);
+		$criteria->alias = 'activity';
 		return new CActiveDataProvider($this, array(
 			'criteria' => $criteria,
+			'sort' => array(
+				'defaultOrder' => 'activity.name',
+			),
 		));
 	}
 	
 	public function __toString()
 	{
-		return $this->getDisplayName();
-	}
-	
-	public function getDisplayName()
-	{
 		return $this->name;
 	}
 	
-	public static function getList()
+	public static function getList($params=array())
 	{
-		$criteria = new CDbCriteria();
-		return CHtml::listData(self::model()->findAll($criteria), 'id', 'displayName');
+		$criteria = new CDbCriteria($params);
+		$criteria->order = 'name';
+		return CHtml::listData(self::model()->findAll($criteria), 'id', 'name');
 	}
 }

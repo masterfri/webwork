@@ -105,30 +105,26 @@ class Rate extends CActiveRecord
 	public function search($params=array())
 	{
 		$criteria = new CDbCriteria($params);
-		$criteria->compare('t.name', $this->name, true);
+		$criteria->alias = 'rate';
+		$criteria->compare('rate.name', $this->name, true);
 		return new CActiveDataProvider($this, array(
 			'criteria' => $criteria,
 			'sort' => array(
-				'defaultOrder' => 'name',
+				'defaultOrder' => 'rate.name',
 			),
 		));
 	}
 	
 	public function __toString()
 	{
-		return $this->getDisplayName();
-	}
-	
-	public function getDisplayName()
-	{
 		return $this->name;
 	}
 	
-	public static function getList()
+	public static function getList($params=array())
 	{
-		$criteria = new CDbCriteria();
+		$criteria = new CDbCriteria($params);
 		$criteria->order = 'name';
-		return CHtml::listData(self::model()->findAll($criteria), 'id', 'displayName');
+		return CHtml::listData(self::model()->findAll($criteria), 'id', 'name');
 	}
 	
 	public function getCompleteMatrix()

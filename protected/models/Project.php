@@ -117,23 +117,22 @@ class Project extends CActiveRecord
 		$criteria->with = array('count_milestones', 'count_tasks');
 		return new CActiveDataProvider($this, array(
 			'criteria' => $criteria,
+			'sort' => array(
+				'defaultOrder' => 'project.name',
+			),
 		));
 	}
 	
 	public function __toString()
 	{
-		return $this->getDisplayName();
-	}
-	
-	public function getDisplayName()
-	{
 		return $this->name;
 	}
 	
-	public static function getList()
+	public static function getList($params=array())
 	{
-		$criteria = new CDbCriteria();
-		return CHtml::listData(self::model()->findAll($criteria), 'id', 'displayName');
+		$criteria = new CDbCriteria($params);
+		$criteria->order = 'name';
+		return CHtml::listData(self::model()->findAll($criteria), 'id', 'name');
 	}
 	
 	public function getTeamList()

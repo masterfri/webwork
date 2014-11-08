@@ -93,6 +93,9 @@ class Milestone extends CActiveRecord
 		$criteria->compare('milestone.name', $this->name, true);
 		return new CActiveDataProvider($this, array(
 			'criteria' => $criteria,
+			'sort' => array(
+				'defaultOrder' => 'milestone.due_date, milestone.name',
+			),
 		));
 	}
 	
@@ -101,9 +104,10 @@ class Milestone extends CActiveRecord
 		return $this->name;
 	}
 	
-	public static function getList()
+	public static function getList($params=array())
 	{
-		$criteria = new CDbCriteria();
+		$criteria = new CDbCriteria($params);
+		$criteria->order = 'name';
 		return CHtml::listData(self::model()->findAll($criteria), 'id', 'name');
 	}
 	

@@ -53,28 +53,4 @@ class ActivityRate extends CActiveRecord
 			),
 		);
 	}
-	
-	public function search($params=array())
-	{
-		$criteria = new CDbCriteria($params);
-		return new CActiveDataProvider($this, array(
-			'criteria' => $criteria,
-		));
-	}
-	
-	public function __toString()
-	{
-		return $this->getDisplayName();
-	}
-	
-	public function getDisplayName()
-	{
-		return "#".$this->primaryKey;
-	}
-	
-	public static function getList()
-	{
-		$criteria = new CDbCriteria();
-		return CHtml::listData(self::model()->findAll($criteria), 'id', 'displayName');
-	}
 }

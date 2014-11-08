@@ -74,11 +74,12 @@ class Assignment extends CActiveRecord
 	public function search($params=array())
 	{
 		$criteria = new CDbCriteria($params);
+		$criteria->alias = 'assignment';
 		$criteria->with = array('user');
 		return new CActiveDataProvider($this, array(
 			'criteria' => $criteria,
 			'sort' => array(
-				'defaultOrder' => 'real_name, username',
+				'defaultOrder' => 'user.real_name, user.username',
 				'attributes' => array(
 					'user' => array(
 						'asc' => 'user.real_name ASC, user.username ASC',
@@ -92,18 +93,7 @@ class Assignment extends CActiveRecord
 	
 	public function __toString()
 	{
-		return $this->getDisplayName();
-	}
-	
-	public function getDisplayName()
-	{
 		return sprintf('%s (%s)', $this->user->getDisplayName(), $this->getRoleName());
-	}
-	
-	public static function getList()
-	{
-		$criteria = new CDbCriteria();
-		return CHtml::listData(self::model()->findAll($criteria), 'id', 'displayName');
 	}
 	
 	public static function getListRoles()
