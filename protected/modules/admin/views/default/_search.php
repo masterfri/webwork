@@ -23,6 +23,7 @@
 					<?php echo $form->tagField($model, 'milestone_id', null, array(
 						'ajax' => array(
 							'url' => $this->createUrl('milestone/query'),
+							'data' => 'js:function(t, p) { return {query: t, page: p, project: $("#Task_project_id").val()}; }',
 						),
 					)); ?> 
 				</div>
@@ -35,6 +36,7 @@
 					<?php echo $form->tagField($model, 'tags', null, array(
 						'ajax' => array(
 							'url' => $this->createUrl('tag/query'),
+							'data' => 'js:function(t, p) { return {query: t, page: p, project: $("#Task_project_id").val()}; }',
 						),
 					)); ?> 
 				</div>

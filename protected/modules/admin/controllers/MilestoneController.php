@@ -20,12 +20,13 @@ class MilestoneController extends AdminController
 		));
 	}
 	
-	public function actionQuery($query, $project='')
+	public function actionQuery($query)
 	{
+		$project = Yii::app()->request->getQuery('project');
 		$model = $this->createSearchModel('Milestone');
 		$model->name = $query;
 		$criteria = new CDbCriteria();
-		$criteria->compare('project_id', $project);
+		$criteria->compare('milestone.project_id', $project);
 		$criteria->limit = 15;
 		$criteria->order = 'milestone.name';
 		if (!Yii::app()->user->checkAccess('query_milestone', array('project' => '*'))) {

@@ -451,6 +451,12 @@ return array(
 		'bizRule' => null,
 		'data' => null,
 	),
+	'query_task' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Query task',
+		'bizRule' => null,
+		'data' => null,
+	),
 	'create_task' => array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'Create task',
@@ -555,6 +561,16 @@ return array(
 		'bizRule' => 'return (!isset($params["project"]) && !isset($params["task"])) || 
 							 (isset($params["project"]) && $params["project"]->isUserAssigned($params["userId"])) ||
 							 (isset($params["task"]) && ($params["task"] === "*" ? false : $params["task"]->project->isUserAssigned($params["userId"])));',
+		'data' => null,
+		'children' => array(
+			'view_task',
+		),
+	),
+	'query_shared_task' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Query shared task',
+		'bizRule' => 'return (!isset($params["project"])) || 
+							 (isset($params["project"]) && $params["project"] === "*" ? false : $params["project"]->isUserAssigned($params["userId"]));',
 		'data' => null,
 		'children' => array(
 			'view_task',

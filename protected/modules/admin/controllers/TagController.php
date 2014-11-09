@@ -12,12 +12,19 @@ class TagController extends AdminController
 		));
 	}
 	
-	public function actionQuery($query, $project='')
+	public function actionQuery($query)
 	{
+		$project = Yii::app()->request->getQuery('project');
 		$model = $this->createSearchModel('Tag');
 		$model->name = $query;
 		$criteria = new CDbCriteria();
-		$criteria->compare('project_id', $project);
+		if (!empty($project)) {
+			$criteria->compare('tag.project_id', $project);
+			$criteria->addCondition('tag.project_id = 0', 'OR');
+			$criteria = new CDbCriteria($criteria);
+		} else {
+			$criteria = new CDbCriteria();
+		}
 		$criteria->limit = 15;
 		$criteria->order = 'tag.name';
 		if (!Yii::app()->user->checkAccess('query_tag', array('project' => '*'))) {
