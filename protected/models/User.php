@@ -80,6 +80,7 @@ class User extends CActiveRecord
 	{
 		return array(
 			'rate' => array(self::BELONGS_TO, 'Rate', 'rate_id'),
+			'assignments' => array(self::HAS_MANY, 'Assignment', 'user_id'),
 		);
 	}
 	
@@ -102,14 +103,20 @@ class User extends CActiveRecord
 	public function search($params=array())
 	{
 		$criteria = new CDbCriteria($params);
-		$criteria->compare('t.username', $this->username, true);
-		$criteria->compare('t.email', $this->email, true);
-		$criteria->compare('t.role', $this->role, true);
+		$criteria->alias = 'user';
+		if (!empty($this->username)) {
+			$tmp = new CDbCriteria();
+			$tmp->compare('user.username', $this->username, true);
+			$tmp->compare('user.real_name', $this->username, true, 'OR');
+			$criteria->mergeWith($tmp);
+		}
+		$criteria->compare('user.email', $this->email, true);
+		$criteria->compare('user.role', $this->role, true);
 		$criteria->with = array('rate');
 		return new CActiveDataProvider($this, array(
 			'criteria' => $criteria,
 			'sort' => array(
-				'defaultOrder' => 'real_name, username',
+				'defaultOrder' => 'user.real_name, user.username',
 				'attributes' => array(
 					'rate' => array(
 						'asc' => 'rate.name ASC',

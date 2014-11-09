@@ -20,6 +20,29 @@ class TaskController extends AdminController
 		));
 	}
 	
+	public function actionQuery($query)
+	{
+		$project = Yii::app()->request->getQuery('project');
+		$model = $this->createSearchModel('Task');
+		$model->name = $query;
+		$criteria = new CDbCriteria();
+		$criteria->compare('task.project_id', $project);
+		$criteria->limit = 15;
+		$criteria->order = 'task.name';
+		if (!Yii::app()->user->checkAccess('query_task', array('project' => '*'))) {
+			$criteria->scopes = array('member');
+		}
+		$provider = $model->search($criteria);
+		$results = array();
+		foreach ($provider->getData() as $task) {
+			$results[] = array(
+				'id' => $task->id,
+				'text' => $task->name,
+			);
+		}
+		echo CJSON::encode($results);
+	}
+	
 	public function actionCreate($project)
 	{
 		$project = $this->loadModel($project, 'Project');
@@ -266,6 +289,10 @@ class TaskController extends AdminController
 			array('allow',
 				'actions' => array('view', 'index', 'watch', 'unwatch', 'comment'),
 				'roles' => array('view_task'),
+			),
+			array('allow',
+				'actions' => array('query'),
+				'roles' => array('query_task'),
 			),
 			array('allow',
 				'actions' => array('update'),

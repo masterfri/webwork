@@ -12,6 +12,37 @@ class UserController extends AdminController
 		));
 	}
 	
+	public function actionQuery($query)
+	{
+		$project = Yii::app()->request->getQuery('project');
+		$model = $this->createSearchModel('User');
+		$model->username = $query;
+		$provider = $model->search();
+		$criteria = $provider->criteria;
+		if (!empty($project)) {
+			$tmp = new CDbCriteria();
+			$tmp->compare('assignments.project_id', $project);
+			$criteria->with['assignments'] = array(
+				'select' => false,
+				'joinType' => 'INNER JOIN',
+				'condition' => $tmp->condition,
+				'params' => $tmp->params,
+				'together' => true,
+			);
+			$criteria->group = 'user.id';
+		}
+		$criteria->limit = 15;
+		$criteria->order = 'user.real_name, user.username';
+		$results = array();
+		foreach ($provider->getData() as $user) {
+			$results[] = array(
+				'id' => $user->id,
+				'text' => $user->getDisplayName(),
+			);
+		}
+		echo CJSON::encode($results);
+	}
+	
 	public function actionCreate()
 	{
 		$model = new User('create');
@@ -68,6 +99,10 @@ class UserController extends AdminController
 			array('allow',
 				'actions' => array('view', 'index'),
 				'roles' => array('view_user'),
+			),
+			array('allow',
+				'actions' => array('query'),
+				'roles' => array('query_user'),
 			),
 			array('allow',
 				'actions' => array('update'),

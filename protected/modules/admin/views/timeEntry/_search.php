@@ -21,18 +21,22 @@
 		<div class="form-group">
 			<?php echo $form->label($model, 'task_id', array('class'=>'col-sm-3 control-label')); ?>
 			<div class="col-sm-9">
-				<?php echo $form->dropdownList($model, 'task_id', Task::getList(), array(
-					'class' => 'form-control',
-					'prompt' => '',
+				<?php echo $form->selectField($model, 'task_id', null, array(
+					'ajax' => array(
+						'url' => $this->createUrl('task/query'),
+						'data' => 'js:function(t, p) { return {query: t, page: p, project: $("#TimeEntry_project_id").val()}; }',
+					),
 				)); ?> 
 			</div>
 		</div>
 		<div class="form-group">
 			<?php echo $form->label($model, 'user_id', array('class'=>'col-sm-3 control-label')); ?>
 			<div class="col-sm-9">
-				<?php echo $form->dropdownList($model, 'user_id', User::getList(), array(
-					'class' => 'form-control',
-					'prompt' => '',
+				<?php echo $form->selectField($model, 'user_id', null, array(
+					'ajax' => array(
+						'url' => $this->createUrl('user/query'),
+						'data' => 'js:function(t, p) { return {query: t, page: p, project: $("#TimeEntry_project_id").val()}; }',
+					),
 				)); ?> 
 			</div>
 		</div>

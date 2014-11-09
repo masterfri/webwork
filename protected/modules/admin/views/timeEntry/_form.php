@@ -1,6 +1,4 @@
 <div class="form-content">
-	
-	
 	<?php $form=$this->beginWidget('ActiveForm', array(
 		'id' => 'timeentry-form',
 		'htmlOptions' => array(
@@ -29,12 +27,14 @@
 				<?php echo $form->error($model, 'project_id', array('class'=>'help-inline')); ?>
 			</div>
 		</div>
-		<div class="form-group">
+		<div class="form-group" style="display: <?php echo $model->project_id > 0 ? 'block' : 'none'; ?>">
 			<?php echo $form->labelEx($model, 'task_id', array('class'=>'col-sm-3 control-label')); ?>
 			<div class="col-sm-9">
-				<?php echo $form->dropdownList($model, 'task_id', Task::getList(), array(
-					'class' => 'form-control',
-					'prompt' => Yii::t('admin.crud', 'Select Value'),
+				<?php echo $form->selectField($model, 'task_id', null, array(
+					'ajax' => array(
+						'url' => $this->createUrl('task/query'),
+						'data' => 'js:function(t, p) { return {query: t, page: p, project: $("#TimeEntry_project_id").val()}; }',
+					),
 				)); ?> 
 				<?php echo $form->error($model, 'task_id', array('class'=>'help-inline')); ?>
 			</div>
@@ -42,9 +42,11 @@
 		<div class="form-group">
 			<?php echo $form->labelEx($model, 'user_id', array('class'=>'col-sm-3 control-label')); ?>
 			<div class="col-sm-9">
-				<?php echo $form->dropdownList($model, 'user_id', User::getList(), array(
-					'class' => 'form-control',
-					'prompt' => Yii::t('admin.crud', 'Select Value'),
+				<?php echo $form->selectField($model, 'user_id', null, array(
+					'ajax' => array(
+						'url' => $this->createUrl('user/query'),
+						'data' => 'js:function(t, p) { return {query: t, page: p, project: $("#TimeEntry_project_id").val()}; }',
+					),
 				)); ?> 
 				<?php echo $form->error($model, 'user_id', array('class'=>'help-inline')); ?>
 			</div>
@@ -88,3 +90,15 @@
 
 	<?php $this->endWidget(); ?>
 </div>
+
+<?php
+
+Yii::app()->clientScript->registerScript('time-entry-form', "
+$('#TimeEntry_project_id').on('change', function() {
+	if ('' == $(this).val()) {
+		$('#TimeEntry_task_id').select2('val', '').closest('.form-group').hide();
+	} else {
+		$('#TimeEntry_task_id').closest('.form-group').show();
+	}
+});
+");

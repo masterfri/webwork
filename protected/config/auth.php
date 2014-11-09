@@ -10,6 +10,12 @@ return array(
 		'bizRule' => null,
 		'data' => null,
 	),
+	'query_user' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Query users',
+		'bizRule' => null,
+		'data' => null,
+	),
 	'create_user' => array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'Create users',
@@ -573,7 +579,7 @@ return array(
 							 (isset($params["project"]) && $params["project"] === "*" ? false : $params["project"]->isUserAssigned($params["userId"]));',
 		'data' => null,
 		'children' => array(
-			'view_task',
+			'query_task',
 		),
 	),
 	'create_shared_task' => array(
@@ -818,6 +824,7 @@ return array(
 			'update_shared_milestone',
 			'delete_shared_milestone',
 			'view_shared_task',
+			'query_shared_task',
 			'create_shared_task',
 			'update_shared_task',
 			'update_shared_task_tags',
@@ -898,11 +905,13 @@ return array(
 		'type' => CAuthItem::TYPE_ROLE,
 		'description' => 'Менеджер',
 		'children' => array(
+			'query_user',
 			'view_project',
 			'create_project',
 			'update_project',
 			'delete_project',
 			'view_task',
+			'query_task',
 			'create_task',
 			'update_task',
 			'delete_task',
