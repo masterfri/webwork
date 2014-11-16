@@ -61,8 +61,20 @@ $this->menu = array(
 	<?php $this->widget('DetailView', array(
 		'data' => $model,		
 		'attributes' => array(
-			'project',
-			'task',
+			array(
+				'name' => 'project',
+				'type' => 'raw',
+				'value' => $model->project && Yii::app()->user->checkAccess('view_project', array('project' => $model->project)) ?
+					CHtml::link(CHtml::encode($model->project), array('project/view', 'id' => $model->project_id)) :
+					$model->project,
+			),
+			array(
+				'name' => 'task',
+				'type' => 'raw',
+				'value' => $model->task && Yii::app()->user->checkAccess('view_task', array('task' => $model->task)) ?
+					CHtml::link(CHtml::encode($model->task), array('task/view', 'id' => $model->task_id)) :
+					$model->task,
+			),
 			'user',
 			'activity',
 			'amount:hours',

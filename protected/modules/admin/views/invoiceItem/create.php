@@ -1,21 +1,21 @@
 <?php
 
-$this->pageHeading = Yii::t('admin.crud', 'New Activity');
+$this->pageHeading = Yii::t('admin.crud', 'New Invoice Item');
 
 $this->breadcrumbs = array(
-	Yii::t('admin.crud', 'Activity') => Yii::app()->user->checkAccess('view_activity') ? array('index') : false, 
+	Yii::t('admin.crud', 'Invoice Items') => Yii::app()->user->checkAccess('update_invoice') ? array('invoice/update', 'id' => $model->invoice_id) : false, 
 	Yii::t('admin.crud', 'Create'),
 );
 
 $this->menu = array(
 	array(
-		'label' => '<i class="glyphicon glyphicon-list-alt"></i> ', 
+		'label' => '<i class="glyphicon glyphicon-arrow-left"></i> ', 
 		'linkOptions' => array(
-			'title' => Yii::t('admin.crud', 'Manage Activity'), 
+			'title' => Yii::t('admin.crud', 'Back to Invoice'), 
 			'class' => 'btn btn-default',
 		), 
-		'url' => array('index'),
-		'visible' => Yii::app()->user->checkAccess('view_activity'),
+		'url' => array('invoice/update', 'id' => $model->invoice_id),
+		'visible' => Yii::app()->user->checkAccess('update_invoice'),
 	),
 );
 

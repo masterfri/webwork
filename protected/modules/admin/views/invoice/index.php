@@ -8,7 +8,11 @@ $this->breadcrumbs = array(
 
 $this->menu = array(
 	array(
-		'label' => '<i class="glyphicon glyphicon-plus"></i> ' . Yii::t('admin.crud', 'Create Invoice'), 
+		'label' => '<i class="glyphicon glyphicon-plus"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Create Invoice'),
+			'class' => 'btn btn-default',
+		),
 		'url' => array('create'),
 		'visible' => Yii::app()->user->checkAccess('create_invoice'),
 	),
@@ -25,12 +29,23 @@ $this->menu = array(
 		'id' => 'invoice-grid',
 		'dataProvider' => $provider,
 		'columns' => array(
-			'project',
-			'comments',
-			'payd:boolean',
-			'items:array',
+			array(
+				'class' => 'LinkColumn',
+				'name' => 'id',
+				'value' => '$data->getNumber()',
+			),
+			'from',
+			'to',
+			array(
+				'class' => 'LinkColumn', 
+				'name' => 'project',
+				'linkExpression' => 'array("project/view", "id" => $data->project_id)',
+				'actitityExpression' => 'Yii::app()->user->checkAccess("view_project", array("project" => $data->project))',
+			),
+			'amount:money',
+			'payd:money',
+			'draft:boolean',
 			'time_created:datetime',
-			'created_by',
 			array(
 				'class' => 'ButtonColumn',
 				'deleteConfirmation' => Yii::t('admin.crud', 'Are you sure you want to delete this invoice?'),

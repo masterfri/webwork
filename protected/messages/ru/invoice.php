@@ -1,10 +1,15 @@
 <?php
 
 return array(
-	'Comments' => 'Comments',
+	'Amount' => 'Сумма',
+	'Comments' => 'Комментарии',
 	'Created by' => 'Создал',
-	'Items' => 'Items',
-	'Payd' => 'Оплачен',
+	'Draft' => 'Черновой',
+	'From' => 'Отправитель',
+	'Items' => 'Позиции',
+	'Number' => 'Номер',
+	'Payd' => 'Выплачено',
 	'Project' => 'Проект',
 	'Date Created' => 'Дата создания',
+	'To' => 'Получатель',
 );

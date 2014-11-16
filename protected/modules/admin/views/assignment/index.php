@@ -68,7 +68,7 @@ $this->menu = array(
 <?php
 
 Yii::app()->clientScript->registerScript('ajax', "
-$(document.body).bind('assignment.created assignment.updated', function() {
+$.ajaxBindings.on('assignment.created assignment.updated', function() {
 	$.fn.yiiGridView.update('assignment-grid');
 });
 ");

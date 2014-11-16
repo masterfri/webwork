@@ -356,8 +356,8 @@ class Task extends CActiveRecord
 				'defaultOrder' => 'task.time_created DESC',
 				'attributes' => array(
 					'assigned' => array(
-						'asc' => 'assigned.real_name ASC',
-						'desc' => 'assigned.real_name DESC',
+						'asc' => 'assigned.real_name, assigned.username',
+						'desc' => 'assigned.real_name DESC, assigned.username DESC',
 					),
 					'*',
 				)

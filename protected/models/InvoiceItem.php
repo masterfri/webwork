@@ -33,6 +33,8 @@ class InvoiceItem extends CActiveRecord
 					'numerical'),
 			array('	name', 
 					'length', 'max' => 200),
+			array(' formattedHours',
+					'safe'),
 			array('	name,
 					value', 
 					'required'),
@@ -63,24 +65,27 @@ class InvoiceItem extends CActiveRecord
 	public function search($params=array())
 	{
 		$criteria = new CDbCriteria($params);
+		$criteria->alias = 'invoiceitem';
 		return new CActiveDataProvider($this, array(
 			'criteria' => $criteria,
+			'sort' => array(
+				'defaultOrder' => 'invoiceitem.name',
+			),
 		));
 	}
 	
 	public function __toString()
 	{
-		return $this->getDisplayName();
-	}
-	
-	public function getDisplayName()
-	{
 		return $this->name;
 	}
 	
-	public static function getList()
+	public function getFormattedHours()
 	{
-		$criteria = new CDbCriteria();
-		return CHtml::listData(self::model()->findAll($criteria), 'id', 'displayName');
+		return Yii::app()->format->formatHours($this->hours);
+	}
+	
+	public function setFormattedHours($value)
+	{
+		$this->hours = Yii::app()->format->parseHours($value);
 	}
 }

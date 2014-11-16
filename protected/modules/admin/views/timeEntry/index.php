@@ -58,10 +58,20 @@ $this->menu = array(
 		'template' => '{items} <div class="table-totals">' . Yii::t('admin.crud', 'Total') . ': <span>' . Yii::app()->format->formatHours($sum) . '</span></div> {pager}',
 		'dataProvider' => $provider,
 		'columns' => array(
-			'project',
-			'task',
+			array(
+				'class' => 'LinkColumn', 
+				'name' => 'project',
+				'linkExpression' => 'array("project/view", "id" => $data->project_id)',
+				'actitityExpression' => 'Yii::app()->user->checkAccess("view_project", array("project" => $data->project))',
+			),
+			array(
+				'class' => 'LinkColumn', 
+				'name' => 'task',
+				'linkExpression' => 'array("task/view", "id" => $data->task_id)',
+				'actitityExpression' => 'Yii::app()->user->checkAccess("view_task", array("task" => $data->task))',
+			),
 			'user',
-			array('class' => 'LinkColumn', 'name' => 'activity'),
+			'activity',
 			'amount:hours',
 			'date_created:datetime',
 			array(

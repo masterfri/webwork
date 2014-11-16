@@ -149,25 +149,6 @@ class TimeEntry extends CActiveRecord
 	
 	public function setFormattedAmount($value)
 	{
-		if (strpos($value, ':') !== false) {
-			list($h, $m) = explode(':', $value);
-			$this->amount = $h + $m / 60;
-		} elseif (strpos($value, 'h') !== false || strpos($value, 'm') !== false) {
-			if (preg_match_all("/(\d+)\s*([hm])/", $value, $matches, PREG_SET_ORDER)) {
-				$total = 0;
-				foreach ($matches as $match) {
-					if ($match[2] == 'h') {
-						$total += $match[1];
-					} elseif ($match[2] == 'm') {
-						$total += $match[1] / 60;
-					}
-				}
-				$this->amount = $total;
-			} else {
-				$this->amount = floatval($value);
-			}
-		} else {
-			$this->amount = floatval($value);
-		}
+		$this->amount = Yii::app()->format->parseHours($value);
 	}
 }

@@ -73,4 +73,29 @@ class Formatter extends CFormatter
 		}
 		return (int) $time;
 	}
+	
+	public function parseHours($value)
+	{
+		if (strpos($value, ':') !== false) {
+			list($h, $m) = explode(':', $value);
+			return $h + $m / 60;
+		} elseif (strpos($value, 'h') !== false || strpos($value, 'm') !== false) {
+			if (preg_match_all("/(\d+)\s*([hm])/", $value, $matches, PREG_SET_ORDER)) {
+				$total = 0;
+				foreach ($matches as $match) {
+					if ($match[2] == 'h') {
+						$total += $match[1];
+					} elseif ($match[2] == 'm') {
+						$total += $match[1] / 60;
+					}
+				}
+				return $total;
+			} else {
+				return floatval($value);
+			}
+		} else {
+			return floatval($value);
+		}
+		return 0;
+	}
 }

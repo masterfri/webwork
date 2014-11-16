@@ -12,6 +12,7 @@ $this->menu = array(
 		'linkOptions' => array(
 			'title' => Yii::t('admin.crud', 'Create Activity'), 
 			'class' => 'btn btn-default',
+			'data-raise' => 'ajax-modal',
 		), 
 		'url' => array('create'),
 		'visible' => Yii::app()->user->checkAccess('create_activity'),
@@ -29,15 +30,32 @@ $this->menu = array(
 		'id' => 'activity-grid',
 		'dataProvider' => $provider,
 		'columns' => array(
-			array('class' => 'LinkColumn', 'name' => 'name'),
+			'name',
 			'description',
 			array(
 				'class' => 'ButtonColumn',
 				'deleteConfirmation' => Yii::t('admin.crud', 'Are you sure you want to delete this activity?'),
-				'template' => '{view}'.
+				'template' => 
 					(Yii::app()->user->checkAccess('update_activity') ? ' {update}' : '').
 					(Yii::app()->user->checkAccess('delete_activity') ? ' {delete}' : ''),
+				'buttons' => array(
+					'update' => array(
+						'options' => array(
+							'data-raise' => 'ajax-modal',
+							'class' => 'btn btn-default btn-sm update',
+							'title' => Yii::t('admin.crud', 'Update'),
+						),
+					),
+				),
 			),
 		),
 	)); ?>
 </div>
+
+<?php
+
+Yii::app()->clientScript->registerScript('ajax', "
+$.ajaxBindings.on('activity.created activity.updated', function() {
+	$.fn.yiiGridView.update('activity-grid');
+});
+");

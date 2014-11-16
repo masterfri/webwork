@@ -5,6 +5,7 @@ Yii::import('zii.widgets.grid.CDataColumn');
 class LinkColumn extends CDataColumn
 {
 	public $linkExpression;
+	public $actitityExpression;
 	public $linkHtmlOptions = array();
 	
 	protected function renderDataCellContent($row,$data)
@@ -14,13 +15,19 @@ class LinkColumn extends CDataColumn
 		} elseif($this->name!==null) {
 			$value = CHtml::value($data, $this->name);
 		}
-		if ($this->linkExpression !== null) {
-			$link = $this->evaluateExpression($this->linkExpression, array('data'=>$data, 'row'=>$row));
+		if ($value === null) {
+			echo $this->grid->nullDisplay;
 		} else {
-			$link = array('view', 'id' => $data->primaryKey);
+			if ($this->linkExpression !== null) {
+				$link = $this->evaluateExpression($this->linkExpression, array('data'=>$data, 'row'=>$row));
+			} else {
+				$link = array('view', 'id' => $data->primaryKey);
+			}
+			if ($this->actitityExpression !== null && !$this->evaluateExpression($this->actitityExpression, array('data'=>$data, 'row'=>$row))) {
+				echo $this->grid->getFormatter()->format($value, $this->type);
+			} else {
+				echo CHtml::link($this->grid->getFormatter()->format($value, $this->type), $link, $this->linkHtmlOptions);
+			}
 		}
-		echo $value===null ? 
-			$this->grid->nullDisplay : 
-			CHtml::link($this->grid->getFormatter()->format($value, $this->type), $link, $this->linkHtmlOptions);
 	}
 }

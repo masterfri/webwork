@@ -15,8 +15,9 @@ class InvoiceController extends AdminController
 	public function actionCreate()
 	{
 		$model = new Invoice('create');
+		$model->from_id = Yii::app()->user->id;
 		if ($this->saveModel($model)) {
-			$this->redirect(array('view', 'id' => $model->id));
+			$this->redirect(array('update', 'id' => $model->id));
 		}
 		$this->render('create', array(
 			'model' => $model,

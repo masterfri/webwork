@@ -62,8 +62,18 @@ $this->menu = array(
 		'data' => $model,		
 		'attributes' => array(
 			'name',
-			'project',
-			array('name' => 'color', 'type' => 'raw', 'value' => sprintf('<div style="width: 20px; height: 20px; background: %s; border: 1px solid black; "></div>', $model->color)),
+			array(
+				'name' => 'project',
+				'type' => 'raw',
+				'value' => $model->project && Yii::app()->user->checkAccess('view_project', array('project' => $model->project)) ?
+					CHtml::link(CHtml::encode($model->project), array('project/view', 'id' => $model->project_id)) :
+					$model->project,
+			),
+			array(
+				'name' => 'color', 
+				'type' => 'raw', 
+				'value' => sprintf('<div style="width: 20px; height: 20px; background: %s; border: 1px solid black; "></div>', $model->color)
+			),
 		),
 	)); ?>
 	<div class="panel-footer foot-details">

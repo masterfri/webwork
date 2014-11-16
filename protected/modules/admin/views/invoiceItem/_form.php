@@ -1,8 +1,6 @@
 <div class="form-content">
-	
-	
 	<?php $form=$this->beginWidget('ActiveForm', array(
-		'id' => 'activity-form',
+		'id' => 'invoiceitem-form',
 		'htmlOptions' => array(
 			'class'=>'form-horizontal',
 			'data-raise' => 'ajax-request',
@@ -22,12 +20,21 @@
 		</div>
 	</div>
 	<div class="form-group">
-		<?php echo $form->labelEx($model, 'description', array('class'=>'col-sm-3 control-label')); ?>
+		<?php echo $form->labelEx($model, 'hours', array('class'=>'col-sm-3 control-label')); ?>
 		<div class="col-sm-9">
-			<?php echo $form->textArea($model, 'description', array(
+			<?php echo $form->textField($model, 'formattedHours', array(
 				'class' => 'form-control',
 			)); ?> 
-			<?php echo $form->error($model, 'description', array('class'=>'help-inline')); ?>
+			<?php echo $form->error($model, 'hours', array('class'=>'help-inline')); ?>
+		</div>
+	</div>
+	<div class="form-group">
+		<?php echo $form->labelEx($model, 'value', array('class'=>'col-sm-3 control-label')); ?>
+		<div class="col-sm-9">
+			<?php echo $form->textField($model, 'value', array(
+				'class' => 'form-control',
+			)); ?> 
+			<?php echo $form->error($model, 'value', array('class'=>'help-inline')); ?>
 		</div>
 	</div>
 	

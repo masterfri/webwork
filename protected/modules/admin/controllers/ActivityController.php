@@ -16,7 +16,16 @@ class ActivityController extends AdminController
 	{
 		$model = new Activity('create');
 		if ($this->saveModel($model)) {
-			$this->redirect(array('view', 'id' => $model->id));
+			if ($this->isAjax()) {
+				$this->ajaxSuccess(array(
+					'trigger' => 'activity.created',
+				));
+			} else {
+				$this->redirect(array('view', 'id' => $model->id));
+			}
+		}
+		if ($this->isAjax()) {
+			$this->layout = 'ajax';
 		}
 		$this->render('create', array(
 			'model' => $model,
@@ -27,7 +36,16 @@ class ActivityController extends AdminController
 	{
 		$model = $this->loadModel($id, 'Activity');
 		if ($this->saveModel($model)) {
-			$this->redirect(array('view', 'id' => $model->id));
+			if ($this->isAjax()) {
+				$this->ajaxSuccess(array(
+					'trigger' => 'activity.updated',
+				));
+			} else {
+				$this->redirect(array('view', 'id' => $model->id));
+			}
+		}
+		if ($this->isAjax()) {
+			$this->layout = 'ajax';
 		}
 		$this->render('update', array(
 			'model' => $model,

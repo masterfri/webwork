@@ -40,6 +40,7 @@ return array(
 	'Technical specification of project' => 'Техническая спецификация проекта',
 	'Are you sure you want to reset timer?' => 'Вы уверены, что хотите сбросить таймер?',
 	'Your timer is not saved. Do you want to leave page?' => 'Значение таймера на сохранено. Покинуть страницу?',
+	'Add Invoice Item' => 'Добавить позицию',
 	'Select Value' => 'Выберите из списка',
 	'Create User' => 'Создать пользователя',
 	'Users' => 'Пользователи',
@@ -206,5 +207,9 @@ return array(
 	'On hold' => 'Приостановлены',
 	'Watch' => 'Следить',
 	'Unwatch' => 'Не следить',
+	'Invoice Items' => 'Позиции',
+	'New Invoice Item' => 'Новая позиция',
+	'Update Invoice Item' => 'Обновление позиции',
+	'Are you sure you want to delete this time invoice item?' => 'Вы уверены, что хотите удалить эту позицию?',
 );
 

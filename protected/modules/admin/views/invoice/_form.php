@@ -1,6 +1,4 @@
 <div class="form-content">
-	
-	
 	<?php $form=$this->beginWidget('ActiveForm', array(
 		'id' => 'invoice-form',
 		'htmlOptions' => array(
@@ -19,6 +17,36 @@
 	<?php echo $form->errorSummary($model, null, null, array('class' => 'alert alert-danger')); ?>
 
 	<div class="form-group">
+		<?php echo $form->labelEx($model, 'from_id', array('class'=>'col-sm-3 control-label')); ?>
+		<div class="col-sm-9">
+			<?php echo $form->dropdownList($model, 'from_id', User::getList(), array(
+				'class' => 'form-control',
+				'prompt' => Yii::t('admin.crud', 'Select Value'),
+			)); ?> 
+			<?php echo $form->error($model, 'from_id', array('class'=>'help-inline')); ?>
+		</div>
+	</div>
+	<div class="form-group">
+		<?php echo $form->labelEx($model, 'to_id', array('class'=>'col-sm-3 control-label')); ?>
+		<div class="col-sm-9">
+			<?php echo $form->dropdownList($model, 'to_id', User::getList(), array(
+				'class' => 'form-control',
+				'prompt' => Yii::t('admin.crud', 'Select Value'),
+			)); ?> 
+			<?php echo $form->error($model, 'to_id', array('class'=>'help-inline')); ?>
+		</div>
+	</div>
+	<div class="form-group">
+		<?php echo $form->labelEx($model, 'project_id', array('class'=>'col-sm-3 control-label')); ?>
+		<div class="col-sm-9">
+			<?php echo $form->dropdownList($model, 'project_id', Project::getList(), array(
+				'class' => 'form-control',
+				'prompt' => Yii::t('admin.crud', 'Select Value'),
+			)); ?> 
+			<?php echo $form->error($model, 'project_id', array('class'=>'help-inline')); ?>
+		</div>
+	</div>
+	<div class="form-group">
 		<?php echo $form->labelEx($model, 'comments', array('class'=>'col-sm-3 control-label')); ?>
 		<div class="col-sm-9">
 			<?php echo $form->textArea($model, 'comments', array(
@@ -27,19 +55,21 @@
 			<?php echo $form->error($model, 'comments', array('class'=>'help-inline')); ?>
 		</div>
 	</div>
-	<div class="form-group">
-		<?php echo $form->labelEx($model, 'payd', array('class'=>'col-sm-3 control-label')); ?>
-		<div class="col-sm-9">
-			<?php echo $form->dropdownList($model, 'payd', array(
-				1 => Yii::t('admin.crud', 'Yes'),
-				0 => Yii::t('admin.crud', 'No'),
-			), array(
-				'class' => 'form-control',
-				'prompt' => Yii::t('admin.crud', 'Select Value'),
-			)); ?> 
-			<?php echo $form->error($model, 'payd', array('class'=>'help-inline')); ?>
+	<?php if(!$model->getIsNewRecord()): ?>
+		<div class="form-group">
+			<?php echo $form->labelEx($model, 'draft', array('class'=>'col-sm-3 control-label')); ?>
+			<div class="col-sm-9">
+				<?php echo $form->dropdownList($model, 'draft', array(
+					1 => Yii::t('admin.crud', 'Yes'),
+					0 => Yii::t('admin.crud', 'No'),
+				), array(
+					'class' => 'form-control',
+					'prompt' => Yii::t('admin.crud', 'Select Value'),
+				)); ?> 
+				<?php echo $form->error($model, 'draft', array('class'=>'help-inline')); ?>
+			</div>
 		</div>
-	</div>
+	<?php endif; ?>
 	
 	<div class="form-group">
 		<div class="col-sm-offset-3 col-sm-9">
