@@ -9,17 +9,20 @@ $this->breadcrumbs = array(
 
 $this->menu = array(
 	array(
-		'label' => '<i class="glyphicon glyphicon-plus"></i> ' . Yii::t('admin.crud', 'Create Payment'), 
-		'url' => array('create'),
-		'visible' => Yii::app()->user->checkAccess('create_payment'),
-	),
-	array(
-		'label' => '<i class="glyphicon glyphicon-eye-open"></i> ' . Yii::t('admin.crud', 'View Payment'), 
+		'label' => '<i class="glyphicon glyphicon-eye-open"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'View Payment'), 
+			'class' => 'btn btn-default',
+		),
 		'url' => array('view', 'id' => $model->id),
 		'visible' => Yii::app()->user->checkAccess('view_payment'),
 	),
 	array(
-		'label' => '<i class="glyphicon glyphicon-wrench"></i> ' . Yii::t('admin.crud', 'Manage Payment'), 
+		'label' => '<i class="glyphicon glyphicon-list-alt"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Manage Payment'), 
+			'class' => 'btn btn-default',
+		),
 		'url'=>array('index'),
 		'visible' => Yii::app()->user->checkAccess('view_payment'),
 	),

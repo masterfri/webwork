@@ -6,6 +6,9 @@ class InvoiceController extends AdminController
 	{
 		$model = $this->createSearchModel('Invoice');
 		$provider = $model->search();
+		if (!Yii::app()->user->checkAccess('view_invoice', array('invoice' => '*'))) {
+			$provider->criteria->scopes[] = 'my';
+		}
 		$this->render('index', array(
 			'model' => $model,
 			'provider' => $provider,
@@ -46,8 +49,12 @@ class InvoiceController extends AdminController
 	
 	public function actionView($id)
 	{
+		$model = $this->loadModel($id, 'Invoice');
+		if (!Yii::app()->user->checkAccess('view_invoice', array('invoice' => $model))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
 		$this->render('view', array(
-			'model' => $this->loadModel($id, 'Invoice'),
+			'model' => $model,
 		));
 	}
 

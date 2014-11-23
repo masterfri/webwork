@@ -5,7 +5,7 @@ Yii::import('zii.widgets.grid.CDataColumn');
 class LinkColumn extends CDataColumn
 {
 	public $linkExpression;
-	public $actitityExpression;
+	public $activityExpression;
 	public $linkHtmlOptions = array();
 	
 	protected function renderDataCellContent($row,$data)
@@ -23,7 +23,7 @@ class LinkColumn extends CDataColumn
 			} else {
 				$link = array('view', 'id' => $data->primaryKey);
 			}
-			if ($this->actitityExpression !== null && !$this->evaluateExpression($this->actitityExpression, array('data'=>$data, 'row'=>$row))) {
+			if ($this->activityExpression !== null && !$this->evaluateExpression($this->activityExpression, array('data'=>$data, 'row'=>$row))) {
 				echo $this->grid->getFormatter()->format($value, $this->type);
 			} else {
 				echo CHtml::link($this->grid->getFormatter()->format($value, $this->type), $link, $this->linkHtmlOptions);

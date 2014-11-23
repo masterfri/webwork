@@ -9,7 +9,20 @@ $this->breadcrumbs = array(
 
 $this->menu = array(
 	array(
-		'label' => '<i class="glyphicon glyphicon-wrench"></i> ' . Yii::t('admin.crud', 'Manage Payment'), 
+		'label' => '<i class="glyphicon glyphicon-arrow-left"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Back to Invoice'), 
+			'class' => 'btn btn-default',
+		), 
+		'url' => array('invoice/view', 'id' => $invoice->id),
+		'visible' => Yii::app()->user->checkAccess('view_invoice', array('invoice' => $invoice)),
+	),
+	array(
+		'label' => '<i class="glyphicon glyphicon-list-alt"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Manage Payment'), 
+			'class' => 'btn btn-default',
+		), 
 		'url' => array('index'),
 		'visible' => Yii::app()->user->checkAccess('view_payment'),
 	),

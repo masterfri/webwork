@@ -12,14 +12,18 @@ class PaymentController extends AdminController
 		));
 	}
 	
-	public function actionCreate()
+	public function actionCreate($invoice)
 	{
+		$invoice = $this->loadModel($invoice, 'Invoice');
 		$model = new Payment('create');
+		$model->invoice = $invoice;
+		$model->amount = $invoice->amount;
 		if ($this->saveModel($model)) {
 			$this->redirect(array('view', 'id' => $model->id));
 		}
 		$this->render('create', array(
 			'model' => $model,
+			'invoice' => $invoice,
 		));
 	}
 	

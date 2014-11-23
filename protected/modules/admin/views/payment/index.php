@@ -8,15 +8,11 @@ $this->breadcrumbs = array(
 
 $this->menu = array(
 	array(
-		'label' => '<i class="glyphicon glyphicon-plus"></i> ' . Yii::t('admin.crud', 'Create Payment'), 
-		'url' => array('create'),
-		'visible' => Yii::app()->user->checkAccess('create_payment'),
-	),
-	array(
-		'label' => '<i class="glyphicon glyphicon-search"></i> ' . Yii::t('admin.crud', 'Search'), 
+		'label' => '<i class="glyphicon glyphicon-search"></i>', 
 		'url' => '#',
 		'linkOptions' => array(
-			'class' => 'search-button',
+			'title' => Yii::t('admin.crud', 'Search'),
+			'class' => 'btn btn-default search-button',
 			'data-toggle' => 'search-form',
 		),
 	),
@@ -43,14 +39,25 @@ $this->menu = array(
 		'id' => 'payment-grid',
 		'dataProvider' => $provider,
 		'columns' => array(
-			'project',
-			'task',
-			'user',
-			'type',
-			'amount',
-			'description',
+			array(
+				'class' => 'LinkColumn',
+				'name' => 'id',
+				'value' => '$data->getNumber()',
+			),
+			array(
+				'class' => 'LinkColumn',
+				'name' => 'invoice',
+				'linkExpression' => 'Yii::app()->controller->createUrl("invoice/view", array("id" => $data->invoice_id))',
+				'activityExpression' => 'Yii::app()->user->checkAccess("view_invoice", array("invoice" => $data->invoice))',
+			),
+			'invoice.from',
+			'invoice.to',
+			array(
+				'name' => 'type',
+				'value' => '$data->getType()',
+			),
+			'amount:money',
 			'date_created:datetime',
-			'created_by',
 			array(
 				'class' => 'ButtonColumn',
 				'deleteConfirmation' => Yii::t('admin.crud', 'Are you sure you want to delete this payment?'),

@@ -210,6 +210,18 @@ return array(
 		'bizRule' => null,
 		'data' => null,
 	),
+	'view_my_invoice' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'View my invoice',
+		'bizRule' => 'return (!isset($params["invoice"])) ||
+							 ($params["invoice"] === "*" ? false :
+								(($params["invoice"]->from_id == $params["userId"]) ||
+								($params["invoice"]->to_id == $params["userId"] && !$params["invoice"]->draft)));',
+		'data' => null,
+		'children' => array(
+			'view_invoice',
+		),
+	),
 	/**
 	 * Milestone 
 	 */
@@ -838,6 +850,7 @@ return array(
 			'reopen_shared_task',
 			'resume_shared_task',
 			'query_shared_tag',
+			'view_my_invoice',
 		),
 		'bizRule' => null,
 		'data' => null

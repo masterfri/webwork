@@ -53,7 +53,7 @@ $this->menu = array(
 				'class' => 'LinkColumn', 
 				'name' => 'project',
 				'linkExpression' => 'array("project/view", "id" => $data->project_id)',
-				'actitityExpression' => 'Yii::app()->user->checkAccess("view_project", array("project" => $data->project))',
+				'activityExpression' => 'Yii::app()->user->checkAccess("view_project", array("project" => $data->project))',
 			),
 			array('name' => 'color', 'type' => 'raw', 'value' => "sprintf('<div style=\"width: 20px; height: 20px; background: %s; border: 1px solid black; \"></div>', \$data->color)"),
 			array(

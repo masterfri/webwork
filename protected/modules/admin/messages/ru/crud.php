@@ -211,5 +211,7 @@ return array(
 	'New Invoice Item' => 'Новая позиция',
 	'Update Invoice Item' => 'Обновление позиции',
 	'Are you sure you want to delete this time invoice item?' => 'Вы уверены, что хотите удалить эту позицию?',
+	'Back to Invoice' => 'Вернуться к счету',
+	'Make Payment' => 'Оплатить',
 );
 

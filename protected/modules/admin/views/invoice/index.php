@@ -16,9 +16,29 @@ $this->menu = array(
 		'url' => array('create'),
 		'visible' => Yii::app()->user->checkAccess('create_invoice'),
 	),
+	array(
+		'label' => '<i class="glyphicon glyphicon-search"></i>', 
+		'url' => '#',
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Search'),
+			'class' => 'btn btn-default search-button',
+			'data-toggle' => 'search-form',
+		),
+	),
 );
 
 ?>
+
+<div class="panel panel-default search-form" style="display: none;">
+	<div class="panel-heading">
+		<h3 class="panel-title"><?php echo Yii::t('admin.crud', 'Search'); ?></h3>
+	</div>
+	<div class="panel-body">
+		<?php $this->renderPartial('_search',array(
+			'model' => $model,
+		)); ?>
+	</div>
+</div>
 
 
 <div class="panel panel-default">
@@ -40,7 +60,7 @@ $this->menu = array(
 				'class' => 'LinkColumn', 
 				'name' => 'project',
 				'linkExpression' => 'array("project/view", "id" => $data->project_id)',
-				'actitityExpression' => 'Yii::app()->user->checkAccess("view_project", array("project" => $data->project))',
+				'activityExpression' => 'Yii::app()->user->checkAccess("view_project", array("project" => $data->project))',
 			),
 			'amount:money',
 			'payd:money',

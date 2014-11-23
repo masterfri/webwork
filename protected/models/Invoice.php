@@ -47,6 +47,10 @@ class Invoice extends CActiveRecord
 					'required', 'on' => 'update'),
 			array('	draft', 
 					'boolean', 'on' => 'update'),
+			array(' from_id,
+					project_id,
+					to_id',
+					'safe', 'on' => 'search'),
 		);
 	}
 	
@@ -60,6 +64,18 @@ class Invoice extends CActiveRecord
 			'payd' => array(self::STAT, 'Payment', 'invoice_id', 'select' => 'SUM(amount)'),
 			'project' => array(self::BELONGS_TO, 'Project', 'project_id'),
 			'to' => array(self::BELONGS_TO, 'User', 'to_id'),
+		);
+	}
+	
+	public function scopes()
+	{
+		return array(
+			'my' => array(
+				'condition' => 'invoice.from_id = :current_user_id OR (invoice.to_id = :current_user_id AND invoice.draft != 1)',
+				'params' => array(
+					':current_user_id' => Yii::app()->user->id,
+				),
+			),
 		);
 	}
 	
@@ -91,6 +107,9 @@ class Invoice extends CActiveRecord
 	{
 		$criteria = new CDbCriteria($params);
 		$criteria->alias = 'invoice';
+		$criteria->compare('invoice.from_id', $this->from_id);
+		$criteria->compare('invoice.project_id', $this->project_id);
+		$criteria->compare('invoice.to_id', $this->to_id);
 		$criteria->with = array('project', 'from', 'to');
 		return new CActiveDataProvider($this, array(
 			'criteria' => $criteria,

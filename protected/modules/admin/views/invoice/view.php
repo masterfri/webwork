@@ -36,6 +36,11 @@ $this->menu = array(
 		),
 		'items' => array(
 			array(
+				'label' => '<i class="glyphicon glyphicon-usd"></i> ' . Yii::t('admin.crud', 'Make Payment'), 
+				'url' => array('payment/create', 'invoice' => $model->id),
+				'visible' => Yii::app()->user->checkAccess('create_payment'),
+			),
+			array(
 				'label' => '<i class="glyphicon glyphicon-pencil"></i> ' . Yii::t('admin.crud', 'Update Invoice'), 
 				'url' => array('update', 'id' => $model->id),
 				'visible' => Yii::app()->user->checkAccess('update_invoice'),

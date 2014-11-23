@@ -10,39 +10,9 @@
 		'method' => 'get',
 	)); ?>
 		<div class="form-group">
-			<?php echo $form->label($model, 'project_id', array('class'=>'col-sm-3 control-label')); ?>
-			<div class="col-sm-9">
-				<?php echo $form->dropdownList($model, 'project_id', Project::getList(), array(
-					'class' => 'form-control',
-					'prompt' => '',
-				)); ?> 
-			</div>
-		</div>
-		<div class="form-group">
-			<?php echo $form->label($model, 'task_id', array('class'=>'col-sm-3 control-label')); ?>
-			<div class="col-sm-9">
-				<?php echo $form->dropdownList($model, 'task_id', Task::getList(), array(
-					'class' => 'form-control',
-					'prompt' => '',
-				)); ?> 
-			</div>
-		</div>
-		<div class="form-group">
-			<?php echo $form->label($model, 'user_id', array('class'=>'col-sm-3 control-label')); ?>
-			<div class="col-sm-9">
-				<?php echo $form->dropdownList($model, 'user_id', User::getList(), array(
-					'class' => 'form-control',
-					'prompt' => '',
-				)); ?> 
-			</div>
-		</div>
-		<div class="form-group">
 			<?php echo $form->label($model, 'type', array('class'=>'col-sm-3 control-label')); ?>
 			<div class="col-sm-9">
-				<?php echo $form->dropdownList($model, 'type', array(
-					1 => 'Income',
-					2 => 'Expend',
-				), array(
+				<?php echo $form->dropdownList($model, 'type', Payment::getListTypes(), array(
 					'class' => 'form-control',
 					'prompt' => '',
 				)); ?> 
