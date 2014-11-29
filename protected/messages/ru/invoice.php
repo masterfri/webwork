@@ -12,4 +12,5 @@ return array(
 	'Project' => 'Проект',
 	'Date Created' => 'Дата создания',
 	'To' => 'Получатель',
+	'Salary for {month}, {year}' => 'Зарплата за {month}, {year}',
 );

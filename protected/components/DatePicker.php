@@ -4,6 +4,7 @@ class DatePicker extends CInputWidget
 {
 	public $registerStyles = true;
 	public $format = 'd/m/Y';
+	public $mode = 'days';
 	
 	public function run()
 	{
@@ -79,7 +80,7 @@ class DatePicker extends CInputWidget
 			'm' => 'mm',
 			'n' => 'm',
 		));
-		
+		$mode = $this->mode;
 		$id = $this->htmlOptions['id'];
 		$cs = Yii::app()->clientScript;
 		$cs->registerCoreScript('jquery');
@@ -91,10 +92,16 @@ class DatePicker extends CInputWidget
 		$cs->registerScript(__CLASS__. "#$id", 
 		"(function() {
 			var b = $('#{$id}_btn_open'), d = $('#{$id}_display'), c = $('#{$id}_btn_clear'), i = $('#{$id}');
-			b.datepicker({format:'$jformat'}).on('changeDate', function(ev) {
-				d.val(b.data('date'));
-				i.val([ev.date.getFullYear(), ((ev.date.getMonth() >= 9 ? '' : '0') + (ev.date.getMonth() + 1)), ((ev.date.getDate() >= 10 ? '' : '0') +  ev.date.getDate())].join('-'));
-				b.datepicker('hide');
+			b.datepicker({format:'{$jformat}',minViewMode:'{$mode}',viewMode:'{$mode}'}).on('changeDate', function(ev) {
+				if (ev.viewMode == '{$mode}') {
+					d.val(ev.formattedDate);
+					".
+					($mode == 'days' ?
+					"i.val([ev.date.getFullYear(), ((ev.date.getMonth() >= 9 ? '' : '0') + (ev.date.getMonth() + 1)), ((ev.date.getDate() >= 10 ? '' : '0') +  ev.date.getDate())].join('-'));" :
+					"i.val([ev.date.getFullYear(), ((ev.date.getMonth() >= 9 ? '' : '0') + (ev.date.getMonth() + 1))].join('-'));").
+					"
+					b.datepicker('hide');
+				}
 			}); 
 			c.click(function() { d.val(''); i.val(''); });
 		})();");

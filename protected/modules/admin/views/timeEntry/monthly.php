@@ -1,21 +1,21 @@
 <?php
 
-$this->pageHeading = Yii::t('admin.crud', 'Daily Time Report');
+$this->pageHeading = Yii::t('admin.crud', 'Monthly Time Report');
 
 $this->breadcrumbs = array(
 	Yii::t('admin.crud', 'Time Entry') => Yii::app()->user->checkAccess('view_time_entry') ? array('index') : false, 
-	Yii::t('admin.crud', 'Daily Time Report'), 
+	Yii::t('admin.crud', 'Monthly Time Report'), 
 );
 
 $this->menu = array(
 	array(
-		'label' => '<i class="glyphicon glyphicon-calendar"></i>', 
+		'label' => '<i class="glyphicon glyphicon-time"></i>', 
 		'linkOptions' => array(
-			'title' => Yii::t('admin.crud', 'Monthly Time Report'), 
+			'title' => Yii::t('admin.crud', 'Daily Time Report'), 
 			'class' => 'btn btn-default',
 		), 
-		'url' => array('monthly'),
-		'visible' => Yii::app()->user->checkAccess('monthly_time_report'),
+		'url' => array('daily'),
+		'visible' => Yii::app()->user->checkAccess('daily_time_report'),
 	),
 	array(
 		'label' => '<i class="glyphicon glyphicon-list-alt"></i>', 
@@ -44,7 +44,7 @@ $this->menu = array(
 		<h3 class="panel-title"><?php echo Yii::t('admin.crud', 'Search'); ?></h3>
 	</div>
 	<div class="panel-body">
-		<?php $this->renderPartial('_search_daily',array(
+		<?php $this->renderPartial('_search_monthly',array(
 			'model' => $model,
 		)); ?>
 	</div>
@@ -78,7 +78,7 @@ $this->menu = array(
 			'activity',
 			'description',
 			'amount:hours',
-			'date_created:time',
+			'date_created:datetime',
 			array(
 				'class' => 'ButtonColumn',
 				'deleteConfirmation' => Yii::t('admin.crud', 'Are you sure you want to delete this time entry?'),

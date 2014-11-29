@@ -45,6 +45,7 @@ class TimeEntry extends CActiveRecord
 					task_id', 
 					'safe', 'on' => 'create'),
 			array('	activity_id,
+					date_created,
 					project_id,
 					task_id,
 					user_id', 
@@ -104,6 +105,14 @@ class TimeEntry extends CActiveRecord
 		$criteria->compare('time_entry.project_id', $this->project_id);
 		$criteria->compare('time_entry.task_id', $this->task_id);
 		$criteria->compare('time_entry.user_id', $this->user_id);
+		if (!empty($this->date_created)) {
+			if (preg_match('/^([0-9]{4})-([0-9]{2})$/', $this->date_created, $ym)) {
+				$criteria->compare('YEAR(time_entry.date_created)', $ym[1]);
+				$criteria->compare('MONTH(time_entry.date_created)', $ym[2]);
+			} else {
+				$criteria->compare('DATE(time_entry.date_created)', $this->date_created);
+			}
+		}
 		$criteria->with = array('project', 'task', 'user', 'activity');
 		return new CActiveDataProvider($this, array(
 			'criteria' => $criteria,

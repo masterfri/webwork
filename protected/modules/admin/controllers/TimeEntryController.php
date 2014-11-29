@@ -9,26 +9,42 @@ class TimeEntryController extends AdminController
 		if (!Yii::app()->user->checkAccess('view_time_entry', array('entry' => '*'))) {
 			$provider->criteria->scopes[] = 'my';
 		}
-		$sum = $model->getSum($provider->criteria);
 		$this->render('index', array(
 			'model' => $model,
 			'provider' => $provider,
-			'sum' => $sum,
 		));
 	}
 	
 	public function actionDaily()
 	{
 		$model = $this->createSearchModel('TimeEntry');
-		$provider = $model->search(array(
-			'condition' => 'time_entry.user_id = :user_id AND DATE(time_entry.date_created) = :today',
-			'params' => array(
-				':user_id' => Yii::app()->user->id,
-				':today' => date('Y-m-d'),
-			)
-		));
+		if (empty($model->date_created)) {
+			$model->date_created = date('Y-m-d');
+		}
+		$provider = $model->search();
+		if (!Yii::app()->user->checkAccess('view_time_entry', array('entry' => '*'))) {
+			$provider->criteria->scopes[] = 'my';
+		}
 		$sum = $model->getSum($provider->criteria);
 		$this->render('daily', array(
+			'model' => $model,
+			'provider' => $provider,
+			'sum' => $sum,
+		));
+	}
+	
+	public function actionMonthly()
+	{
+		$model = $this->createSearchModel('TimeEntry');
+		if (empty($model->date_created)) {
+			$model->date_created = date('Y-m');
+		}
+		$provider = $model->search();
+		if (!Yii::app()->user->checkAccess('view_time_entry', array('entry' => '*'))) {
+			$provider->criteria->scopes[] = 'my';
+		}
+		$sum = $model->getSum($provider->criteria);
+		$this->render('monthly', array(
 			'model' => $model,
 			'provider' => $provider,
 			'sum' => $sum,
@@ -140,6 +156,10 @@ class TimeEntryController extends AdminController
 			array('allow',
 				'actions' => array('daily'),
 				'roles' => array('daily_time_report'),
+			),
+			array('allow',
+				'actions' => array('monthly'),
+				'roles' => array('monthly_time_report'),
 			),
 			array('allow',
 				'actions' => array('update'),

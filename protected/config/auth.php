@@ -784,6 +784,12 @@ return array(
 		'bizRule' => null,
 		'data' => null,
 	),
+	'monthly_time_report' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Monthly time report',
+		'bizRule' => null,
+		'data' => null,
+	),
 	'view_my_time_entry' => array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'View my time entry',
@@ -874,6 +880,7 @@ return array(
 			'complete_shared_task',
 			'estimate_shared_task',
 			'daily_time_report',
+			'monthly_time_report',
 			'report_time_entry',
 			'view_my_time_entry',
 			'update_my_time_entry',

@@ -87,7 +87,7 @@ $this->menu = array(
 	)); ?>
 	<div class="panel-footer foot-details">
 		<?php echo Yii::t('tag', 'Created by'); ?>
-		<?php echo CHtml::encode($model->created_by); ?>,
+		<?php echo CHtml::encode(CHtml::value($model, 'created_by', Yii::t('admin.crud', 'System'))); ?>,
 		<?php echo Yii::app()->format->formatDatetime($model->time_created); ?>
 	</div>
 </div>

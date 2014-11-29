@@ -2,3 +2,4 @@ assets/*
 uploads/*
 protected/runtime/*
 protected/config/main.php
+protected/config/console.php

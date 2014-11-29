@@ -287,6 +287,7 @@
 							this.element.trigger({
 								type: 'changeDate',
 								date: this.date,
+								formattedDate: DPGlobal.formatDate(this.date, this.format),
 								viewMode: DPGlobal.modes[this.viewMode].clsName
 							});
 						}
@@ -311,6 +312,7 @@
 							this.element.trigger({
 								type: 'changeDate',
 								date: this.date,
+								formattedDate: DPGlobal.formatDate(this.date, this.format),
 								viewMode: DPGlobal.modes[this.viewMode].clsName
 							});
 						}

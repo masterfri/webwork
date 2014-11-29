@@ -26,6 +26,15 @@ $this->menu = array(
 		'visible' => Yii::app()->user->checkAccess('daily_time_report'),
 	),
 	array(
+		'label' => '<i class="glyphicon glyphicon-calendar"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Monthly Time Report'), 
+			'class' => 'btn btn-default',
+		), 
+		'url' => array('monthly'),
+		'visible' => Yii::app()->user->checkAccess('monthly_time_report'),
+	),
+	array(
 		'label' => '<i class="glyphicon glyphicon-search"></i>', 
 		'url' => '#',
 		'linkOptions' => array(
@@ -55,7 +64,6 @@ $this->menu = array(
 	</div>
 	<?php $this->widget('GridView', array(
 		'id' => 'timeentry-grid',
-		'template' => '{items} <div class="table-totals">' . Yii::t('admin.crud', 'Total') . ': <span>' . Yii::app()->format->formatHours($sum) . '</span></div> {pager}',
 		'dataProvider' => $provider,
 		'columns' => array(
 			array(
@@ -72,6 +80,7 @@ $this->menu = array(
 			),
 			'user',
 			'activity',
+			'description',
 			'amount:hours',
 			'date_created:datetime',
 			array(

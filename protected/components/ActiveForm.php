@@ -101,10 +101,17 @@ class ActiveForm extends CActiveForm
 	
 	public function dateField($model, $attribute, $htmlOptions=array())
 	{
+		$options = $this->extractOptions(array(
+			'format' => 'd/m/Y',
+			'mode' => 'days',
+		), $htmlOptions);
+		
 		return $this->controller->widget('DatePicker', array(
 			'model' => $model,
 			'attribute' => $attribute,
 			'htmlOptions' => $htmlOptions,
+			'format' => $options['format'],
+			'mode' => $options['mode'],
 		), true);
 	}
 	

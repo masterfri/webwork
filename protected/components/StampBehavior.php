@@ -14,14 +14,14 @@ class StampBehavior extends CActiveRecordBehavior
 			if ($this->create_time_attribute) {
 				$this->owner->{$this->create_time_attribute} = date($this->time_format);
 			}
-			if ($this->created_by_attribute) {
+			if ($this->created_by_attribute && Yii::app()->hasComponent('user')) {
 				$this->owner->{$this->created_by_attribute} = Yii::app()->user->id;
 			}
 		} else {
 			if ($this->update_time_attribute) {
 				$this->owner->{$this->update_time_attribute} = date($this->time_format);
 			}
-			if ($this->updated_by_attribute) {
+			if ($this->updated_by_attribute && Yii::app()->hasComponent('user')) {
 				$this->owner->{$this->updated_by_attribute} = Yii::app()->user->id;
 			}
 		}

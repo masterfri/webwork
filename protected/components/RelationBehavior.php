@@ -184,6 +184,7 @@ class RelationBehavior extends CActiveRecordBehavior
 			while ($row = $iterator->read()) {
 				$model->populateRecord($row)->delete();
 			}
+			$iterator->close();
 		}
 	}
 	

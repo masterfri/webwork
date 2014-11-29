@@ -176,6 +176,7 @@ return array(
 	'Create Time Entry' => 'Создать временную запись',
 	'Report Time' => 'Отчет о времени',
 	'Daily Time Report' => 'Дневной отчет',
+	'Monthly Time Report' => 'Месячный отчет',
 	'New Time Report' => 'Добавить отчет',
 	'Report Time for: {task}' => 'Отчет по задаче: {task}',
 	'Back to Task' => 'Назад к задаче',
@@ -213,5 +214,6 @@ return array(
 	'Are you sure you want to delete this time invoice item?' => 'Вы уверены, что хотите удалить эту позицию?',
 	'Back to Invoice' => 'Вернуться к счету',
 	'Make Payment' => 'Оплатить',
+	'System' => 'Система',
 );
 
