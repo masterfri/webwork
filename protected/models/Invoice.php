@@ -29,6 +29,7 @@ class Invoice extends CActiveRecord
 			'project_id' => Yii::t('invoice', 'Project'),
 			'project' => Yii::t('invoice', 'Project'),
 			'time_created' => Yii::t('invoice', 'Date Created'),
+			'total_hours' => Yii::t('invoice', 'Total Hours'),
 			'to_id' => Yii::t('invoice', 'To'),
 			'to' => Yii::t('invoice', 'To'),
 		);
@@ -58,6 +59,7 @@ class Invoice extends CActiveRecord
 	{
 		return array(
 			'amount' => array(self::STAT, 'InvoiceItem', 'invoice_id', 'select' => 'SUM(value)'),
+			'total_hours' => array(self::STAT, 'InvoiceItem', 'invoice_id', 'select' => 'SUM(hours)'),
 			'created_by' => array(self::BELONGS_TO, 'User', 'created_by_id'),
 			'from' => array(self::BELONGS_TO, 'User', 'from_id'),
 			'items' => array(self::HAS_MANY, 'InvoiceItem', 'invoice_id'),
@@ -143,6 +145,34 @@ class Invoice extends CActiveRecord
 		$provider = $model->search($criteria);
 		$provider->pagination = false;
 		return $provider;
+	}
+	
+	public function getItemsGroups($params=array())
+	{
+		$criteria = new CDbCriteria($params);
+		$criteria->order = 'IF(ISNULL(project.id), 1, 0), project.name';
+		$criteria->with = array(
+			'task' => array(
+				'with' => array('project'),
+			),
+		);
+		$groups = array();
+		$data = $this->getItems($criteria)->getData();
+		foreach ($data as $item) {
+			$project = CHtml::value($item, 'task.project_id', 0);
+			if (!isset($groups[$project])) {
+				$groups[$project] = array(
+					'name' => CHtml::value($item, 'task.project.name'),
+					'items' => array(),
+					'total_hours' => 0,
+					'total_amount' => 0,
+				);
+			}
+			$groups[$project]['items'][] = $item;
+			$groups[$project]['total_hours'] += $item->hours;
+			$groups[$project]['total_amount'] += $item->value;
+		}
+		return $groups;
 	}
 	
 	public function getNumber()

@@ -13,4 +13,6 @@ return array(
 	'Date Created' => 'Дата создания',
 	'To' => 'Получатель',
 	'Salary for {month}, {year}' => 'Зарплата за {month}, {year}',
+	'Other' => 'Прочее',
+	'Total Hours' => 'Всего часов',
 );

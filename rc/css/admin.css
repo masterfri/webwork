@@ -554,3 +554,9 @@ ol.unstyled {
 .task-list-search .panel-body{
 	border-bottom: 1px solid #ccc;
 }
+.grid-view .row-total td {
+	font-weight: bold;
+}
+.grid-view .row-group-title th {
+	background-color: #ddd !important;
+}

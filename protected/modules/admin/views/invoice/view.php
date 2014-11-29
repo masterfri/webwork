@@ -80,6 +80,7 @@ $this->menu = array(
 					$model->project,
 			),
 			'comments',
+			'total_hours:hours',
 			'amount:money',
 			'payd:money',
 			'draft:boolean',
@@ -96,18 +97,44 @@ $this->menu = array(
 	<div class="panel-heading">
 		<h3 class="panel-title"><?php echo Yii::t('invoice', 'Items') ?></h3>
 	</div>
-	<?php $this->widget('GridView', array(
-		'id' => 'items-grid',
-		'dataProvider' => $model->getItems(),
-		'columns' => array(
-			array(
-				'header' => '#',
-				'value' => '$row + 1',
-			),
-			'name',
-			'hours:hours',
-			'value:money',
-		),
-	)); ?>
+	<table class="table table-striped table-condensed grid-view">
+		<thead>
+			<tr>
+				<th width="30">#</th>
+				<th><?php echo CHtml::encode(InvoiceItem::model()->getAttributeLabel('name')) ?></th>
+				<th><?php echo CHtml::encode(InvoiceItem::model()->getAttributeLabel('hours')) ?></th>
+				<th><?php echo CHtml::encode(InvoiceItem::model()->getAttributeLabel('value')) ?></th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php 
+			$groups = $model->getItemsGroups();
+			$format = Yii::app()->format;
+			$n = 1;
+			foreach($model->getItemsGroups() as $id => $group): ?>
+				<?php if ($id != 0 || count($groups) > 0): ?>
+					<tr class="row-group-title">
+						<th colspan="4">
+							<?php echo $id == 0 ? Yii::t('invoice', 'Other') : CHtml::encode($group['name']); ?>
+						</th>
+					</tr>
+				<?php endif; ?>
+				<?php foreach($group['items'] as $item): ?>
+					<tr>
+						<td><?php echo $n++; ?></td>
+						<td><?php echo CHtml::encode($item->name) ?></td>
+						<td><?php echo $format->formatHours($item->hours); ?></td>
+						<td><?php echo $format->formatMoney($item->value); ?></td>
+					</tr>
+				<?php endforeach; ?>
+				<tr class="row-total">
+					<td>&nbsp;</td>
+					<td><?php echo Yii::t('admin.crud', 'Total') ?></td>
+					<td><?php echo $format->formatHours($group['total_hours']); ?></td>
+					<td><?php echo $format->formatMoney($group['total_amount']); ?></td>
+				</tr>
+			<?php endforeach; ?>
+		</tbody>
+	</table>
 </div>
 
