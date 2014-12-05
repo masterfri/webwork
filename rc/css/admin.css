@@ -560,3 +560,6 @@ ol.unstyled {
 .grid-view .row-group-title th {
 	background-color: #ddd !important;
 }
+.panel.no-body .panel-heading {
+	border-bottom: none;
+}

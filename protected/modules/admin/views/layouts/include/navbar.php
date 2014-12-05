@@ -56,22 +56,38 @@
 						'class' => 'dropdown-toggle',
 						'data-toggle' => 'dropdown',
 					),
-					'items' => array(
-						array(
-							'label' => '<i class="glyphicon glyphicon-briefcase"></i> ' . Yii::t('admin.crud', 'Project'),
-							'url' => array('/admin/project'),
-							'visible' => Yii::app()->user->checkAccess('view_project'),
-						),
-						array(
-							'label' => '<i class="glyphicon glyphicon-time"></i> ' . Yii::t('admin.crud', 'Time Entry'),
-							'url' => array('/admin/timeEntry'),
-							'visible' => Yii::app()->user->checkAccess('view_time_entry'),
-						),
-						array(
-							'label' => '<i class="glyphicon glyphicon-tag"></i> ' . Yii::t('admin.crud', 'Tag'),
-							'url' => array('/admin/tag'),
-							'visible' => Yii::app()->user->checkAccess('view_tag'),
-						),
+					'items' => CMap::mergeArray(array_map(function($project) {
+							return array(
+								'label' => '<i class="glyphicon glyphicon-file"></i> ' . CHtml::encode($project->name),
+								'url' => array('/admin/project/view', 'id' => $project->id),
+							);
+						}, Project::getAll(
+							Yii::app()->user->checkAccess('viev_project', array('project' => '*')) ? 
+								array() : 
+								array('scopes' => array('member'))
+						)), array(
+							array(
+								'label' => '<i class="glyphicon glyphicon-briefcase"></i> ' . Yii::t('admin.crud', 'Manage Project'),
+								'url' => array('/admin/project'),
+								'visible' => Yii::app()->user->checkAccess('view_project'),
+							),
+							array(
+								'label' => '',
+								'itemOptions' => array(
+									'class' => 'divider',
+								)
+							),
+							array(
+								'label' => '<i class="glyphicon glyphicon-time"></i> ' . Yii::t('admin.crud', 'Time Entry'),
+								'url' => array('/admin/timeEntry'),
+								'visible' => Yii::app()->user->checkAccess('view_time_entry'),
+							),
+							array(
+								'label' => '<i class="glyphicon glyphicon-tag"></i> ' . Yii::t('admin.crud', 'Tag'),
+								'url' => array('/admin/tag'),
+								'visible' => Yii::app()->user->checkAccess('view_tag'),
+							),
+						)
 					),
 				),
 				array(

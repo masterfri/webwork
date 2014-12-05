@@ -215,5 +215,6 @@ return array(
 	'Back to Invoice' => 'Вернуться к счету',
 	'Make Payment' => 'Оплатить',
 	'System' => 'Система',
+	'Actions marked with * require a comment' => 'Действия, помеченные *, требуют комментария',
 );
 

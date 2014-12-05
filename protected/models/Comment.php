@@ -31,7 +31,7 @@ class Comment extends CActiveRecord
 			array('	content', 
 					'length', 'max' => 16000),
 			array('	content', 
-					'required'),
+					'required', 'on' => 'comment, return, reopen'),
 			array(' attachments',
 					'safe'),
 		);

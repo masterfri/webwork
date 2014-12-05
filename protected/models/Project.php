@@ -130,9 +130,14 @@ class Project extends CActiveRecord
 	
 	public static function getList($params=array())
 	{
+		return CHtml::listData(self::getAll($params), 'id', 'name');
+	}
+	
+	public static function getAll($params=array())
+	{
 		$criteria = new CDbCriteria($params);
 		$criteria->order = 'name';
-		return CHtml::listData(self::model()->findAll($criteria), 'id', 'name');
+		return self::model()->findAll($criteria);
 	}
 	
 	public function getTeamList()

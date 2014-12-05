@@ -37,13 +37,15 @@
 		</div>
 			
 		<div class="panel-footer">
+			<p class="help-block"><?php echo Yii::t('admin.crud', 'Actions marked with * require a comment'); ?></p>
+			
 			<?php if(Yii::app()->user->checkAccess('comment_task', array('task' => $task))) 
 				echo CHtml::tag('button', array(
 					'type' => 'submit',
 					'class' => 'btn btn-primary',
 					'name' => 'action_type',
 					'value' => Task::ACTION_COMMENT,
-				), Yii::t('admin.crud', 'Submit')); ?>
+				), Yii::t('admin.crud', 'Submit') . ' *'); ?>
 			
 			<?php if(Yii::app()->user->checkAccess('start_task', array('task' => $task))) 
 				echo CHtml::tag('button', array(
@@ -67,7 +69,7 @@
 					'class' => 'btn btn-default',
 					'name' => 'action_type',
 					'value' => Task::ACTION_RETURN,
-				), Yii::t('admin.crud', 'Return')); ?>
+				), Yii::t('admin.crud', 'Return') . ' *'); ?>
 				
 			<?php if(Yii::app()->user->checkAccess('close_task', array('task' => $task))) 
 				echo CHtml::tag('button', array(
@@ -91,7 +93,7 @@
 					'class' => 'btn btn-default',
 					'name' => 'action_type',
 					'value' => Task::ACTION_REOPEN,
-				), Yii::t('admin.crud', 'Reopen')); ?>
+				), Yii::t('admin.crud', 'Reopen') . ' *'); ?>
 			
 			<?php if(Yii::app()->user->checkAccess('resume_task', array('task' => $task))) 
 				echo CHtml::tag('button', array(
