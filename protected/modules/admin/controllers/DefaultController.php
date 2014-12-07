@@ -96,6 +96,7 @@ class DefaultController extends AdminController
 	public function getDataScheduled($model=null)
 	{
 		return $this->getData(array(
+			'active',
 			'assigned',
 			'scheduled',
 		), $model);
@@ -104,6 +105,7 @@ class DefaultController extends AdminController
 	public function getDataUpdated($model=null)
 	{
 		return $this->getData(array(
+			'active',
 			'member', 
 			'updated',
 		), $model);
@@ -112,6 +114,7 @@ class DefaultController extends AdminController
 	public function getDataNew($model=null)
 	{
 		return $this->getData(array(
+			'active',
 			'member', 
 			'new',
 		), $model);
@@ -120,6 +123,7 @@ class DefaultController extends AdminController
 	public function getDataMy($model=null)
 	{
 		return $this->getData(array(
+			'active',
 			'my',
 		), $model);
 	}
@@ -127,6 +131,7 @@ class DefaultController extends AdminController
 	public function getDataPending($model=null)
 	{
 		return $this->getData(array(
+			'active',
 			'member', 
 			'pending',
 		), $model);
@@ -135,6 +140,7 @@ class DefaultController extends AdminController
 	public function getDataExpired($model=null)
 	{
 		return $this->getData(array(
+			'active',
 			'member', 
 			'expired',
 		), $model);
@@ -143,6 +149,7 @@ class DefaultController extends AdminController
 	public function getDataCompleted($model=null)
 	{
 		return $this->getData(array(
+			'active',
 			'member', 
 			'closed',
 		), $model);
@@ -151,6 +158,7 @@ class DefaultController extends AdminController
 	public function getDataOnHold($model=null)
 	{
 		return $this->getData(array(
+			'active',
 			'member', 
 			'on_hold',
 		), $model);

@@ -5,7 +5,11 @@ class TagController extends AdminController
 	public function actionIndex()
 	{
 		$model = $this->createSearchModel('Tag');
-		$provider = $model->search();
+		$provider = $model->search(array(
+			'scopes' => array(
+				'active',
+			),
+		));
 		$this->render('index', array(
 			'model' => $model,
 			'provider' => $provider,
@@ -21,9 +25,6 @@ class TagController extends AdminController
 		if (!empty($project)) {
 			$criteria->compare('tag.project_id', $project);
 			$criteria->addCondition('tag.project_id = 0', 'OR');
-			$criteria = new CDbCriteria($criteria);
-		} else {
-			$criteria = new CDbCriteria();
 		}
 		$criteria->limit = 15;
 		$criteria->order = 'tag.name';

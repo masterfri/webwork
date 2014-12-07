@@ -61,11 +61,7 @@
 								'label' => '<i class="glyphicon glyphicon-file"></i> ' . CHtml::encode($project->name),
 								'url' => array('/admin/project/view', 'id' => $project->id),
 							);
-						}, Project::getAll(
-							Yii::app()->user->checkAccess('viev_project', array('project' => '*')) ? 
-								array() : 
-								array('scopes' => array('member'))
-						)), array(
+						}, Project::getUserBundle()), array(
 							array(
 								'label' => '<i class="glyphicon glyphicon-briefcase"></i> ' . Yii::t('admin.crud', 'Manage Project'),
 								'url' => array('/admin/project'),
@@ -78,11 +74,6 @@
 								)
 							),
 							array(
-								'label' => '<i class="glyphicon glyphicon-time"></i> ' . Yii::t('admin.crud', 'Time Entry'),
-								'url' => array('/admin/timeEntry'),
-								'visible' => Yii::app()->user->checkAccess('view_time_entry'),
-							),
-							array(
 								'label' => '<i class="glyphicon glyphicon-tag"></i> ' . Yii::t('admin.crud', 'Tag'),
 								'url' => array('/admin/tag'),
 								'visible' => Yii::app()->user->checkAccess('view_tag'),
@@ -91,7 +82,7 @@
 					),
 				),
 				array(
-					'label' => '<i class="glyphicon glyphicon-usd"></i> ' . Yii::t('admin.crud', 'Payment') . ' <b class="caret"></b>',
+					'label' => '<i class="glyphicon glyphicon-check"></i> ' . Yii::t('admin.crud', 'Reports') . ' <b class="caret"></b>',
 					'url' => '#',
 					'itemOptions' => array(
 						'class' => 'dropdown',
@@ -101,6 +92,11 @@
 						'data-toggle' => 'dropdown',
 					),
 					'items' => array(
+						array(
+							'label' => '<i class="glyphicon glyphicon-time"></i> ' . Yii::t('admin.crud', 'Time Entry'),
+							'url' => array('/admin/timeEntry'),
+							'visible' => Yii::app()->user->checkAccess('view_time_entry'),
+						),
 						array(
 							'label' => '<i class="glyphicon glyphicon-usd"></i> ' . Yii::t('admin.crud', 'Payment'),
 							'url' => array('/admin/payment'),

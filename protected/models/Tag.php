@@ -65,6 +65,13 @@ class Tag extends CActiveRecord
 					),
 				),
 			),
+			'active' => array(
+				'with' => array(
+					'project' => array(
+						'condition' => 'tag.project_id = 0 OR project.archived = 0',
+					),
+				),
+			),
 		);
 	}
 	

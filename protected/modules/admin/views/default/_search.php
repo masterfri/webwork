@@ -14,7 +14,7 @@
 			<div class="col-sm-6">
 				<div class="form-group">
 					<?php echo $form->labelEx($model, 'project_id', array('class'=>'control-label')); ?>
-					<?php echo $form->tagField($model, 'project_id', Project::getList()); ?> 
+					<?php echo $form->tagField($model, 'project_id', Project::getUserBundleList()); ?> 
 				</div>
 			</div>
 			<div class="col-sm-6">

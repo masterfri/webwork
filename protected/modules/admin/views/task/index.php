@@ -19,6 +19,15 @@ $this->menu = array(
 		'visible' => Yii::app()->user->checkAccess('create_task', array('project' => $project)),
 	),
 	array(
+		'label' => '<i class="glyphicon glyphicon-arrow-left"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Back to Project'),
+			'class' => 'btn btn-default',
+		),
+		'url' => array('project/view', 'id' => $project->id),
+		'visible' => Yii::app()->user->checkAccess('view_project', array('project' => $project)),
+	),
+	array(
 		'label' => '<i class="glyphicon glyphicon-search"></i>', 
 		'url' => '#',
 		'linkOptions' => array(

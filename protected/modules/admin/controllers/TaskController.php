@@ -10,7 +10,7 @@ class TaskController extends AdminController
 		}
 		$model = $this->createSearchModel('Task');
 		$provider = $model->search(array(
-			'condition' => 'project_id = :project_id',
+			'condition' => 'task.project_id = :project_id',
 			'params' => array(':project_id' => $project->id),
 		));
 		$this->render('index', array(

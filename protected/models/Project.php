@@ -98,6 +98,12 @@ class Project extends CActiveRecord
 					),
 				),
 			),
+			'active' => array(
+				'condition' => 'project.archived = 0',
+			),
+			'archived' => array(
+				'condition' => 'project.archived = 1',
+			),
 		);
 	}
 	
@@ -133,11 +139,29 @@ class Project extends CActiveRecord
 		return CHtml::listData(self::getAll($params), 'id', 'name');
 	}
 	
+	public static function getUserBundleList($active_only=true, $params=array())
+	{
+		return CHtml::listData(self::getUserBundle($active_only, $params), 'id', 'name');
+	}
+	
 	public static function getAll($params=array())
 	{
 		$criteria = new CDbCriteria($params);
+		$criteria->alias = 'project';
 		$criteria->order = 'name';
 		return self::model()->findAll($criteria);
+	}
+	
+	public static function getUserBundle($active_only=true, $params=array())
+	{
+		$criteria = new CDbCriteria($params);
+		if ($active_only) {
+			$criteria->scopes[] = 'active';
+		}
+		if (!Yii::app()->user->checkAccess('view_project', array('project' => '*'))) {
+			$criteria->scopes[] = 'member';
+		}
+		return self::getAll($criteria);
 	}
 	
 	public function getTeamList()
@@ -208,5 +232,17 @@ class Project extends CActiveRecord
 		$criteria->compare('project_id', $this->id);
 		$criteria->order = 'due_date';
 		return Milestone::model()->findAll($criteria);
+	}
+	
+	public function archive()
+	{
+		$this->archived = 1;
+		$this->update(array('archived'));
+	}
+	
+	public function activate()
+	{
+		$this->archived = 0;
+		$this->update(array('archived'));
 	}
 }

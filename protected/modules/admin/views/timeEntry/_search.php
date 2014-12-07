@@ -12,38 +12,41 @@
 		<div class="form-group">
 			<?php echo $form->label($model, 'project_id', array('class'=>'col-sm-3 control-label')); ?>
 			<div class="col-sm-9">
-				<?php echo $form->dropdownList($model, 'project_id', Project::getList(), array(
-					'class' => 'form-control',
-					'prompt' => '',
+				<?php echo $form->tagField($model, 'project_id', null, array(
+					'ajax' => array(
+						'url' => $this->createUrl('project/query'),
+					),
 				)); ?> 
 			</div>
 		</div>
 		<div class="form-group">
 			<?php echo $form->label($model, 'task_id', array('class'=>'col-sm-3 control-label')); ?>
 			<div class="col-sm-9">
-				<?php echo $form->selectField($model, 'task_id', null, array(
+				<?php echo $form->tagField($model, 'task_id', null, array(
 					'ajax' => array(
 						'url' => $this->createUrl('task/query'),
-						'data' => 'js:function(t, p) { return {query: t, page: p, project: $("#TimeEntry_project_id").val()}; }',
+						'data' => 'js:function(t, p) { return {query: t, page: p, project: $("#TimeEntry_project_id").tagval()}; }',
 					),
 				)); ?> 
 			</div>
 		</div>
-		<div class="form-group">
-			<?php echo $form->label($model, 'user_id', array('class'=>'col-sm-3 control-label')); ?>
-			<div class="col-sm-9">
-				<?php echo $form->selectField($model, 'user_id', null, array(
-					'ajax' => array(
-						'url' => $this->createUrl('user/query'),
-						'data' => 'js:function(t, p) { return {query: t, page: p, project: $("#TimeEntry_project_id").val()}; }',
-					),
-				)); ?> 
+		<?php if (Yii::app()->user->checkAccess('view_time_entry', array('entry' => '*'))): ?>
+			<div class="form-group">
+				<?php echo $form->label($model, 'user_id', array('class'=>'col-sm-3 control-label')); ?>
+				<div class="col-sm-9">
+					<?php echo $form->tagField($model, 'user_id', null, array(
+						'ajax' => array(
+							'url' => $this->createUrl('user/query'),
+							'data' => 'js:function(t, p) { return {query: t, page: p, project: $("#TimeEntry_project_id").tagval()}; }',
+						),
+					)); ?> 
+				</div>
 			</div>
-		</div>
+		<?php endif; ?>
 		<div class="form-group">
 			<?php echo $form->label($model, 'activity_id', array('class'=>'col-sm-3 control-label')); ?>
 			<div class="col-sm-9">
-				<?php echo $form->dropdownList($model, 'activity_id', Activity::getList(), array(
+				<?php echo $form->tagField($model, 'activity_id', Activity::getList(), array(
 					'class' => 'form-control',
 					'prompt' => '',
 				)); ?> 

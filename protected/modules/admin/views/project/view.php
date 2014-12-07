@@ -69,6 +69,24 @@ $this->menu = array(
 				'visible' => Yii::app()->user->checkAccess('update_project', array('project' => $model)),
 			),
 			array(
+				'label' => '<i class="glyphicon glyphicon-save"></i> ' . Yii::t('admin.crud', 'Archive Project'), 
+				'url' => '#', 
+				'linkOptions' => array(
+					'submit' => array('archive', 'id' => $model->id),
+					'confirm' => Yii::t('admin.crud', 'Are you sure you want to archive this project?'),
+				),
+				'visible' => $model->archived == 0 && Yii::app()->user->checkAccess('archive_project', array('project' => $model)),
+			),
+			array(
+				'label' => '<i class="glyphicon glyphicon-open"></i> ' . Yii::t('admin.crud', 'Activate Project'), 
+				'url' => '#', 
+				'linkOptions' => array(
+					'submit' => array('activate', 'id' => $model->id),
+					'confirm' => Yii::t('admin.crud', 'Are you sure you want to activate this project?'),
+				),
+				'visible' => $model->archived == 1 && Yii::app()->user->checkAccess('activate_project', array('project' => $model)),
+			),
+			array(
 				'label' => '<i class="glyphicon glyphicon-trash"></i> ' . Yii::t('admin.crud', 'Delete Project'), 
 				'url' => '#', 
 				'linkOptions' => array(

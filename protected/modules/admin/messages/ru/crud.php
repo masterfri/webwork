@@ -135,7 +135,12 @@ return array(
 	'Update Project' => 'Обновить',
 	'View Project' => 'Просмотреть',
 	'Delete Project' => 'Удалить',
+	'Archive Project' => 'В архив',
+	'Archived Projects' => 'Архив',
+	'Activate Project' => 'Вернуть из архива',
 	'Are you sure you want to delete this project?' => 'Вы уверены, что хотите удалить этот проект?',
+	'Are you sure you want to archive this project?' => 'Вы уверены, что хотите отправить этот проект в архив?',
+	'Are you sure you want to activate this project?' => 'Вы уверены, что хотите вернуть этот проект из архива?',
 	'Back to Project' => 'Вернуться к проекту',
 	'New Rate' => 'Создание рейта',
 	'Updating Rate' => 'Редактирование рейта',
@@ -216,5 +221,6 @@ return array(
 	'Make Payment' => 'Оплатить',
 	'System' => 'Система',
 	'Actions marked with * require a comment' => 'Действия, помеченные *, требуют комментария',
+	'Reports' => 'Отчеты',
 );
 

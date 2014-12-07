@@ -342,6 +342,12 @@ return array(
 		'bizRule' => null,
 		'data' => null,
 	),
+	'query_project' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Query project',
+		'bizRule' => null,
+		'data' => null,
+	),
 	'create_project' => array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'Create project',
@@ -360,6 +366,18 @@ return array(
 		'bizRule' => null,
 		'data' => null,
 	),
+	'archive_project' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Archive project',
+		'bizRule' => null,
+		'data' => null,
+	),
+	'activate_project' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Activate project',
+		'bizRule' => null,
+		'data' => null,
+	),
 	'view_shared_project' => array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'View shared project',
@@ -368,6 +386,16 @@ return array(
 		'data' => null,
 		'children' => array(
 			'view_project',
+		),
+	),
+	'query_shared_project' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Query shared project',
+		'bizRule' => 'return (!isset($params["project"])) || 
+							 ($params["project"] !== "*");',
+		'data' => null,
+		'children' => array(
+			'query_project',
 		),
 	),
 	'update_shared_project' => array(
@@ -388,6 +416,26 @@ return array(
 		'data' => null,
 		'children' => array(
 			'delete_project',
+		),
+	),
+	'archive_shared_project' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Archive shared project',
+		'bizRule' => 'return (!isset($params["project"])) || 
+							 ($params["project"]->isUserAssigned($params["userId"], array(Assignment::ROLE_OWNER, Assignment::ROLE_MANAGER)));',
+		'data' => null,
+		'children' => array(
+			'archive_project',
+		),
+	),
+	'activate_shared_project' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Activate shared project',
+		'bizRule' => 'return (!isset($params["project"])) || 
+							 ($params["project"]->isUserAssigned($params["userId"], array(Assignment::ROLE_OWNER, Assignment::ROLE_MANAGER)));',
+		'data' => null,
+		'children' => array(
+			'activate_project',
 		),
 	),
 	/**
@@ -835,7 +883,10 @@ return array(
 		'children' => array(
 			'guest',
 			'view_shared_project',
+			'query_shared_project',
 			'update_shared_project',
+			'archive_shared_project',
+			'activate_shared_project',
 			'view_shared_milestone',
 			'query_shared_milestone',
 			'create_shared_milestone',
@@ -927,9 +978,12 @@ return array(
 		'children' => array(
 			'query_user',
 			'view_project',
+			'query_project',
 			'create_project',
 			'update_project',
 			'delete_project',
+			'archive_project',
+			'activate_project',
 			'view_task',
 			'query_task',
 			'create_task',

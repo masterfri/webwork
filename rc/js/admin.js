@@ -6,6 +6,18 @@ $(function() {
 		placement: 'bottom'
 	});
 	
+	$.fn.tagval = function() {
+		var val = [];
+		$(this).each(function() {
+			if ('' != this.value) {
+				$(this.value.split(',')).each(function() {
+					val.push(this);
+				});
+			}
+		})
+		return val;
+	}
+	
 	$(document.body).on('click', '[data-toggle=search-form]', function() {
 		$('.search-form').toggle();
 		return false;

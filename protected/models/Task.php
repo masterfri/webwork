@@ -250,6 +250,16 @@ class Task extends CActiveRecord
 					),
 				),
 			),
+			'active' => array(
+				'with' => array(
+					'project' => array(
+						'joinType' => 'INNER JOIN',
+						'scopes' => array(
+							'active',
+						),
+					),
+				),
+			),
 			'new' => array(
 				'condition' => 'task.phase IN(:phase_created, :phase_new_iteration)',
 				'params' => array(

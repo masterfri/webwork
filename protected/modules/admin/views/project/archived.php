@@ -1,9 +1,10 @@
 <?php
 
-$this->pageHeading = Yii::t('admin.crud', 'Manage Project');
+$this->pageHeading = Yii::t('admin.crud', 'Archived Projects');
 
 $this->breadcrumbs = array(
-	Yii::t('admin.crud', 'Project'), 
+	Yii::t('admin.crud', 'Project') => Yii::app()->user->checkAccess('view_project') ? array('index') : false, 
+	Yii::t('admin.crud', 'Archived Projects'),
 );
 
 $this->menu = array(
@@ -17,12 +18,12 @@ $this->menu = array(
 		'visible' => Yii::app()->user->checkAccess('create_project'),
 	),
 	array(
-		'label' => '<i class="glyphicon glyphicon-folder-close"></i>', 
+		'label' => '<i class="glyphicon glyphicon-list-alt"></i>', 
 		'linkOptions' => array(
-			'title' => Yii::t('admin.crud', 'Archived Projects'), 
+			'title' => Yii::t('admin.crud', 'Manage Project'), 
 			'class' => 'btn btn-default',
 		), 
-		'url' => array('archived'),
+		'url' => array('index'),
 		'visible' => Yii::app()->user->checkAccess('view_project'),
 	),
 	array(
@@ -72,20 +73,20 @@ $this->menu = array(
 			),
 			array(
 				'class' => 'ButtonColumn',
-				'deleteConfirmation' => Yii::t('admin.crud', 'Are you sure you want to archive this project?'),
+				'deleteConfirmation' => Yii::t('admin.crud', 'Are you sure you want to activate this project?'),
 				'template' => '{view} {update} {delete}',
 				'buttons' => array(
 					'update' => array(
 						'visible' => 'Yii::app()->user->checkAccess("update_project", array("project" => $data))',
 					),
 					'delete' => array(
-						'label' => '<i class="glyphicon glyphicon-save"></i>',
+						'label' => '<i class="glyphicon glyphicon-open"></i>',
 						'options' => array(
-							'class' => 'btn btn-default btn-sm archive',
-							'title' => Yii::t('admin.crud', 'Archive Project'),
+							'class' => 'btn btn-default btn-sm activate',
+							'title' => Yii::t('admin.crud', 'Activate Project'),
 						),
-						'url' => 'Yii::app()->controller->createUrl("archive", array("id" => $data->id))',
-						'visible' => 'Yii::app()->user->checkAccess("archive_project", array("project" => $data))',
+						'url' => 'Yii::app()->controller->createUrl("activate", array("id" => $data->id))',
+						'visible' => 'Yii::app()->user->checkAccess("activate_project", array("project" => $data))',
 					),
 				),
 			),
