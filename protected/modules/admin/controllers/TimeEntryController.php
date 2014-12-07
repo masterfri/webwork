@@ -19,7 +19,7 @@ class TimeEntryController extends AdminController
 	{
 		$model = $this->createSearchModel('TimeEntry');
 		if (empty($model->date_created)) {
-			$model->date_created = date('Y-m-d');
+			$model->date_created = MysqlDateHelper::currentDate();
 		}
 		$provider = $model->search();
 		if (!Yii::app()->user->checkAccess('view_time_entry', array('entry' => '*'))) {

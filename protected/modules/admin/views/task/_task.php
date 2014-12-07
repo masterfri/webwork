@@ -27,7 +27,7 @@
 					</div>
 					<div class="date-scheduled task-detail">
 						<span class="l glyphicon glyphicon-calendar" title="<?php echo Yii::t('task', 'Date Scheduled'); ?>"></span>
-						<?php if (!empty($data->date_sheduled) && '0000-00-00' != $data->date_sheduled): ?>
+						<?php if (!MysqlDateHelper::isEmpty($data->date_sheduled)): ?>
 							<?php echo Yii::app()->format->formatDate($data->date_sheduled); ?>
 						<?php else: ?>
 							<span class="not-set"><?php echo Yii::t('admin.crud', 'Not set'); ?></span>
@@ -41,7 +41,7 @@
 					</div>
 					<div class="due-date task-detail">
 						<span class="l glyphicon glyphicon-fire" title="<?php echo Yii::t('task', 'Due Date'); ?>"></span>
-						<?php if (!empty($data->due_date) && '0000-00-00' != $data->due_date): ?>
+						<?php if (!MysqlDateHelper::isEmpty($data->due_date)): ?>
 							<?php echo Yii::app()->format->formatDate($data->due_date); ?>
 						<?php else: ?>
 							<span class="not-set"><?php echo Yii::t('admin.crud', 'Not set'); ?></span>

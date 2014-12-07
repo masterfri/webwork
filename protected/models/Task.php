@@ -320,7 +320,7 @@ class Task extends CActiveRecord
 			if ($this->getIsNewRecord()) {
 				$this->phase = self::PHASE_CREATED;
 			}
-			if ($this->readyToSchedule()) {
+			if ($this->canBeScheduled()) {
 				$this->phase = self::PHASE_SCHEDULED;
 			}
 			return true;
@@ -459,7 +459,7 @@ class Task extends CActiveRecord
 			$model = new Subscription();
 			$model->task_id = $this->id;
 			$model->user_id = $user_id;
-			$model->last_view_time = '0000-00-00 00:00:00';
+			$model->last_view_time = MysqlDateHelper::EMPTY_DATETIME;
 			$model->save();
 		}
 		return $model;
@@ -486,26 +486,24 @@ class Task extends CActiveRecord
 	{
 		if (array_key_exists($action, self::$phase_graph)) {
 			if ($action == self::ACTION_REOPEN) {
-				$this->date_sheduled = '0000-00-00';
+				$this->date_sheduled = MysqlDateHelper::EMPTY_DATE;
 			} elseif ($action == self::ACTION_START_WORK) {
-				if ($this->date_sheduled == '' || $this->date_sheduled == '0000-00-00') {
-					$this->date_sheduled = date('Y-m-d');
+				if (MysqlDateHelper::isEmpty($this->date_sheduled)) {
+					$this->date_sheduled = MysqlDateHelper::currentDate();
 				}
 				$this->assigned_id = Yii::app()->user->id;
 			}
 			$this->phase = self::$phase_graph[$action];
 		}
-		$this->time_updated = date('Y-m-d H:i:s');
+		$this->time_updated = MysqlDateHelper::currentDatetime();
 		$this->update(array('time_updated', 'phase', 'date_sheduled', 'assigned_id'));
 	}
 	
-	protected function readyToSchedule()
+	protected function canBeScheduled()
 	{
-		return ($this->phase == self::PHASE_CREATED || 
-				$this->phase == self::PHASE_NEW_ITERATION) &&
+		return  $this->phase == self::PHASE_CREATED &&
 				$this->assigned !== null &&
-				$this->date_sheduled != '' &&
-				$this->date_sheduled != '0000-00-00';
+				!MysqlDateHelper::isEmpty($this->date_sheduled);
 	}
 	
 	public function getEstimate()

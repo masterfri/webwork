@@ -65,7 +65,7 @@ class Formatter extends CFormatter
 		if (is_string($time)) {
 			if (ctype_digit($time) || ($time{0}=='-' && ctype_digit(substr($time, 1)))) {
 				return (int) $time;
-			} elseif ('0000-00-00' != $time && '0000-00-00 00:00:00' != $time) {
+			} elseif (!MysqlDateHelper::isEmpty($time)) {
 				return strtotime($time);
 			} else {
 				return 0;

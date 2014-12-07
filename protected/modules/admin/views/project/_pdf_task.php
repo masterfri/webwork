@@ -7,7 +7,7 @@
 		</td>
 		<td style="width: 30%;">
 			<?php echo Yii::t('task', 'Date Scheduled'); ?>:
-			<?php if (!empty($task->date_sheduled) && '0000-00-00' != $task->date_sheduled): ?>
+			<?php if (!MysqlDateHelper::isEmpty($task->date_sheduled)): ?>
 				<?php echo Yii::app()->format->formatDate($task->date_sheduled); ?>
 			<?php else: ?>
 				<span class="not-set"><?php echo Yii::t('admin.crud', 'Not set'); ?></span>
@@ -15,7 +15,7 @@
 		</td>
 		<td style="width: 30%;">
 			<?php echo Yii::t('task', 'Due Date'); ?>:
-			<?php if (!empty($task->due_date) && '0000-00-00' != $task->due_date): ?>
+			<?php if (!MysqlDateHelper::isEmpty($task->due_date)): ?>
 				<?php echo Yii::app()->format->formatDate($task->due_date); ?>
 			<?php else: ?>
 				<span class="not-set"><?php echo Yii::t('admin.crud', 'Not set'); ?></span>

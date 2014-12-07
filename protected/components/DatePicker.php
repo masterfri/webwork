@@ -31,7 +31,7 @@ class DatePicker extends CInputWidget
 			$value = $this->value;
 		}
 		
-		if ('0000-00-00' == $value || '' == $value) {
+		if (MysqlDateHelper::isEmpty($value)) {
 			$value = '';
 			$fvalue = '';
 		} else {

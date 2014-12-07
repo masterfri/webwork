@@ -15,4 +15,5 @@ return array(
 	'Salary for {month}, {year}' => 'Зарплата за {month}, {year}',
 	'Other' => 'Прочее',
 	'Total Hours' => 'Всего часов',
+	'Invoice' => 'Счет',
 );

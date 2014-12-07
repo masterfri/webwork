@@ -46,7 +46,7 @@ class Subscription extends CActiveRecord
 	
 	public function markAsSeen()
 	{
-		$this->last_view_time = date('Y-m-d H:i:s');
+		$this->last_view_time = MysqlDateHelper::currentDatetime();
 		$this->save();
 	}
 }

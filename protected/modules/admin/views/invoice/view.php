@@ -36,6 +36,11 @@ $this->menu = array(
 		),
 		'items' => array(
 			array(
+				'label' => '<i class="glyphicon glyphicon-file"></i> ' . Yii::t('admin.crud', 'Export to PDF'), 
+				'url' => array('pdf', 'id' => $model->id),
+				'visible' => Yii::app()->user->checkAccess('view_invoice', array('invoice' => $model)),
+			),
+			array(
 				'label' => '<i class="glyphicon glyphicon-usd"></i> ' . Yii::t('admin.crud', 'Make Payment'), 
 				'url' => array('payment/create', 'invoice' => $model->id),
 				'visible' => Yii::app()->user->checkAccess('create_payment'),

@@ -47,14 +47,14 @@ class InvoiceCommand extends CConsoleCommand
 	
 	protected function generateInvoiceForUser($m, $y, $user, $builder)
 	{
-		$monthName = Yii::app()->dateFormatter->format('LLLL', mktime(0,0,0, $m, 1, $y));
-		if (in_array($user->role, self::$_employeeRoles)) {
-			if ($user->rate === null) {
-				$this->say(sprintf("Rate is not set for user: %s", $user->getDisplayName()));
-			} else {
+		if ($user->rate === null) {
+			$this->say(sprintf("Rate is not set for user: %s", $user->getDisplayName()));
+		} else {
+			$monthName = Yii::app()->dateFormatter->format('LLLL', mktime(0,0,0, $m, 1, $y));
+			if (in_array($user->role, self::$_employeeRoles)) {
 				$reader = $this->getEmployeeInvoiceItems($builder, $user, $y, $m);
 				if ($reader->getRowCount() > 0) {
-					$this->say(sprintf("Generating salary invoice from user: %s", $user->getDisplayName()));
+					$this->say(sprintf("Generating salary invoice for employee: %s", $user->getDisplayName()));
 					$comments = Yii::t('invoice', 'Salary for {month}, {year}', array(
 						'{month}' => $monthName,
 						'{year}' => $y,
@@ -63,18 +63,19 @@ class InvoiceCommand extends CConsoleCommand
 				}
 				$reader->close();
 			}
+			if (in_array($user->role, self::$_customerRoles)) {
+				$reader = $this->getCustomerInvoiceItems($builder, $user, $y, $m);
+				if ($reader->getRowCount() > 0) {
+					$this->say(sprintf("Generating invoice for client: %s", $user->getDisplayName()));
+					$comments = Yii::t('invoice', 'Monthly invoice for {month}, {year}', array(
+						'{month}' => $monthName,
+						'{year}' => $y,
+					));
+					$this->createInvoice(null, $user->id, $comments, 1, $reader, $user->rate->getCompleteMatrix());
+				}
+				$reader->close();
+			}
 		}
-		$reader = $this->getCustomerInvoiceItems($builder, $user, $y, $m);
-		if ($reader->getRowCount() > 0) {
-			$this->say(sprintf("Generating invoice for user: %s", $user->getDisplayName()));
-			$comments = Yii::t('invoice', 'Monthly invoice for {month}, {year}', array(
-				'{month}' => $monthName,
-				'{year}' => $y,
-			));
-			$matrix = (in_array($user->role, self::$_customerRoles) && $user->rate) ? $user->rate->getCompleteMatrix() : null;
-			$this->createInvoice(null, $user->id, $comments, 1, $reader, $matrix);
-		}
-		$reader->close();
 	}
 	
 	protected function getEmployeeInvoiceItems($builder, $user, $y, $m)

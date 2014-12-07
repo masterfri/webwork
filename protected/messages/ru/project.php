@@ -8,4 +8,5 @@ return array(
 	'Name' => 'Название',
 	'Scope' => 'Описание',
 	'Tasks' => 'Задачи',
+	'Responsible Persons' => 'Ответственные лица',
 );

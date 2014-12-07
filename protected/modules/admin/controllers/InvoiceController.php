@@ -57,6 +57,17 @@ class InvoiceController extends AdminController
 			'model' => $model,
 		));
 	}
+	
+	public function actionPdf($id)
+	{
+		$model = $this->loadModel($id, 'Invoice');
+		if (!Yii::app()->user->checkAccess('view_invoice', array('invoice' => $model))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
+		$this->renderPartial('pdf', array(
+			'model' => $model,
+		));
+	}
 
 	public function filters()
 	{
@@ -74,7 +85,7 @@ class InvoiceController extends AdminController
 				'roles' => array('create_invoice'),
 			),
 			array('allow',
-				'actions' => array('view', 'index'),
+				'actions' => array('view', 'index', 'pdf'),
 				'roles' => array('view_invoice'),
 			),
 			array('allow',
