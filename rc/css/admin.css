@@ -563,3 +563,13 @@ ol.unstyled {
 .panel.no-body .panel-heading {
 	border-bottom: none;
 }
+.md-editor .btn-toolbar .btn {
+	height: 30px;
+}
+.md-editor > textarea.form-control,
+.md-editor .md-preview {
+	padding: 5px;
+	background: #fff;
+	border-bottom: 0;
+	border-top: 1px solid #eee;
+}

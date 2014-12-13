@@ -90,6 +90,18 @@ class ActiveForm extends CActiveForm
 		}
 	}
 	
+	public function markdownField($model, $attribute, $htmlOptions=array())
+	{
+		$cs = Yii::app()->clientScript;
+		$cs->registerScriptFile('/rc/markdown/markdown.js');
+		$cs->registerScriptFile('/rc/toopay-bootstrap-markdown/js/bootstrap-markdown.js');
+		$cs->registerCssFile('/rc/toopay-bootstrap-markdown/css/bootstrap-markdown.min.css');
+		CHtml::resolveNameID($model, $attribute, $htmlOptions);
+		$id = $htmlOptions['id'];
+		$cs->registerScript("markdownfield{$id}", "$('#{$id}').markdown({resize: 'vertical'});");
+		return $this->textArea($model, $attribute, $htmlOptions);
+	}
+	
 	public function colorField($model, $attribute, $htmlOptions=array())
 	{
 		return $this->controller->widget('ColorPicker', array(

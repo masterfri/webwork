@@ -30,7 +30,7 @@
 	<div class="form-group">
 		<?php echo $form->labelEx($model, 'scope', array('class'=>'col-sm-3 control-label')); ?>
 		<div class="col-sm-9">
-			<?php echo $form->textArea($model, 'scope', array(
+			<?php echo $form->markdownField($model, 'scope', array(
 				'class' => 'form-control',
 			)); ?> 
 			<?php echo $form->error($model, 'scope', array('class'=>'help-inline')); ?>
