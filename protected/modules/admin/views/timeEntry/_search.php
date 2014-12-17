@@ -20,6 +20,17 @@
 			</div>
 		</div>
 		<div class="form-group">
+			<?php echo $form->label($model, 'milestone_id', array('class'=>'col-sm-3 control-label')); ?>
+			<div class="col-sm-9">
+				<?php echo $form->tagField($model, 'milestone_id', null, array(
+					'ajax' => array(
+						'url' => $this->createUrl('milestone/query'),
+						'data' => 'js:function(t, p) { return {query: t, page: p, project: $("#TimeEntry_project_id").tagval()}; }',
+					),
+				)); ?> 
+			</div>
+		</div>
+		<div class="form-group">
 			<?php echo $form->label($model, 'task_id', array('class'=>'col-sm-3 control-label')); ?>
 			<div class="col-sm-9">
 				<?php echo $form->tagField($model, 'task_id', null, array(

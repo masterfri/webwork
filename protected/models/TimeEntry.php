@@ -2,6 +2,8 @@
 
 class TimeEntry extends CActiveRecord  
 {
+	public $milestone_id;
+	
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
@@ -22,6 +24,7 @@ class TimeEntry extends CActiveRecord
 			'created_by' => Yii::t('timeEntry', 'Created by'),
 			'date_created' => Yii::t('timeEntry', 'Date Created'),
 			'description' => Yii::t('timeEntry', 'Description'),
+			'milestone_id' => Yii::t('task', 'Milestone'),
 			'project_id' => Yii::t('timeEntry', 'Project'),
 			'project' => Yii::t('timeEntry', 'Project'),
 			'task_id' => Yii::t('timeEntry', 'Task'),
@@ -46,6 +49,7 @@ class TimeEntry extends CActiveRecord
 					'safe', 'on' => 'create'),
 			array('	activity_id,
 					date_created,
+					milestone_id,
 					project_id,
 					task_id,
 					user_id', 
@@ -102,6 +106,7 @@ class TimeEntry extends CActiveRecord
 		$criteria = new CDbCriteria($params);
 		$criteria->alias = 'time_entry';
 		$criteria->compare('time_entry.activity_id', $this->activity_id);
+		$criteria->compare('task.milestone_id', $this->milestone_id);
 		$criteria->compare('time_entry.project_id', $this->project_id);
 		$criteria->compare('time_entry.task_id', $this->task_id);
 		$criteria->compare('time_entry.user_id', $this->user_id);
