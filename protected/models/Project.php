@@ -245,4 +245,14 @@ class Project extends CActiveRecord
 		$this->archived = 0;
 		$this->update(array('archived'));
 	}
+	
+	public function getOwner()
+	{
+		foreach ($this->assignments as $assignment) {
+			if ($assignment->role == Assignment::ROLE_OWNER) {
+				return $assignment->user;
+			}
+		}
+		return null;
+	}
 }

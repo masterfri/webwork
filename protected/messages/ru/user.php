@@ -18,4 +18,5 @@ return array(
 	'Real Name' => 'Имя',
 	'Status' => 'Статус',
 	'Confirm Password' => 'Подтверждение пароля',
+	'Locale' => 'Локаль',
 );

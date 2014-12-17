@@ -86,11 +86,17 @@
 	<div class="form-group">
 		<?php echo $form->labelEx($model, 'status', array('class'=>'col-sm-3 control-label')); ?>
 		<div class="col-sm-9">
-			<?php echo $form->dropdownList($model, 'status', array(
-				User::STATUS_ENABLED => Yii::t('user', 'Active'),
-				User::STATUS_DISABLED => Yii::t('user', 'Inactive'),
-				User::STATUS_LOCKED => Yii::t('user', 'Locked'),
-			), array(
+			<?php echo $form->dropdownList($model, 'status', User::getListStatuses(), array(
+				'class'=>'form-control',
+				'prompt' => Yii::t('admin.crud', 'Select Value'),
+			)); ?>
+			<?php echo $form->error($model, 'status', array('class'=>'help-inline')); ?>
+		</div>
+	</div>
+	<div class="form-group">
+		<?php echo $form->labelEx($model, 'locale', array('class'=>'col-sm-3 control-label')); ?>
+		<div class="col-sm-9">
+			<?php echo $form->dropdownList($model, 'locale', User::getListLocales(), array(
 				'class'=>'form-control',
 				'prompt' => Yii::t('admin.crud', 'Select Value'),
 			)); ?>

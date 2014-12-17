@@ -68,6 +68,7 @@ $this->menu = array(
 			'roleName',
 			'rate',
 			'statusName',
+			'localeName',
 		),
 	)); ?>
 </div>

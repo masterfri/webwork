@@ -131,6 +131,9 @@ class ProjectController extends AdminController
 		if (!Yii::app()->user->checkAccess('view_project', array('project' => $model))) {
 			throw new CHttpException(403, 'Forbidden');
 		}
+		if (null !== ($owner = $model->getOwner())) {
+			Yii::app()->language = $owner->locale;
+		}
 		$this->renderPartial('pdf', array(
 			'model' => $model,
 		));

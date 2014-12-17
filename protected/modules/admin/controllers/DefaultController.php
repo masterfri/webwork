@@ -190,6 +190,8 @@ class DefaultController extends AdminController
 		if(isset($_POST['UserLoginForm'])) {
 			$model->attributes = $_POST['UserLoginForm'];
 			if($model->validate() && $model->login()) {
+				$user = Yii::app()->user;
+				$user->setLocale($user->getModel()->locale);
 				$this->redirect(Yii::app()->createUrl('/admin'));
 			}
 		}

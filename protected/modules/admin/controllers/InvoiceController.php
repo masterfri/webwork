@@ -64,6 +64,9 @@ class InvoiceController extends AdminController
 		if (!Yii::app()->user->checkAccess('view_invoice', array('invoice' => $model))) {
 			throw new CHttpException(403, 'Forbidden');
 		}
+		if (null !== $model->to) {
+			Yii::app()->language = $model->to->locale;
+		}
 		$this->renderPartial('pdf', array(
 			'model' => $model,
 		));

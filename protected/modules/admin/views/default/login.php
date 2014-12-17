@@ -3,7 +3,7 @@
 	<div style="padding-top: 20px;"></div>
 	<div class="col-lg-4 col-lg-offset-4">
 		<div class="panel panel-default">
-			<div class="panel-heading">Авторизация на сайте <?php echo CHtml::encode(Yii::app()->name); ?></div>
+			<div class="panel-heading"><?php echo CHtml::encode(Yii::app()->name); ?></div>
 			<div class="panel-body">
 				<?php $form=$this->beginWidget('CActiveForm', array(
 					'id' => 'login-form',
@@ -30,7 +30,7 @@
 					<div class="form-group">
 						<button type="submit" class="btn btn-success">
 							<i class="icon-lock icon-white"></i>
-							Войти
+							<?php echo Yii::t('admin.crud', 'Login')?>
 						</button>
 					</div>
 				<?php $this->endWidget(); ?>

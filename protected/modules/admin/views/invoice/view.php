@@ -134,7 +134,7 @@ $this->menu = array(
 				<?php endforeach; ?>
 				<tr class="row-total">
 					<td>&nbsp;</td>
-					<td><?php echo Yii::t('admin.crud', 'Total') ?></td>
+					<td><?php echo Yii::t('admin.crud', 'Subtotal') ?></td>
 					<td><?php echo $format->formatHours($group['total_hours']); ?></td>
 					<td><?php echo $format->formatMoney($group['total_amount']); ?></td>
 				</tr>

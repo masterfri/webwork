@@ -51,7 +51,7 @@
 			<?php endforeach; ?>
 			<tr class="total1">
 				<td>&nbsp;</td>
-				<td><?php echo Yii::t('admin.crud', 'Total') ?></td>
+				<td><?php echo Yii::t('admin.crud', 'Subtotal') ?></td>
 				<td align="right"><?php echo $format->formatHours($group['total_hours']); ?></td>
 				<td align="right"><?php echo $format->formatMoney($group['total_amount']); ?></td>
 			</tr>

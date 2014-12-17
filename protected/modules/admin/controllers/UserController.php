@@ -58,6 +58,10 @@ class UserController extends AdminController
 	{
 		$model = $this->loadModel($id, 'User');
 		if ($this->saveModel($model)) {
+			$user = Yii::app()->user;
+			if ($model->id == $user->id) {
+				$user->setLocale($model->locale);
+			}
 			$this->redirect(array('view', 'id' => $model->id));
 		}
 		$this->render('update', array(

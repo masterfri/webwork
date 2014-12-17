@@ -70,7 +70,7 @@ class InvoiceCommand extends CConsoleCommand
 					$comments = Yii::t('invoice', 'Monthly invoice for {month}, {year}', array(
 						'{month}' => $monthName,
 						'{year}' => $y,
-					));
+					), null, $user->locale);
 					$this->createInvoice(null, $user->id, $comments, 1, $reader, $user->rate->getCompleteMatrix());
 				}
 				$reader->close();

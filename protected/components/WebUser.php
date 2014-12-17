@@ -8,6 +8,7 @@ class WebUser extends CWebUser
 {
 	public $guestRole = 'guest';
 	protected $_model;
+	protected $_locale;
 	
 	public function getRole()
 	{
@@ -18,6 +19,30 @@ class WebUser extends CWebUser
 			}
 		}
 		return $this->guestRole;
+	}
+	
+	public function getLocale()
+	{
+		if (null === $this->_locale) {
+			$locale = (string) Yii::app()->request->cookies['locale'];
+			if ('' === $locale) {
+				$locale = 'en';
+				$model = $this->getModel();
+				if ($model) {
+					$locale = $model->locale;
+				}
+			}
+			$this->setLocale($locale);
+		}
+		return $this->_locale;
+	}
+	
+	public function setLocale($locale)
+	{
+		$this->_locale = $locale;
+		$cookie = new CHttpCookie('locale', $locale);
+		$cookie->expire = time() + 31104000;
+		Yii::app()->request->cookies['locale'] = $cookie;
 	}
 	
 	public function isAdmin()

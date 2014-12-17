@@ -9,6 +9,9 @@ class User extends CActiveRecord
 	public $password_plain;
 	public $password_confirm;
 	
+	protected static $locales;
+	protected static $statuses;
+	
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
@@ -33,6 +36,8 @@ class User extends CActiveRecord
 			'statusName' => Yii::t('user', 'Status'),
 			'password_plain' => Yii::t('user', 'Password'),
 			'password_confirm' => Yii::t('user', 'Confirm Password'),
+			'locale' => Yii::t('user', 'Locale'),
+			'localeName' => Yii::t('user', 'Locale'),
 		);
 	}
 	
@@ -44,7 +49,8 @@ class User extends CActiveRecord
 			array('	email,
 					role,
 					username,
-					status', 
+					status,
+					locale', 
 					'required', 'on' => 'create, update'),
 			array(' email,
 					username,
@@ -161,31 +167,47 @@ class User extends CActiveRecord
 		return $this->generateRandomString(15);
 	}
 	
-	public function getStatusName()
-	{
-		switch ($this->status) {
-			case self::STATUS_LOCKED:
-				return Yii::t('user', 'Locked');
-				
-			case self::STATUS_ENABLED:
-				return Yii::t('user', 'Active');
-				
-			case self::STATUS_DISABLED:
-				return Yii::t('user', 'Inactive');
-				
-			default:
-				return Yii::t('user', 'Undefined');
-		}
-	}
-	
 	public static function listRoles()
 	{
 		return Yii::app()->authManager->listRoles();
 	}
 	
+	public static function getListLocales()
+	{
+		if (null === self::$locales) {
+			self::$locales = array(
+				'en' => 'English',
+				'ru' => 'Русский',
+			);
+		}
+		return self::$locales;
+	}
+	
+	public static function getListStatuses()
+	{
+		if (null === self::$statuses) {
+			self::$statuses = array(
+				self::STATUS_ENABLED => Yii::t('user', 'Active'),
+				self::STATUS_DISABLED => Yii::t('user', 'Inactive'),
+				self::STATUS_LOCKED => Yii::t('user', 'Locked'),
+			);
+		}
+		return self::$statuses;
+	}
+	
 	public function getRoleName()
 	{
 		return Yii::app()->authManager->getRoleDescription($this->role);
+	}
+	
+	public function getLocaleName()
+	{
+		return array_key_exists($this->locale, self::getListLocales()) ? self::$locales[$this->locale] : '';
+	}
+	
+	public function getStatusName()
+	{
+		return array_key_exists($this->status, self::getListStatuses()) ? self::$statuses[$this->status] : '';
 	}
 	
 	public function __toString()

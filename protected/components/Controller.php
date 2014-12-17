@@ -117,4 +117,13 @@ class Controller extends CController
 		)));
 		Yii::app()->end();
 	}
+	
+	protected function beforeAction($action)
+	{
+		if (parent::beforeAction($action)) {
+			Yii::app()->language = Yii::app()->user->getLocale();
+			return true;
+		}
+		return false;
+	}
 }
