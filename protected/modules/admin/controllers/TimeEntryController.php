@@ -33,7 +33,7 @@ class TimeEntryController extends AdminController
 		));
 	}
 	
-	public function actionMonthly()
+	public function actionMonthly($export='')
 	{
 		$model = $this->createSearchModel('TimeEntry');
 		if (empty($model->date_created)) {
@@ -43,12 +43,19 @@ class TimeEntryController extends AdminController
 		if (!Yii::app()->user->checkAccess('view_time_entry', array('entry' => '*'))) {
 			$provider->criteria->scopes[] = 'my';
 		}
-		$sum = $model->getSum($provider->criteria);
-		$this->render('monthly', array(
-			'model' => $model,
-			'provider' => $provider,
-			'sum' => $sum,
-		));
+		if ('csv' == $export) {
+			$this->render('monthlyCsv', array(
+				'model' => $model,
+				'provider' => $provider,
+			));
+		} else {
+			$sum = $model->getSum($provider->criteria);
+			$this->render('monthly', array(
+				'model' => $model,
+				'provider' => $provider,
+				'sum' => $sum,
+			));
+		}
 	}
 	
 	public function actionCreate()

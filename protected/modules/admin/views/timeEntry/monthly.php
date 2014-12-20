@@ -35,6 +35,16 @@ $this->menu = array(
 			'data-toggle' => 'search-form',
 		),
 	),
+	array(
+		'label' => '<i class="glyphicon glyphicon-export"></i>', 
+		'url' => array('monthly', 'export' => 'csv'),
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Export to CSV'), 
+			'class' => 'btn btn-default',
+			'onclick' => "location.href = $.param.querystring(this.href, $('form[role=search-form]').serialize()); return false;",
+		),
+		'visible' => Yii::app()->user->checkAccess('view_time_entry'),
+	),
 );
 
 ?>

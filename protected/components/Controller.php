@@ -126,4 +126,13 @@ class Controller extends CController
 		}
 		return false;
 	}
+	
+	public function enableWebLog($flag=true)
+	{
+		foreach (Yii::app()->log->routes as $route) {
+			if ($route instanceof CWebLogRoute) {
+				$route->enabled = $flag;
+			}
+		}
+	}
 }
