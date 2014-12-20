@@ -35,6 +35,7 @@ return array(
 	'Not available' => 'Недоступно',
 	'Specification' => 'Спецификация',
 	'Export to PDF' => 'Экспорт в PDF',
+	'Export to CSV' => 'Экспорт в CSV',
 	'Page [[page_cu]] of [[page_nb]]' => 'Страница [[page_cu]] из [[page_nb]]',
 	'Total estimate' => 'Общая оценка времени',
 	'Work start date' => 'Дата начала работ',
