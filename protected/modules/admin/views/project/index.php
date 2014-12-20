@@ -1,9 +1,9 @@
 <?php
 
-$this->pageHeading = Yii::t('admin.crud', 'Manage Project');
+$this->pageHeading = Yii::t('admin.crud', 'Manage Projects');
 
 $this->breadcrumbs = array(
-	Yii::t('admin.crud', 'Project'), 
+	Yii::t('admin.crud', 'Projects'), 
 );
 
 $this->menu = array(

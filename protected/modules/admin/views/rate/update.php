@@ -1,9 +1,9 @@
 <?php
 
-$this->pageHeading = Yii::t('admin.crud', 'Updating Rate');
+$this->pageHeading = Yii::t('admin.crud', 'Rate Updating');
 
 $this->breadcrumbs = array(
-	Yii::t('admin.crud', 'Rate') => Yii::app()->user->checkAccess('view_rate') ? array('index') : false, 
+	Yii::t('admin.crud', 'Rates') => Yii::app()->user->checkAccess('view_rate') ? array('index') : false, 
 	Yii::t('admin.crud', 'Update'),
 );
 
@@ -29,7 +29,7 @@ $this->menu = array(
 	array(
 		'label' => '<i class="glyphicon glyphicon-list-alt"></i>', 
 		'linkOptions' => array(
-			'title' => Yii::t('admin.crud', 'Manage Rate'), 
+			'title' => Yii::t('admin.crud', 'Manage Rates'), 
 			'class' => 'btn btn-default',
 		),
 		'url'=>array('index'),

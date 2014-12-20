@@ -3,7 +3,7 @@
 $this->pageHeading = Yii::t('admin.crud', 'Project Information');
 
 $this->breadcrumbs = array(
-	Yii::t('admin.crud', 'Project') => Yii::app()->user->checkAccess('view_project') ? array('index') : false, 
+	Yii::t('admin.crud', 'Projects') => Yii::app()->user->checkAccess('view_project') ? array('index') : false, 
 );
 
 $this->menu = array(
@@ -19,7 +19,7 @@ $this->menu = array(
 	array(
 		'label' => '<i class="glyphicon glyphicon-calendar"></i>', 
 		'linkOptions' => array(
-			'title' => Yii::t('admin.crud', 'Milestone'), 
+			'title' => Yii::t('admin.crud', 'Milestones'), 
 			'class' => 'btn btn-default',
 		), 
 		'url' => array('milestone/index', 'project' => $model->id),
@@ -28,7 +28,7 @@ $this->menu = array(
 	array(
 		'label' => '<i class="glyphicon glyphicon-tasks"></i>', 
 		'linkOptions' => array(
-			'title' => Yii::t('admin.crud', 'Task'), 
+			'title' => Yii::t('admin.crud', 'Tasks'), 
 			'class' => 'btn btn-default',
 		), 
 		'url' => array('task/index', 'project' => $model->id),
@@ -37,7 +37,7 @@ $this->menu = array(
 	array(
 		'label' => '<i class="glyphicon glyphicon-list-alt"></i>', 
 		'linkOptions' => array(
-			'title' => Yii::t('admin.crud', 'Manage Project'), 
+			'title' => Yii::t('admin.crud', 'Manage Projects'), 
 			'class' => 'btn btn-default',
 		), 
 		'url' => array('index'),
@@ -59,7 +59,7 @@ $this->menu = array(
 				'visible' => Yii::app()->user->checkAccess('view_project', array('project' => $model)),
 			),
 			array(
-				'label' => '<i class="glyphicon glyphicon-user"></i> ' . Yii::t('admin.crud', 'Assignment'), 
+				'label' => '<i class="glyphicon glyphicon-user"></i> ' . Yii::t('admin.crud', 'Team'), 
 				'url' => array('assignment/index', 'project' => $model->id),
 				'visible' => Yii::app()->user->checkAccess('view_assignment', array('project' => $model)),
 			),

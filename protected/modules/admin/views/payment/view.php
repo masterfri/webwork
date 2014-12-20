@@ -3,14 +3,23 @@
 $this->pageHeading = Yii::t('admin.crud', 'Payment Information');
 
 $this->breadcrumbs = array(
-	Yii::t('admin.crud', 'Payment') => Yii::app()->user->checkAccess('view_payment') ? array('index') : false, 
+	Yii::t('admin.crud', 'Payments') => Yii::app()->user->checkAccess('view_payment') ? array('index') : false, 
 );
 
 $this->menu = array(
 	array(
+		'label' => '<i class="glyphicon glyphicon-arrow-left"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('admin.crud', 'Back to Invoice'), 
+			'class' => 'btn btn-default',
+		), 
+		'url' => array('invoice/view', 'id' => $model->invoice->id),
+		'visible' => Yii::app()->user->checkAccess('view_invoice', array('invoice' => $model->invoice)),
+	),
+	array(
 		'label' => '<i class="glyphicon glyphicon-list-alt"></i>', 
 		'linkOptions' => array(
-			'title' => Yii::t('admin.crud', 'Manage Payment'), 
+			'title' => Yii::t('admin.crud', 'Manage Payments'), 
 			'class' => 'btn btn-default',
 		),
 		'url' => array('index'),

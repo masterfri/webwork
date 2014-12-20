@@ -1,12 +1,21 @@
 <?php
 
-$this->pageHeading = Yii::t('admin.crud', 'Manage Task');
+$this->pageHeading = Yii::t('admin.crud', 'Manage Tasks');
 
-$this->breadcrumbs = array(
-	Yii::t('admin.crud', 'Project') => Yii::app()->user->checkAccess('view_project') ? array('project/index') : false, 
-	CHtml::encode($project->name) => Yii::app()->user->checkAccess('view_project', array('project' => $project)) ? array('project/view', 'id' => $project->id) : false, 
-	Yii::t('admin.crud', 'Task'), 
-);
+if (null !== $milestone) {
+	$this->breadcrumbs = array(
+		Yii::t('admin.crud', 'Projects') => Yii::app()->user->checkAccess('view_project') ? array('project/index') : false, 
+		CHtml::encode($project->name) => Yii::app()->user->checkAccess('view_project', array('project' => $project)) ? array('project/view', 'id' => $project->id) : false, 
+		CHtml::encode($milestone->name) => Yii::app()->user->checkAccess('view_milestone', array('milestone' => $milestone)) ? array('milestone/view', 'id' => $milestone->id) : false, 
+		Yii::t('admin.crud', 'Tasks'), 
+	);
+} else {
+	$this->breadcrumbs = array(
+		Yii::t('admin.crud', 'Projects') => Yii::app()->user->checkAccess('view_project') ? array('project/index') : false, 
+		CHtml::encode($project->name) => Yii::app()->user->checkAccess('view_project', array('project' => $project)) ? array('project/view', 'id' => $project->id) : false, 
+		Yii::t('admin.crud', 'Tasks'), 
+	);
+}
 
 $this->menu = array(
 	array(

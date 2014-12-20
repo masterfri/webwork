@@ -1,9 +1,9 @@
 <?php
 
-$this->pageHeading = Yii::t('admin.crud', 'Updating Time Entry');
+$this->pageHeading = Yii::t('admin.crud', 'Time Entry Updating');
 
 $this->breadcrumbs = array(
-	Yii::t('admin.crud', 'Time Entry') => Yii::app()->user->checkAccess('view_time_entry') ? array('index') : false, 
+	Yii::t('admin.crud', 'Time Entries') => Yii::app()->user->checkAccess('view_time_entry') ? array('index') : false, 
 	Yii::t('admin.crud', 'Update'),
 );
 
@@ -29,7 +29,7 @@ $this->menu = array(
 	array(
 		'label' => '<i class="glyphicon glyphicon-list-alt"></i>', 
 		'linkOptions' => array(
-			'title' => Yii::t('admin.crud', 'Manage Time Entry'), 
+			'title' => Yii::t('admin.crud', 'Manage Time Entries'), 
 			'class' => 'btn btn-default',
 		), 
 		'url'=>array('index'),

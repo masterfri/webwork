@@ -3,7 +3,7 @@
 $this->pageHeading = Yii::t('admin.crud', 'Activity Information');
 
 $this->breadcrumbs = array(
-	Yii::t('admin.crud', 'Activity') => Yii::app()->user->checkAccess('view_activity') ? array('index') : false, 
+	Yii::t('admin.crud', 'Activities') => Yii::app()->user->checkAccess('view_activity') ? array('index') : false, 
 );
 
 $this->menu = array(
@@ -19,7 +19,7 @@ $this->menu = array(
 	array(
 		'label' => '<i class="glyphicon glyphicon-list-alt"></i>', 
 		'linkOptions' => array(
-			'title' => Yii::t('admin.crud', 'Manage Activity'), 
+			'title' => Yii::t('admin.crud', 'Manage Activities'), 
 			'class' => 'btn btn-default',
 		),
 		'url' => array('index'),

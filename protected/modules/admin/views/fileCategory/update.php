@@ -1,6 +1,6 @@
 <?php
 
-$this->pageHeading = Yii::t('admin.crud', 'Updating File Category');
+$this->pageHeading = Yii::t('admin.crud', 'File Category Updating');
 
 $this->breadcrumbs = array(
 	Yii::t('admin.crud', 'File Categories') => Yii::app()->user->checkAccess('view_file_category') ? array('index') : false, 

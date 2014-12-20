@@ -1,9 +1,9 @@
 <?php
 
-$this->pageHeading = Yii::t('admin.crud', 'Manage Time Entry');
+$this->pageHeading = Yii::t('admin.crud', 'Manage Time Entries');
 
 $this->breadcrumbs = array(
-	Yii::t('admin.crud', 'Time Entry'), 
+	Yii::t('admin.crud', 'Time Entries'), 
 );
 
 $this->menu = array(

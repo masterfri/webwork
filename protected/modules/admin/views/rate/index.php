@@ -1,9 +1,9 @@
 <?php
 
-$this->pageHeading = Yii::t('admin.crud', 'Manage Rate');
+$this->pageHeading = Yii::t('admin.crud', 'Manage Rates');
 
 $this->breadcrumbs = array(
-	Yii::t('admin.crud', 'Rate'), 
+	Yii::t('admin.crud', 'Rates'), 
 );
 
 $this->menu = array(

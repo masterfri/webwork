@@ -1,11 +1,11 @@
 <?php
 
-$this->pageHeading = Yii::t('admin.crud', 'New Assignment');
+$this->pageHeading = Yii::t('admin.crud', 'New Member');
 
 $this->breadcrumbs = array(
-	Yii::t('admin.crud', 'Project') => Yii::app()->user->checkAccess('view_project') ? array('project/index') : false, 
+	Yii::t('admin.crud', 'Projects') => Yii::app()->user->checkAccess('view_project') ? array('project/index') : false, 
 	CHtml::encode($project->name) => Yii::app()->user->checkAccess('view_project', array('project' => $project)) ? array('project/view', 'id' => $project->id) : false, 
-	Yii::t('admin.crud', 'Assignment') => Yii::app()->user->checkAccess('view_assignment', array('project' => $project)) ? array('index', 'project' => $project->id) : false, 
+	Yii::t('admin.crud', 'Team') => Yii::app()->user->checkAccess('view_assignment', array('project' => $project)) ? array('index', 'project' => $project->id) : false, 
 	Yii::t('admin.crud', 'Create'),
 );
 
@@ -13,7 +13,7 @@ $this->menu = array(
 	array(
 		'label' => '<i class="glyphicon glyphicon-list-alt"></i> ', 
 		'linkOptions' => array(
-			'title' => Yii::t('admin.crud', 'Manage Assignment'), 
+			'title' => Yii::t('admin.crud', 'Manage Team'), 
 			'class' => 'btn btn-default',
 		),
 		'url' => array('index', 'project' => $project->id),

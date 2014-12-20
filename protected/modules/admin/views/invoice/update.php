@@ -1,9 +1,9 @@
 <?php
 
-$this->pageHeading = Yii::t('admin.crud', 'Updating Invoice');
+$this->pageHeading = Yii::t('admin.crud', 'Invoice Updating');
 
 $this->breadcrumbs = array(
-	Yii::t('admin.crud', 'Invoice') => Yii::app()->user->checkAccess('view_invoice') ? array('index') : false, 
+	Yii::t('admin.crud', 'Invoices') => Yii::app()->user->checkAccess('view_invoice') ? array('index') : false, 
 	Yii::t('admin.crud', 'Update'),
 );
 
@@ -29,7 +29,7 @@ $this->menu = array(
 	array(
 		'label' => '<i class="glyphicon glyphicon-list-alt"></i>', 
 		'linkOptions' => array(
-			'title' => Yii::t('admin.crud', 'Manage Invoice'),
+			'title' => Yii::t('admin.crud', 'Manage Invoices'),
 			'class' => 'btn btn-default',
 		),
 		'url'=>array('index'),

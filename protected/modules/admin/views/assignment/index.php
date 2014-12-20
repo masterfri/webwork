@@ -1,18 +1,18 @@
 <?php
 
-$this->pageHeading = Yii::t('admin.crud', 'Manage Assignment');
+$this->pageHeading = Yii::t('admin.crud', 'Team');
 
 $this->breadcrumbs = array(
-	Yii::t('admin.crud', 'Project') => Yii::app()->user->checkAccess('view_project') ? array('project/index') : false, 
+	Yii::t('admin.crud', 'Projects') => Yii::app()->user->checkAccess('view_project') ? array('project/index') : false, 
 	CHtml::encode($project->name) => Yii::app()->user->checkAccess('view_project', array('project' => $project)) ? array('project/view', 'id' => $project->id) : false, 
-	Yii::t('admin.crud', 'Assignment'), 
+	Yii::t('admin.crud', 'Team'), 
 );
 
 $this->menu = array(
 	array(
 		'label' => '<i class="glyphicon glyphicon-plus"></i>', 
 		'linkOptions' => array(
-			'title' => Yii::t('admin.crud', 'Create Assignment'), 
+			'title' => Yii::t('admin.crud', 'Add a Member'), 
 			'class' => 'btn btn-default',
 			'data-raise' => 'ajax-modal',
 		),
@@ -45,7 +45,7 @@ $this->menu = array(
 			array('name' => 'role', 'value' => '$data->getRoleName()'),
 			array(
 				'class' => 'ButtonColumn',
-				'deleteConfirmation' => Yii::t('admin.crud', 'Are you sure you want to delete this assignment?'),
+				'deleteConfirmation' => Yii::t('admin.crud', 'Are you sure you want to delete this member?'),
 				'template' => '{update} {delete}',
 				'buttons' => array(
 					'update' => array(

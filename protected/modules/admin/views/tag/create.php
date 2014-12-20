@@ -3,7 +3,7 @@
 $this->pageHeading = Yii::t('admin.crud', 'New Tag');
 
 $this->breadcrumbs = array(
-	Yii::t('admin.crud', 'Tag') => Yii::app()->user->checkAccess('view_tag') ? array('index') : false, 
+	Yii::t('admin.crud', 'Tags') => Yii::app()->user->checkAccess('view_tag') ? array('index') : false, 
 	Yii::t('admin.crud', 'Create'),
 );
 
@@ -11,7 +11,7 @@ $this->menu = array(
 	array(
 		'label' => '<i class="glyphicon glyphicon-list-alt"></i>', 
 		'linkOptions' => array(
-			'title' => Yii::t('admin.crud', 'Manage Tag'), 
+			'title' => Yii::t('admin.crud', 'Manage Tags'), 
 			'class' => 'btn btn-default',
 		), 
 		'url' => array('index'),

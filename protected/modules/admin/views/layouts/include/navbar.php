@@ -35,19 +35,19 @@
 							'visible' => Yii::app()->user->checkAccess('view_user'),
 						),
 						array(
-							'label' => '<i class="glyphicon glyphicon-star"></i> ' . Yii::t('admin.crud', 'Rate'),
+							'label' => '<i class="glyphicon glyphicon-star"></i> ' . Yii::t('admin.crud', 'Rates'),
 							'url' => array('/admin/rate'),
 							'visible' => Yii::app()->user->checkAccess('view_rate'),
 						),
 						array(
-							'label' => '<i class="glyphicon glyphicon-flash"></i> ' . Yii::t('admin.crud', 'Activity'),
+							'label' => '<i class="glyphicon glyphicon-flash"></i> ' . Yii::t('admin.crud', 'Activities'),
 							'url' => array('/admin/activity'),
 							'visible' => Yii::app()->user->checkAccess('view_activity'),
 						),
 					),
 				),
 				array(
-					'label' => '<i class="glyphicon glyphicon-briefcase"></i> ' . Yii::t('admin.crud', 'Project') . ' <b class="caret"></b>',
+					'label' => '<i class="glyphicon glyphicon-briefcase"></i> ' . Yii::t('admin.crud', 'Projects') . ' <b class="caret"></b>',
 					'url' => '#',
 					'itemOptions' => array(
 						'class' => 'dropdown',
@@ -63,7 +63,7 @@
 							);
 						}, Project::getUserBundle()), array(
 							array(
-								'label' => '<i class="glyphicon glyphicon-briefcase"></i> ' . Yii::t('admin.crud', 'Manage Project'),
+								'label' => '<i class="glyphicon glyphicon-briefcase"></i> ' . Yii::t('admin.crud', 'Manage Projects'),
 								'url' => array('/admin/project'),
 								'visible' => Yii::app()->user->checkAccess('view_project'),
 							),
@@ -74,7 +74,7 @@
 								)
 							),
 							array(
-								'label' => '<i class="glyphicon glyphicon-tag"></i> ' . Yii::t('admin.crud', 'Tag'),
+								'label' => '<i class="glyphicon glyphicon-tag"></i> ' . Yii::t('admin.crud', 'Tags'),
 								'url' => array('/admin/tag'),
 								'visible' => Yii::app()->user->checkAccess('view_tag'),
 							),
@@ -93,17 +93,17 @@
 					),
 					'items' => array(
 						array(
-							'label' => '<i class="glyphicon glyphicon-time"></i> ' . Yii::t('admin.crud', 'Time Entry'),
+							'label' => '<i class="glyphicon glyphicon-time"></i> ' . Yii::t('admin.crud', 'Time Entries'),
 							'url' => array('/admin/timeEntry'),
 							'visible' => Yii::app()->user->checkAccess('view_time_entry'),
 						),
 						array(
-							'label' => '<i class="glyphicon glyphicon-usd"></i> ' . Yii::t('admin.crud', 'Payment'),
+							'label' => '<i class="glyphicon glyphicon-usd"></i> ' . Yii::t('admin.crud', 'Payments'),
 							'url' => array('/admin/payment'),
 							'visible' => Yii::app()->user->checkAccess('view_payment'),
 						),
 						array(
-							'label' => '<i class="glyphicon glyphicon-list-alt"></i> ' . Yii::t('admin.crud', 'Invoice'),
+							'label' => '<i class="glyphicon glyphicon-list-alt"></i> ' . Yii::t('admin.crud', 'Invoices'),
 							'url' => array('/admin/invoice'),
 							'visible' => Yii::app()->user->checkAccess('view_invoice'),
 						),

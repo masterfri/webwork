@@ -1,9 +1,9 @@
 <?php
 
-$this->pageHeading = Yii::t('admin.crud', 'Manage Payment');
+$this->pageHeading = Yii::t('admin.crud', 'Manage Payments');
 
 $this->breadcrumbs = array(
-	Yii::t('admin.crud', 'Payment'), 
+	Yii::t('admin.crud', 'Payments'), 
 );
 
 $this->menu = array(

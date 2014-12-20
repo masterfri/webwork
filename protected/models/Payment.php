@@ -38,14 +38,14 @@ class Payment extends CActiveRecord
 	{
 		return array(
 			array('	amount', 
-					'numerical', 'on' => 'create, update'),
+					'numerical', 'min' => 0.01, 'on' => 'create, update'),
 			array('	amount,
 					type', 
 					'required', 'on' => 'create, update'),
 			array('	description', 
 					'length', 'max' => 16000, 'on' => 'create, update'),
 			array('	type', 
-					'in', 'range' => array(1, 2), 'on' => 'create, update'),
+					'in', 'range' => array(self::INCOME, self::EXPEND), 'on' => 'create, update'),
 			array('	invoice_id,
 					type', 
 					'safe', 'on' => 'search'),

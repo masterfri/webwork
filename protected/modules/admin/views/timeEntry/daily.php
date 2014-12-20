@@ -3,7 +3,7 @@
 $this->pageHeading = Yii::t('admin.crud', 'Daily Time Report');
 
 $this->breadcrumbs = array(
-	Yii::t('admin.crud', 'Time Entry') => Yii::app()->user->checkAccess('view_time_entry') ? array('index') : false, 
+	Yii::t('admin.crud', 'Time Entries') => Yii::app()->user->checkAccess('view_time_entry') ? array('index') : false, 
 	Yii::t('admin.crud', 'Daily Time Report'), 
 );
 
@@ -20,7 +20,7 @@ $this->menu = array(
 	array(
 		'label' => '<i class="glyphicon glyphicon-list-alt"></i>', 
 		'linkOptions' => array(
-			'title' => Yii::t('admin.crud', 'Manage Time Entry'), 
+			'title' => Yii::t('admin.crud', 'Manage Time Entries'), 
 			'class' => 'btn btn-default',
 		), 
 		'url' => array('index'),

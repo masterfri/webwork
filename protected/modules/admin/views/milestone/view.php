@@ -3,9 +3,9 @@
 $this->pageHeading = Yii::t('admin.crud', 'Milestone Information');
 
 $this->breadcrumbs = array(
-	Yii::t('admin.crud', 'Project') => Yii::app()->user->checkAccess('view_project') ? array('project/index') : false, 
+	Yii::t('admin.crud', 'Projects') => Yii::app()->user->checkAccess('view_project') ? array('project/index') : false, 
 	CHtml::encode($model->project->name) => Yii::app()->user->checkAccess('view_project', array('project' => $model->project)) ? array('project/view', 'id' => $model->project->id) : false, 
-	Yii::t('admin.crud', 'Milestone') => Yii::app()->user->checkAccess('view_milestone', array('project' => $model->project)) ? array('index', 'project' => $model->project->id) : false, 
+	Yii::t('admin.crud', 'Milestones') => Yii::app()->user->checkAccess('view_milestone', array('project' => $model->project)) ? array('index', 'project' => $model->project->id) : false, 
 );
 
 $this->menu = array(
@@ -21,7 +21,7 @@ $this->menu = array(
 	array(
 		'label' => '<i class="glyphicon glyphicon-tasks"></i>', 
 		'linkOptions' => array(
-			'title' => Yii::t('admin.crud', 'Task'),
+			'title' => Yii::t('admin.crud', 'Tasks'),
 			'class' => 'btn btn-default',
 		),
 		'url' => array('task/index', 'project' => $model->project->id, 'milestone' => $model->id),
@@ -30,7 +30,7 @@ $this->menu = array(
 	array(
 		'label' => '<i class="glyphicon glyphicon-list-alt"></i>', 
 		'linkOptions' => array(
-			'title' => Yii::t('admin.crud', 'Manage Milestone'),
+			'title' => Yii::t('admin.crud', 'Manage Milestones'),
 			'class' => 'btn btn-default',
 		),
 		'url' => array('index', 'project' => $model->project->id),

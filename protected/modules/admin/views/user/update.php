@@ -1,6 +1,6 @@
 <?php
 
-$this->pageHeading = Yii::t('admin.crud', 'Updating User');
+$this->pageHeading = Yii::t('admin.crud', 'User Updating');
 
 $this->breadcrumbs = array(
 	Yii::t('admin.crud', 'Users') => Yii::app()->user->checkAccess('view_user') ? array('index') : false, 

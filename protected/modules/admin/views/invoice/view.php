@@ -3,7 +3,7 @@
 $this->pageHeading = Yii::t('admin.crud', 'Invoice Information');
 
 $this->breadcrumbs = array(
-	Yii::t('admin.crud', 'Invoice') => Yii::app()->user->checkAccess('view_invoice') ? array('index') : false, 
+	Yii::t('admin.crud', 'Invoices') => Yii::app()->user->checkAccess('view_invoice') ? array('index') : false, 
 );
 
 $this->menu = array(
@@ -19,7 +19,7 @@ $this->menu = array(
 	array(
 		'label' => '<i class="glyphicon glyphicon-list-alt"></i>', 
 		'linkOptions' => array(
-			'title' => Yii::t('admin.crud', 'Manage Invoice'), 
+			'title' => Yii::t('admin.crud', 'Manage Invoices'), 
 			'class' => 'btn btn-default',
 		), 
 		'url' => array('index'),
@@ -41,7 +41,7 @@ $this->menu = array(
 				'visible' => Yii::app()->user->checkAccess('view_invoice', array('invoice' => $model)),
 			),
 			array(
-				'label' => '<i class="glyphicon glyphicon-usd"></i> ' . Yii::t('admin.crud', 'Make Payment'), 
+				'label' => '<i class="glyphicon glyphicon-usd"></i> ' . Yii::t('admin.crud', 'Make a Payment'), 
 				'url' => array('payment/create', 'invoice' => $model->id),
 				'visible' => Yii::app()->user->checkAccess('create_payment'),
 			),

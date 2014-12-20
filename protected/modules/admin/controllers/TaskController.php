@@ -13,9 +13,14 @@ class TaskController extends AdminController
 			'condition' => 'task.project_id = :project_id',
 			'params' => array(':project_id' => $project->id),
 		));
+		if ($milestone) {
+			$milestone = $this->loadModel($milestone, 'Milestone');
+			$provider->criteria->compare('task.milestone_id', $milestone->id);
+		}
 		$this->render('index', array(
 			'model' => $model,
 			'project' => $project,
+			'milestone' => $milestone,
 			'provider' => $provider,
 		));
 	}

@@ -1,9 +1,9 @@
 <?php
 
-$this->pageHeading = Yii::t('admin.crud', 'Manage Tag');
+$this->pageHeading = Yii::t('admin.crud', 'Manage Tags');
 
 $this->breadcrumbs = array(
-	Yii::t('admin.crud', 'Tag'), 
+	Yii::t('admin.crud', 'Tags'), 
 );
 
 $this->menu = array(
