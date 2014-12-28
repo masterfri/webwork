@@ -3,7 +3,8 @@
 return array(
 	'Assigned' => 'Назначена',
 	'Assignments' => 'Assignments',
-	'Comments' => 'Comments',
+	'Attachments' => 'Вложения',
+	'Comments' => 'Комментарии',
 	'Complexity' => 'Сложность',
 	'Created by' => 'Создал',
 	'Date Scheduled' => 'Дата начала',

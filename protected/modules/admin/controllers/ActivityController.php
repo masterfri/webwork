@@ -19,6 +19,10 @@ class ActivityController extends AdminController
 			if ($this->isAjax()) {
 				$this->ajaxSuccess(array(
 					'trigger' => 'activity.created',
+					'message' => array(
+						'title' => Yii::t('admin.crud', 'Success'),
+						'text' => Yii::t('admin.crud', 'Activity has been created'),
+					),
 				));
 			} else {
 				$this->redirect(array('view', 'id' => $model->id));
@@ -39,6 +43,10 @@ class ActivityController extends AdminController
 			if ($this->isAjax()) {
 				$this->ajaxSuccess(array(
 					'trigger' => 'activity.updated',
+					'message' => array(
+						'title' => Yii::t('admin.crud', 'Success'),
+						'text' => Yii::t('admin.crud', 'Activity has been updated'),
+					),
 				));
 			} else {
 				$this->redirect(array('view', 'id' => $model->id));

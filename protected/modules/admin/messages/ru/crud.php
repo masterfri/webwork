@@ -18,6 +18,7 @@ return array(
 	'No' => 'Нет',
 	'Total' => 'Итого',
 	'Subtotal' => 'Всего',
+	'Success' => 'Успех',
 	'View' => 'Просмотреть',
 	'Create' => 'Создать',
 	'Update' => 'Обновить',
@@ -230,5 +231,12 @@ return array(
 	'System' => 'Система',
 	'Actions marked with * require a comment' => 'Действия, помеченные *, требуют комментария',
 	'Reports' => 'Отчеты',
+	'Activity has been created' => 'Вид активности создан',
+	'Activity has been updated' => 'Вид активности обновлен',
+	'Team member has been added' => 'Участник добавлен',
+	'Team member has been updated' => 'Участник обновлен',
+	'Time has been reported' => 'Отчет о затраченном времени отправлен',
+	'Item has been added' => 'Позиция добавлена',
+	'Item has been updated' => 'Позиция обновлена',
 );
 

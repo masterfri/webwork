@@ -5,7 +5,12 @@ $.fn.fileSelect = function(options) {
 		itemCssClass: 'file-select-item',
 		maxfiles: false,
 		accept: false,
+		previewImages: false,
 	}, options || {});
+	
+	function isImage(type) {
+		return -1 != ['image/png', 'image/jpeg', 'image/jpg', 'image/gif', 'image/bmp'].indexOf(type.toLowerCase());
+	}
 	
 	function discard(input) {
 		var clone = $(input).clone();
@@ -29,9 +34,19 @@ $.fn.fileSelect = function(options) {
 	function createItem(input, file) {
 		var i = $('<span></span>');
 		i.addClass(options.itemCssClass)
-			.attr('data-type', file.type)
-			.text(file.name)
-			.append('<a href="#" class="delete">&times</a>');
+			.attr('data-type', file.type);
+		if (isImage(file.type) && options.previewImages && window.FileReader) {
+			var tmb = $('<img class="thumbnail" />').attr('title', file.name);
+			var reader = new FileReader();
+			reader.onload = function (e) {
+				tmb.attr('src', e.target.result);
+			}
+			reader.readAsDataURL(file);
+			i.append(tmb).addClass('has-preview');
+		} else {
+			i.text(file.name);
+		}
+		i.append('<a href="#" class="delete">&times</a>');
 		$(input)
 			.detach()
 			.removeAttr('id')

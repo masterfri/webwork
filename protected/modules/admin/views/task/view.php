@@ -246,6 +246,29 @@ $this->menu = array(
 		</div>
 	</div>
 	<div class="clearfix"></div>
+	<?php if (count($model->attachments)): ?>
+		<div class="panel-footer attachments">
+			<?php foreach ($model->attachments as $attachment): ?>
+				<a class="thumbnail" target="_blank" href="<?php echo $attachment->getUrl(); ?>">
+					<?php if ($attachment->getIsImage()): ?>
+						<?php echo CHtml::image($attachment->getUrlResized(150, 100), '', array('title' => $attachment->title)); ?>
+					<?php else: ?>
+						<span class="no-thumb">
+							<span class="file-name">
+								<?php echo CHtml::encode($attachment->title); ?>
+							</span>
+							<span class="file-type">
+								<?php echo CHtml::encode($attachment->mime); ?>
+							</span>
+							<span class="file-size">
+								<?php echo $attachment->getFriendlySize(); ?>
+							</span>
+						</span>
+					<?php endif; ?>
+				</a>
+			<?php endforeach; ?>
+		</div>
+	<?php endif; ?>
 	<div class="panel-footer foot-details">
 		<?php echo Yii::t('task', 'Created by'); ?>
 		<?php echo CHtml::encode($model->created_by); ?>,

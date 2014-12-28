@@ -1,5 +1,77 @@
 (function($) {
 	
+	function displayMessage(message, params) {
+		var opts = $.extend({}, $.ajaxBindings.defaults.message, params || {});
+		var c = $('#ajax-bindings-message-container');
+		if (c.length == 0) {
+			c = $('<div id="ajax-bindings-message-container" class="ajax-bindings-message-container"></div>').appendTo(document.body);
+			c.css('position', 'fixed');
+		}
+		if (typeof message == 'string') {
+			message = {
+				'text': message,
+				'type': 'default',
+				'title': false,
+			};
+		} else {
+			message = $.extend({
+				'text': '',
+				'type': 'default',
+				'title': false,
+			}, message);
+		}
+		if (opts.position == 'top-left') {
+			c.css({
+				'top': opts.hspace,
+				'left': opts.hspace,
+				'right': 'auto',
+				'bottom': 'auto',
+			});
+		} else if (opts.position == 'top-right') {
+			c.css({
+				'top': opts.hspace,
+				'left': 'auto',
+				'right': opts.hspace,
+				'bottom': 'auto',
+			});
+		} else if (opts.position == 'bottom-right') {
+			c.css({
+				'top': 'auto',
+				'left': 'auto',
+				'right': opts.hspace,
+				'bottom': opts.hspace,
+			});
+		} else {
+			c.css({
+				'top': 'auto',
+				'left': opts.hspace,
+				'right': 'auto',
+				'bottom': opts.hspace,
+			});
+		}
+		var m = $(
+			'<div class="alert alert-dismissible" role="alert" style="display: none;">'+
+				'<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>'+
+			'</div>'
+		);
+		if (message.title) {
+			m.append($('<h3></h3>').text(message.title));
+		}
+		m.append($('<p></p>').text(message.text));
+		if (message.type in opts.cssClass) {
+			m.addClass(opts.cssClass[message.type]);
+		} else {
+			m.addClass(opts.cssClass['default']);
+		}
+		c.prepend(m);
+		m.fadeIn('slow');
+		setTimeout(function() {
+			m.fadeOut('slow', function() {
+				m.remove();
+			});
+		}, opts.timeout);
+	}
+	
 	function fireOnload() {
 		var t = $(this);
 		t.trigger(t.data('onload'), [t]);
@@ -75,6 +147,9 @@
 		} else {
 			if (typeof response == 'string') {
 				response = $.parseJSON(response);
+			}
+			if (response.message) {
+				$.ajaxBindings.message(response.message);
 			}
 			if (response.trigger) {
 				$(document.body).trigger(response.trigger, [response]);
@@ -317,7 +392,12 @@
 			if (typeof opts.blockui == 'object' || (opts.blockui != 'none' && opts.blockui !== false)) {
 				thiz.blockUI(typeof opts.blockui == 'object' ? opts.blockui : {'mode': opts.blockui});
 			}
-			$.ajax(opts.url, {'dataType' : 'html'})
+			var settings = configureAjax(thiz, $.extend(
+				opts.url ? {'url': opts.url} : {}, 
+				opts.method ? {'type': opts.method} : {},
+				{'dataType' : 'html'}
+			));
+			$.ajax(settings)
 				.done(function(response) {
 					updateSelf(thiz, response, opts);
 					opts.ondone(thiz, response, opts);
@@ -343,7 +423,10 @@
 				opts.ondone = options;
 			}
 			if (!opts.confirmation || confirm(opts.confirmation)) {
-				var settings = configureAjax(thiz, opts.url ? {'url': opts.url} : {});
+				var settings = configureAjax(thiz, $.extend(
+					opts.url ? {'url': opts.url} : {}, 
+					opts.method ? {'type': opts.method} : {}
+				));
 				if (typeof opts.blockui == 'object' || (opts.blockui != 'none' && opts.blockui !== false)) {
 					thiz.blockUI(typeof opts.blockui == 'object' ? opts.blockui : {'mode': opts.blockui});
 				}
@@ -377,7 +460,11 @@
 			if (typeof opts.blockui == 'object' || (opts.blockui != 'none' && opts.blockui !== false)) {
 				modal.find('.modal-body').blockUI(typeof opts.blockui == 'object' ? opts.blockui : {'mode': opts.blockui});
 			}
-			var settings = configureAjax(thiz, opts.url ? {'url': opts.url} : {}, {'dataType' : 'html'});
+			var settings = configureAjax(thiz, $.extend(
+				opts.url ? {'url': opts.url} : {}, 
+				opts.method ? {'type': opts.method} : {}, 
+				{'dataType' : 'html'}
+			));
 			modal.addClass(opts.loadingCssClass);
 			$.ajax(settings)
 				.done(function(response) {
@@ -421,7 +508,11 @@
 					tip.find('.popover-content').blockUI(typeof opts.blockui == 'object' ? opts.blockui : {'mode': opts.blockui});
 					adjustPopover(tip);
 				}
-				var settings = configureAjax(thiz, opts.url ? {'url': opts.url} : {}, {'dataType' : 'html'});
+				var settings = configureAjax(thiz, $.extend(
+					opts.url ? {'url': opts.url} : {}, 
+					opts.method ? {'type': opts.method} : {}, 
+					{'dataType' : 'html'}
+				));
 				tip.addClass(opts.loadingCssClass);
 				$.ajax(settings)
 					.done(function(response) {
@@ -528,6 +619,9 @@
 		'off': function(trigger) {
 			$(document.body).unbind(trigger);
 		},
+		'message': function(message, params) {
+			displayMessage(message, params);
+		},
 		'defaults': {
 			'ajaxUpdate': {
 				'ondone': function() {},
@@ -564,10 +658,22 @@
 				'cssClass': 'loading',
 				'coverCssClass': 'block-ui-cover',
 				'indicatorCssClass': 'block-ui-indicator',
-				'spinner': 'Loading...',
+				'spinner': '<div class="block-ui-spinner-container"><div class="block-ui-spinner">Loading...</div></div>',
 				'mode': 'auto',
 				'animateCover': 300,
 				'animateIndicator': 300
+			},
+			'message': {
+				'timeout': 5000,
+				'vspace': 20,
+				'hspace': 20,
+				'position': 'bottom-right',
+				'cssClass': {
+					'default': 'alert alert-info',
+					'success': 'alert alert-success',
+					'warning': 'alert alert-warning',
+					'error': 'alert alert-danger'
+				}
 			}
 		}
 	};

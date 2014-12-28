@@ -86,6 +86,10 @@ class TimeEntryController extends AdminController
 			if($this->isAjax()) {
 				$this->ajaxSuccess(array(
 					'trigger' => 'timeentry.created',
+					'message' => array(
+						'title' => Yii::t('admin.crud', 'Success'),
+						'text' => Yii::t('admin.crud', 'Time has been reported'),
+					),
 				));
 			} else {
 				$this->redirect(array('daily'));

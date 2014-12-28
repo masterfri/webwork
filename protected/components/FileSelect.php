@@ -10,6 +10,7 @@ class FileSelect extends CInputWidget
 	public $buttonCssClass = 'button-wrapper';
 	public $maxfiles = false;
 	public $accept = false;
+	public $previewImages = false;
 	
 	public function run()
 	{
@@ -66,6 +67,7 @@ class FileSelect extends CInputWidget
 			'itemCssClass' => $this->itemCssClass,
 			'maxfiles' => $this->maxfiles,
 			'accept' => $this->accept,
+			'previewImages' => $this->previewImages,
 		));
 		$cs->registerScript(__CLASS__. "#{$id}", 
 			"$('#{$id}').fileSelect({$options});".
@@ -77,12 +79,22 @@ class FileSelect extends CInputWidget
 	{
 		$value = $this->normalizeSelection($value);
 		foreach ($value as $file) {
-			echo CHtml::openTag('span', array(
-				'class' => $this->itemCssClass,
-				'data-type' => $file->mime,
-			));
-			echo CHtml::hiddenField($name, $file->id);
-			echo CHtml::encode($file->title);
+			if ($this->previewImages && $file->getIsImage()) {
+				echo CHtml::openTag('span', array(
+					'class' => $this->itemCssClass . ' has-preview',
+					'data-type' => $file->mime,
+				));
+				echo CHtml::image($file->getUrlResized(150, 100), '', array(
+					'title' => $file->title,
+				));
+			} else {
+				echo CHtml::openTag('span', array(
+					'class' => $this->itemCssClass,
+					'data-type' => $file->mime,
+				));
+				echo CHtml::encode($file->title);
+			}
+			echo CHtml::hiddenField($name, $file->id, array('id' => false));
 			echo CHtml::link('&times', '#', array('class' => 'delete'));
 			echo CHtml::closeTag('span');
 			if (!$this->multiple) {

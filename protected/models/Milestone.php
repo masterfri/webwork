@@ -15,6 +15,7 @@ class Milestone extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
+			'attachments' => Yii::t('milestone', 'Attachments'),
 			'created_by_id' => Yii::t('milestone', 'Created by'),
 			'created_by' => Yii::t('milestone', 'Created by'),
 			'description' => Yii::t('milestone', 'Description'),
@@ -38,6 +39,8 @@ class Milestone extends CActiveRecord
 					'length', 'max' => 200, 'on' => 'create, update'),
 			array('	name', 
 					'required', 'on' => 'create, update'),
+			array(' attachments',
+					'safe', 'on' => 'create, update'),
 			array('	name', 
 					'safe', 'on' => 'search'),
 		);
@@ -46,6 +49,7 @@ class Milestone extends CActiveRecord
 	public function relations()
 	{
 		return array(
+			'attachments' => array(self::MANY_MANY, 'File', '{{milestone_attachment}}(milestone_id,file_id)'),
 			'created_by' => array(self::BELONGS_TO, 'User', 'created_by_id'),
 			'project' => array(self::BELONGS_TO, 'Project', 'project_id'),
 			'tasks' => array(self::HAS_MANY, 'Task', 'milestone_id'),
@@ -76,8 +80,16 @@ class Milestone extends CActiveRecord
 				'created_by_attribute' => 'created_by',
 			),
 			array(
+				// UploadFileBehavior MUST be defined before RelationBehavior
+				'class' => 'UploadFileBehavior',
+				'attributes' => array(
+					'attachments',
+				),
+			),
+			array(
 				'class' => 'RelationBehavior',
 				'attributes' => array(
+					'attachments',
 					'created_by',
 					'project',
 					'tasks',

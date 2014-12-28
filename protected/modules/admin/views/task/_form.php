@@ -5,6 +5,7 @@
 		'id' => 'task-form',
 		'htmlOptions' => array(
 			'class'=>'form-horizontal',
+			'enctype' => 'multipart/form-data',
 		),
 		'enableClientValidation' => true,
 		'clientOptions' => array(
@@ -34,6 +35,18 @@
 				'class' => 'form-control',
 			)); ?> 
 			<?php echo $form->error($model, 'description', array('class'=>'help-inline')); ?>
+		</div>
+	</div>
+	<div class="form-group">
+		<?php echo $form->labelEx($model, 'attachments', array('class'=>'col-sm-3 control-label')); ?>
+		<div class="col-sm-9">
+			<?php echo $form->fileSelectField($model, 'attachments', array(
+				'multiple' => true,
+				'maxfiles' => 10,
+				'buttonText' => '<span class="glyphicon glyphicon-paperclip"></span> ' . Yii::t('admin.crud', 'Attach files'),
+				'buttonCssClass' => 'btn btn-default',
+			)); ?>
+			<?php echo $form->error($model, 'attachments', array('class'=>'help-inline')); ?>
 		</div>
 	</div>
 	<div class="form-group">

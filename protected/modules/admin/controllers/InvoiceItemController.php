@@ -11,6 +11,10 @@ class InvoiceItemController extends AdminController
 			if ($this->isAjax()) {
 				$this->ajaxSuccess(array(
 					'trigger' => 'invoiceitem.created',
+					'message' => array(
+						'title' => Yii::t('admin.crud', 'Success'),
+						'text' => Yii::t('admin.crud', 'Item has been added'),
+					),
 				));
 			} else {
 				$this->redirect(array('invoice/update', 'id' => $invoice));
@@ -31,6 +35,10 @@ class InvoiceItemController extends AdminController
 			if ($this->isAjax()) {
 				$this->ajaxSuccess(array(
 					'trigger' => 'invoiceitem.updated',
+					'message' => array(
+						'title' => Yii::t('admin.crud', 'Success'),
+						'text' => Yii::t('admin.crud', 'Item has been updated'),
+					),
 				));
 			} else {
 				$this->redirect(array('invoice/update', 'id' => $invoice));

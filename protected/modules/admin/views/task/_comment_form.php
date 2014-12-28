@@ -19,7 +19,7 @@
 
 				<div class="form-group">
 					<?php echo $form->labelEx($comment, 'content', array('class'=>'control-label')); ?>
-					<?php echo $form->textArea($comment, 'content', array(
+					<?php echo $form->markdownField($comment, 'content', array(
 						'class' => 'form-control',
 					)); ?> 
 					<?php echo $form->error($comment, 'content', array('class'=>'help-inline')); ?>

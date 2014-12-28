@@ -16,6 +16,7 @@ class Project extends CActiveRecord
 	{
 		return array(
 			'assignments' => Yii::t('project', 'Assignments'),
+			'attachments' => Yii::t('project', 'Attachments'),
 			'created_by_id' => Yii::t('project', 'Created by'),
 			'created_by' => Yii::t('project', 'Created by'),
 			'date_created' => Yii::t('project', 'Date Created'),
@@ -37,6 +38,8 @@ class Project extends CActiveRecord
 					'required', 'on' => 'create, update'),
 			array('	scope', 
 					'length', 'max' => 16000, 'on' => 'create, update'),
+			array(' attachments',
+					'safe', 'on' => 'create, update'),
 			array('	name', 
 					'safe', 'on' => 'search'),
 		);
@@ -46,6 +49,7 @@ class Project extends CActiveRecord
 	{
 		return array(
 			'assignments' => array(self::HAS_MANY, 'Assignment', 'project_id'),
+			'attachments' => array(self::MANY_MANY, 'File', '{{project_attachment}}(project_id,file_id)'),
 			'user_assignment' => array(self::HAS_ONE, 'Assignment', 'project_id', 
 				'on' => 'user_assignment.user_id = :current_user_id',
 				'params' => array(
@@ -68,12 +72,20 @@ class Project extends CActiveRecord
 				'created_by_attribute' => 'created_by',
 			),
 			array(
+				// UploadFileBehavior MUST be defined before RelationBehavior
+				'class' => 'UploadFileBehavior',
+				'attributes' => array(
+					'attachments',
+				),
+			),
+			array(
 				'class' => 'RelationBehavior',
 				'attributes' => array(
 					'assignments' => array(
 						'cascadeDelete' => true,
 						'quickDelete' => true,
 					),
+					'attachments',
 					'created_by',
 					'milestones' => array(
 						'cascadeDelete' => true,

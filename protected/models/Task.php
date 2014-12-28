@@ -108,6 +108,7 @@ class Task extends CActiveRecord
 			'assigned_id' => Yii::t('task', 'Assigned'),
 			'assigned' => Yii::t('task', 'Assigned'),
 			'assignments' => Yii::t('task', 'Assignments'),
+			'attachments' => Yii::t('task', 'Attachments'),
 			'comments' => Yii::t('task', 'Comments'),
 			'complexity' => Yii::t('task', 'Complexity'),
 			'created_by_id' => Yii::t('task', 'Created by'),
@@ -157,6 +158,8 @@ class Task extends CActiveRecord
 					'in', 'range' => array_keys(self::getListPriorities()), 'on' => 'create, update, change-priority'),
 			array('	regression_risk', 
 					'in', 'range' => array_keys(self::getListRegressionRisks()), 'on' => 'create, update, estimate'),
+			array(' attachments',
+					'safe', 'on' => 'create, update'),
 			array('	assigned_id,
 					milestone_id,
 					name,
@@ -174,6 +177,7 @@ class Task extends CActiveRecord
 		return array(
 			'assigned' => array(self::BELONGS_TO, 'User', 'assigned_id'),
 			'assignments' => array(self::HAS_MANY, 'Assignment', 'task_id'),
+			'attachments' => array(self::MANY_MANY, 'File', '{{task_attachment}}(task_id,file_id)'),
 			'user_assignment' => array(self::HAS_ONE, 'Assignment', 'task_id',
 				'on' => 'user_assignment.user_id = :current_user_id',
 				'params' => array(
@@ -202,6 +206,13 @@ class Task extends CActiveRecord
 				'created_by_attribute' => 'created_by',
 			),
 			array(
+				// UploadFileBehavior MUST be defined before RelationBehavior
+				'class' => 'UploadFileBehavior',
+				'attributes' => array(
+					'attachments',
+				),
+			),
+			array(
 				'class' => 'RelationBehavior',
 				'attributes' => array(
 					'assigned',
@@ -209,6 +220,7 @@ class Task extends CActiveRecord
 						'cascadeDelete' => true,
 						'quickDelete' => true,
 					),
+					'attachments',
 					'comments' => array(
 						'cascadeDelete' => true,
 					),

@@ -32,6 +32,10 @@ class AssignmentController extends AdminController
 			if ($this->isAjax()) {
 				$this->ajaxSuccess(array(
 					'trigger' => 'assignment.created',
+					'message' => array(
+						'title' => Yii::t('admin.crud', 'Success'),
+						'text' => Yii::t('admin.crud', 'Team member has been added'),
+					),
 				));
 			} else {
 				$this->redirect(array('view', 'id' => $model->id));
@@ -56,6 +60,10 @@ class AssignmentController extends AdminController
 			if ($this->isAjax()) {
 				$this->ajaxSuccess(array(
 					'trigger' => 'assignment.updated',
+					'message' => array(
+						'title' => Yii::t('admin.crud', 'Success'),
+						'text' => Yii::t('admin.crud', 'Team member has been updated'),
+					),
 				));
 			} else {
 				$this->redirect(array('view', 'id' => $model->id));

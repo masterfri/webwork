@@ -573,3 +573,15 @@ ol.unstyled {
 	border-bottom: 0;
 	border-top: 1px solid #eee;
 }
+.ajax-bindings-message-container {
+	min-width: 400px;
+}
+.ajax-bindings-message-container h3 {
+	margin-top: 0;
+}
+.ajax-bindings-message-container .alert {
+	box-shadow: 0 0 15px rgba(0,0,0, .4);
+	-moz-box-shadow: 0 0 15px rgba(0,0,0, .4);
+	-webkit-box-shadow: 0 0 15px rgba(0,0,0, .4);
+	margin: 0;
+}

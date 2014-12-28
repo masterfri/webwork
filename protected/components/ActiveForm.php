@@ -98,7 +98,8 @@ class ActiveForm extends CActiveForm
 		$cs->registerCssFile('/rc/toopay-bootstrap-markdown/css/bootstrap-markdown.min.css');
 		CHtml::resolveNameID($model, $attribute, $htmlOptions);
 		$id = $htmlOptions['id'];
-		$cs->registerScript("markdownfield{$id}", "$('#{$id}').markdown({resize: 'vertical'});");
+		$htmlOptions['data-onload'] = 'markdown.init';
+		$cs->registerScript("markdownfield{$id}", "$(document.body).on('markdown.init', '#{$id}', function() { $(this).markdown({resize: 'vertical'}); }); $('#{$id}').trigger('markdown.init');");
 		return $this->textArea($model, $attribute, $htmlOptions);
 	}
 	

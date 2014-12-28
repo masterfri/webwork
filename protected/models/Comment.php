@@ -55,17 +55,18 @@ class Comment extends CActiveRecord
 				'created_by_attribute' => 'created_by',
 			),
 			array(
+				// UploadFileBehavior MUST be defined before RelationBehavior
+				'class' => 'UploadFileBehavior',
+				'attributes' => array(
+					'attachments',
+				),
+			),
+			array(
 				'class' => 'RelationBehavior',
 				'attributes' => array(
 					'attachments',
 					'created_by',
 					'task',
-				),
-			),
-			array(
-				'class' => 'UploadFileBehavior',
-				'attributes' => array(
-					'attachments',
 				),
 			),
 		);
