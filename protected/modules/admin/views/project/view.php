@@ -150,3 +150,52 @@ $this->menu = array(
 		<?php echo Yii::app()->format->formatDatetime($model->date_created); ?>
 	</div>
 </div>
+<?php if (false !== $notes): ?>
+	<div class="row">
+		<div class="col-sm-8">
+			<h3><?php echo Yii::t('admin.crud', 'Notes'); ?></h3>
+		</div>
+		<div class="col-sm-4">
+			<div class="pull-right">
+				<?php $this->widget('zii.widgets.CMenu', array(
+					'items' => array(
+						array(
+							'label' => '<i class="glyphicon glyphicon-plus"></i>', 
+							'linkOptions' => array(
+								'title' => Yii::t('admin.crud', 'Create Note'), 
+								'class' => 'btn btn-default',
+								'data-raise' => 'ajax-modal',
+							), 
+							'url' => array('note/create', 'project' => $model->id),
+							'visible' => Yii::app()->user->checkAccess('create_note', array('project' => $model)),
+						),
+					),
+					'encodeLabel' => false,
+					'htmlOptions' => array(
+						'class' => 'nav nav-pills context-menu',
+					),
+				)); ?>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<?php $this->widget('ListView', array(
+			'id' => 'notes-list',
+			'dataProvider' => $notes,
+			'itemView' => '../note/view',
+			'emptyText' => Yii::app()->user->checkAccess('create_note', array('project' => $model)) ?
+				('<div class="col-xs-12"><div class="create-first-item"><a href="' . $this->createUrl('note/create', array('project' => $model->id)) . '" data-raise="ajax-modal">' . Yii::t('admin.crud', 'Create first note') . '</a></div></div>') : 
+				('<div class="col-xs-12"><span class="empty">' . Yii::t('admin.crud', 'There are no notes yet') . '</span></div>'),
+		)); ?>
+	</div>
+<?php
+
+Yii::app()->clientScript->registerScript('notes',
+<<<EOS
+$.ajaxBindings.on('note.created note.updated note.deleted', function() {
+	$.fn.yiiListView.update('notes-list');
+});
+EOS
+);
+
+endif; ?>

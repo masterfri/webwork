@@ -307,6 +307,63 @@ return array(
 		),
 	),
 	/**
+	 * Note 
+	 */
+	'view_note' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'View note',
+		'bizRule' => null,
+		'data' => null,
+	),
+	'create_note' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Create note',
+		'bizRule' => null,
+		'data' => null,
+	),
+	'update_note' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Edit note',
+		'bizRule' => null,
+		'data' => null,
+	),
+	'delete_note' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Delete note',
+		'bizRule' => null,
+		'data' => null,
+	),
+	'update_my_note' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Edit my note',
+		'bizRule' => 'return (!isset($params["note"])) || 
+							 ($params["note"]->created_by_id == $params["userId"]);',
+		'data' => null,
+		'children' => array(
+			'update_note',
+		),
+	),
+	'delete_my_note' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Delete my note',
+		'bizRule' => 'return (!isset($params["note"])) || 
+							 ($params["note"]->created_by_id == $params["userId"]);',
+		'data' => null,
+		'children' => array(
+			'delete_note',
+		),
+	),
+	'create_note_on_shared' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Create note on shared project',
+		'bizRule' => 'return (!isset($params["project"])) || 
+							 ($params["project"]->isUserAssigned($params["userId"]));',
+		'data' => null,
+		'children' => array(
+			'create_note',
+		),
+	),
+	/**
 	 * Payment 
 	 */
 	'view_payment' => array(
@@ -936,6 +993,10 @@ return array(
 			'view_my_time_entry',
 			'update_my_time_entry',
 			'delete_my_time_entry',
+			'view_note',
+			'update_my_note',
+			'delete_my_note',
+			'create_note_on_shared',
 		),
 		'bizRule' => null,
 		'data' => null
@@ -1026,6 +1087,9 @@ return array(
 			'create_rate',
 			'update_rate',
 			'delete_rate',
+			'create_note',
+			'update_note',
+			'delete_note',
 			'client',
 			'teamlead',
 		),

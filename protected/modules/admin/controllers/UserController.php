@@ -84,6 +84,26 @@ class UserController extends AdminController
 			'model' => $this->loadModel($id, 'User'),
 		));
 	}
+	
+	public function actionProfile()
+	{
+		$this->render('profile', array(
+			'model' => Yii::app()->user->getModel(),
+		));
+	}
+	
+	public function actionUpdateProfile()
+	{
+		$model = Yii::app()->user->getModel();
+		$model->setScenario('updateProfile');
+		if ($this->saveModel($model)) {
+			$user = Yii::app()->user->setLocale($model->locale);
+			$this->redirect(array('profile'));
+		}
+		$this->render('updateProfile', array(
+			'model' => $model,
+		));
+	}
 
 	public function filters()
 	{
@@ -115,6 +135,10 @@ class UserController extends AdminController
 			array('allow',
 				'actions' => array('delete'),
 				'roles' => array('delete_user'),
+			),
+			array('allow',
+				'actions' => array('profile', 'updateProfile'),
+				'users' => array('@'),
 			),
 			array('deny'),
 		);

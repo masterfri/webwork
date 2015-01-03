@@ -57,6 +57,7 @@ class Project extends CActiveRecord
 				)),
 			'created_by' => array(self::BELONGS_TO, 'User', 'created_by_id'),
 			'milestones' => array(self::HAS_MANY, 'Milestone', 'project_id'),
+			'notes' => array(self::HAS_MANY, 'Note', 'project_id'),
 			'count_milestones' => array(self::STAT, 'Milestone', 'project_id'),
 			'tasks' => array(self::HAS_MANY, 'Task', 'project_id'),
 			'count_tasks' => array(self::STAT, 'Task', 'project_id'),
@@ -88,6 +89,10 @@ class Project extends CActiveRecord
 					'attachments',
 					'created_by',
 					'milestones' => array(
+						'cascadeDelete' => true,
+						'quickDelete' => true,
+					),
+					'notes' => array(
 						'cascadeDelete' => true,
 						'quickDelete' => true,
 					),

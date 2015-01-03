@@ -13,7 +13,7 @@
 		<?php echo CHtml::link('<i class="glyphicon glyphicon-off"></i> ' . Yii::t('admin.crud', 'Logout'), array('/admin/default/logout'), array('class' => 'btn btn-default navbar-btn pull-right logout-btn')) ?>
 		
 		<p class="pull-right navbar-text visible-lg">
-			<i class="glyphicon glyphicon-user"></i> <?php echo  Yii::t('admin.crud', 'You are logged as'); ?> <b><?php echo Yii::app()->user->name; ?></b>
+			<i class="glyphicon glyphicon-user"></i> <?php echo  Yii::t('admin.crud', 'You are logged as'); ?> <a href="<?php echo $this->createUrl('/admin/user/profile'); ?>"><b><?php echo Yii::app()->user->name; ?></a></b>
 		</p>
 		
 		<?php $this->widget('Menu', array(

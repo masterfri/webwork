@@ -10,6 +10,8 @@ return array(
 	'Change tags' => 'Изменить теги',
 	'Change priority' => 'Изменить приоритет',
 	'Change assignment' => 'Назначить исполнителя',
+	'My Profile' => 'Мой профиль',
+	'Profile Updating' => 'Обновление профиля',
 	'Start' => 'Старт',
 	'Stop' => 'Стоп',
 	'Reset' => 'Сброс',
@@ -238,5 +240,14 @@ return array(
 	'Time has been reported' => 'Отчет о затраченном времени отправлен',
 	'Item has been added' => 'Позиция добавлена',
 	'Item has been updated' => 'Позиция обновлена',
+	'Notes' => 'Заметки',
+	'Create Note' => 'Добавить заметку',
+	'New Note' => 'Новая заметка',
+	'Updating Note' => 'Редактирование заметки',
+	'Are you sure you want to delete this note?' => 'Вы уверены, что хотите удалить эту заметку?',
+	'Note has been created' => 'Заметка создана',
+	'Note has been updated' => 'Заметка обновлена',
+	'Create first note' => 'Создать первую заметку',
+	'There are no notes yet' => 'Пока нет заметок',
 );
 

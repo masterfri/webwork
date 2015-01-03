@@ -17,7 +17,7 @@ class InvoiceItemController extends AdminController
 					),
 				));
 			} else {
-				$this->redirect(array('invoice/update', 'id' => $invoice));
+				$this->redirect(array('invoice/update', 'id' => $invoice->id));
 			}
 		}
 		if ($this->isAjax()) {
@@ -41,7 +41,7 @@ class InvoiceItemController extends AdminController
 					),
 				));
 			} else {
-				$this->redirect(array('invoice/update', 'id' => $invoice));
+				$this->redirect(array('invoice/update', 'id' => $model->invoice_id));
 			}
 		}
 		if ($this->isAjax()) {

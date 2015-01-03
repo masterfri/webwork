@@ -585,3 +585,85 @@ ol.unstyled {
 	-webkit-box-shadow: 0 0 15px rgba(0,0,0, .4);
 	margin: 0;
 }
+.ajax-bindings-message-container .alert + .alert {
+	margin-top: 15px;
+}
+.create-first-item {
+	border: 1px solid #eee;
+	background-color: #f9f9f9;
+	padding: 10px;
+	text-align: center;
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+}
+.sticky-note {
+	height: 140px;
+	z-index: 0;
+}
+.sticky-note:hover {
+	z-index: 1;
+}
+.sticky-note:hover .panel {
+	box-shadow: 0 0 15px rgba(0,0,0, .2);
+	-moz-box-shadow: 0 0 15px rgba(0,0,0, .2);
+	-webkit-box-shadow: 0 0 15px rgba(0,0,0, .2);
+}
+.sticky-note .panel-heading {
+	position: relative;
+}
+.sticky-note .panel-heading em {
+	color: #777;
+	font-size: 0.9em;
+}
+.sticky-note .panel-heading .actions {
+	position: absolute;
+	top: 5px;
+	right: 0;
+	padding: 5px 15px 5px 20px;
+	background-image: linear-gradient(left, rgba(245,245,245,0) 0, rgba(245,245,245,1) 20px);
+	background-image: -webkit-linear-gradient(left, rgba(245,245,245,0) 0, rgba(245,245,245,1) 20px);
+	background-image: -moz-linear-gradient(left, rgba(245,245,245,0) 0, rgba(245,245,245,1) 20px);
+	background-image: -o-linear-gradient(left, rgba(245,245,245,0) 0, rgba(245,245,245,1) 20px);
+	font-size: 0.9em;
+}
+.sticky-note .panel-success .panel-heading .actions {
+	background-image: linear-gradient(left, rgba(223,240,216,0) 0, rgba(223,240,216,1) 20px);
+	background-image: -webkit-linear-gradient(left, rgba(223,240,216,0) 0, rgba(223,240,216,1) 20px);
+	background-image: -moz-linear-gradient(left, rgba(223,240,216,0) 0, rgba(223,240,216,1) 20px);
+	background-image: -o-linear-gradient(left, rgba(223,240,216,0) 0, rgba(223,240,216,1) 20px);
+}
+.sticky-note .panel-heading .actions a {
+	display: inline-block;
+	margin-left: 5px;
+}
+.sticky-note .panel-body {
+	position: relative;
+	padding-bottom: 0;
+	z-index: 5;
+}
+.sticky-note .panel-body .text {
+	max-height: 50px;
+	overflow: hidden;
+	padding-bottom: 10px;
+}
+.sticky-note:hover .panel-body .text {
+	max-height: none;
+	overflow: visible;
+	z-index: 1;
+}
+.sticky-note .fadebox {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	height: 10px;
+	background-image: linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+	background-image: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+	background-image: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+	background-image: -o-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+	z-index: 10;
+}
+.sticky-note:hover .fadebox {
+	display: none;
+}

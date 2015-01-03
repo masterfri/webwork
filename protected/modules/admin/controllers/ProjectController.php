@@ -120,8 +120,23 @@ class ProjectController extends AdminController
 		if (!Yii::app()->user->checkAccess('view_project', array('project' => $model))) {
 			throw new CHttpException(403, 'Forbidden');
 		}
+		
+		if (Yii::app()->user->checkAccess('view_note')) {
+			$notes = Note::model()->search(array(
+				'condition' => 'note.project_id = :project AND (note.private = 0 OR note.created_by_id = :user)',
+				'params' => array(
+					':project' => $model->id,
+					':user' => Yii::app()->user->id,
+				),
+			));
+			$notes->pagination = array('pageSize' => 30);
+		} else {
+			$notes = false;
+		}
+		
 		$this->render('view', array(
 			'model' => $model,
+			'notes' => $notes,
 		));
 	}
 	
