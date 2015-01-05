@@ -1,5 +1,9 @@
+<?php $first_new = false; ?>
 <?php foreach($comments as $comment): ?>
-	<div class="panel panel-default <?php echo empty($comment->content) ? 'no-body' : ''; ?> action-<?php echo $comment->action; ?>" id="comment-<?php echo $comment->id; ?>">
+	<?php if (!$first_new && $last_visit !== false && MysqlDateHelper::gt($comment->time_created, $last_visit, false)): ?>
+		<a id="continue-discussion" class="anchor"></a>
+	<?php $first_new = true; endif; ?>
+	<div class="panel <?php echo ($last_visit !== false && MysqlDateHelper::gt($comment->time_created, $last_visit, false)) ? 'panel-success' : 'panel-default'; ?> <?php echo empty($comment->content) ? 'no-body' : ''; ?> action-<?php echo $comment->action; ?>" id="comment-<?php echo $comment->id; ?>">
 		<div class="panel-heading">
 			<?php echo Yii::t('admin.crud', $comment->getActionExplanation(), array(
 				'{author}' => CHtml::encode(CHtml::value($comment, 'created_by.displayName')),
@@ -40,3 +44,7 @@
 		<?php endif; ?>
 	</div>
 <?php endforeach; ?>
+
+<?php if(!$first_new): ?>
+	<a id="continue-discussion" class="anchor"></a>
+<?php endif; ?>

@@ -20,7 +20,7 @@ class MysqlDateHelper
 		return date('Y-m-d H:i:s');
 	}
 	
-	public static function compare($date1, $date2)
+	public static function compare($date1, $date2, $skip_time=true)
 	{
 		if (self::isEmpty($date1) && self::isEmpty($date2)) {
 			return 0;
@@ -31,27 +31,27 @@ class MysqlDateHelper
 		if (self::isEmpty($date2)) {
 			return -1;
 		}
-		$dif = self::diff($date1, $date2);
+		$dif = self::diff($date1, $date2, $skip_time);
 		return 0 == $dif ? 0 : ($dif > 0 ? 1 : -1);
 	}
 	
-	public static function gt($date1, $date2)
+	public static function gt($date1, $date2, $skip_time=true)
 	{
-		return -1 == self::compare($date1, $date2);
+		return -1 == self::compare($date1, $date2, $skip_time);
 	}
 	
-	public static function lt($date1, $date2)
+	public static function lt($date1, $date2, $skip_time=true)
 	{
-		return 1 == self::compare($date1, $date2);
+		return 1 == self::compare($date1, $date2, $skip_time);
 	}
 	
-	public static function diff($date1, $date2)
+	public static function diff($date1, $date2, $skip_time=true)
 	{
 		if (self::isEmpty($date1) || self::isEmpty($date2)) {
 			return 0;
 		}
 		$datetime = new DateTime($date1);
 		$interval = $datetime->diff(new DateTime($date2));
-		return false === $interval ? 0 : intval($interval->format('%R%a'));
+		return false === $interval ? 0 : intval($interval->format($skip_time ? '%R%a' : '%R%a%H%I%S'));
 	}
 }

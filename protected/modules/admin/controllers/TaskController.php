@@ -175,9 +175,12 @@ class TaskController extends AdminController
 		if (!Yii::app()->user->checkAccess('view_task', array('task' => $task))) {
 			throw new CHttpException(403, 'Forbidden');
 		}
-
+		
 		if ($task->user_subscription !== null) {
+			$last_visit = $task->user_subscription->last_view_time;
 			$task->user_subscription->markAsSeen();
+		} else {
+			$last_visit = false;
 		}
 		
 		if($this->isAjax()) {
@@ -187,6 +190,7 @@ class TaskController extends AdminController
 		$this->render('view', array(
 			'model' => $task,
 			'comment' => new Comment(),
+			'last_visit' => $last_visit,
 		));
 	}
 	
@@ -231,6 +235,7 @@ class TaskController extends AdminController
 								'content' => $this->renderPartial('_comments', array(
 									'task' => $task,
 									'comments' => array($comment),
+									'last_visit' => false,
 								), true),
 							),
 						),

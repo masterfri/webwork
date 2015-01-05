@@ -667,3 +667,7 @@ ol.unstyled {
 .sticky-note:hover .fadebox {
 	display: none;
 }
+blockquote p {
+	font-size: 14px;
+	color: #777;
+}

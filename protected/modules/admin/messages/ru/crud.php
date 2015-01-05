@@ -15,6 +15,7 @@ return array(
 	'Start' => 'Старт',
 	'Stop' => 'Стоп',
 	'Reset' => 'Сброс',
+	'Continue' => 'Продолжить',
 	'Settings' => 'Настройки',
 	'Yes' => 'Да',
 	'No' => 'Нет',

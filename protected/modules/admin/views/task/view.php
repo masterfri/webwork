@@ -276,11 +276,12 @@ $this->menu = array(
 	</div>
 </div>
 
-<h3><?php echo Yii::t('admin.crud', 'Disscussion'); ?></h3>
+<h3><?php echo Yii::t('admin.crud', 'Disscussion'); ?> <a class="small" href="#continue-discussion"><?php echo Yii::t('admin.crud', 'Continue'); ?></a></h3>
 <div id="comments-list">
 	<?php $this->renderPartial('_comments', array(
 		'task' => $model,
 		'comments' => $model->comments,
+		'last_visit' => $last_visit,
 	)); ?>
 </div>
 
