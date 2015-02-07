@@ -10,11 +10,17 @@
 		<?php
 			$cs = Yii::app()->clientScript;
 			$cs->registerCoreScript('jquery');
+			$cs->registerCoreScript('bbq');
 			$cs->registerScriptFile('/rc/bootstrap/js/bootstrap.js', CClientScript::POS_END);
 			$cs->registerScriptFile('/rc/ajax-bindings/ajax-bindings.js', CClientScript::POS_END);
 			$cs->registerScriptFile('/rc/js/admin.js', CClientScript::POS_END);
 		?>
-		
+		<script type="text/javascript">
+			$(function() {					
+				var notify = $('#notifications');
+				notify.length && notify.notifier('<?php echo $this->createUrl('default/notifications'); ?>', 5000);
+			});
+		</script>
 	</head>
 	<body>
 		<?php echo $content; ?>

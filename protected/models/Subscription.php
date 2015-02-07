@@ -49,4 +49,13 @@ class Subscription extends CActiveRecord
 		$this->last_view_time = MysqlDateHelper::currentDatetime();
 		$this->save();
 	}
+	
+	public static function markAllAsSeen($user)
+	{
+		$criteria = new CDbCriteria();
+		$criteria->compare('user_id', $user);
+		self::model()->updateAll(array(
+			'last_view_time' => MysqlDateHelper::currentDatetime(),
+		), $criteria);
+	}
 }

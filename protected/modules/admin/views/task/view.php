@@ -221,25 +221,27 @@ $this->menu = array(
 				<?php endif; ?>
 				<?php if (Yii::app()->user->checkAccess('report_time_entry', array('task' => $model))): ?>
 					<li class="timer hr">
-						<form id="timer_form" action="<?php echo $this->createUrl('timeEntry/report'); ?>" method="get" data-raise="ajax-modal">
-							<button type="submit" class="btn btn-default btn-xs btn-square" title="<?php echo Yii::t('admin.crud', 'Report Time'); ?>">
-								<span class="glyphicon glyphicon-plus"></span>
-							</button>
-							<a id="start_timer" class="btn btn-default btn-xs btn-square" href="#" title="<?php echo Yii::t('admin.crud', 'Start'); ?>">
-								<span class="glyphicon glyphicon-play"></span>
-							</a>
-							<a id="stop_timer" class="btn btn-default btn-xs btn-square hidden" href="#" title="<?php echo Yii::t('admin.crud', 'Stop'); ?>">
-								<span class="glyphicon glyphicon-stop"></span>
-							</a>
-							<a id="reset_timer" class="btn btn-default btn-xs btn-square" href="#" title="<?php echo Yii::t('admin.crud', 'Reset'); ?>">
-								<span class="glyphicon glyphicon-remove"></span>
-							</a>
-							<span id="timer_display">
-								<code>0:00:00</code>
-								<input type="hidden" name="sec" value="0" />
-							</span>
-							<input type="hidden" name="task" value="<?php echo $model->id; ?>" />
-						</form>
+						<div id="timer_form_container" class="timer-form-container">
+							<form id="timer_form" action="<?php echo $this->createUrl('timeEntry/report'); ?>" method="get" data-raise="ajax-modal">
+								<button type="submit" class="btn btn-default btn-xs btn-square" title="<?php echo Yii::t('admin.crud', 'Report Time'); ?>">
+									<span class="glyphicon glyphicon-plus"></span>
+								</button>
+								<a id="start_timer" class="btn btn-default btn-xs btn-square" href="#" title="<?php echo Yii::t('admin.crud', 'Start'); ?>">
+									<span class="glyphicon glyphicon-play"></span>
+								</a>
+								<a id="stop_timer" class="btn btn-default btn-xs btn-square hidden" href="#" title="<?php echo Yii::t('admin.crud', 'Stop'); ?>">
+									<span class="glyphicon glyphicon-stop"></span>
+								</a>
+								<a id="reset_timer" class="btn btn-default btn-xs btn-square" href="#" title="<?php echo Yii::t('admin.crud', 'Reset'); ?>">
+									<span class="glyphicon glyphicon-remove"></span>
+								</a>
+								<span id="timer_display">
+									<code>0:00:00</code>
+									<input type="hidden" name="sec" value="0" />
+								</span>
+								<input type="hidden" name="task" value="<?php echo $model->id; ?>" />
+							</form>
+						</div>
 					</li>
 				<?php endif; ?>
 			</ul>
@@ -291,7 +293,7 @@ $this->renderPartial('_comment_form', array(
 	'task' => $model,
 	'comment' => $comment,
 )); 
-
+$taskId = $model->id;
 $changePriorityUrl = CJSON::encode($this->createUrl('changePriority', array('id' => $model->id)));
 $changeAssignmentUrl = CJSON::encode($this->createUrl('changeAssignment', array('id' => $model->id)));
 $changeTagsUrl = CJSON::encode($this->createUrl('changeTags', array('id' => $model->id)));
@@ -361,6 +363,29 @@ $(document.body).bind('timeentry.created', function() {
 });
 $(document.body).on('mousedown', '#comment-form button[type=submit]', function() {
 	$('#action_type').val($(this).attr('value'));
+});
+window.notificationCallback = function(data) {
+	var i = data.task.indexOf('$taskId');
+	if (i != -1) {
+		data.task.splice(i, 1);
+		data.total--;
+		$('#comments-list').ajaxUpdate({
+			ondone: function() {
+				setTimeout(function() {
+					location.href = '#continue-discussion';
+				}, 100);
+			}
+		});
+	}
+	return data;
+}
+$(window).on('scroll', function() {
+	var f = $('#timer_form_container');
+	if (f.offset().top < $(document.body).scrollTop()) {
+		f.addClass('floating');
+	} else {
+		f.removeClass('floating');
+	}
 });
 EOS
 );

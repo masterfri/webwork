@@ -250,5 +250,7 @@ return array(
 	'Note has been updated' => 'Заметка обновлена',
 	'Create first note' => 'Создать первую заметку',
 	'There are no notes yet' => 'Пока нет заметок',
+	'Mark all as seen' => 'Отметить как просмотренные',
+	'Are you sure you want to mark all tasks as seen?' => 'Отметить все задачи как просмотренные?',
 );
 

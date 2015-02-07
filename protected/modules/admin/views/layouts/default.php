@@ -35,5 +35,7 @@
 	<div id="content" class="container">
 		<?php echo $content; ?>
 	</div>
-
+	<div class="footer">
+		<p><a href="<?php echo Yii::app()->homeUrl; ?>"><?php echo CHtml::encode(Yii::app()->name); ?></a> &copy; 2014 - <?php echo date('Y'); ?> <a href="http://masterfri.org.ua">masterfri</a>.</p>
+	</div>
 <?php $this->endContent(); ?>

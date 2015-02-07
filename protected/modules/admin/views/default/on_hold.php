@@ -2,4 +2,5 @@
 	'model' => $model,
 	'provider' => $provider,
 	'group_date' => false,
+	'mark_read_button' => false,
 )); ?>

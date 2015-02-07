@@ -1,19 +1,26 @@
 <nav class="navbar navbar-default" role="navigation">
 	<div class="navbar-header">
-		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-navbar-collapse">
 			<span class="sr-only"><?php echo Yii::t('admin.crud', 'Toggle navigation'); ?></span>
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
 		</button>
-		<a class="navbar-brand" href="<?php echo $this->createUrl('/admin'); ?>"><?php echo CHtml::encode(Yii::app()->name); ?></a>
+		<a class="navbar-brand" href="<?php echo $this->createUrl('/admin'); ?>">
+			<img src="/rc/img/logo-sm.png" title="<?php echo CHtml::encode(Yii::app()->name); ?>" />
+		</a>
 	</div>
 
-	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	<div class="collapse navbar-collapse" id="bs-navbar-collapse">
 		<?php echo CHtml::link('<i class="glyphicon glyphicon-off"></i> ' . Yii::t('admin.crud', 'Logout'), array('/admin/default/logout'), array('class' => 'btn btn-default navbar-btn pull-right logout-btn')) ?>
 		
 		<p class="pull-right navbar-text visible-lg">
 			<i class="glyphicon glyphicon-user"></i> <?php echo  Yii::t('admin.crud', 'You are logged as'); ?> <a href="<?php echo $this->createUrl('/admin/user/profile'); ?>"><b><?php echo Yii::app()->user->name; ?></a></b>
+		</p>
+		
+		<p class="pull-right notifications" id="notifications">
+			<a class="btn btn-default" href="<?php echo $this->createUrl('default/updated'); ?>"><i class="glyphicon glyphicon-bell"></i></a>
+			<audio><source src="/rc/audio/notify.mp3" type="audio/mpeg" /></audio>
 		</p>
 		
 		<?php $this->widget('Menu', array(

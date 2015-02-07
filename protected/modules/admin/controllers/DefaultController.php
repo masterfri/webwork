@@ -93,6 +93,38 @@ class DefaultController extends AdminController
 		));
 	}
 	
+	public function actionMarkAllSeen()
+	{
+		Subscription::markAllAsSeen(Yii::app()->user->id);
+		if($this->isAjax()) {
+			$this->ajaxSuccess(array(
+				'trigger' => 'tasks.markseen',
+			));
+		} else {
+			$this->redirect(array('default/updated'));
+		}
+	}
+	
+	public function actionNotifications($time)
+	{
+		$provider = $this->getDataUpdated();
+		$provider->criteria->addCondition('task.time_updated > :time_updated');
+		$provider->criteria->params[':time_updated'] = date('Y-m-d H:i:s', (int) $time);
+		$provider->pagination = array('pageSize' => 100);
+		$provider->sort = array('defaultOrder' => 'task.id DESC');
+		if ($provider->getTotalItemCount() > 0) {
+			$this->ajaxSuccess(array(
+				'trigger' => 'notification.new',
+				'total' => $provider->getTotalItemCount(),
+				'task' => array_map(function($t) {
+					return $t->id;
+				}, $provider->getData()),
+			));
+		} else {
+			$this->ajaxSuccess();
+		}
+	}
+	
 	public function getDataScheduled($model=null)
 	{
 		return $this->getData(array(

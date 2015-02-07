@@ -280,7 +280,7 @@ class TaskController extends AdminController
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('view', 'id' => $model->id));
 		}
 	}
-
+	
 	public function filters()
 	{
 		return array(

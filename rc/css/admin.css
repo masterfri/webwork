@@ -546,11 +546,16 @@ ol.unstyled {
 	display: block;
 	font-style: italic;
 }
-.task-list .btn.search-button {
+.task-list .btn.search-button,
+.task-list .btn.mark-read-button {
 	float: right;
-	margin: 10px 20px;
+	margin: 10px 20px 10px 0;
 	padding: 8px;
 }
+.task-list .btn.mark-read-button {
+	margin-right: 5px;
+}
+
 .task-list-search .panel-body{
 	border-bottom: 1px solid #ccc;
 }
@@ -670,4 +675,61 @@ ol.unstyled {
 blockquote p {
 	font-size: 14px;
 	color: #777;
+}
+html {
+    height: 100%;
+}
+body {
+    min-height: 100%;
+    position: relative;
+}
+body:after {
+    content: '';
+    display: block;
+    height: 80px;
+}
+.footer {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	height: 70px;
+	background-color: #f9f9f9;
+	border-top: 1px solid #eee;
+	text-align: center;
+	width: 100%;
+}
+.footer p {
+	padding-top: 20px;
+}
+.navbar-brand {
+	padding: 9px 15px;
+}
+.navbar .notifications {
+	padding-top: 10px;
+}
+.navbar .notifications .btn .badge {
+	margin-left: 5px;
+	font-size: 10px;
+	background: red;
+	padding: 2px 5px;
+	margin-top: 2px;
+	display: none;
+	vertical-align: top;
+	display: inline-block;
+}
+.timer-form-container.floating form {
+	position: fixed;
+	top: 20px;
+	right: 20px;
+	background-color: #fff;
+	border: 1px solid #eee;
+	padding: 10px;
+	width: 200px;
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	z-index: 100;
+	box-shadow: 0 0 10px rgba(0,0,0, 0.4);
+	-moz-box-shadow: 0 0 10px rgba(0,0,0, 0.4);
+	-webkit-box-shadow: 0 0 10px rgba(0,0,0, 0.4);
 }

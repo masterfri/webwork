@@ -1,6 +1,7 @@
 <?php $this->beginContent('admin.views.layouts.default'); ?>
 
 	<?php $this->widget('Menu', array(
+		'id' => 'dashboard-tabs',
 		'items' => array(
 			array(
 				'label' => Yii::t('admin.crud', 'My tasks'),
