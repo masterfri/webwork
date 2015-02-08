@@ -4,7 +4,6 @@
 		<title><?php echo CHtml::encode(Yii::app()->name); ?></title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<link rel="stylesheet" href="/rc/bootstrap/css/bootstrap.css" type="text/css">
-		<!-- link rel="stylesheet" href="/rc/bootstrap/css/bootstrap-theme.css" type="text/css" -->
 		<link rel="stylesheet" href="/rc/css/admin.css" type="text/css">
 		
 		<?php
@@ -18,7 +17,7 @@
 		<script type="text/javascript">
 			$(function() {					
 				var notify = $('#notifications');
-				notify.length && notify.notifier('<?php echo $this->createUrl('default/notifications'); ?>', 5000);
+				notify.length && notify.notifier('<?php echo $this->createUrl('default/notifications'); ?>', 60000);
 			});
 		</script>
 	</head>
