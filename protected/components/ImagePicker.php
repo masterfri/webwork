@@ -23,7 +23,7 @@ class ImagePicker extends CInputWidget
 
 		$this->registerClientScript();
 		
-		$url = Yii::app()->createUrl('admin/file/imagePickerDialog', array(
+		$url = Yii::app()->createUrl('core/file/imagePickerDialog', array(
 			'w' => $this->displayWidth,
 			'h' => $this->displayHeight,
 		));
@@ -51,7 +51,7 @@ class ImagePicker extends CInputWidget
 				'height' => $this->displayHeight > 0 ? $this->displayHeight : 'auto',
 			));
 		}
-		$placeholder = $this->placeholder !== null ? $this->placeholder : Yii::t('admin.crud', 'No thumb');
+		$placeholder = $this->placeholder !== null ? $this->placeholder : Yii::t('core.crud', 'No thumb');
 		$w = $this->displayWidth > 0 ? "{$this->displayWidth}px" : 'auto';
 		$h = $this->displayHeight > 0 ? "{$this->displayHeight}px" : 'auto';
 		echo '<span class="image-picker-placeholder" style="width: ' . $w . '; height: ' . $h . '; line-height: ' . $h . ';">' . 
