@@ -62,6 +62,90 @@ return array(
 		'data' => null,
 	),
 	/**
+	 * Application
+	 */
+	'view_application' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'View application',
+		'bizRule' => null,
+		'data' => null,
+	),
+	'create_application' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Create application',
+		'bizRule' => null,
+		'data' => null,
+	),
+	'update_application' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Edit application',
+		'bizRule' => null,
+		'data' => null,
+	),
+	'delete_application' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Delete application',
+		'bizRule' => null,
+		'data' => null,
+	),
+	'pull_application' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Pull application',
+		'bizRule' => null,
+		'data' => null,
+	),
+	'view_shared_application' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'View shared application',
+		'bizRule' => 'return (!isset($params["project"]) && !isset($params["application"])) || 
+							 (isset($params["project"]) && $params["project"]->isUserAssigned($params["userId"])) ||
+							 (isset($params["application"]) && $params["application"]->project->isUserAssigned($params["userId"]));',
+		'data' => null,
+		'children' => array(
+			'view_application',
+		),
+	),
+	'create_shared_application' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Create shared application',
+		'bizRule' => 'return (!isset($params["project"])) || 
+							 ($params["project"]->isUserAssigned($params["userId"], Assignment::ROLE_MANAGER));',
+		'data' => null,
+		'children' => array(
+			'create_application',
+		),
+	),
+	'update_shared_application' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Edit shared application',
+		'bizRule' => 'return (!isset($params["application"])) || 
+							 ($params["application"]->project->isUserAssigned($params["userId"], Assignment::ROLE_MANAGER));',
+		'data' => null,
+		'children' => array(
+			'update_application',
+		),
+	),
+	'pull_shared_application' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Pull shared application',
+		'bizRule' => 'return (!isset($params["application"])) || 
+							 ($params["application"]->project->isUserAssigned($params["userId"], Assignment::ROLE_MANAGER));',
+		'data' => null,
+		'children' => array(
+			'pull_application',
+		),
+	),
+	'delete_shared_application' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Delete shared application',
+		'bizRule' => 'return (!isset($params["application"])) || 
+							 ($params["application"]->project->isUserAssigned($params["userId"], Assignment::ROLE_MANAGER));',
+		'data' => null,
+		'children' => array(
+			'delete_application',
+		),
+	),
+	/**
 	 * Assignment 
 	 */
 	'view_assignment' => array(
@@ -926,6 +1010,15 @@ return array(
 		),
 	),
 	/**
+	 * Options
+	 */ 
+	'update_general_options' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Update general options',
+		'bizRule' => null,
+		'data' => null,
+	),
+	/**
 	 * Basic roles
 	 */
 	'guest' => array(
@@ -997,6 +1090,11 @@ return array(
 			'update_my_note',
 			'delete_my_note',
 			'create_note_on_shared',
+			'view_shared_application',
+			'create_shared_application',
+			'update_shared_application',
+			'delete_shared_application',
+			'pull_shared_application',
 		),
 		'bizRule' => null,
 		'data' => null
@@ -1071,6 +1169,11 @@ return array(
 			'create_milestone',
 			'update_milestone',
 			'delete_milestone',
+			'view_application',
+			'create_application',
+			'update_application',
+			'delete_application',
+			'pull_application',
 			'view_assignment',
 			'create_assignment',
 			'update_assignment',
@@ -1121,6 +1224,7 @@ return array(
 			'create_tag',
 			'update_tag',
 			'delete_tag',
+			'update_general_options',
 			'manager',
 		),
 		'bizRule' => null,

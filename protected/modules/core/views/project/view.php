@@ -35,6 +35,15 @@ $this->menu = array(
 		'visible' => Yii::app()->user->checkAccess('view_task', array('project' => $model)),
 	),
 	array(
+		'label' => '<i class="glyphicon glyphicon-globe"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('core.crud', 'Applications'), 
+			'class' => 'btn btn-default',
+		), 
+		'url' => array('application/index', 'project' => $model->id),
+		'visible' => Yii::app()->user->checkAccess('view_application', array('project' => $model)),
+	),
+	array(
 		'label' => '<i class="glyphicon glyphicon-list-alt"></i>', 
 		'linkOptions' => array(
 			'title' => Yii::t('core.crud', 'Manage Projects'), 

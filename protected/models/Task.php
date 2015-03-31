@@ -31,9 +31,6 @@ class Task extends CActiveRecord
 	const ACTION_REOPEN = 'reopen';
 	const ACTION_RESUME = 'resume';
 	
-	const COMPLEXITY_RATE = 1;
-	const ESTIMATE_RESERVE_RATE = 0.2;
-
 	protected static $regression_risks;
 	protected static $priorities;
 	protected static $phases;
@@ -525,7 +522,7 @@ class Task extends CActiveRecord
 		} elseif ($this->complexity > 0) {
 			$power = CHtml::value($this, 'assigned.rate.power');
 			if ($power > 0) {
-				return self::COMPLEXITY_RATE * $this->complexity / $power;
+				return GeneralOptions::instance()->complexity_rate * $this->complexity / $power;
 			}
 		}
 		return 0;
@@ -533,7 +530,7 @@ class Task extends CActiveRecord
 	
 	public function getEstimateReserve()
 	{
-		return self::ESTIMATE_RESERVE_RATE * $this->getEstimate();
+		return GeneralOptions::instance()->estimate_error_rate * $this->getEstimate();
 	}
 	
 	public function getEstimateRange()

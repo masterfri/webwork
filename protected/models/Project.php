@@ -48,6 +48,7 @@ class Project extends CActiveRecord
 	public function relations()
 	{
 		return array(
+			'applications' => array(self::HAS_MANY, 'Application', 'project_id'),
 			'assignments' => array(self::HAS_MANY, 'Assignment', 'project_id'),
 			'attachments' => array(self::MANY_MANY, 'File', '{{project_attachment}}(project_id,file_id)'),
 			'user_assignment' => array(self::HAS_ONE, 'Assignment', 'project_id', 
@@ -82,6 +83,9 @@ class Project extends CActiveRecord
 			array(
 				'class' => 'RelationBehavior',
 				'attributes' => array(
+					'applications' => array(
+						'cascadeDelete' => true,
+					),
 					'assignments' => array(
 						'cascadeDelete' => true,
 						'quickDelete' => true,

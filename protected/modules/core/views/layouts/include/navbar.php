@@ -150,6 +150,11 @@
 						'data-toggle' => 'dropdown',
 					),
 					'items' => array(
+						array(
+							'label' => '<i class="glyphicon glyphicon-wrench"></i> ' . Yii::t('core.crud', 'General'),
+							'url' => array('options/generalOptions'),
+							'visible' => Yii::app()->user->checkAccess('update_general_options'),
+						),
 					),
 				),
 			),
