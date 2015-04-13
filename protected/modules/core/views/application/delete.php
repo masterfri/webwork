@@ -1,12 +1,12 @@
 <?php
 
-$this->pageHeading = Yii::t('core.crud', 'Pull Application');
+$this->pageHeading = Yii::t('core.crud', 'Delete Application');
 
 $this->breadcrumbs = array(
 	Yii::t('core.crud', 'Projects') => Yii::app()->user->checkAccess('view_project') ? array('project/index') : false, 
 	CHtml::encode($model->project->name) => Yii::app()->user->checkAccess('view_project', array('project' => $model->project)) ? array('project/view', 'id' => $model->project->id) : false, 
 	Yii::t('core.crud', 'Applications') => Yii::app()->user->checkAccess('view_application', array('project' => $model->project)) ? array('index', 'project' => $model->project->id) : false, 
-	Yii::t('core.crud', 'Pull'),
+	Yii::t('core.crud', 'Delete'),
 );
 
 $this->menu = array(
@@ -49,44 +49,59 @@ $this->menu = array(
 );
 
 Yii::app()->clientScript->registerScript('processing', "
-$('#pull-form').on('submit', function() {
+$('#delete-form').on('submit', function() {
 	$(this).children('.preloader').show();
+	$(this).children('.options').hide();
 	$(this).children('.btn').attr('disabled', 'disabled');
 });
 ");
+
+if (null !== $response) {
+	$this->renderPartial('_httpsh_response', array(
+		'response' => $response,
+	));
+}
 
 ?>
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<h3 class="panel-title"><?php echo $this->pageHeading; ?></h3>
 	</div>
-	<?php $this->widget('DetailView', array(
-		'data' => $model,		
-		'attributes' => array(
-			'git',
-			'git_branch',
-		),
-	)); ?>
 	<div class="panel-body">
-		<?php if ($response): ?>
-			<?php if (!$response->getIsSuccess()): ?>
-				<div class="alert alert-danger">
-					<?php echo CHtml::encode($response->getMessage()); ?>
-				</div>
-				<pre><?php echo CHtml::encode($response->getRaw()); ?></pre>
-			<?php else: ?>
-				<div class="alert alert-success">
-					<?php echo Yii::t('core.crud', 'Pull has been successfully completed'); ?>
-				</div>
-			<?php endif; ?>
-		<?php else: ?>
-			<form action="" method="post" id="pull-form">
-				<input name="make_pull" type="hidden" value="1" />
-				<div style="display: none;" class="preloader">
-					<p><?php echo Yii::t('core.crud', 'Operation is in process... Please, be patient.'); ?></p>
-				</div>
-				<button type="submit" class="btn btn-primary"><?php echo Yii::t('core.crud', 'Make Pull'); ?></button>
-			</form>
-		<?php endif; ?>
+		<form action="" method="post" id="delete-form">
+			<input name="delete" type="hidden" value="1" />
+			<div class="options">
+				<p><?php echo Yii::t('core.crud', 'You are going to delete the application `{app}`. Please, confirm your intention by clicking `Delete`. Optionally you can delete following:', array(
+					'{app}' => CHtml::encode($model->name),
+				)); ?></p>
+				<p>
+					<label><?php echo CHtml::checkbox('opts[files]'); ?> <?php echo Yii::t('application', 'Application files'); ?></label>
+					<?php if ($model->status & Application::STATUS_HAS_WEB): ?>
+						<br />
+						<label><?php echo CHtml::checkbox('opts[vhost]'); ?> <?php echo Yii::t('application', 'Virtual host'); ?></label>
+					<?php endif; ?>
+					<?php if ($model->getIsGitLocal()): ?>
+						<br />
+						<label><?php echo CHtml::checkbox('opts[git]'); ?> <?php echo Yii::t('application', 'Git repository `{repo}`', array(
+							'{repo}' => CHtml::encode($model->git),
+						)); ?></label>
+					<?php endif; ?>
+					<?php if ($model->status & Application::STATUS_HAS_DB): ?>
+						<br />
+						<label><?php echo CHtml::checkbox('opts[db]'); ?> <?php echo Yii::t('application', 'MySQL database `{db}`', array(
+							'{db}' => CHtml::encode($model->db_name),
+						)); ?></label>
+						<br />
+						<label><?php echo CHtml::checkbox('opts[dbuser]'); ?> <?php echo Yii::t('application', 'MySQL user `{user}`', array(
+							'{user}' => CHtml::encode($model->db_user),
+						)); ?></label>
+					<?php endif; ?>
+				</p>
+			</div>
+			<div style="display: none;" class="preloader">
+				<p><?php echo Yii::t('core.crud', 'Operation is in process... Please, be patient.'); ?></p>
+			</div>
+			<button type="submit" class="btn btn-danger"><?php echo Yii::t('core.crud', 'Delete'); ?></button>
+		</form>
 	</div>
 </div>

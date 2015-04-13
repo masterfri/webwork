@@ -1,0 +1,26 @@
+<?php
+
+return array(
+	'Name' => 'Имя',
+	'Database Name' => 'Имя БД',
+	'Password' => 'Пароль',
+	'User' => 'Имя пользователя',
+	'Description' => 'Описание',
+	'Document Root' => 'Корневая папка',
+	'Logs Directory' => 'Папка для логов',
+	'Vhost Directives' => 'Дополнительные директивы',
+	'Git Repository URL' => 'URL git репозитория',
+	'Create Repository' => 'Создать репозиторий',
+	'Branch' => 'Ветка',
+	'Project' => 'Проект',
+	'Domain' => 'Домен',
+	'Created by' => 'Создал',
+	'Web Server' => 'Web сервер',
+	'Git Repository' => 'Git репозиторий',
+	'Database' => 'База данных',
+	'Application files' => 'Файлы приложения',
+	'Virtual host' => 'Настройки вируального хоста',
+	'Git repository `{repo}`' => 'Git репозиторий `{repo}`',
+	'MySQL database `{db}`' => 'Базу данных MySQL `{db}`',
+	'MySQL user `{user}`' => 'Пользователя MySQL `{user}`',
+);

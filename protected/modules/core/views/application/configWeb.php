@@ -5,7 +5,7 @@ $this->pageHeading = Yii::t('core.crud', 'Configure Web Server');
 $this->breadcrumbs = array(
 	Yii::t('core.crud', 'Projects') => Yii::app()->user->checkAccess('view_project') ? array('project/index') : false, 
 	CHtml::encode($model->project->name) => Yii::app()->user->checkAccess('view_project', array('project' => $model->project)) ? array('project/view', 'id' => $model->project->id) : false, 
-	Yii::t('core.crud', 'Application') => Yii::app()->user->checkAccess('view_application', array('project' => $model->project)) ? array('index', 'project' => $model->project->id) : false, 
+	Yii::t('core.crud', 'Applications') => Yii::app()->user->checkAccess('view_application', array('project' => $model->project)) ? array('index', 'project' => $model->project->id) : false, 
 	Yii::t('core.crud', 'Configure Web Server'),
 );
 

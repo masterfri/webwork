@@ -155,10 +155,20 @@ class ApplicationController extends AdminController
 		if (!Yii::app()->user->checkAccess('delete_application', array('application' => $model))) {
 			throw new CHttpException(403, 'Forbidden');
 		}
-		$model->delete();
-		if(!isset($_GET['ajax'])) {
-			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index', 'project' => $model->project_id));
+		$response = null;
+		if (isset($_POST['delete'])) {
+			if (isset($_POST['opts'])) {
+				$response = $model->cleanup(array_keys($_POST['opts']));
+			}
+			if (null === $response || $response->getIsSuccess()) {
+				$model->delete();
+				$this->redirect(array('index', 'project' => $model->project_id));
+			}
 		}
+		$this->render('delete', array(
+			'model' => $model,
+			'response' => $response,
+		));
 	}
 	
 	public function actionView($id)
@@ -203,7 +213,6 @@ class ApplicationController extends AdminController
 	{
 		return array(
 			'accessControl',
-			'postOnly + delete', 
 		);
 	}
 	

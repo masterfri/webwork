@@ -44,12 +44,18 @@ $this->menu = array(
 			array(
 				'class' => 'ButtonColumn',
 				'deleteConfirmation' => Yii::t('core.crud', 'Are you sure you want to delete this application?'),
-				'template' => '{view} {update} {delete}',
+				'template' => '{view} {update} {remove}',
 				'buttons' => array(
 					'update' => array(
 						'visible' => 'Yii::app()->user->checkAccess("update_application", array("application" => $data))',
 					),
-					'delete' => array(
+					'remove' => array(
+						'label' => '<i class="glyphicon glyphicon-trash"></i>',
+						'options' => array(
+							'title' => Yii::t('core.crud', 'Delete'),
+							'class' => 'btn btn-default btn-sm delete',
+						),
+						'url' => 'Yii::app()->controller->createUrl("delete", array("id" => $data->id))',
 						'visible' => 'Yii::app()->user->checkAccess("delete_application", array("application" => $data))',
 					),
 				),

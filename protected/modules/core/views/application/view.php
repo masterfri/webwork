@@ -73,11 +73,7 @@ $this->menu = array(
 			),
 			array(
 				'label' => '<i class="glyphicon glyphicon-trash"></i> ' . Yii::t('core.crud', 'Delete Application'), 
-				'url' => '#', 
-				'linkOptions' => array(
-					'submit' => array('delete', 'id' => $model->id),
-					'confirm' => Yii::t('core.crud', 'Are you sure you want to delete this application?'),
-				),
+				'url' => array('delete', 'id' => $model->id), 
 				'visible' => Yii::app()->user->checkAccess('delete_application', array('application' => $model)),
 			),
 		),

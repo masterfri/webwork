@@ -30,7 +30,7 @@ class Application extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'db_name' => Yii::t('application', 'Name'),
+			'db_name' => Yii::t('application', 'Database Name'),
 			'db_password' => Yii::t('application', 'Password'),
 			'db_user' => Yii::t('application', 'User'),
 			'description' => Yii::t('application', 'Description'),
@@ -84,7 +84,7 @@ class Application extends CActiveRecord
 			array('	db_name,
 					db_password,
 					db_user',
-					'match', 'pattern' => '/^[a-z0-9_]$/i', 'on' => 'configdb'),
+					'match', 'pattern' => '/^[a-z0-9_]+$/i', 'on' => 'configdb'),
 			array('	db_name,
 					db_password,
 					db_user',
@@ -163,6 +163,16 @@ class Application extends CActiveRecord
 		return sprintf('%s.%s', $this->name, GeneralOptions::instance()->app_domain);
 	}
 	
+	public function getGitRepoName()
+	{
+		return preg_replace('/[^0-9a-z_-]/i', '_', $this->name);
+	}
+	
+	public function getIsGitLocal()
+	{
+		return ($this->status & self::STATUS_HAS_GIT) && substr($this->git, 0, 1) == '/';
+	}
+	
 	public function setStatus($status)
 	{
 		$this->status = $this->status | $status;
@@ -200,7 +210,7 @@ class Application extends CActiveRecord
 		$command = $this->createWebShCommand('GitHttpShCommand');
 		$response = $command->setupGit(array(
 			'domain' => $this->getDomain(),
-			'name' => preg_replace('/[^0-9a-z_-]/i', '_', $this->name),
+			'name' => $this->getGitRepoName(),
 			'url' => $this->git,
 			'create' => $this->create_repo,
 		));
@@ -229,6 +239,18 @@ class Application extends CActiveRecord
 			'domain' => $this->getDomain(),
 			'url' => $this->git,
 			'branch' => $this->git_branch,
+		));
+	}
+	
+	public function cleanup($options)
+	{
+		$command = $this->createWebShCommand('CleanupHttpShCommand');
+		return $command->cleanup(array(
+			'domain' => $this->getDomain(),
+			'db_name' => $this->db_name,
+			'db_user' => $this->db_user,
+			'repo_name' => $this->getGitRepoName(),
+			'options' => $options,
 		));
 	}
 }

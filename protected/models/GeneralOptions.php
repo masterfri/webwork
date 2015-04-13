@@ -15,7 +15,7 @@ class GeneralOptions extends OptionRecord
 	public function attributeLabels()
 	{
 		return array(
-			'app_domain' => Yii::t('core.generalOptions', 'Application Domain'),
+			'app_domain' => Yii::t('core.generalOptions', 'Applications Domain'),
 			'complexity_rate' => Yii::t('core.generalOptions', 'Complexity Rate'),
 			'estimate_error_rate' => Yii::t('core.generalOptions', 'Estimate Error Rate'),
 			'httpsh_host' => Yii::t('core.generalOptions', 'Host'),
