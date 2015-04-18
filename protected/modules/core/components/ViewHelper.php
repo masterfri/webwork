@@ -13,8 +13,8 @@ class ViewHelper
 			$class = 'phase-icon phase-scheduled';
 		} elseif ($phase == Task::PHASE_IN_PROGRESS) {
 			$class = 'phase-icon phase-in-progress';
-		} elseif ($phase == Task::PHASE_PENDING) {
-			$class = 'phase-icon phase-pending';
+		} elseif ($phase == Task::PHASE_COMPLETED) {
+			$class = 'phase-icon phase-completed';
 		} elseif ($phase == Task::PHASE_NEW_ITERATION) {
 			$class = 'phase-icon phase-new-iteration';
 		} elseif ($phase == Task::PHASE_CLOSED) {

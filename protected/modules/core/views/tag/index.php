@@ -59,9 +59,15 @@ $this->menu = array(
 			array(
 				'class' => 'ButtonColumn',
 				'deleteConfirmation' => Yii::t('core.crud', 'Are you sure you want to delete this tag?'),
-				'template' => '{view}'.
-					(Yii::app()->user->checkAccess('update_tag') ? ' {update}' : '').
-					(Yii::app()->user->checkAccess('delete_tag') ? ' {delete}' : ''),
+				'template' => '{view} {update} {delete}',
+				'buttons' => array(
+					'update' => array(
+						'visible' => 'Yii::app()->user->checkAccess("update_tag", array("tag" => $data))',
+					),
+					'delete' => array(
+						'visible' => 'Yii::app()->user->checkAccess("delete_tag", array("tag" => $data))',
+					),
+				),
 			),
 		),
 	)); ?>

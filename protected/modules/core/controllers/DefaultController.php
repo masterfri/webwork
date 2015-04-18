@@ -49,12 +49,12 @@ class DefaultController extends AdminController
 		));
 	}
 	
-	public function actionPending()
+	public function actionCompleted()
 	{
 		$model = $this->createSearchModel('Task');
-		$provider = $this->getDataPending($model);
+		$provider = $this->getDataCompleted($model);
 		$this->layout = 'core.views.layouts.dashboard';
-		$this->render('pending', array(
+		$this->render('completed', array(
 			'model' => $model,
 			'provider' => $provider,
 		));
@@ -71,12 +71,12 @@ class DefaultController extends AdminController
 		));
 	}
 	
-	public function actionCompleted()
+	public function actionClosed()
 	{
 		$model = $this->createSearchModel('Task');
-		$provider = $this->getDataCompleted($model);
+		$provider = $this->getDataClosed($model);
 		$this->layout = 'core.views.layouts.dashboard';
-		$this->render('completed', array(
+		$this->render('closed', array(
 			'model' => $model,
 			'provider' => $provider,
 		));
@@ -160,12 +160,12 @@ class DefaultController extends AdminController
 		), $model);
 	}
 	
-	public function getDataPending($model=null)
+	public function getDataCompleted($model=null)
 	{
 		return $this->getData(array(
 			'active',
 			'member', 
-			'pending',
+			'completed',
 		), $model);
 	}
 	
@@ -178,7 +178,7 @@ class DefaultController extends AdminController
 		), $model);
 	}
 	
-	public function getDataCompleted($model=null)
+	public function getDataClosed($model=null)
 	{
 		return $this->getData(array(
 			'active',

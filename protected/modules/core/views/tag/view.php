@@ -38,7 +38,7 @@ $this->menu = array(
 			array(
 				'label' => '<i class="glyphicon glyphicon-pencil"></i> ' . Yii::t('core.crud', 'Update Tag'), 
 				'url' => array('update', 'id' => $model->id),
-				'visible' => Yii::app()->user->checkAccess('update_tag'),
+				'visible' => Yii::app()->user->checkAccess('update_tag', array('tag' => $model)),
 			),
 			array(
 				'label' => '<i class="glyphicon glyphicon-trash"></i> ' . Yii::t('core.crud', 'Delete Tag'), 
@@ -47,7 +47,7 @@ $this->menu = array(
 					'submit' => array('delete', 'id' => $model->id),
 					'confirm' => Yii::t('core.crud', 'Are you sure you want to delete this tag?'),
 				),
-				'visible' => Yii::app()->user->checkAccess('delete_tag'),
+				'visible' => Yii::app()->user->checkAccess('delete_tag', array('tag' => $model)),
 			),
 		),
 	),

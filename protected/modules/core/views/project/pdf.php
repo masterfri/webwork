@@ -15,7 +15,7 @@
 	<?php if ('' != $model->scope): ?>
 		<h2><?php echo Yii::t('project', 'Scope'); ?></h2>
 		<?php 
-			$this->beginWidget('CMarkdown'); 
+			$this->beginWidget('MarkdownWidget'); 
 			echo $model->scope;
 			$this->endWidget(); 
 		?>
@@ -69,7 +69,7 @@
 		</table>
 		<?php if ('' != $milestone->description): ?>
 			<?php 
-				$this->beginWidget('CMarkdown'); 
+				$this->beginWidget('MarkdownWidget'); 
 				echo $milestone->description;
 				$this->endWidget(); 
 			?>

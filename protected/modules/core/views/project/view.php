@@ -122,7 +122,7 @@ $this->menu = array(
 	<div class="panel-body">
 		<?php if ('' != $model->scope): ?>
 			<?php 
-				$this->beginWidget('CMarkdown'); 
+				$this->beginWidget('MarkdownWidget'); 
 				echo $model->scope;
 				$this->endWidget(); 
 			?>

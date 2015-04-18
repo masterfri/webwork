@@ -5,11 +5,13 @@ class TagController extends AdminController
 	public function actionIndex()
 	{
 		$model = $this->createSearchModel('Tag');
-		$provider = $model->search(array(
-			'scopes' => array(
-				'active',
-			),
-		));
+		$criteria = new CDbCriteria();
+		if (Yii::app()->user->checkAccess('view_tag', array('project' => '*'))) {
+			$criteria->scopes = array('active');
+		} else {
+			$criteria->scopes = array('member', 'active');
+		}
+		$provider = $model->search($criteria);
 		$this->render('index', array(
 			'model' => $model,
 			'provider' => $provider,
@@ -44,7 +46,11 @@ class TagController extends AdminController
 	
 	public function actionCreate()
 	{
-		$model = new Tag('create');
+		if (Yii::app()->user->checkAccess('create_tag', array('project' => '*'))) {
+			$model = new Tag('create');
+		} else {
+			$model = new Tag('createShared');
+		}
 		if ($this->saveModel($model)) {
 			$this->redirect(array('view', 'id' => $model->id));
 		}
@@ -56,6 +62,14 @@ class TagController extends AdminController
 	public function actionUpdate($id)
 	{
 		$model = $this->loadModel($id, 'Tag');
+		if (!Yii::app()->user->checkAccess('update_tag', array('tag' => $model))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
+		if (Yii::app()->user->checkAccess('update_tag', array('project' => '*'))) {
+			$model->setScenario('update');
+		} else {
+			$model->setScenario('updateShared');
+		}
 		if ($this->saveModel($model)) {
 			$this->redirect(array('view', 'id' => $model->id));
 		}
@@ -67,6 +81,9 @@ class TagController extends AdminController
 	public function actionDelete($id)
 	{
 		$model = $this->loadModel($id, 'Tag');
+		if (!Yii::app()->user->checkAccess('delete_tag', array('tag' => $model))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
 		$model->delete();
 		if(!isset($_GET['ajax'])) {
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
@@ -75,8 +92,12 @@ class TagController extends AdminController
 	
 	public function actionView($id)
 	{
+		$model = $this->loadModel($id, 'Tag');
+		if (!Yii::app()->user->checkAccess('view_tag', array('tag' => $model))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
 		$this->render('view', array(
-			'model' => $this->loadModel($id, 'Tag'),
+			'model' => $model,
 		));
 	}
 

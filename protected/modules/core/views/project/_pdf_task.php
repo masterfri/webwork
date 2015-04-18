@@ -25,7 +25,7 @@
 </table>
 <?php if ('' != $task->description): ?>
 	<?php 
-		$this->beginWidget('CMarkdown'); 
+		$this->beginWidget('MarkdownWidget'); 
 		echo $task->description;
 		$this->endWidget(); 
 	?>

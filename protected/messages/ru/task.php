@@ -29,8 +29,8 @@ return array(
 	'New' => 'Новая',
 	'Scheduled' => 'Запланирована',
 	'In progress' => 'Выполняется',
-	'Pending' => 'Ожидает проверки',
+	'Completed' => 'Завершена',
 	'New iteration' => 'Новый цикл',
-	'Closed' => 'Завершена',
+	'Closed' => 'Закрыта',
 	'On-hold' => 'Приостановлена',
 );

@@ -129,6 +129,9 @@ class TaskController extends AdminController
 		}
 		$model->setScenario('change-assignment');
 		$model->assigned_id = $user;
+		if ($user > 0 && MysqlDateHelper::isEmpty($model->date_sheduled)) {
+			$model->date_sheduled = MysqlDateHelper::currentDate();
+		}
 		$model->save();
 		if($this->isAjax()) {
 			$this->ajaxSuccess(array(

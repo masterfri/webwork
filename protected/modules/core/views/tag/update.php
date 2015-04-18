@@ -24,7 +24,7 @@ $this->menu = array(
 			'class' => 'btn btn-default',
 		), 
 		'url' => array('view', 'id' => $model->id),
-		'visible' => Yii::app()->user->checkAccess('view_tag'),
+		'visible' => Yii::app()->user->checkAccess('view_tag', array('tag' => $model)),
 	),
 	array(
 		'label' => '<i class="glyphicon glyphicon-list-alt"></i>', 

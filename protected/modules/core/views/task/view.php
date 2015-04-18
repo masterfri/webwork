@@ -130,7 +130,7 @@ $this->menu = array(
 		<div class="panel-body">
 			<?php if ('' != $model->description): ?>
 				<?php 
-					$this->beginWidget('CMarkdown'); 
+					$this->beginWidget('MarkdownWidget'); 
 					echo $model->description;
 					$this->endWidget(); 
 				?>
@@ -309,7 +309,9 @@ $('#priority').on('selectitem', function(e, v, l) {
 });
 $('#assignment').on('selectitem', function(e, v, l) {
 	var url = $.param.querystring($changeAssignmentUrl, {user: v, ajax: 1});
-	$.post(url);
+	$.post(url, {}, function() {
+		$('#task-details').ajaxUpdate();
+	});
 });
 $('#tags').on('selectitem', function(e, v, l) {
 	var url = $.param.querystring($changeTagsUrl, {ajax: 1});

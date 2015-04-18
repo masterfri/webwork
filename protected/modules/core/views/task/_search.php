@@ -51,7 +51,7 @@
 					Task::PHASE_CREATED => Yii::t('task', 'New'),
 					Task::PHASE_SCHEDULED => Yii::t('task', 'Scheduled'),
 					Task::PHASE_IN_PROGRESS => Yii::t('task', 'In progress'),
-					Task::PHASE_PENDING => Yii::t('task', 'Pending'),
+					Task::PHASE_COMPLETED => Yii::t('task', 'Completed'),
 					Task::PHASE_NEW_ITERATION => Yii::t('task', 'New iteration'),
 					Task::PHASE_CLOSED => Yii::t('task', 'Closed'),
 					Task::PHASE_ON_HOLD => Yii::t('task', 'On-hold'),

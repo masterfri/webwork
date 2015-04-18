@@ -13,7 +13,7 @@
 		<?php if (!empty($comment->content)): ?>
 			<div class="panel-body">
 				<?php 
-					$this->beginWidget('CMarkdown'); 
+					$this->beginWidget('MarkdownWidget'); 
 					echo $comment->content;
 					$this->endWidget(); 
 				?>

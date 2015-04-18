@@ -354,7 +354,7 @@ return array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'Query shared milestone',
 		'bizRule' => 'return (!isset($params["project"])) || 
-							 (isset($params["project"]) && $params["project"] === "*" ? false : $params["project"]->isUserAssigned($params["userId"]));',
+							 ($params["project"] === "*" ? false : $params["project"]->isUserAssigned($params["userId"]));',
 		'data' => null,
 		'children' => array(
 			'query_milestone',
@@ -639,6 +639,48 @@ return array(
 		'bizRule' => null,
 		'data' => null,
 	),
+	'view_shared_tag' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'View shared tag',
+		'bizRule' => 'return (!isset($params["project"]) && !isset($params["tag"])) || 
+							 (isset($params["tag"]) && ($params["tag"]->project === null ? true : $params["tag"]->project->isUserAssigned($params["userId"]))) ||
+							 (isset($params["project"]) && ($params["project"] === "*" ? false : $params["project"]->isUserAssigned($params["userId"])));',
+		'data' => null,
+		'children' => array(
+			'view_tag',
+		),
+	),
+	'create_shared_tag' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Create shared tag',
+		'bizRule' => 'return (!isset($params["project"])) || 
+							 ($params["project"] === "*" ? false : $params["project"]->isUserAssigned($params["userId"], array(Assignment::ROLE_OWNER, Assignment::ROLE_MANAGER)));',
+		'data' => null,
+		'children' => array(
+			'create_tag',
+		),
+	),
+	'update_shared_tag' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Update shared tag',
+		'bizRule' => 'return (!isset($params["tag"]) && !isset($params["project"])) || 
+							 (isset($params["project"]) && ($params["project"] === "*" ? false : $params["project"]->isUserAssigned($params["userId"], array(Assignment::ROLE_OWNER, Assignment::ROLE_MANAGER)))) ||
+							 (isset($params["tag"]) && ($params["tag"]->project !== null && $params["tag"]->project->isUserAssigned($params["userId"], array(Assignment::ROLE_OWNER, Assignment::ROLE_MANAGER))));',
+		'data' => null,
+		'children' => array(
+			'update_tag',
+		),
+	),
+	'delete_shared_tag' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Delete shared tag',
+		'bizRule' => 'return (!isset($params["tag"])) || 
+							 ($params["tag"]->project !== null && $params["tag"]->project->isUserAssigned($params["userId"], array(Assignment::ROLE_OWNER, Assignment::ROLE_MANAGER)));',
+		'data' => null,
+		'children' => array(
+			'delete_tag',
+		),
+	),
 	'query_shared_tag' => array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'Query shared tag',
@@ -777,7 +819,7 @@ return array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'Query shared task',
 		'bizRule' => 'return (!isset($params["project"])) || 
-							 (isset($params["project"]) && $params["project"] === "*" ? false : $params["project"]->isUserAssigned($params["userId"]));',
+							 ($params["project"] === "*" ? false : $params["project"]->isUserAssigned($params["userId"]));',
 		'data' => null,
 		'children' => array(
 			'query_task',
@@ -1056,7 +1098,11 @@ return array(
 			'hold_shared_task',
 			'reopen_shared_task',
 			'resume_shared_task',
+			'view_shared_tag',
 			'query_shared_tag',
+			'create_shared_tag',
+			'update_shared_tag',
+			'delete_shared_tag',
 			'view_my_invoice',
 		),
 		'bizRule' => null,

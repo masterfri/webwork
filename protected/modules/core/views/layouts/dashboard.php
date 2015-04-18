@@ -24,9 +24,9 @@
 				'counter' => $this->getDataUpdated()->totalItemCount,
 			),
 			array(
-				'label' => Yii::t('core.crud', 'Pending'),
-				'url' => array('/core/default/pending'),
-				'counter' => $this->getDataPending()->totalItemCount,
+				'label' => Yii::t('core.crud', 'Completed'),
+				'url' => array('/core/default/completed'),
+				'counter' => $this->getDataCompleted()->totalItemCount,
 			),
 			array(
 				'label' => Yii::t('core.crud', 'Expired'),
@@ -34,9 +34,9 @@
 				'counter' => $this->getDataExpired()->totalItemCount,
 			),
 			array(
-				'label' => Yii::t('core.crud', 'Completed'),
-				'url' => array('/core/default/completed'),
-				'counter' => $this->getDataCompleted()->totalItemCount,
+				'label' => Yii::t('core.crud', 'Closed'),
+				'url' => array('/core/default/closed'),
+				'counter' => $this->getDataClosed()->totalItemCount,
 			),
 			array(
 				'label' => Yii::t('core.crud', 'On hold'),

@@ -373,7 +373,7 @@ ol.unstyled {
 	content: "\e072";
 	color: #428bca;
 }
-.phase-icon.phase-pending:before {
+.phase-icon.phase-completed:before {
 	content: "\e034";
 	color: #d9534f;
 }

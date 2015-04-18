@@ -29,13 +29,17 @@ class Tag extends CActiveRecord
 	{
 		return array(
 			array('	color', 
-					'length', 'max' => 20, 'on' => 'create, update'),
+					'length', 'max' => 20, 'on' => 'create, update, createShared, updateShared'),
 			array('	name', 
-					'length', 'max' => 200, 'on' => 'create, update'),
+					'length', 'max' => 200, 'on' => 'create, update, createShared, updateShared'),
 			array('	name', 
-					'required', 'on' => 'create, update'),
+					'required', 'on' => 'create, update, createShared, updateShared'),
 			array(' project_id',
 					'safe', 'on' => 'create, update'),
+			array(' project_id',
+					'required', 'on' => 'createShared, updateShared'),
+			array(' project_id',
+					'checkProject', 'on' => 'createShared, updateShared'),
 			array('	name', 
 					'safe', 'on' => 'search'),
 		);
@@ -124,5 +128,18 @@ class Tag extends CActiveRecord
 		$criteria = new CDbCriteria($params);
 		$criteria->order = 'name';
 		return CHtml::listData(self::model()->findAll($criteria), 'id', 'name');
+	}
+	
+	public function checkProject($attribute, $params=array())
+	{
+		if ($this->project_id > 0) {
+			$assignment = Assignment::model()->find('project_id = :project AND user_id = :user', array(
+				':project' => $this->project_id,
+				':user' => Yii::app()->user->id,
+			));
+			if (null === $assignment) {
+				$this->addError('project_id', Yii::t('tag', 'This project can not be selected'));
+			}
+		}
 	}
 }

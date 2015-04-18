@@ -17,7 +17,7 @@ class Task extends CActiveRecord
 	const PHASE_CREATED = 1;
 	const PHASE_SCHEDULED = 2;
 	const PHASE_IN_PROGRESS = 3;
-	const PHASE_PENDING = 4;
+	const PHASE_COMPLETED = 4;
 	const PHASE_NEW_ITERATION = 5;
 	const PHASE_CLOSED = 6;
 	const PHASE_ON_HOLD = 7;
@@ -40,27 +40,27 @@ class Task extends CActiveRecord
 			self::PHASE_CREATED,
 			self::PHASE_SCHEDULED,
 			self::PHASE_IN_PROGRESS,
-			self::PHASE_PENDING,
+			self::PHASE_COMPLETED,
 			self::PHASE_NEW_ITERATION,
 			self::PHASE_ON_HOLD,
 		),
 		self::ACTION_START_WORK => array(
 			self::PHASE_CREATED,
 			self::PHASE_SCHEDULED,
-			self::PHASE_PENDING,
+			self::PHASE_COMPLETED,
 			self::PHASE_NEW_ITERATION,
 		),
 		self::ACTION_COMPLETE_WORK => array(
 			self::PHASE_IN_PROGRESS,
 		),
 		self::ACTION_RETURN => array(
-			self::PHASE_PENDING,
+			self::PHASE_COMPLETED,
 		),
 		self::ACTION_CLOSE => array(
 			self::PHASE_CREATED,
 			self::PHASE_SCHEDULED,
 			self::PHASE_IN_PROGRESS,
-			self::PHASE_PENDING,
+			self::PHASE_COMPLETED,
 			self::PHASE_NEW_ITERATION,
 			self::PHASE_ON_HOLD,
 		),
@@ -68,7 +68,7 @@ class Task extends CActiveRecord
 			self::PHASE_CREATED,
 			self::PHASE_SCHEDULED,
 			self::PHASE_IN_PROGRESS,
-			self::PHASE_PENDING,
+			self::PHASE_COMPLETED,
 			self::PHASE_NEW_ITERATION,
 		),
 		self::ACTION_REOPEN => array(
@@ -81,7 +81,7 @@ class Task extends CActiveRecord
 	
 	protected static $phase_graph = array(
 		self::ACTION_START_WORK => self::PHASE_IN_PROGRESS,
-		self::ACTION_COMPLETE_WORK => self::PHASE_PENDING,
+		self::ACTION_COMPLETE_WORK => self::PHASE_COMPLETED,
 		self::ACTION_RETURN => self::PHASE_NEW_ITERATION,
 		self::ACTION_CLOSE => self::PHASE_CLOSED,
 		self::ACTION_PUT_ON_HOLD => self::PHASE_ON_HOLD,
@@ -276,10 +276,10 @@ class Task extends CActiveRecord
 					':phase_new_iteration' => self::PHASE_NEW_ITERATION,
 				),
 			),
-			'pending' => array(
-				'condition' => 'task.phase = :phase_pending',
+			'completed' => array(
+				'condition' => 'task.phase = :phase_completed',
 				'params' => array(
-					':phase_pending' => self::PHASE_PENDING,
+					':phase_completed' => self::PHASE_COMPLETED,
 				),
 			),
 			'closed' => array(
@@ -441,7 +441,7 @@ class Task extends CActiveRecord
 				self::PHASE_CREATED => Yii::t('task', 'New'),
 				self::PHASE_SCHEDULED => Yii::t('task', 'Scheduled'),
 				self::PHASE_IN_PROGRESS => Yii::t('task', 'In progress'),
-				self::PHASE_PENDING => Yii::t('task', 'Pending'),
+				self::PHASE_COMPLETED => Yii::t('task', 'Completed'),
 				self::PHASE_NEW_ITERATION => Yii::t('task', 'New iteration'),
 				self::PHASE_CLOSED => Yii::t('task', 'Closed'),
 				self::PHASE_ON_HOLD => Yii::t('task', 'On-hold'),
