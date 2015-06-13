@@ -733,3 +733,226 @@ body:after {
 	-moz-box-shadow: 0 0 10px rgba(0,0,0, 0.4);
 	-webkit-box-shadow: 0 0 10px rgba(0,0,0, 0.4);
 }
+
+.schedule-table table {
+	table-layout: fixed;
+	margin-bottom: 0;
+	border: none;
+}
+.schedule-table table .g {
+	width: 16%;
+}
+.schedule-table.nohr table .g {
+	width: 20%;
+}
+.schedule-table table td.g {
+	padding: 1px;
+}
+.schedule-table tr:last-child th,
+.schedule-table tr:last-child td {
+  border-bottom: 0;
+}
+.schedule-table th:last-child,
+.schedule-table td:last-child  {
+  border-right: 0;
+}
+.schedule-table th:first-child,
+.schedule-table td:first-child  {
+  border-left: 0;
+}
+.schedule-table table .g ul {
+	list-style: none;
+	padding: 0; 
+	margin: 0;
+}
+.schedule-table table .g ul li,
+.schedule-draggable-helper {
+	font-size: 10px;
+	font-weight: bold;
+	background-color: #f9f9f9;
+	border: 1px solid #eee;
+	padding: 2px;
+	list-style: none;
+}
+.schedule-table table .g ul li.tmp-hide {
+	visibility: hidden;
+}
+.schedule-table table .g ul li.spare-time,
+.schedule-table table .g ul li.other-tasks {
+	background: transparent;
+	border: none;
+	padding: 10px 0;
+	text-align: center;
+	color: #ccc;
+}
+.schedule-table table .g ul li.other-tasks + li.spare-time {
+	border-top: 1px solid #f0f0f0;
+}
+.schedule-table table .g ul li + li {
+	margin-top: 1px;
+}
+.schedule-table table .g .task-name,
+.schedule-tasklist .title,
+.schedule-draggable-helper .title {
+	max-width: 100%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.schedule-table table .g .task-details {
+	margin-top: 3px;
+	color: #777;
+}
+.schedule-draggable-helper .task-details > div {
+	margin-top: 4px;
+	color: #777;
+}
+.schedule-draggable-helper .task-details .glyphicon {
+	margin-right: 3px;
+}
+.schedule-table .nav {
+	padding: 5px;
+}
+.schedule-table .nothing {
+	padding: 30px 10px;
+	text-align: center;
+}
+.schedule-table .g.hover .spare-time {
+	background-color: #a5cdef;
+	color: #777;
+}
+.schedule-table .g.hover.tmp-vacant {
+	background-color: #a5cdef;
+}
+.schedule-table .g.hover.tmp-vacant .spare-time,
+.schedule-table .g.hover.tmp-vacant .other-tasks {
+	visibility: hidden;
+}
+.schedule-table .g.empty {
+	vertical-align: middle;
+}
+.schedule-table .g.empty.hover {
+	background-color: #a5cdef;
+}
+.schedule-table .g.empty .spare-time ul,
+.schedule-table .g.empty .spare-time li {
+	display: inline-block;
+}
+.schedule-table.editable .t {
+	cursor: move;
+}
+.schedule-table.editable .t:hover {
+	border: 1px solid #a5cdef;
+}
+.schedule-table.editable .t.noupdate {
+	cursor: default;
+}
+.schedule-table.editable .t.noupdate:hover {
+	border: 1px solid #eee;
+}
+.row > .no-gutter-left {
+	padding-left: 0;
+}
+.row > .no-gutter-right {
+	padding-right: 0;
+}
+.schedule-wrapper-grid {
+	border-right: 1px solid #ddd;
+}
+.schedule-wrapper-tasks {
+	padding: 1px;
+	border-left: 1px solid #ddd;
+	margin-left: -1px;
+}
+.schedule-tasklist {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	min-height: 70px;
+}
+.schedule-tasklist.hover {
+	background-color: #a5cdef;
+}
+.schedule-tasklist .task {
+	font-size: 10px;
+	font-weight: bold;
+	background-color: #f9f9f9;
+	border: 1px solid #eee;
+	padding: 2px;
+	cursor: move;
+}
+.schedule-tasklist .task:hover {
+	border: 1px solid #a5cdef;
+}
+.schedule-tasklist .task .task-details > div {
+	margin-top: 3px;
+	color: #777;
+}
+.schedule-container {
+	background-color: #eee;
+}
+.schedule-container .schedule-wrapper-grid,
+.schedule-container .schedule-wrapper-tasks {
+	background-color: #fff;
+}
+.tasklist-container .paginate a {
+	font-size: 26px;
+	text-decoration: none;
+}
+.tasklist-container .paginate .next  {
+	text-align: right;
+}
+.schedule-tasklist .drop-to-remove {
+	display: none;
+}
+.schedule-tasklist.active .drop-to-remove {
+	display: block;
+	background-color: #f9f9f9;
+	padding: 20px;
+	text-align: center;
+	font-size: 10px;
+	font-weight: bold;
+	border: 1px solid #eee;
+	color: #ccc;
+}
+.schedule-tasklist.hover .drop-to-remove {
+	background-color: #a5cdef;
+	color: #777;
+}
+.progress-indicator {
+	width: 100%;
+	position: relative;
+	background: #777;
+	font-size: 11px;
+	font-weight: bold;
+	color: #fff;
+	display: inline-block;
+	height: 2em;
+	line-height: 2em;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+.progress-indicator .progress-indicator-bar {
+	position: absolute;
+	background: #5cb85c;
+	height: 2em;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	display: inline-block;
+	top: 0;
+	left: 0;
+	z-index: 1;
+}
+.progress-indicator .progress-indicator-numbers {
+	position: absolute;
+	display: inline-block;
+	top: 0;
+	left: 0;
+	text-align: center;
+	width: 100%;
+	height: 2em;
+	line-height: 2em;
+	z-index: 2;
+}

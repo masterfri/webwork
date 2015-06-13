@@ -66,7 +66,7 @@ $this->menu = array(
 			),
 			array(
 				'name' => 'count_tasks',
-				'value' => 'CHtml::link($data->count_tasks, array("task/index", "project" => $data->id), array("class" => "btn btn-xs btn-default"))',
+				'value' => 'CHtml::link(ViewHelper::progerss($data->count_tasks, $data->count_closed_tasks), array("task/index", "project" => $data->id), array("class" => "progress-container"))',
 				'type' => 'raw',
 				'visible' => Yii::app()->user->checkAccess('view_task'),
 			),

@@ -1052,6 +1052,52 @@ return array(
 		),
 	),
 	/**
+	 * Schedule
+	 */ 
+	'view_schedule' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'View schedule',
+		'bizRule' => null,
+		'data' => null,
+	),
+	'update_schedule' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Update project schedule',
+		'bizRule' => null,
+		'data' => null,
+	),
+	'view_user_schedule' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'View user schedule',
+		'bizRule' => 'return (!isset($params["project"]) && !isset($params["user"])) || 
+							 (isset($params["project"]) && $params["project"]->isUserAssigned($params["userId"])) ||
+							 (isset($params["user"]) && ($params["user"] === "*" ? false : $params["user"]->id == $params["userId"]));',
+		'data' => null,
+		'children' => array(
+			'view_schedule',
+		),
+	),
+	'view_shared_project_schedule' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'View shared project schedule',
+		'bizRule' => 'return (!isset($params["project"]) && !isset($params["user"])) || 
+							 (isset($params["project"]) && $params["project"]->isUserAssigned($params["userId"]));',
+		'data' => null,
+		'children' => array(
+			'view_schedule',
+		),
+	),
+	'update_shared_project_schedule' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Update shared project schedule',
+		'bizRule' => 'return (!isset($params["project"])) || 
+							 ($params["project"]->isUserAssigned($params["userId"], Assignment::ROLE_MANAGER));',
+		'data' => null,
+		'children' => array(
+			'update_schedule',
+		),
+	),
+	/**
 	 * Options
 	 */ 
 	'update_general_options' => array(
@@ -1113,6 +1159,7 @@ return array(
 		'description' => 'Клиент',
 		'children' => array(
 			'create_project',
+			'view_shared_project_schedule',
 			'user',
 		),
 		'bizRule' => null,
@@ -1141,6 +1188,8 @@ return array(
 			'update_shared_application',
 			'delete_shared_application',
 			'pull_shared_application',
+			'view_user_schedule',
+			'update_shared_project_schedule',
 		),
 		'bizRule' => null,
 		'data' => null
@@ -1239,6 +1288,8 @@ return array(
 			'create_note',
 			'update_note',
 			'delete_note',
+			'view_schedule',
+			'update_schedule',
 			'client',
 			'teamlead',
 		),

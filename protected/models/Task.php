@@ -140,9 +140,10 @@ class Task extends CActiveRecord
 			array('	complexity,
 					estimate', 
 					'numerical', 'on' => 'create, update, estimate'),
-			array('	date_sheduled,
-					due_date', 
+			array('	due_date', 
 					'date', 'format' => 'yyyy-MM-dd', 'on' => 'create, update'),
+			array('	date_sheduled', 
+					'date', 'format' => 'yyyy-MM-dd', 'on' => 'create, update, schedule'),
 			array('	description', 
 					'length', 'max' => 16000, 'on' => 'create, update'),
 			array('	name', 
@@ -151,6 +152,11 @@ class Task extends CActiveRecord
 					'required', 'on' => 'create, update'),
 			array('	complexity', 
 					'required', 'on' => 'estimate'),
+			array(' assigned_id,
+					date_sheduled',
+					'required', 'on' => 'schedule'),
+			array(' complexity',
+					'validateEstimate', 'on' => 'schedule'),
 			array('	priority', 
 					'in', 'range' => array_keys(self::getListPriorities()), 'on' => 'create, update, change-priority'),
 			array('	regression_risk', 
@@ -185,6 +191,7 @@ class Task extends CActiveRecord
 			'milestone' => array(self::BELONGS_TO, 'Milestone', 'milestone_id'),
 			'project' => array(self::BELONGS_TO, 'Project', 'project_id'),
 			'subscriptions' => array(self::HAS_MANY, 'Subscription', 'task_id'),
+			'schedule' => array(self::HAS_MANY, 'TaskSchedule', 'task_id'),
 			'user_subscription' => array(self::HAS_ONE, 'Subscription', 'task_id',
 				'on' => 'user_subscription.user_id = :current_user_id',
 				'params' => array(
@@ -228,8 +235,23 @@ class Task extends CActiveRecord
 						'cascadeDelete' => true,
 						'quickDelete' => true,
 					),
+					'schedule' => array(
+						'cascadeDelete' => true,
+						'quickDelete' => true,
+					),
 					'tags',
 				),
+			),
+			array(
+				'class' => 'TrackAttributeBehavior',
+				'attributes' => array(
+					'assigned_id',
+					'date_sheduled',
+					'estimate',
+					'complexity',
+					'phase',
+				),
+				'callback' => array($this, 'renewSchedule'),
 			),
 		);
 	}
@@ -317,6 +339,20 @@ class Task extends CActiveRecord
 					'user_subscription' => array(
 						'select' => false,
 						'joinType' => 'INNER JOIN',
+					)
+				),
+			),
+			'nonplanned' => array(
+				'condition' => 'task.phase NOT IN(:phase_closed, :phase_on_hold) AND ISNULL(schedule.task_id)',
+				'params' => array(
+					':phase_closed' => self::PHASE_CLOSED,
+					':phase_on_hold' => self::PHASE_ON_HOLD,
+				),
+				'with' => array(
+					'schedule' => array(
+						'select' => false,
+						'together' => true,
+						'joinType' => 'LEFT JOIN',
 					)
 				),
 			),
@@ -539,5 +575,30 @@ class Task extends CActiveRecord
 			$this->getEstimate(),
 			$this->getEstimate() + $this->getEstimateReserve(),
 		);
+	}
+	
+	public function clearSchedule()
+	{
+		TaskSchedule::model()->deleteAll('task_id = ?', array($this->id));
+	}
+	
+	public function renewSchedule()
+	{
+		$this->clearSchedule();
+		if (!in_array($this->phase, array(self::PHASE_CLOSED, self::PHASE_ON_HOLD))) {
+			if ($this->assigned_id > 0 && !MysqlDateHelper::isEmpty($this->date_sheduled)) {
+				$estimate = $this->getEstimate() + $this->getEstimateReserve();
+				if ($estimate > 0) {
+					TaskSchedule::model()->addTask($this->id, $this->assigned_id, $this->date_sheduled, $estimate);
+				}
+			}
+		}
+	}
+	
+	public function validateEstimate($attribute, $params=array())
+	{
+		if ($this->complexity <= 0 && $this->estimate <= 0) {
+			$this->addError('complexity', Yii::t('core.crud', 'Task complexity estimate is required'));
+		}
 	}
 }

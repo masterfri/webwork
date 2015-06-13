@@ -276,6 +276,16 @@ return array(
 	'Pull Application' => 'Загрузка',
 	'Operation is in process... Please, be patient.' => 'Операция выполняется... Пожалуйста, подождите.',
 	'Pull has been successfully completed' => 'Загрузка успешно завершена',
-	'You are going to delete the application `{app}`. Please, confirm your intention by clicking `Delete`. Optionally you can delete following:' => 'Вы собираетесь удалить приложение `{app}`. Для подтверждения нажмите `Удалить`. Дополнительно вы можете удалить:'
+	'You are going to delete the application `{app}`. Please, confirm your intention by clicking `Delete`. Optionally you can delete following:' => 'Вы собираетесь удалить приложение `{app}`. Для подтверждения нажмите `Удалить`. Дополнительно вы можете удалить:',
+	'Schedule' => 'Расписание',
+	'Nothing is planned this week' => 'На этой неделе ничего не запланировано',
+	'Previous week' => 'Предыдущая неделя',
+	'Next week' => 'Следующая неделя',
+	'Scheduling' => 'Планирование',
+	'{hours} h.' => '{hours} ч.',
+	'Spare time: {hours} h.' => 'Свободно: {hours} ч.',
+	'Other tasks: {hours} h.' => 'Другие задачи: {hours} ч.',
+	'Task complexity estimate is required' => 'Необходима оценка сложности задачи',
+	'Drop here to remove' => 'Бросьте здесь, чтоб убрать',
 );
 

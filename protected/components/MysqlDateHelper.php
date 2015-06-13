@@ -20,6 +20,16 @@ class MysqlDateHelper
 		return date('Y-m-d H:i:s');
 	}
 	
+	public static function mkdate($d, $m=null, $y=null)
+	{
+		return date('Y-m-d', mktime(0,0,0, $m === null ? date('m') : $m, $d, $y === null ? date('Y') : $y));
+	}
+	
+	public static function mktime($h, $i, $s=0, $d=null, $m=null, $y=null)
+	{
+		return date('Y-m-d H:i:s', mktime($h, $i, $s, $m === null ? date('m') : $m, $d === null ? date('d') : $d, $y === null ? date('Y') : $y));
+	}
+	
 	public static function compare($date1, $date2, $skip_time=true)
 	{
 		if (self::isEmpty($date1) && self::isEmpty($date2)) {

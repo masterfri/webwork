@@ -9,4 +9,9 @@ class CoreModule extends CWebModule
 		
 		Yii::app()->messages->extensionPaths['core'] = 'core.messages';
 	}
+	
+	public function getVersion()
+	{
+		return '1.3';
+	}
 }

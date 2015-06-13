@@ -50,8 +50,15 @@
 		</div>
 	</div>
 	<div class="form-group">
+		<?php echo $form->labelEx($model, 'date_start', array('class'=>'col-sm-3 control-label')); ?>
+		<div class="col-sm-3">
+			<?php echo $form->dateField($model, 'date_start', array(
+				'class' => 'form-control datepicker-form-control',
+			)); ?> 
+			<?php echo $form->error($model, 'date_start', array('class'=>'help-inline')); ?>
+		</div>
 		<?php echo $form->labelEx($model, 'due_date', array('class'=>'col-sm-3 control-label')); ?>
-		<div class="col-sm-9">
+		<div class="col-sm-3">
 			<?php echo $form->dateField($model, 'due_date', array(
 				'class' => 'form-control datepicker-form-control',
 			)); ?> 

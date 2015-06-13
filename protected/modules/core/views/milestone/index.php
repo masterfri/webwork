@@ -59,8 +59,18 @@ $this->menu = array(
 		'id' => 'milestone-grid',
 		'dataProvider' => $provider,
 		'columns' => array(
-			array('class' => 'LinkColumn', 'name' => 'name'),
+			array(
+				'class' => 'LinkColumn', 
+				'name' => 'name'
+			),
+			'date_start:date',
 			'due_date:date',
+			array(
+				'name' => 'count_tasks',
+				'value' => 'CHtml::link(ViewHelper::progerss($data->count_tasks, $data->count_closed_tasks), array("task/index", "milestone" => $data->id, "project" => $data->project_id), array("class" => "progress-container"))',
+				'type' => 'raw',
+				'visible' => Yii::app()->user->checkAccess('view_task'),
+			),
 			array(
 				'class' => 'ButtonColumn',
 				'deleteConfirmation' => Yii::t('core.crud', 'Are you sure you want to delete this milestone?'),

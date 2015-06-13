@@ -100,6 +100,16 @@ class ViewHelper
 		return '';
 	}
 	
+	public static function formatDuration($value)
+	{
+		$value = round($value * 4) / 4;
+		return ltrim(strtr($value, array(
+			'.25' => '&frac14;',
+			'.5' => '&frac12;',
+			'.75' => '&frac34;',
+		)), '0');
+	}
+	
 	public static function formatEstimate($value)
 	{
 		list($min, $max) = array_map(function($v) {
@@ -108,12 +118,7 @@ class ViewHelper
 			} elseif ($v >= 20) {
 				return strval(round($v));
 			} else {
-				$v = round($v * 4) / 4;
-				return ltrim(strtr($v, array(
-					'.25' => '&frac14;',
-					'.5' => '&frac12;',
-					'.75' => '&frac34;',
-				)), '0');
+				return ViewHelper::formatDuration($v);
 			}
 		}, $value);
 		
@@ -126,5 +131,19 @@ class ViewHelper
 		}
 		
 		return Yii::t('core.crud', 'Not available');
+	}
+	
+	public static function progerss($total, $done) 
+	{
+		$width = $total > 0 ? round(100 * $done / $total) : 0;
+		$html  = CHtml::openTag('span', array('class' => 'progress-indicator'));
+		$html .= CHtml::tag('span', array('class' => 'progress-indicator-bar', 'style' => sprintf('width: %d%%;', $width)), '');
+		$html .= CHtml::openTag('span', array('class' => 'progress-indicator-numbers'));
+		$html .= CHtml::tag('span', array('class' => 'count-done'), $done); 
+		$html .= '/';
+		$html .= CHtml::tag('span', array('class' => 'count-total'), $total); 
+		$html .= CHtml::closeTag('span');
+		$html .= CHtml::closeTag('span');
+		return $html;
 	}
 }

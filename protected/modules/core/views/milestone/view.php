@@ -81,6 +81,7 @@ $this->menu = array(
 	<?php $this->widget('DetailView', array(
 		'data' => $model,		
 		'attributes' => array(
+			'date_start:date',
 			'due_date:date',
 		),
 	)); ?>

@@ -62,6 +62,12 @@ class Project extends CActiveRecord
 			'count_milestones' => array(self::STAT, 'Milestone', 'project_id'),
 			'tasks' => array(self::HAS_MANY, 'Task', 'project_id'),
 			'count_tasks' => array(self::STAT, 'Task', 'project_id'),
+			'count_closed_tasks' => array(self::STAT, 'Task', 'project_id', 
+				'condition' => 'phase = :phase_closed', 
+				'params' => array(
+					':phase_closed' => Task::PHASE_CLOSED,
+				),
+			),
 		);
 	}
 	
@@ -141,7 +147,7 @@ class Project extends CActiveRecord
 		$criteria = new CDbCriteria($params);
 		$criteria->alias = 'project';
 		$criteria->compare('project.name', $this->name, true);
-		$criteria->with = array('count_milestones', 'count_tasks');
+		$criteria->with = array('count_milestones', 'count_tasks', 'count_closed_tasks');
 		return new CActiveDataProvider($this, array(
 			'criteria' => $criteria,
 			'sort' => array(
@@ -187,7 +193,7 @@ class Project extends CActiveRecord
 	
 	public function getTeamList()
 	{
-		$data = CHtml::listData($this->assignments, 'user_id', 'user');
+		$data = CHtml::listData($this->assignments, 'user_id', 'user.displayName');
 		asort($data);
 		return $data;
 	}

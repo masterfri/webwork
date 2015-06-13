@@ -88,6 +88,26 @@ class User extends CActiveRecord
 		return array(
 			'rate' => array(self::BELONGS_TO, 'Rate', 'rate_id'),
 			'assignments' => array(self::HAS_MANY, 'Assignment', 'user_id'),
+			'schedule' => array(self::HAS_MANY, 'TaskSchedule', 'user_id'),
+		);
+	}
+	
+	public function behaviors()
+	{
+		return array(
+			array(
+				'class' => 'RelationBehavior',
+				'attributes' => array(
+					'assignments' => array(
+						'cascadeDelete' => true,
+						'quickDelete' => true,
+					),
+					'schedule' => array(
+						'cascadeDelete' => true,
+						'quickDelete' => true,
+					),
+				),
+			),
 		);
 	}
 	

@@ -177,6 +177,18 @@
 					}
 				});
 			}
+			if (response.modal) {
+				var modalopts = $.ajaxBindings.defaults.ajaxModal;
+				var modaltitle, modalbody;
+				if (typeof response.modal == 'object') {
+					modaltitle = response.modal.title || modalopts.title;
+					modalbody = response.modal.content || '';
+				} else {
+					modaltitle = modalopts.title;
+					modalbody = response.modal;
+				}
+				updateModal(createModal(modaltitle), modalbody, modalopts);
+			}
 			if (response.redirect) {
 				location.href = response.redirect;
 			}

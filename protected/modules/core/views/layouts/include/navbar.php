@@ -81,6 +81,11 @@
 								)
 							),
 							array(
+								'label' => '<i class="glyphicon glyphicon-th"></i> ' . Yii::t('core.crud', 'Schedule'),
+								'url' => array('schedule/index'),
+								'visible' => Yii::app()->user->checkAccess('view_schedule'),
+							),
+							array(
 								'label' => '<i class="glyphicon glyphicon-tag"></i> ' . Yii::t('core.crud', 'Tags'),
 								'url' => array('tag/index'),
 								'visible' => Yii::app()->user->checkAccess('view_tag'),

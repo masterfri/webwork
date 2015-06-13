@@ -57,7 +57,15 @@
 		<h2><?php echo CHtml::encode($milestone->name); ?></h2>
 		<table style="color: #777; width: 100%;">
 			<tr>
-				<td style="width: 34%;">
+				<td style="width: 40%;">
+					<?php echo Yii::t('milestone', 'Date Start'); ?>:
+					<?php if (!MysqlDateHelper::isEmpty($milestone->date_start)): ?>
+						<?php echo Yii::app()->format->formatDate($milestone->date_start); ?>
+					<?php else: ?>
+						<span class="not-set"><?php echo Yii::t('core.crud', 'Not set'); ?></span>
+					<?php endif; ?>
+				</td>
+				<td style="width: 30%;">
 					<?php echo Yii::t('milestone', 'Due Date'); ?>:
 					<?php if (!MysqlDateHelper::isEmpty($milestone->due_date)): ?>
 						<?php echo Yii::app()->format->formatDate($milestone->due_date); ?>
@@ -65,6 +73,7 @@
 						<span class="not-set"><?php echo Yii::t('core.crud', 'Not set'); ?></span>
 					<?php endif; ?>
 				</td>
+				<td style="width: 30%;">&nbsp;</td>
 			</tr>
 		</table>
 		<?php if ('' != $milestone->description): ?>
