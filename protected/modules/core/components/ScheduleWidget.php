@@ -169,7 +169,7 @@ class ScheduleWidget extends CWidget
 			}
 		} else {
 			if (null === $this->emptyText) {
-				$this->emptyText = Yii::t('core.crud', 'Nothing is planned this week');
+				$this->emptyText = Yii::t('core.crud', 'Nothing has been planned for this week');
 			}
 			echo CHtml::openTag('tr');
 			echo CHtml::tag('td', array('class' => 'nothing', 'colspan' => $total_cols), $this->emptyText);
