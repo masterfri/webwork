@@ -1,0 +1,26 @@
+<?php
+
+return array(
+	'Created by' => 'Создал',
+	'Name' => 'Название',
+	'Date' => 'Дата',
+	'Start Date' => 'Дата начала',
+	'End Date' => 'Дата окончания',
+	'Day' => 'День',
+	'Date Created' => 'Дата создания',
+	'For' => 'Для',
+	'Month' => 'Месяц',
+	'Year' => 'Год',
+	'January' => 'Января',
+	'February' => 'Февраля',
+	'March' => 'Марта',
+	'April' => 'Апреля',
+	'May' => 'Мая',
+	'June' => 'Июня',
+	'July' => 'Июля',
+	'August' => 'Августа',
+	'September' => 'Сентября',
+	'October' => 'Октября',
+	'November' => 'Ноября',
+	'December' => 'Декабря',
+);

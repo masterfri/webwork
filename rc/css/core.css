@@ -278,19 +278,27 @@ ul.tags li {
 	border: 0;
 }
 .detailed-view.table-bordered > tbody > tr > td:first-child,
-.detailed-view.table-bordered > tbody > tr > th:first-child {
+.detailed-view.table-bordered > tbody > tr > th:first-child,
+.detailed-sum.table-bordered > tbody > tr > td:first-child,
+.detailed-sum.table-bordered > tbody > tr > th:first-child {
 	border-left: 0;
 }
 .detailed-view.table-bordered > tbody > tr > td:last-child,
-.detailed-view.table-bordered > tbody > tr > th:last-child {
+.detailed-view.table-bordered > tbody > tr > th:last-child,
+.detailed-sum.table-bordered > tbody > tr > td:last-child,
+.detailed-sum.table-bordered > tbody > tr > th:last-child {
 	border-right: 0;
 }
 .detailed-view.table-bordered > tbody > tr:first-child > td,
-.detailed-view.table-bordered > tbody > tr:first-child > th {
+.detailed-view.table-bordered > tbody > tr:first-child > th,
+.detailed-sum.table-bordered > tbody > tr:first-child > td,
+.detailed-sum.table-bordered > tbody > tr:first-child > th {
 	border-top: 0;
 }
 .detailed-view.table-bordered > tbody > tr:last-child > td,
-.detailed-view.table-bordered > tbody > tr:last-child > th {
+.detailed-view.table-bordered > tbody > tr:last-child > th,
+.detailed-sum.table-bordered > tbody > tr:last-child > td,
+.detailed-sum.table-bordered > tbody > tr:last-child > th {
 	border-bottom: 0;
 }
 .detailed-view.table-bordered + .panel-body {
@@ -955,4 +963,8 @@ body:after {
 	height: 2em;
 	line-height: 2em;
 	z-index: 2;
+}
+.calendar .non-working {
+	background-color: #f9f9f9;
+	color: #d9534f;
 }

@@ -84,6 +84,16 @@
 		</div>
 	</div>
 	<div class="form-group">
+		<?php echo $form->labelEx($model, 'working_hours_id', array('class'=>'col-sm-3 control-label')); ?>
+		<div class="col-sm-9">
+			<?php echo $form->dropdownList($model, 'working_hours_id', WorkingHours::getList(), array(
+				'class'=>'form-control',
+				'prompt' => Yii::t('workingHours', 'General'),
+			)); ?>
+			<?php echo $form->error($model, 'working_hours_id', array('class'=>'help-inline')); ?>
+		</div>
+	</div>
+	<div class="form-group">
 		<?php echo $form->labelEx($model, 'status', array('class'=>'col-sm-3 control-label')); ?>
 		<div class="col-sm-9">
 			<?php echo $form->dropdownList($model, 'status', User::getListStatuses(), array(

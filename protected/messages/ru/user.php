@@ -19,4 +19,5 @@ return array(
 	'Status' => 'Статус',
 	'Confirm Password' => 'Подтверждение пароля',
 	'Locale' => 'Локаль',
+	'Working Hours' => 'Рабочие часы',
 );

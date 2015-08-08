@@ -87,8 +87,22 @@ class UserController extends AdminController
 	
 	public function actionProfile()
 	{
+		$monthnum = date('m');
+		$month1 = date('F');
+		$month2 = date('F', mktime(0,0,0, $monthnum + 1, 1));
+		$month1start = 2 - date('N', mktime(0,0,0, $monthnum, 1));
+		$month2start = 2 - date('N', mktime(0,0,0, $monthnum + 1, 1));
+		$month1days = date('t', mktime(0,0,0, $monthnum, 1));
+		$month2days = date('t', mktime(0,0,0, $monthnum + 1, 1));
 		$this->render('profile', array(
 			'model' => Yii::app()->user->getModel(),
+			'monthnum' => $monthnum,
+			'month1' => $month1,
+			'month2' => $month2,
+			'month1i' => $month1start,
+			'month2i' => $month2start,
+			'month1days' => $month1days,
+			'month2days' => $month2days,
 		));
 	}
 	

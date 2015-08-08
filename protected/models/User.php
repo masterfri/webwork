@@ -38,6 +38,8 @@ class User extends CActiveRecord
 			'password_confirm' => Yii::t('user', 'Confirm Password'),
 			'locale' => Yii::t('user', 'Locale'),
 			'localeName' => Yii::t('user', 'Locale'),
+			'working_hours' => Yii::t('user', 'Working Hours'),
+			'working_hours_id' => Yii::t('user', 'Working Hours'),
 		);
 	}
 	
@@ -74,7 +76,8 @@ class User extends CActiveRecord
 					'safe', 'on' => 'update, updateProfile'),
 			array(' password_confirm', 
 					'compare', 'compareAttribute' => 'password_plain', 'on' => 'create, update, updateProfile'),
-			array(' rate_id',
+			array(' rate_id,
+					working_hours_id',
 					'safe', 'on' => 'create, update'),
 			array('	email,
 					username,
@@ -89,6 +92,7 @@ class User extends CActiveRecord
 			'rate' => array(self::BELONGS_TO, 'Rate', 'rate_id'),
 			'assignments' => array(self::HAS_MANY, 'Assignment', 'user_id'),
 			'schedule' => array(self::HAS_MANY, 'TaskSchedule', 'user_id'),
+			'working_hours' => array(self::BELONGS_TO, 'WorkingHours', 'working_hours_id'),
 		);
 	}
 	
@@ -98,6 +102,8 @@ class User extends CActiveRecord
 			array(
 				'class' => 'RelationBehavior',
 				'attributes' => array(
+					'rate',
+					'working_hours',
 					'assignments' => array(
 						'cascadeDelete' => true,
 						'quickDelete' => true,

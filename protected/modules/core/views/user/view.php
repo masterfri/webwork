@@ -67,6 +67,10 @@ $this->menu = array(
 			'email',
 			'roleName',
 			'rate',
+			array(
+				'name' => 'working_hours',
+				'value' => CHtml::value($model, "working_hours", Yii::t("workingHours", "General")),
+			),
 			'statusName',
 			'localeName',
 		),

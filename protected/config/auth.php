@@ -607,6 +607,60 @@ return array(
 		'data' => null,
 	),
 	/**
+	 * Holiday 
+	 */
+	'view_holiday' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'View holiday',
+		'bizRule' => null,
+		'data' => null,
+	),
+	'create_holiday' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Create holiday',
+		'bizRule' => null,
+		'data' => null,
+	),
+	'update_holiday' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Edit holiday',
+		'bizRule' => null,
+		'data' => null,
+	),
+	'delete_holiday' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Delete holiday',
+		'bizRule' => null,
+		'data' => null,
+	),
+	/**
+	 * Working hours 
+	 */
+	'view_working_hours' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'View working hours',
+		'bizRule' => null,
+		'data' => null,
+	),
+	'create_working_hours' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Create working hours',
+		'bizRule' => null,
+		'data' => null,
+	),
+	'update_working_hours' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Edit working hours',
+		'bizRule' => null,
+		'data' => null,
+	),
+	'delete_working_hours' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Delete working hours',
+		'bizRule' => null,
+		'data' => null,
+	),
+	/**
 	 * Tag 
 	 */
 	'view_tag' => array(
@@ -1290,6 +1344,14 @@ return array(
 			'delete_note',
 			'view_schedule',
 			'update_schedule',
+			'view_holiday',
+			'create_holiday',
+			'update_holiday',
+			'delete_holiday',
+			'view_working_hours',
+			'create_working_hours',
+			'update_working_hours',
+			'delete_working_hours',
 			'client',
 			'teamlead',
 		),

@@ -160,6 +160,16 @@
 							'url' => array('options/generalOptions'),
 							'visible' => Yii::app()->user->checkAccess('update_general_options'),
 						),
+						array(
+							'label' => '<i class="glyphicon glyphicon-calendar"></i> ' . Yii::t('core.crud', 'Holidays'),
+							'url' => array('holiday/index'),
+							'visible' => Yii::app()->user->checkAccess('view_holiday'),
+						),
+						array(
+							'label' => '<i class="glyphicon glyphicon-time"></i> ' . Yii::t('core.crud', 'Working Hours'),
+							'url' => array('workingHours/index'),
+							'visible' => Yii::app()->user->checkAccess('view_working_hours'),
+						),
 					),
 				),
 			),
