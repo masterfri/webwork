@@ -65,25 +65,26 @@ class ScheduleWidget extends CWidget
 		echo CHtml::closeTag('div');
 		
 		echo CHtml::openTag('table', array('class' => $this->tableCssClass));
-		echo CHtml::openTag('tr');
-		if (!$this->noHr) {
-			echo CHtml::tag('th', array('class' => 'h'), '');
-			$total_cols++;
-		}
-		$working_days = array();
-		for ($i = 0; $i < 7; $i++) {
-			foreach (array_keys($this->grid) as $user) {
-				if ($ts->isWorkingDay($user, $day + $i, $month, $year)) {
-					echo CHtml::tag('th', array('class' => 'g'), CHtml::encode($formatter->format($this->dateFormat, mktime(0,0,0, $month, $day + $i))));
-					$total_cols++;
-					$working_days[$i] = 1;
-					break;
+
+		if (count($this->grid)) {
+			echo CHtml::openTag('tr');
+			if (!$this->noHr) {
+				echo CHtml::tag('th', array('class' => 'h'), '');
+				$total_cols++;
+			}
+			$working_days = array();
+			for ($i = 0; $i < 7; $i++) {
+				foreach (array_keys($this->grid) as $user) {
+					if ($ts->isWorkingDay($user, $day + $i, $month, $year)) {
+						echo CHtml::tag('th', array('class' => 'g'), CHtml::encode($formatter->format($this->dateFormat, mktime(0,0,0, $month, $day + $i))));
+						$total_cols++;
+						$working_days[$i] = 1;
+						break;
+					}
 				}
 			}
-		}
-		echo CHtml::closeTag('tr');
-		
-		if (count($this->grid)) {
+			echo CHtml::closeTag('tr');
+			
 			$this->sortGrid();
 			foreach ($this->grid as $user => $dates) {
 				echo CHtml::openTag('tr');
@@ -184,8 +185,15 @@ class ScheduleWidget extends CWidget
 			if (null === $this->emptyText) {
 				$this->emptyText = Yii::t('core.crud', 'Nothing has been planned for this week');
 			}
+			
 			echo CHtml::openTag('tr');
-			echo CHtml::tag('td', array('class' => 'nothing', 'colspan' => $total_cols), $this->emptyText);
+			echo CHtml::tag('th', array('class' => 'g'), sprintf('%s - %s', 
+				CHtml::encode($formatter->format($this->dateFormat, mktime(0,0,0, $month, $day))),
+				CHtml::encode($formatter->format($this->dateFormat, mktime(0,0,0, $month, $day + 6)))));
+			echo CHtml::closeTag('tr');
+			
+			echo CHtml::openTag('tr');
+			echo CHtml::tag('td', array('class' => 'nothing'), $this->emptyText);
 			echo CHtml::closeTag('tr');
 		}
 		echo CHtml::closeTag('table');

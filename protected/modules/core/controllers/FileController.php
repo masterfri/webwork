@@ -70,6 +70,26 @@ class FileController extends AdminController
 		));
 	}
 	
+	public function actionDownload($id)
+	{
+		$model = $this->loadModel($id, 'File');
+		$path = File::getUploadPath() . '/' . $model->path;
+		if (!is_readable($path)) {
+			throw new CHttpException(404, 'Not Found');
+		}
+		header("Content-Type: " . $model->mime);
+		header("Content-Length: " . $model->size);
+		if ($model->getIsImage()) {
+			header("Content-Disposition: inline");
+		} else {
+			header("Content-Disposition: attachment; filename=" . $model->title);
+		}
+		header("Cache-Control: max-age=3600000, must-revalidate");
+		header("Expires: " . date('r', time() + 3600000));
+		header("Last-Modified: " . date('r', $model->update_time));
+		readfile($path);
+	}
+	
 	public function actionImagePickerDialog($w, $h)
 	{
 		$model = $this->createSearchModel('File');
@@ -113,6 +133,10 @@ class FileController extends AdminController
 			array('allow',
 				'actions' => array('delete'),
 				'roles' => array('delete_file'),
+			),
+			array('allow',
+				'actions' => array('download'),
+				'users' => array('@'),
 			),
 			array('deny'),
 		);

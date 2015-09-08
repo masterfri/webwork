@@ -197,9 +197,21 @@ class File extends CActiveRecord
 		return sprintf("%0.1f MB",  $bytes / 1048576);
 	}
 	
-	public function getUrl($absolute=true)
+	public function getUrl($absolute=true, $protected=true)
 	{
-		return sprintf('http://%s%s/%s', $_SERVER['HTTP_HOST'], self::getUploadPathUrl(), $this->path);
+		if ($protected) {
+			if ($absolute) {
+				return Yii::app()->createAbsoluteUrl('core/file/download', array('id' => $this->id, 'title' => $this->title));
+			} else {
+				return Yii::app()->createUrl('core/file/download', array('id' => $this->id, 'title' => $this->title));
+			}
+		} else {
+			if ($absolute) {
+				return sprintf('http://%s%s/%s', $_SERVER['HTTP_HOST'], self::getUploadPathUrl(), $this->path);
+			} else {
+				return sprintf('%s/%s', self::getUploadPathUrl(), $this->path);
+			}
+		}
 	}
 	
 	public function getIsImage()
@@ -212,14 +224,14 @@ class File extends CActiveRecord
 		return self::$validImageTypes;
 	}
 	
-	public function getUrlResized($width, $height=0)
+	public function getUrlResized($width, $height=0, $absolute=true, $protected=true)
 	{
 		if (! $this->getIsImage()) {
 			throw new Exception('Trying resize non-image file');
 		}
 		
 		if (($width == 0 || $this->width == $width) && ($height == 0 || $this->height == $height)) {
-			return $this->getUrl();
+			return $this->getUrl($absolute, $protected);
 		}
 		
 		$criteria = new CDbCriteria();
@@ -237,7 +249,7 @@ class File extends CActiveRecord
 			$resized = $this->makeResized($width, $height);
 		}
 		
-		return $resized->getUrl();
+		return $resized->getUrl($absolute, $protected);
 	}
 	
 	public function getImageSizeReal()
