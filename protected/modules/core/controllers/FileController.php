@@ -77,6 +77,8 @@ class FileController extends AdminController
 		if (!is_readable($path)) {
 			throw new CHttpException(404, 'Not Found');
 		}
+		header_remove("Pragma");
+		header_remove("Expires");
 		header("Content-Type: " . $model->mime);
 		header("Content-Length: " . $model->size);
 		if ($model->getIsImage()) {
@@ -84,10 +86,13 @@ class FileController extends AdminController
 		} else {
 			header("Content-Disposition: attachment; filename=" . $model->title);
 		}
-		header("Cache-Control: max-age=3600000, must-revalidate");
-		header("Expires: " . date('r', time() + 3600000));
+		header("Cache-Control: max-age=8640000");
 		header("Last-Modified: " . date('r', $model->update_time));
-		readfile($path);
+		header("ETag: " . md5($path));
+		if (strcasecmp($_SERVER['REQUEST_METHOD'], 'GET') == 0) {
+			readfile($path);
+		}
+		exit;
 	}
 	
 	public function actionImagePickerDialog($w, $h)
