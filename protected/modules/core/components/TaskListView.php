@@ -5,7 +5,7 @@ class TaskListView extends ListView
 	public $htmlOptions = array('class' => 'task-list');
 	public $template = '{sorter} {items} {pager}';
 	public $itemView = '/task/_task';
-    public $sortableAttributes = array('name','priority','date_sheduled','due_date');
+    public $sortableAttributes = array('name','priority','date_sheduled','due_date','time_updated');
 	public $group_by_date = false;
 	protected $group_date;
 	

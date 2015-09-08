@@ -125,6 +125,7 @@ class Task extends CActiveRecord
 			'subscriptions' => Yii::t('task', 'Subscriptions'),
 			'tags' => Yii::t('task', 'Tags'),
 			'time_created' => Yii::t('task', 'Date Created'),
+			'time_updated' => Yii::t('task', 'Date Updated'),
 		);
 	}
 	
@@ -362,6 +363,7 @@ class Task extends CActiveRecord
 	protected function beforeSave()
 	{
 		if (parent::beforeSave()) {
+			$this->time_updated = MysqlDateHelper::currentDatetime();
 			if ($this->getIsNewRecord()) {
 				$this->phase = self::PHASE_CREATED;
 			}

@@ -785,6 +785,7 @@ body:after {
 .schedule-table table .g ul li.tmp-hide {
 	visibility: hidden;
 }
+.schedule-table table .g.day-off ul li,
 .schedule-table table .g ul li.spare-time,
 .schedule-table table .g ul li.other-tasks {
 	background: transparent;

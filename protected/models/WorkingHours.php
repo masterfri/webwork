@@ -136,9 +136,9 @@ class WorkingHours extends CActiveRecord
 		if (!isset(self::$userhours[$user_id])) {
 			$criteria = new CDbCriteria();
 			$criteria->alias = 'wh';
-			$criteria->join = 'INNER JOIN ' . User::model()->tableName() . ' `user` ON `user`.`working_hours_id` = `wh`.id AND `user`.`id` = :user OR `wh`.`general` = 1';
+			$criteria->join = 'INNER JOIN ' . User::model()->tableName() . ' `user` ON (`user`.`working_hours_id` = `wh`.id OR `wh`.`general` = 1) AND `user`.`id` = :user';
 			$criteria->params[':user'] = $user_id;
-			$criteria->order = 'IF(ISNULL(`user`.`id`), 1, 0)';
+			$criteria->order = 'IF(`user`.`working_hours_id` = `wh`.id, 0, 1)';
 			$criteria->limit = 1;
 			$wh = self::model()->find($criteria);
 			if ($wh !== null) {

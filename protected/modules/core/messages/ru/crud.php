@@ -305,6 +305,7 @@ return array(
 	'{hours} h.' => '{hours} ч.',
 	'Spare time: {hours} h.' => 'Свободно: {hours} ч.',
 	'Other tasks: {hours} h.' => 'Другие задачи: {hours} ч.',
+	'Day off' => 'Выходной',
 	'Task complexity estimate is required' => 'Необходима оценка сложности задачи',
 	'Drop here to remove' => 'Бросьте здесь, чтоб убрать',
 );

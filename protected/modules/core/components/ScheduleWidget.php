@@ -32,7 +32,6 @@ class ScheduleWidget extends CWidget
 		$current_user = Yii::app()->user;
 		$today = MysqlDateHelper::currentDate();
 		$ts = TaskSchedule::model();
-		$working_day_length = $ts->getWorkingDayLength();
 		$total_cols = 0;
 		$next_date = clone $start;
 		$next_date->modify('+1 week');
@@ -71,10 +70,15 @@ class ScheduleWidget extends CWidget
 			echo CHtml::tag('th', array('class' => 'h'), '');
 			$total_cols++;
 		}
+		$working_days = array();
 		for ($i = 0; $i < 7; $i++) {
-			if (!$ts->isWeekend($day + $i, $month, $year)) {
-				echo CHtml::tag('th', array('class' => 'g'), CHtml::encode($formatter->format($this->dateFormat, mktime(0,0,0, $month, $day + $i))));
-				$total_cols++;
+			foreach (array_keys($this->grid) as $user) {
+				if ($ts->isWorkingDay($user, $day + $i, $month, $year)) {
+					echo CHtml::tag('th', array('class' => 'g'), CHtml::encode($formatter->format($this->dateFormat, mktime(0,0,0, $month, $day + $i))));
+					$total_cols++;
+					$working_days[$i] = 1;
+					break;
+				}
 			}
 		}
 		echo CHtml::closeTag('tr');
@@ -87,74 +91,83 @@ class ScheduleWidget extends CWidget
 					echo CHtml::tag('th', array(), CHtml::encode($this->hr[$user]));
 				}
 				for ($i = 0; $i < 7; $i++) {
-					if (!$ts->isWeekend($day + $i, $month, $year)) {
+					if (isset($working_days[$i])) {
 						$date = MysqlDateHelper::mkdate($day + $i, $month, $year);
 						$class_name = array('g');
 						$content = '';
 						$total = 0;
 						$other_tasks = 0;
 						$content .= CHtml::openTag('ul');
-						if (isset($dates[$date])) {
-							foreach ($dates[$date] as $entry) {
-								$task = $entry->task;
-								if ($current_user->checkAccess('view_task', array('task' => $task))) {
-									$task_class_name = 't';
-									if ($this->editMode && !$current_user->checkAccess('update_schedule', array('project' => $task->project))) {
-										$task_class_name .= ' noupdate';
-									}
-									$content .= CHtml::openTag('li', array(
-										'class' => $task_class_name,
-										'data-task' => $task->id,
-										'data-task-priority' => $task->priority,
-										'data-task-due-date' => $format->formatDate($task->due_date),
-										'data-task-estimate' => ViewHelper::formatEstimate($task->getEstimateRange()),
-									));
-									$content .= CHtml::tag('div', array('class' => 'task-name'), CHtml::link(CHtml::encode(CHtml::value($entry, 'task.name')), array('task/view', 'id' => $entry->task_id), array('title' => CHtml::value($entry, 'task.name'))));
-									if ($this->showProject) {
-										$content .= CHtml::openTag('div', array('class' => 'task-details project-name'));
-										$content .= CHtml::tag('span', array('class' => 'glyphicon glyphicon-briefcase'), '');
+						if ($ts->isWorkingDay($user, $day + $i, $month, $year)) {
+							$working_day_length = $ts->getWorkingDayLength($user, $day + $i, $month, $year);
+							if (isset($dates[$date])) {
+								foreach ($dates[$date] as $entry) {
+									$task = $entry->task;
+									if ($current_user->checkAccess('view_task', array('task' => $task))) {
+										$task_class_name = 't';
+										if ($this->editMode && !$current_user->checkAccess('update_schedule', array('project' => $task->project))) {
+											$task_class_name .= ' noupdate';
+										}
+										$content .= CHtml::openTag('li', array(
+											'class' => $task_class_name,
+											'data-task' => $task->id,
+											'data-task-priority' => $task->priority,
+											'data-task-due-date' => $format->formatDate($task->due_date),
+											'data-task-estimate' => ViewHelper::formatEstimate($task->getEstimateRange()),
+										));
+										$content .= CHtml::tag('div', array('class' => 'task-name'), CHtml::link(CHtml::encode(CHtml::value($entry, 'task.name')), array('task/view', 'id' => $entry->task_id), array('title' => CHtml::value($entry, 'task.name'))));
+										if ($this->showProject) {
+											$content .= CHtml::openTag('div', array('class' => 'task-details project-name'));
+											$content .= CHtml::tag('span', array('class' => 'glyphicon glyphicon-briefcase'), '');
+											$content .= ' ';
+											$content .= CHtml::encode(CHtml::value($task, 'project.name'));
+											$content .= CHtml::closeTag('div');
+										}
+										$content .= CHtml::openTag('div', array('class' => 'task-details'));
+										$content .= CHtml::tag('span', array('class' => 'glyphicon glyphicon-time'), '');
 										$content .= ' ';
-										$content .= CHtml::encode(CHtml::value($task, 'project.name'));
+										$content .= Yii::t('core.crud', '{hours} h.', array('{hours}' => ViewHelper::formatDuration($entry->hours)));
 										$content .= CHtml::closeTag('div');
+										$content .= CHtml::closeTag('li');
+										$total += $entry->hours;
+									} else {
+										$total += $entry->hours;
+										$other_tasks += $entry->hours;
 									}
-									$content .= CHtml::openTag('div', array('class' => 'task-details'));
-									$content .= CHtml::tag('span', array('class' => 'glyphicon glyphicon-time'), '');
-									$content .= ' ';
-									$content .= Yii::t('core.crud', '{hours} h.', array('{hours}' => ViewHelper::formatDuration($entry->hours)));
-									$content .= CHtml::closeTag('div');
-									$content .= CHtml::closeTag('li');
-									$total += $entry->hours;
-								} else {
-									$total += $entry->hours;
-									$other_tasks += $entry->hours;
 								}
+							} else {
+								$class_name[] = 'empty';
+							}
+							$free = $working_day_length - $total;
+							if ($other_tasks > 0) {
+								$content .= CHtml::openTag('li', array(
+									'class' => 'other-tasks',
+								));
+								$content .= Yii::t('core.crud', 'Other tasks: {hours} h.', array('{hours}' => ViewHelper::formatDuration($other_tasks)));
+								$content .= CHtml::closeTag('li');
+							}
+							if ($free > 0 && $this->showSpareTime) {
+								$content .= CHtml::openTag('li', array(
+									'class' => 'spare-time',
+								));
+								$content .= Yii::t('core.crud', 'Spare time: {hours} h.', array('{hours}' => ViewHelper::formatDuration($free)));
+								$content .= CHtml::closeTag('li');
+							}
+							echo CHtml::closeTag('ul');
+							if ($total >= $working_day_length) {
+								$class_name[] = 'full';
 							}
 						} else {
+							$class_name[] = 'day-off';
 							$class_name[] = 'empty';
-						}
-						$free = $working_day_length - $total;
-						if ($other_tasks > 0) {
-							$content .= CHtml::openTag('li', array(
-								'class' => 'other-tasks',
-							));
-							$content .= Yii::t('core.crud', 'Other tasks: {hours} h.', array('{hours}' => ViewHelper::formatDuration($other_tasks)));
+							$content .= CHtml::openTag('li');
+							$content .= Yii::t('core.crud', 'Day off');
 							$content .= CHtml::closeTag('li');
 						}
-						if ($free > 0 && $this->showSpareTime) {
-							$content .= CHtml::openTag('li', array(
-								'class' => 'spare-time',
-							));
-							$content .= Yii::t('core.crud', 'Spare time: {hours} h.', array('{hours}' => ViewHelper::formatDuration($free)));
-							$content .= CHtml::closeTag('li');
-						}
-						echo CHtml::closeTag('ul');
 						if ($date == $today) {
 							$class_name[] = 'today';
 						} elseif (MysqlDateHelper::lt($date, $today)) {
 							$class_name[] = 'past';
-						}
-						if ($total >= $working_day_length) {
-							$class_name[] = 'full';
 						}
 						echo CHtml::openTag('td', array(
 							'data-date' => $date,

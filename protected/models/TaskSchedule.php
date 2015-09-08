@@ -22,8 +22,6 @@ class TaskSchedule extends CActiveRecord
 	
 	public function addTask($task_id, $user_id, $date_start, $hours)
 	{
-		$working_day_length = $this->getWorkingDayLength();
-		
 		$today = MysqlDateHelper::currentDate();
 		if (MysqlDateHelper::gt($today, $date_start)) {
 			$date_start = $today;
@@ -33,9 +31,9 @@ class TaskSchedule extends CActiveRecord
 		$start_month = $month = $datetime->format('n');
 		$start_year = $year = $datetime->format('Y');
 		while ($hours > 0) {
-			$working_days = $this->getWorkingDays($month, $year, $start_day, $start_month, $start_year);
+			$working_days = $this->getWorkingDays($user_id, $month, $year, $start_day, $start_month, $start_year);
 			$user_loading = $this->getUserLoading($user_id, $month, $year, $date_start);
-			foreach ($working_days as $date) {
+			foreach ($working_days as $date => $working_day_length) {
 				if (isset($user_loading[$date])) {
 					$free_hours = $working_day_length - $user_loading[$date];
 				} else {
@@ -63,7 +61,7 @@ class TaskSchedule extends CActiveRecord
 		}
 	}
 	
-	protected function getWorkingDays($month, $year, $start_day, $start_month, $start_year)
+	protected function getWorkingDays($user_id, $month, $year, $start_day, $start_month, $start_year)
 	{
 		if ($month == $start_month && $year == $start_year) {
 			$day = $start_day;
@@ -73,8 +71,9 @@ class TaskSchedule extends CActiveRecord
 		$last_day = date('t', mktime(0,0,0, $month, 1, $year));
 		$result = array();
 		for (; $day <= $last_day; $day++) {
-			if ($this->isWorkingDay($day, $month, $year)) {
-				$result[] = MysqlDateHelper::mkdate($day, $month, $year);
+			if ($this->isWorkingDay($user_id, $day, $month, $year)) {
+				$date = MysqlDateHelper::mkdate($day, $month, $year);
+				$result[$date] = $this->getWorkingDayLength($user_id, $day, $month, $year);
 			}
 		}
 		return $result;
@@ -97,25 +96,12 @@ class TaskSchedule extends CActiveRecord
 		return $result;
 	}
 	
-	public function isWorkingDay($day, $month, $year)
+	public function isWorkingDay($user_id, $day, $month, $year)
 	{
-		return  !$this->isHoliday($day, $month, $year) && 
-				!$this->isWeekend($day, $month, $year);
+		return (WorkingHours::checkUserHours($user_id, $day, $month, $year) > 0) &&
+			   (Holiday::checkDate($day, $month, $year, $user_id) == false);
 	}
-	
-	public function isHoliday($day, $month, $year)
-	{
-		 // TODO to config
-		return false;
-	}
-	
-	public function isWeekend($day, $month, $year)
-	{
-		$holidays = array('6', '7'); // TODO to config
-		
-		return in_array(date('N', mktime(0,0,0, $month, $day, $year)), $holidays);
-	}
-	
+
 	public function scopes()
 	{
 		return array(
@@ -150,8 +136,8 @@ class TaskSchedule extends CActiveRecord
 		);
 	}
 	
-	public function getWorkingDayLength()
+	public function getWorkingDayLength($user_id, $day, $month, $year)
 	{
-		return 8;  // TODO to config
+		return WorkingHours::checkUserHours($user_id, $day, $month, $year);
 	}
 }

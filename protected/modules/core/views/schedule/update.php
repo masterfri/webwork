@@ -106,7 +106,7 @@ $.ajaxBindings.on('tasklist.init', function() {
 });
 
 $.ajaxBindings.on('schedulegrid.init', function() {
-	$('#scheduling-grid td:not(.full,.past)').droppable({
+	$('#scheduling-grid td:not(.full,.past,.day-off)').droppable({
 		tolerance: 'pointer',
 		hoverClass: 'hover',
 		drop: function(e, ui) {

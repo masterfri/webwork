@@ -19,6 +19,7 @@ return array(
 	'Risk of Regression' => 'Риск регрессии',
 	'Tags' => 'Тэги',
 	'Date Created' => 'Дата создания',
+	'Date Updated' => 'Дата обновления',
 	'Critical' => 'Критический',
 	'Urgent' => 'Срочный',
 	'High' => 'Высокий',
