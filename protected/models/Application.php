@@ -101,6 +101,7 @@ class Application extends CActiveRecord
 		return array(
 			'created_by' => array(self::BELONGS_TO, 'User', 'created_by_id'),
 			'project' => array(self::BELONGS_TO, 'Project', 'project_id'),
+			'entities' => array(self::HAS_MANY, 'AppEntity', 'application_id'),
 		);
 	}
 
@@ -117,6 +118,9 @@ class Application extends CActiveRecord
 				'attributes' => array(
 					'created_by',
 					'project',
+					'entities' => array(
+						'cascadeDelete' => true,
+					),
 				),
 			),
 		);

@@ -969,3 +969,42 @@ body:after {
 	background-color: #f9f9f9;
 	color: #d9534f;
 }
+.app-entity-attr .h .form-control {
+	display: inline;
+	width: 200px;
+	height: 28px; 
+	padding: 4px 12px;
+}
+.app-entity-attr .form-control.short {
+	width: 60px;
+}
+.app-entity-attr .mleft {
+	margin-left: 10px;
+}
+.app-entity-attr .more-container {
+	padding-top: 20px;
+}
+.app-entity-attr .h .btn-group .btn {
+	color: #ddd;
+}
+.app-entity-attr .h .btn-group .btn.active {
+	color: #000;
+}
+.app-entity-attr .h .btn-danger.confirmation {
+	height: 28px;
+    line-height: 10px;
+}
+.app-entity-attr .h .btn-danger.confirmation span {
+	display: none;
+}
+.app-entity-attr .h .btn-danger.confirmation:before {
+	content: 'confirm';
+	font-size: 12px;
+	font-weight: bold;
+}
+.app-entity-attr.invalid {
+	border: 1px solid #d9534f;
+}
+.app-entity-attr .form-control.invalid {
+	border: 1px solid #d9534f;
+}

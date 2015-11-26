@@ -308,5 +308,16 @@ return array(
 	'Day off' => 'Выходной',
 	'Task complexity estimate is required' => 'Необходима оценка сложности задачи',
 	'Drop here to remove' => 'Бросьте здесь, чтоб убрать',
+	'Design' => 'Проектирование',
+	'New Application Entity' => 'Создание сущности',
+	'Application Entity Updating' => 'Редактирование сущности',
+	'Application Entity Information' => 'Информация о сущности',
+	'Create Application Entity' => 'Создать сущность',
+	'Application Entities' => 'Сущности',
+	'Manage Application Entities' => 'Все сущности',
+	'Update Application Entity' => 'Обновить',
+	'View Application Entity' => 'Просмотреть',
+	'Delete Application Entity' => 'Удалить',
+	'Are you sure you want to delete this application entity?' => 'Вы уверены, что хотите удалить эту сущность?',
 );
 

@@ -37,6 +37,15 @@ $this->menu = array(
 		'visible' => Yii::app()->user->checkAccess('view_project', array('project' => $model->project)),
 	),
 	array(
+		'label' => '<i class="glyphicon glyphicon-wrench"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('core.crud', 'Design'),
+			'class' => 'btn btn-default',
+		),
+		'url' => array('appEntity/index', 'application' => $model->id),
+		'visible' => Yii::app()->user->checkAccess('design_application', array('project' => $model->project)),
+	),
+	array(
 		'label' => '<i class="glyphicon glyphicon-cog"></i> <span class="caret"></span>', 
 		'linkOptions' => array(
 			'class' => 'btn btn-default dropdown-toggle',
