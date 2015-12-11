@@ -99,7 +99,7 @@ if (null !== $response) {
 				</p>
 			</div>
 			<div style="display: none;" class="preloader">
-				<p><?php echo Yii::t('core.crud', 'Operation is in process... Please, be patient.'); ?></p>
+				<p><?php echo Yii::t('core.crud', 'Operation in process... Please, be patient.'); ?></p>
 			</div>
 			<button type="submit" class="btn btn-danger"><?php echo Yii::t('core.crud', 'Delete'); ?></button>
 		</form>

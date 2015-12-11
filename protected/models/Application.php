@@ -7,6 +7,8 @@ class Application extends CActiveRecord
 	const STATUS_HAS_DB = 0x04;
 	
 	public $create_repo = 0;
+	protected $_lastBuild;
+	protected static $_cf;
 	
 	protected static $allowedVhostDirectives = array(
 		'AddDefaultCharset',
@@ -44,6 +46,10 @@ class Application extends CActiveRecord
 			'project' => Yii::t('application', 'Project'),
 			'project_id' => Yii::t('application', 'Project'),
 			'domain' => Yii::t('application', 'Domain'),
+			'entitiesToBuild' => Yii::t('application', 'Entities to Build'),
+			'schemesToBuild' => Yii::t('application', 'Schemes to Build'),
+			'packages' => Yii::t('application', 'Packages to Include'),
+			'buildOptionsFlat' => Yii::t('application', 'Options'),
 		);
 	}
 	
@@ -93,6 +99,12 @@ class Application extends CActiveRecord
 					'unique', 'criteria' => array('condition' => 'id != :id', 'params' => array(':id' => $this->id)), 'on' => 'configdb'),
 			array('	db_user',
 					'unique', 'criteria' => array('condition' => 'id != :id', 'params' => array(':id' => $this->id)), 'on' => 'configdb'),
+			array(' entitiesToBuild,
+					schemesToBuild',
+					'required', 'on' => 'build'),
+			array(' packages,
+					buildOptionsFlat',
+					'safe', 'on' => 'build'),
 		);
 	}
 	
@@ -256,5 +268,129 @@ class Application extends CActiveRecord
 			'repo_name' => $this->getGitRepoName(),
 			'options' => $options,
 		));
+	}
+	
+	public function getCF()
+	{
+		if (null === self::$_cf) {
+			self::$_cf = Yii::app()->cf;
+			self::$_cf->setup($this->getCFWorkdir());
+		}
+		return self::$_cf;
+	}
+	
+	public function getCFWorkdir()
+	{
+		$dir = Yii::app()->getRuntimePath() . '/cf-build';
+		if (!is_dir($dir)) {
+			if (!@mkdir($dir)) {
+				throw new CException("Can't create directory $dir");
+			}
+		} elseif (!is_writable($dir)) {
+			throw new CException("Directory $dir is not writable");
+		}
+		$dir .= '/app-' . $this->id;
+		if (!is_dir($dir)) {
+			if (!@mkdir($dir)) {
+				throw new CException("Can't create directory $dir");
+			}
+		} elseif (!is_writable($dir)) {
+			throw new CException("Directory $dir is not writable");
+		}
+		return $dir;
+	}
+	
+	protected function getLastBuild()
+	{
+		if (null === $this->_lastBuild) {
+			if (!empty($this->last_build_json)) {
+				$this->_lastBuild = CJSON::decode($this->last_build_json);
+			} else {
+				$this->_lastBuild = array(
+					'entities' => array(),
+					'schemes' => array(),
+					'packages' => array(),
+					'options' => array(),
+				);
+			}
+		}
+		return $this->_lastBuild;
+	}
+	
+	public function getEntitiesToBuild()
+	{
+		$last_build = $this->getLastBuild();
+		return isset($last_build['entities']) ? $last_build['entities'] : array();
+	}
+	
+	public function getSchemesToBuild()
+	{
+		$last_build = $this->getLastBuild();
+		return isset($last_build['schemes']) ? $last_build['schemes'] : array();
+	}
+	
+	public function getPackages()
+	{
+		$last_build = $this->getLastBuild();
+		return isset($last_build['packages']) ? $last_build['packages'] : array();
+	}
+	
+	public function getBuildOptions()
+	{
+		$last_build = $this->getLastBuild();
+		return isset($last_build['options']) ? $last_build['options'] : array();
+	}
+	
+	public function setEntitiesToBuild($val)
+	{
+		$this->getLastBuild();
+		$this->_lastBuild['entities'] = $val;
+		$this->last_build_json = CJSON::encode($this->_lastBuild);
+	}
+	
+	public function setSchemesToBuild($val)
+	{
+		$this->getLastBuild();
+		$this->_lastBuild['schemes'] = $val;
+		$this->last_build_json = CJSON::encode($this->_lastBuild);
+	}
+	
+	public function setPackages($val)
+	{
+		$this->getLastBuild();
+		$this->_lastBuild['packages'] = $val;
+		$this->last_build_json = CJSON::encode($this->_lastBuild);
+	}
+	
+	public function setBuildOptions($val)
+	{
+		$this->getLastBuild();
+		$this->_lastBuild['options'] = $val;
+		$this->last_build_json = CJSON::encode($this->_lastBuild);
+	}
+	
+	public function getBuildOptionsFlat()
+	{
+		$result = array();
+		foreach ($this->getBuildOptions() as $key => $val) {
+			$result[] = $key . ' ' . $val;
+		}
+		return implode("\n", $result);
+	}
+	
+	public function setBuildOptionsFlat($val)
+	{
+		$data = array();
+		$lines = explode("\n", $val);
+		foreach ($lines as $line) {
+			$line = trim($line);
+			if ('' != $line) {
+				$couple = preg_split('/\s+/', $line, 2);
+				$key = trim(array_shift($couple));
+				$val = trim(array_shift($couple));
+				$data[$key] = $val;
+			}
+		}
+		$this->setBuildOptions($data);
 	}
 }

@@ -94,6 +94,12 @@ return array(
 		'bizRule' => null,
 		'data' => null,
 	),
+	'push_application' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Push application',
+		'bizRule' => null,
+		'data' => null,
+	),
 	'design_application' => array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'Design application',
@@ -139,6 +145,16 @@ return array(
 		'data' => null,
 		'children' => array(
 			'pull_application',
+		),
+	),
+	'push_shared_application' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Push shared application',
+		'bizRule' => 'return (!isset($params["application"])) || 
+							 ($params["application"]->project->isUserAssigned($params["userId"], Assignment::ROLE_MANAGER));',
+		'data' => null,
+		'children' => array(
+			'push_application',
 		),
 	),
 	'design_shared_application' => array(
@@ -1340,6 +1356,7 @@ return array(
 			'update_application',
 			'delete_application',
 			'pull_application',
+			'push_application',
 			'design_application',
 			'view_assignment',
 			'create_assignment',

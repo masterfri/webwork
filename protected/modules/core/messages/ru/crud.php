@@ -294,7 +294,7 @@ return array(
 	'Pull From Repo' => 'Загрузить из репозитория',
 	'Allowed options are:' => 'Допустимые директивы:',
 	'Pull Application' => 'Загрузка',
-	'Operation is in process... Please, be patient.' => 'Операция выполняется... Пожалуйста, подождите.',
+	'Operation in process... Please, be patient.' => 'Операция выполняется... Пожалуйста, подождите.',
 	'Pull has been successfully completed' => 'Загрузка успешно завершена',
 	'You are going to delete the application `{app}`. Please, confirm your intention by clicking `Delete`. Optionally you can delete following:' => 'Вы собираетесь удалить приложение `{app}`. Для подтверждения нажмите `Удалить`. Дополнительно вы можете удалить:',
 	'Schedule' => 'Расписание',

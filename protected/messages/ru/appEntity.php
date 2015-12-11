@@ -6,4 +6,7 @@ return array(
 	'Label' => 'Заголовок',
 	'Name' => 'Название',
 	'Date Created' => 'Дата создания',
+	'Мodule' => 'Модуль',
+	'Schemes' => 'Схемы компиляции',
+	'Attributes' => 'Атрибуты',
 );

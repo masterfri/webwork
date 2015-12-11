@@ -62,13 +62,9 @@ $this->menu = array(
 	<div class="panel-heading">
 		<h3 class="panel-title"><?php echo CHtml::encode($model->name); ?></h3>
 	</div>
-	<?php $this->widget('DetailView', array(
-		'data' => $model,		
-		'attributes' => array(
-			'label',
-			'description:ntext',
-		),
-	)); ?>
+	<div class="panel-body">
+		<pre><?php echo CHtml::encode($model->plain_source); ?></pre>
+	</div>
 	<div class="panel-footer foot-details">
 		<?php echo Yii::t('activity', 'Created by'); ?>
 		<?php echo CHtml::encode($model->created_by); ?>,

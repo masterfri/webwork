@@ -1,6 +1,11 @@
+<?php
+
+$cf = $model->application->getCF();
+
+?>
+
 <div class="form-content">
-	
-	
+		
 	<?php $form=$this->beginWidget('ActiveForm', array(
 		'id' => 'appEntity-form',
 		'htmlOptions' => array(
@@ -30,6 +35,15 @@
 		</div>
 	</div>
 	<div class="form-group">
+		<?php echo $form->labelEx($model, 'module', array('class'=>'col-sm-3 control-label')); ?>
+		<div class="col-sm-9">
+			<?php echo $form->textField($model, 'module', array(
+				'class' => 'form-control',
+			)); ?> 
+			<?php echo $form->error($model, 'module', array('class'=>'help-inline')); ?>
+		</div>
+	</div>
+	<div class="form-group">
 		<?php echo $form->labelEx($model, 'label', array('class'=>'col-sm-3 control-label')); ?>
 		<div class="col-sm-9">
 			<?php echo $form->textField($model, 'label', array(
@@ -50,11 +64,7 @@
 	<div class="form-group">
 		<?php echo $form->labelEx($model, 'schemes', array('class'=>'col-sm-3 control-label')); ?>
 		<div class="col-sm-9">
-			<?php echo $form->tagField($model, 'schemes', array(
-				'scheme1' => 'scheme1',
-				'scheme2' => 'scheme2',
-				'scheme3' => 'scheme3',
-			), array(
+			<?php echo $form->tagField($model, 'schemes', array_combine($cf->getCompileSchemes(), $cf->getCompileSchemes()), array(
 				'class' => 'form-control',
 			)); ?> 
 			<?php echo $form->error($model, 'schemes', array('class'=>'help-inline')); ?>
@@ -99,9 +109,6 @@
 </div>
 
 <?php
-
-$cf = Yii::app()->cf;
-$cf->setup();
 
 $types = CJSON::encode(array(
 	'std' => $cf->getStandardTypes(),

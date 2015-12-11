@@ -83,7 +83,7 @@ $('#pull-form').on('submit', function() {
 			<form action="" method="post" id="pull-form">
 				<input name="make_pull" type="hidden" value="1" />
 				<div style="display: none;" class="preloader">
-					<p><?php echo Yii::t('core.crud', 'Operation is in process... Please, be patient.'); ?></p>
+					<p><?php echo Yii::t('core.crud', 'Operation in process... Please, be patient.'); ?></p>
 				</div>
 				<button type="submit" class="btn btn-primary"><?php echo Yii::t('core.crud', 'Make Pull'); ?></button>
 			</form>

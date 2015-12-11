@@ -100,6 +100,112 @@ class AppEntityController extends AdminController
 			'model' => $model,
 		));
 	}
+	
+	public function actionBuild($application)
+	{
+		$application = $this->loadModel($application, 'Application');
+		if (!Yii::app()->user->checkAccess('design_application', array('application' => $application))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
+		
+		$entities = CHtml::listData($application->entities, 'id', 'name');
+		$cf = $application->getCF();
+		$schemes = $cf->getBuildSchemes();
+		$schemes = array_combine($schemes, $schemes);
+		$packages = $cf->getPackages();
+		
+		$application->setScenario('build');
+		
+		if (empty($application->last_build_json)) {
+			$application->last_build_json = CJSON::encode(array(
+				'entities' => array_keys($entities),
+				'schemes' => array(),
+				'packages' => array(),
+			));
+		}
+		
+		$current_packages = $application->getPackages();
+		
+		if ($this->saveModel($application)) {
+			$to_build_ids = $application->getEntitiesToBuild();
+			$new_packages = array_diff($application->getPackages(), $current_packages);
+			$to_build = array_filter($application->entities, function($e) use($to_build_ids) {
+				return in_array($e->id, $to_build_ids);
+			});
+			$result = Yii::t('core.crud', 'Build started') . "\n";
+			foreach ($new_packages as $package) {
+				$result .= Yii::t('core.crud', 'Deploying package') . ': ' . $package . "\n";
+				$cf->deployPackage($package);
+			}
+			$result .= $cf->build($to_build, $application->getSchemesToBuild(), $application->getBuildOptions());
+			$result .= Yii::t('core.crud', 'Build finished');
+			$this->render('build-results', array(
+				'application' => $application,
+				'result' => $result,
+			));
+		} else {
+			$this->render('build', array(
+				'application' => $application,
+				'entities' => $entities,
+				'schemes' => $schemes,
+				'packages' => $packages,
+			));
+		}
+	}
+	
+	public function actionDownload($application)
+	{
+		$application = $this->loadModel($application, 'Application');
+		if (!Yii::app()->user->checkAccess('design_application', array('application' => $application))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
+		$file = Yii::app()->getRuntimePath() . '/' . uniqid() . '.zip';
+		$zip = new ZipArchive(); 
+		$zip->open($file, ZipArchive::CREATE);
+		try {
+			$added = array();
+			$this->writeToZip($zip, $application->getCFWorkdir() . '/static/', '', $added);
+			$this->writeToZip($zip, $application->getCFWorkdir() . '/compiled/', '', $added);
+			$zip->close();
+			header('Content-Type: application/zip');
+			header('Content-Size: ' . filesize($file));
+			header('Content-Disposition: attachment; filename=app-' . $application->id . '.zip');
+			readfile($file);
+			@unlink($file);
+			exit;
+		} catch (Exception $e) {
+			$zip->close();
+			@unlink($file);
+			throw $e;
+		}
+	}
+	
+	protected function writeToZip($zip, $dir, $path, &$added)
+	{
+		if (is_dir($dir)) {
+			if ($dh = @opendir($dir)) { 
+				if(!empty($path) && !array_key_exists($path, $added)) {
+					if (!$zip->addEmptyDir($path)) {
+						throw new CException('Can not create directory in archive: ' . $path);
+					}
+					$added[$path] = 1;
+				}
+				while (($file = readdir($dh)) !== false) {
+					if (!is_file($dir . $file)) {
+						if ($file !== '.' && $file !== '..') {
+							$this->writeToZip($zip, $dir . $file . '/', $path . $file . '/', $added);
+						}
+					} else { 
+						if (!$zip->addFile($dir . $file, $path . $file)) {
+							throw new CException('Can not add file to archive: ' . $path . $file);
+						}
+					}
+				}
+			} else {
+				throw new CException('Can not access directory: ' . $dir);
+			}
+		}
+	}
 
 	public function filters()
 	{
@@ -122,6 +228,10 @@ class AppEntityController extends AdminController
 			),
 			array('allow',
 				'actions' => array('update'),
+				'roles' => array('design_application'),
+			),
+			array('allow',
+				'actions' => array('build', 'download'),
 				'roles' => array('design_application'),
 			),
 			array('allow',
