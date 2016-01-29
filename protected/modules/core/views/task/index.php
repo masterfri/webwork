@@ -28,6 +28,16 @@ $this->menu = array(
 		'visible' => Yii::app()->user->checkAccess('create_task', array('project' => $project)),
 	),
 	array(
+		'label' => '<i class="glyphicon glyphicon-flash"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('core.crud', 'Quick Create'), 
+			'class' => 'btn btn-default',
+			'data-toggle' => 'quick-create-form',
+		),
+		'url' => '#',
+		'visible' => Yii::app()->user->checkAccess('create_task', array('project' => $project)),
+	),
+	array(
 		'label' => '<i class="glyphicon glyphicon-arrow-left"></i>', 
 		'linkOptions' => array(
 			'title' => Yii::t('core.crud', 'Back to Project'),
@@ -60,6 +70,20 @@ $this->menu = array(
 		)); ?>
 	</div>
 </div>
+
+<?php if (Yii::app()->user->checkAccess('create_task', array('project' => $project))): ?>
+	<div class="panel panel-default quick-create-form" style="display: none;">
+		<div class="panel-heading">
+			<h3 class="panel-title"><?php echo Yii::t('core.crud', 'Quick Create'); ?></h3>
+		</div>
+		<div class="panel-body">
+			<?php $this->renderPartial('_quickform',array(
+				'model' => $model,
+				'project' => $project,
+			)); ?>
+		</div>
+	</div>
+<?php endif; ?>
 
 <div class="panel panel-default">
 	<div class="panel-heading">

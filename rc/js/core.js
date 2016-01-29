@@ -11,6 +11,11 @@ $(function() {
 		return false;
 	});
 	
+	$(document.body).on('click', '[data-toggle=quick-create-form]', function() {
+		$('.quick-create-form').toggle();
+		return false;
+	});
+	
 	$(document.body).on('submit', '[role=search-form]', function() {
 		var target = $(this).attr('data-target');
 		var type = $(this).attr('data-target-type');

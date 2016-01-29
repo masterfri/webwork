@@ -57,7 +57,24 @@ class TaskController extends AdminController
 		$model = new Task('create');
 		$model->project = $project;
 		if ($this->saveModel($model)) {
-			$this->redirect(array('view', 'id' => $model->id));
+			if($this->isAjax()) {
+				$model->refresh();
+				if ($model->user_subscription === null) {
+					$subscription = $model->subscribe(Yii::app()->user->id);
+				} else {
+					$subscription = $model->user_subscription;
+				}
+				$subscription->markAsSeen();
+				$this->ajaxSuccess(array(
+					'trigger' => 'task.created',
+					'message' => array(
+						'title' => Yii::t('core.crud', 'Success'),
+						'text' => Yii::t('core.crud', 'Task has been created'),
+					),
+				));
+			} else {
+				$this->redirect(array('view', 'id' => $model->id));
+			}
 		}
 		$this->render('create', array(
 			'model' => $model,

@@ -2,9 +2,15 @@
 
 class CodeforgeComponent extends CApplicationComponent
 {
-	public $cf_dir;
+	const RESOLVE_SKIP = 1;
+	const RESOLVE_IGNORE = 2;
+	const RESOLVE_REPLACE = 3;
 	
+	public $cf_dir;
 	protected $layer;
+	protected $ignorelist;
+	protected $checksumlist;
+	protected $update_ignorelist = false;
 	
 	public function setup($workdir=null)
 	{
@@ -27,6 +33,7 @@ class CodeforgeComponent extends CApplicationComponent
 		require_once CF_LIB_DIR . '/Parser.php';
 		require_once CF_LIB_DIR . '/Attribute.php';
 		require_once CF_LIB_DIR . '/FileHelper.php';
+		require_once CF_LIB_DIR . '/EasyConfig.php';
 		
 		$this->layer = new Codeforge\WebLayer();
 		$this->layer->setSchemesDir(array(

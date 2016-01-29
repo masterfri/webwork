@@ -153,6 +153,18 @@ class AppEntityController extends AdminController
 		}
 	}
 	
+	public function actionPush($application)
+	{
+		$application = $this->loadModel($application, 'Application');
+		if (!Yii::app()->user->checkAccess('push_application', array('application' => $application))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
+		if (!($application->status & Application::STATUS_HAS_GIT)) {
+			throw new CHttpException(500, 'Application is not configured');
+		}
+		
+	}
+	
 	public function actionDownload($application)
 	{
 		$application = $this->loadModel($application, 'Application');
@@ -164,8 +176,8 @@ class AppEntityController extends AdminController
 		$zip->open($file, ZipArchive::CREATE);
 		try {
 			$added = array();
-			$this->writeToZip($zip, $application->getCFWorkdir() . '/static/', '', $added);
 			$this->writeToZip($zip, $application->getCFWorkdir() . '/compiled/', '', $added);
+			$this->writeToZip($zip, $application->getCFWorkdir() . '/static/', '', $added);
 			$zip->close();
 			header('Content-Type: application/zip');
 			header('Content-Size: ' . filesize($file));
@@ -233,6 +245,10 @@ class AppEntityController extends AdminController
 			array('allow',
 				'actions' => array('build', 'download'),
 				'roles' => array('design_application'),
+			),
+			array('allow',
+				'actions' => array('push'),
+				'roles' => array('push_application'),
 			),
 			array('allow',
 				'actions' => array('delete'),
