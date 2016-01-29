@@ -208,6 +208,8 @@ return array(
 	'Task Updating' => 'Редактирование задачи',
 	'Task Information' => 'Информация о задаче',
 	'Create Task' => 'Добавить задачу',
+	'Quick Create' => 'Быстрое добавление',
+	'Task has been created' => 'Задача создана',
 	'Tasks' => 'Задачи',
 	'Manage Tasks' => 'Все задачи',
 	'Update Task' => 'Обновить',
