@@ -106,6 +106,44 @@ return array(
 		'bizRule' => null,
 		'data' => null,
 	),
+	'create_entity_template' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Create entity template',
+		'bizRule' => null,
+		'data' => null,
+	),
+	'update_entity_template' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Update entity template',
+		'bizRule' => null,
+		'data' => null,
+	),
+	'delete_entity_template' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Delete entity template',
+		'bizRule' => null,
+		'data' => null,
+	),
+	'update_my_entity_template' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Update my entity template',
+		'bizRule' => 'return (!isset($params["template"])) ||
+							 ($params["template"]->created_by_id == $params["userId"]);',
+		'data' => null,
+		'children' => array(
+			'update_entity_template',
+		),
+	),
+	'delete_my_entity_template' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Delete my entity template',
+		'bizRule' => 'return (!isset($params["template"])) ||
+							 ($params["template"]->created_by_id == $params["userId"]);',
+		'data' => null,
+		'children' => array(
+			'delete_entity_template',
+		),
+	),
 	'view_shared_application' => array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'View shared application',
@@ -1277,6 +1315,9 @@ return array(
 			'pull_shared_application',
 			'view_user_schedule',
 			'update_shared_project_schedule',
+			'create_entity_template',
+			'update_my_entity_template',
+			'delete_my_entity_template',
 		),
 		'bizRule' => null,
 		'data' => null
@@ -1387,6 +1428,8 @@ return array(
 			'create_working_hours',
 			'update_working_hours',
 			'delete_working_hours',
+			'update_entity_template',
+			'delete_entity_template',
 			'client',
 			'teamlead',
 		),

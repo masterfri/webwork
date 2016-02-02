@@ -36,6 +36,7 @@ return array(
 	'Pull' => 'Загрузка',
 	'Make Pull' => 'Загрузить',
 	'Next Step' => 'Далее',
+	'Back' => 'Назад',
 	'Skip this Step' => 'Пропустить',
 	'Start work' => 'Начать работу',
 	'Complete work' => 'Завершить работу',
@@ -321,5 +322,13 @@ return array(
 	'View Application Entity' => 'Просмотреть',
 	'Delete Application Entity' => 'Удалить',
 	'Are you sure you want to delete this application entity?' => 'Вы уверены, что хотите удалить эту сущность?',
+	'Copy as Template' => 'Скопировать в шаблоны',
+	'Are you sure you want to delete this template?' => 'Вы уверены, что хотите удалить этот шаблон?',
+	'Manage Templates' => 'Все шаблоны',
+	'Templates' => 'Шаблоны',
+	'Template Updating' => 'Обновление шаблона',
+	'View Template' => 'Просмотреть',
+	'Create From Template' => 'Создать из шаблона',
+	'New From Template' => 'Создание из шаблона',
 );
 

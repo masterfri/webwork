@@ -28,6 +28,24 @@ $this->menu = array(
 		'url' => array('create', 'application' => $application->id),
 		'visible' => Yii::app()->user->checkAccess('design_application', array('application' => $application)),
 	),
+	array(
+		'label' => '<i class="glyphicon glyphicon-file"></i>',
+		'linkOptions' => array(
+			'title' => Yii::t('core.crud', 'Create From Template'), 
+			'class' => 'btn btn-default',
+		), 
+		'url' => array('chooseTemplate', 'application' => $application->id),
+		'visible' => Yii::app()->user->checkAccess('design_application', array('application' => $application)),
+	),
+	array(
+		'label' => '<i class="glyphicon glyphicon-folder-open"></i>',
+		'linkOptions' => array(
+			'title' => Yii::t('core.crud', 'Manage Templates'), 
+			'class' => 'btn btn-default',
+		), 
+		'url' => array('templates'),
+		'visible' => Yii::app()->user->checkAccess('design_application'),
+	),
 );
 
 ?>

@@ -20,7 +20,36 @@ class AppEntityController extends AdminController
 		));
 	}
 	
-	public function actionCreate($application)
+	public function actionTemplates()
+	{
+		$model = $this->createSearchModel('AppEntity');
+		$provider = $model->search(array(
+			'condition' => 'application_id = 0',
+		));
+		$this->render('templates', array(
+			'model' => $model,
+			'provider' => $provider,
+		));
+	}
+	
+	public function actionChooseTemplate($application)
+	{
+		$application = $this->loadModel($application, 'Application');
+		if (!Yii::app()->user->checkAccess('design_application', array('application' => $application))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
+		$model = $this->createSearchModel('AppEntity');
+		$provider = $model->search(array(
+			'condition' => 'application_id = 0',
+		));
+		$this->render('chooseTemplate', array(
+			'model' => $model,
+			'provider' => $provider,
+			'application' => $application,
+		));
+	}
+	
+	public function actionCreate($application, $template=null)
 	{
 		$application = $this->loadModel($application, 'Application');
 		if (!Yii::app()->user->checkAccess('design_application', array('application' => $application))) {
@@ -29,6 +58,15 @@ class AppEntityController extends AdminController
 		$model = new AppEntity('create');
 		$model->application = $application;
 		$model->application_id = $application->id;
+		if ($template !== null) {
+			$template = $this->loadModel($template, 'AppEntity');
+			$model->name = $template->name;
+			$model->module = $template->module;
+			$model->label = $template->label;
+			$model->description = $template->description;
+			$model->json_schemes = $template->json_schemes;
+			$model->json_source = $template->json_source;
+		}
 		if ($this->saveModel($model)) {
 			if ($this->isAjax()) {
 				$this->ajaxSuccess(array(
@@ -54,6 +92,9 @@ class AppEntityController extends AdminController
 	public function actionUpdate($id)
 	{
 		$model = $this->loadModel($id, 'AppEntity');
+		if ($model->application === null) {
+			throw new CHttpException(403, 'Forbidden');
+		}
 		if (!Yii::app()->user->checkAccess('design_application', array('application' => $model->application))) {
 			throw new CHttpException(403, 'Forbidden');
 		}
@@ -81,6 +122,9 @@ class AppEntityController extends AdminController
 	public function actionDelete($id)
 	{
 		$model = $this->loadModel($id, 'AppEntity');
+		if ($model->application === null) {
+			throw new CHttpException(403, 'Forbidden');
+		}
 		if (!Yii::app()->user->checkAccess('design_application', array('application' => $model->application))) {
 			throw new CHttpException(403, 'Forbidden');
 		}
@@ -90,14 +134,88 @@ class AppEntityController extends AdminController
 		}
 	}
 	
+	public function actionUpdateTemplate($id)
+	{
+		$model = $this->loadModel($id, 'AppEntity');
+		if ($model->application !== null) {
+			throw new CHttpException(403, 'Forbidden');
+		}
+		if (!Yii::app()->user->checkAccess('update_entity_template', array('template' => $model))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
+		$model->setScenario('updateTemplate');
+		if ($this->saveModel($model)) {
+			if ($this->isAjax()) {
+				$this->ajaxSuccess(array(
+					'trigger' => 'appEntity.updated',
+					'message' => array(
+						'title' => Yii::t('core.crud', 'Success'),
+						'text' => Yii::t('core.crud', 'Template has been updated'),
+					),
+				));
+			} else {
+				$this->redirect(array('view', 'id' => $model->id));
+			}
+		}
+		if ($this->isAjax()) {
+			$this->layout = 'ajax';
+		}
+		$this->render('updateTemplate', array(
+			'model' => $model,
+		));
+	}
+	
+	public function actionDeleteTemplate($id)
+	{
+		$model = $this->loadModel($id, 'AppEntity');
+		if ($model->application !== null) {
+			throw new CHttpException(403, 'Forbidden');
+		}
+		if (!Yii::app()->user->checkAccess('delete_entity_template', array('template' => $model))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
+		$model->delete();
+		if(!isset($_GET['ajax'])) {
+			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('templates'));
+		}
+	}
+	
 	public function actionView($id)
 	{
 		$model = $this->loadModel($id, 'AppEntity');
-		if (!Yii::app()->user->checkAccess('design_application', array('application' => $model->application))) {
+		if ($model->application !== null) {
+			if (!Yii::app()->user->checkAccess('design_application', array('application' => $model->application))) {
+				throw new CHttpException(403, 'Forbidden');
+			}
+			$this->render('view', array(
+				'model' => $model,
+			));
+		} else {
+			$this->render('view-tpl', array(
+				'model' => $model,
+			));
+		}
+	}
+	
+	public function actionCopyAsTemplate($id)
+	{
+		$model = $this->loadModel($id, 'AppEntity');
+		if (!Yii::app()->user->checkAccess('create_entity_template')) {
 			throw new CHttpException(403, 'Forbidden');
 		}
-		$this->render('view', array(
+		$template = new AppEntity('copyAsTemplate');
+		$template->name = $model->name;
+		$template->module = $model->module;
+		$template->label = $model->label;
+		$template->description = $model->description;
+		$template->json_schemes = $model->json_schemes;
+		$template->json_source = $model->json_source;
+		if ($this->saveModel($template)) {
+			$this->redirect(array('view', 'id' => $template->id));
+		}
+		$this->render('copyAsTemplate', array(
 			'model' => $model,
+			'template' => $template,
 		));
 	}
 	
@@ -235,12 +353,16 @@ class AppEntityController extends AdminController
 				'roles' => array('design_application'),
 			),
 			array('allow',
-				'actions' => array('view', 'index'),
+				'actions' => array('view', 'index', 'templates', 'chooseTemplate'),
 				'roles' => array('design_application'),
 			),
 			array('allow',
 				'actions' => array('update'),
 				'roles' => array('design_application'),
+			),
+			array('allow',
+				'actions' => array('updateTemplate'),
+				'roles' => array('update_entity_template'),
 			),
 			array('allow',
 				'actions' => array('build', 'download'),
@@ -251,8 +373,16 @@ class AppEntityController extends AdminController
 				'roles' => array('push_application'),
 			),
 			array('allow',
+				'actions' => array('copyAsTemplate'),
+				'roles' => array('create_entity_template'),
+			),
+			array('allow',
 				'actions' => array('delete'),
 				'roles' => array('design_application'),
+			),
+			array('allow',
+				'actions' => array('deleteTemplate'),
+				'roles' => array('delete_entity_template'),
 			),
 			array('deny'),
 		);

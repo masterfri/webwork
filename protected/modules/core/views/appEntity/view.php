@@ -45,6 +45,11 @@ $this->menu = array(
 				'visible' => Yii::app()->user->checkAccess('design_application', array('application' => $model->application)),
 			),
 			array(
+				'label' => '<i class="glyphicon glyphicon-file"></i> ' . Yii::t('core.crud', 'Copy as Template'), 
+				'url' => array('copyAsTemplate', 'id' => $model->id),
+				'visible' => Yii::app()->user->checkAccess('create_entity_template'),
+			),
+			array(
 				'label' => '<i class="glyphicon glyphicon-trash"></i> ' . Yii::t('core.crud', 'Delete Application Entity'), 
 				'url' => '#', 
 				'linkOptions' => array(
