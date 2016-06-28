@@ -34,4 +34,5 @@ return array(
 	'New iteration' => 'Новый цикл',
 	'Closed' => 'Закрыта',
 	'On-hold' => 'Приостановлена',
+	'Time spent' => 'Потрачено времени',
 );

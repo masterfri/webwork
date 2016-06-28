@@ -119,6 +119,7 @@ $this->menu = array(
 					'value' => ViewHelper::formatEstimate($model->getEstimateRange()),
 					'type' => 'raw',
 				),
+				'timeSpent:hours',
 				array(
 					'name' => 'regression_risk',
 					'value' => $model->getRegressionRisk(),

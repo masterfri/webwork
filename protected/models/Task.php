@@ -126,6 +126,7 @@ class Task extends CActiveRecord
 			'tags' => Yii::t('task', 'Tags'),
 			'time_created' => Yii::t('task', 'Date Created'),
 			'time_updated' => Yii::t('task', 'Date Updated'),
+			'timeSpent' => Yii::t('task', 'Time spent'),
 		);
 	}
 	
@@ -199,6 +200,7 @@ class Task extends CActiveRecord
 					':current_user_id' => Yii::app()->user->id,
 				)),
 			'tags' => array(self::MANY_MANY, 'Tag', '{{task_tag_tags}}(task_id,tag_id)'),
+			'timeSpent' => array(self::STAT, 'TimeEntry', 'task_id', 'select' => 'SUM(amount)'),
 		);
 	}
 	
