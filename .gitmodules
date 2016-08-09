@@ -1,0 +1,6 @@
+[submodule "httpsh"]
+        path = protected/httpsh
+        url = git@github.com:masterfri/HttpToShell.git
+[submodule "codeforge"]
+        path = protected/cf
+        url = git@github.com:masterfri/codeforge.git
