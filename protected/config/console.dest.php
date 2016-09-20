@@ -38,6 +38,7 @@ return array (
 	),
 	'commandMap' => array(
 		'invoice' => 'core.commands.InvoiceCommand',
+		'translate' => 'core.commands.TranslateCommand',
 	),
 	'name' => 'Webwork',
 	'language' => 'ru',

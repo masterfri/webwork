@@ -3,3 +3,4 @@ uploads/*
 protected/runtime/*
 protected/config/main.php
 protected/config/console.php
+protected/httpsh-commands/config.sh

@@ -6,11 +6,10 @@ class CodeforgeComponent extends CApplicationComponent
 	const RESOLVE_IGNORE = 2;
 	const RESOLVE_REPLACE = 3;
 	
+	const PROJECT_DIR_NAME = 'codeforge';
+	
 	public $cf_dir;
 	protected $layer;
-	protected $ignorelist;
-	protected $checksumlist;
-	protected $update_ignorelist = false;
 	
 	public function setup($workdir=null)
 	{
@@ -42,9 +41,15 @@ class CodeforgeComponent extends CApplicationComponent
 		$this->layer->setExtensionsDir(array(
 			CF_THISDIR . '/extensions',
 		));
-		$this->layer->setCacheDir($this->prepareDir(CF_WORKDIR . '/cache'));
-		$this->layer->setPartialDir($this->prepareDir(CF_WORKDIR . '/partial'));
-		$this->layer->setStaticPartialDir($this->prepareDir(CF_WORKDIR . '/static-partial'));
+		$this->prepareDir(CF_WORKDIR . '/' . self::PROJECT_DIR_NAME);
+		$this->layer->setCacheDir($this->prepareDir(CF_WORKDIR . '/' . self::PROJECT_DIR_NAME . '/cache'));
+		$this->layer->setPartialDir($this->prepareDir(CF_WORKDIR . '/' . self::PROJECT_DIR_NAME . '/partial'));
+		$this->layer->setStaticPartialDir($this->prepareDir(CF_WORKDIR . '/' . self::PROJECT_DIR_NAME . '/static-partial'));
+	}
+	
+	public function importLib($lib)
+	{
+		require_once($this->cf_dir . '/lib/' . $lib . '.php');
 	}
 	
 	public function getCustomTypes()
@@ -94,7 +99,7 @@ class CodeforgeComponent extends CApplicationComponent
 					$models[] = $model;
 				}
 			}
-			$compile_dir = $this->prepareDir(CF_WORKDIR . '/compiled');
+			$compile_dir = $this->prepareDir(CF_WORKDIR . '/' . self::PROJECT_DIR_NAME . '/compiled');
 			$this->layer->setEnv($options);
 			$this->layer->setModels($models);
 			$this->layer->compile($compile_dir);
@@ -115,18 +120,56 @@ class CodeforgeComponent extends CApplicationComponent
 		if (!isset($list[$name])) {
 			throw new CException("Package $name can not be found");
 		}
-		Codeforge\FileHelper::copyContents($list[$name]['dir'], CF_WORKDIR);
+		Codeforge\FileHelper::copyContents($list[$name]['dir'], CF_WORKDIR . '/' . self::PROJECT_DIR_NAME);
 	}
 	
 	protected function prepareDir($dir)
 	{
 		if (!is_dir($dir)) {
-			if (!@mkdir($dir, 0700, true)) {
+			if (!@mkdir($dir, 0755, true)) {
 				throw new CException('Can not create directory ' . $dir);
 			}
 		} elseif (!is_writable($dir)) {
 			throw new CException('Directory ' . $dir . ' is not writable');
 		}
 		return $dir;
+	}
+	
+	public function updateChecksum(&$data)
+	{
+		$checksumFile = CF_WORKDIR . '/' . self::PROJECT_DIR_NAME . '/checksum.list';
+		$list = new Codeforge\EasyConfig($data);
+		$list->writeToFile($checksumFile);
+	}
+	
+	public function updateIgnoreList(&$files, $replace=false)
+	{
+		$ignoreFile = CF_WORKDIR . '/' . self::PROJECT_DIR_NAME . '/ignore.list';
+		if (!$replace && is_file($ignoreFile)) {
+			$list = new Codeforge\EasyConfig();
+			$list->readFile($ignoreFile);
+			$ignorelist = $list->getData();
+		} else {
+			$ignorelist = array();
+		}
+		foreach ($files as $file) {
+			if (!in_array($file, $ignorelist)) {
+				$ignorelist[] = $file;
+			}
+		}
+		$list = new Codeforge\EasyConfig($ignorelist);
+		$list->writeToFile($ignoreFile);
+	}
+	
+	public function cleanup($compiledOnly=true)
+	{
+		if ($compiledOnly) {
+			$dir = CF_WORKDIR . '/' . self::PROJECT_DIR_NAME . '/compiled';
+		} else {
+			$dir = CF_WORKDIR . '/' . self::PROJECT_DIR_NAME;
+		}
+		if (is_dir($dir)) {
+			Codeforge\FileHelper::cleanup($dir, true, false);
+		}
 	}
 }

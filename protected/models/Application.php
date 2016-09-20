@@ -138,6 +138,20 @@ class Application extends CActiveRecord
 		);
 	}
 	
+	protected function afterDelete()
+	{
+		Yii::app()->cf->importLib('FileHelper');
+		$appdir = $this->getCFWorkdir(false);
+		if (is_dir($appdir)) {
+			Codeforge\FileHelper::rm($appdir);
+		}
+		$appdir = $this->getGitWorkdir(false);
+		if (is_dir($appdir)) {
+			Codeforge\FileHelper::rm($appdir);
+		}
+		parent::afterDelete();
+	}
+	
 	public function search($params=array())
 	{
 		$criteria = new CDbCriteria($params);
@@ -266,8 +280,51 @@ class Application extends CActiveRecord
 			'db_name' => $this->db_name,
 			'db_user' => $this->db_user,
 			'repo_name' => $this->getGitRepoName(),
+			'workdir' => $this->getGitWorkdir(),
 			'options' => $options,
 		));
+	}
+	
+	public function pullWorkCopy($branch)
+	{
+		$command = $this->createWebShCommand('GitHttpShCommand');
+		return $command->pullWorkCopy(array(
+			'workpath' => $this->getGitWorkdir(),
+			'url' => $this->git,
+			'branch' => $branch,
+		));
+	}
+	
+	public function pushWorkCopy($branch, $message)
+	{
+		$command = $this->createWebShCommand('GitHttpShCommand');
+		return $command->pushWorkCopy(array(
+			'workpath' => $this->getGitWorkdir(),
+			'url' => $this->git,
+			'branch' => $branch,
+			'message' => $message,
+		));
+	}
+	
+	public function releaseWorkCopy($overwrite=false)
+	{
+		$command = $this->createWebShCommand('CFHttpShCommand');
+		$response = $command->releaseWorkCopy(array(
+			'gitpath' => $this->getGitWorkdir(),
+			'cfpath' => $this->getCFWorkdir(),
+			'overwrite' => $overwrite,
+		));
+		if ($response->getIsSuccess()) {
+			if ($response->hasData('checksum')) {
+				$checksum = array();
+				foreach ($response->getData('checksum') as $line) {
+					list($sum, $file) = explode(' ', $line);
+					$checksum[trim($file)] = trim($sum);
+				}
+				$this->getCF()->updateChecksum($checksum);
+			}
+		}
+		return $response;
 	}
 	
 	public function getCF()
@@ -279,23 +336,55 @@ class Application extends CActiveRecord
 		return self::$_cf;
 	}
 	
-	public function getCFWorkdir()
+	public function getCFWorkdir($create=true)
 	{
-		$dir = Yii::app()->getRuntimePath() . '/cf-build';
-		if (!is_dir($dir)) {
-			if (!@mkdir($dir)) {
-				throw new CException("Can't create directory $dir");
+		if ($create) {
+			$dir = Yii::app()->getRuntimePath() . '/cf-build';
+			if (!is_dir($dir)) {
+				if (!@mkdir($dir)) {
+					throw new CException("Can't create directory $dir");
+				}
+			} elseif (!is_writable($dir)) {
+				throw new CException("Directory $dir is not writable");
 			}
-		} elseif (!is_writable($dir)) {
-			throw new CException("Directory $dir is not writable");
+			$dir .= '/app-' . $this->id;
+			if (!is_dir($dir)) {
+				if (!@mkdir($dir)) {
+					throw new CException("Can't create directory $dir");
+				}
+			} elseif (!is_writable($dir)) {
+				throw new CException("Directory $dir is not writable");
+			}
+		} else {
+			$dir = Yii::app()->getRuntimePath() . '/cf-build/app-' . $this->id;
 		}
-		$dir .= '/app-' . $this->id;
-		if (!is_dir($dir)) {
-			if (!@mkdir($dir)) {
-				throw new CException("Can't create directory $dir");
+		return $dir;
+	}
+	
+	public function getGitWorkdir($create=true)
+	{
+		if ($create) {
+			$dir = Yii::app()->getRuntimePath() . '/git-work-dir';
+			if (!is_dir($dir)) {
+				if (!@mkdir($dir)) {
+					throw new CException("Can't create directory $dir");
+				}
+			} elseif (!is_writable($dir)) {
+				throw new CException("Directory $dir is not writable");
 			}
-		} elseif (!is_writable($dir)) {
-			throw new CException("Directory $dir is not writable");
+			$dir .= '/app-' . $this->id;
+			if (!is_dir($dir)) {
+				if (!@mkdir($dir)) {
+					throw new CException("Can't create directory $dir");
+				}
+				if (!@chmod($dir, 0775)) {
+					throw new CException("Can't set permissions for directory $dir");
+				}
+			} elseif ((fileperms($dir) & 0775) != 0775) {
+				throw new CException("Directory $dir is not writable for owner group");
+			}
+		} else {
+			$dir = Yii::app()->getRuntimePath() . '/git-work-dir/app-' . $this->id;
 		}
 		return $dir;
 	}

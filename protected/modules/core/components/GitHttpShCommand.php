@@ -19,4 +19,23 @@ class GitHttpShCommand extends HttpShCommand
 			'branch' => $params['branch'],
 		));
 	}
+	
+	public function pullWorkCopy($params)
+	{
+		return $this->query('git-pull-work-copy.sh', array(
+			'workpath' => $params['workpath'],
+			'url' => $params['url'],
+			'branch' => $params['branch'],
+		));
+	}
+	
+	public function pushWorkCopy($params)
+	{
+		return $this->query('git-push-work-copy.sh', array(
+			'workpath' => $params['workpath'],
+			'url' => $params['url'],
+			'branch' => $params['branch'],
+			'message' => $params['message'],
+		));
+	}
 }

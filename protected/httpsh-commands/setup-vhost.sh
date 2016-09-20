@@ -2,7 +2,8 @@
 
 # Include extras
 THISDIR=$(dirname $0)
-. "$THISDIR/include.sh"
+. "$THISDIR/config.sh"
+. "$THISDIR/helpers.sh"
 
 # Input vars
 DOMAIN=""
@@ -38,15 +39,15 @@ done
 
 # Create necessary directories
 SITE_DIR="$WWW_DATA_DIR/$DOMAIN"
-safemkdir "$SITE_DIR"
+safe-create-dir "$SITE_DIR"
 
 DOC_ROOT="$SITE_DIR/$DOC_ROOT"
-safemkdir "$DOC_ROOT"
+safe-create-dir "$DOC_ROOT"
 
 if [ "$LOG_DIR" != "" ]
 then
 	LOG_DIR="$SITE_DIR/$LOG_DIR"
-	safemkdir "$LOG_DIR"
+	safe-create-dir "$LOG_DIR"
 fi
 
 # Create vhost config
@@ -73,7 +74,7 @@ if [ $? -ne 0 ]
 then
 	echo ">RETURN: 4 Can not create file"
 	echo ">DATA: file $VHOST_FILE"
-	exit;
+	exit
 fi
 
 chmod "$VHMOD" "$VHOST_FILE"
@@ -82,16 +83,11 @@ then
 	echo ">RETURN: 2 Can not change file mode"
 	echo ">DATA: file $VHOST_FILE"
 	echo ">DATA: mode $VHMOD"
-	exit;
+	exit
 fi
 
 # Restart apache
-sudo "$APACHECTL" graceful
-if [ $? -ne 0 ]
-then
-	echo ">RETURN: 101 Can not reload apache configuration"
-	exit;
-fi
+webserver-reload
 
 # Report success
 echo ">RETURN: 0 Vhost successfully created"

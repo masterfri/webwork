@@ -2,20 +2,27 @@
 
 $flashes = Yii::app()->user->getFlashes();
 if(! empty($flashes)) {
+	$code = '';
 	foreach ($flashes as $key => $val) {
 		if ('counters' == $key) continue;
 		if (strpos($key, 'error') !== false) {
-			$class = 'alert alert-danger';
-		} elseif (strpos($key, 'message') !== false) {
-			$class = 'alert alert-success';
+			$type = 'error';
+			$title = Yii::t('core.crud', 'Error');
+		} elseif (strpos($key, 'success') !== false) {
+			$type = 'success';
+			$title = Yii::t('core.crud', 'Success');
 		} elseif (strpos($key, 'warning') !== false) {
-			$class = 'alert alert-warning';
+			$type = 'warning';
+			$title = Yii::t('core.crud', 'Warning');
 		} else {
-			$class = 'alert alert-info';
+			$type = 'default';
+			$title = Yii::t('core.crud', 'Success');
 		}
-		echo CHtml::openTag('div', array('class' => $class));
-		echo '<button type="button" class="close" data-dismiss="alert">×</button>';
-		echo $val;
-		echo CHtml::closeTag('div');
+		$code .= "$.ajaxBindings.message(" . CJSON::encode(array(
+			'title' => $title,
+			'type' => $type,
+			'text' => $val,
+		)) . ");\n";
 	}
+	Yii::app()->clientScript->registerScript('flash-messages', $code);
 }

@@ -20,6 +20,7 @@ class NoteController extends AdminController
 					),
 				));
 			} else {
+				Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Note has been created'));
 				$this->redirect(array('project/view', 'id' => $project->id));
 			}
 		}
@@ -48,6 +49,7 @@ class NoteController extends AdminController
 					),
 				));
 			} else {
+				Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Note has been updated'));
 				$this->redirect(array('project/view', 'id' => $model->project_id));
 			}
 		}

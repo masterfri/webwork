@@ -300,6 +300,7 @@ return array(
 	'Operation in process... Please, be patient.' => 'Операция выполняется... Пожалуйста, подождите.',
 	'Pull has been successfully completed' => 'Загрузка успешно завершена',
 	'You are going to delete the application `{app}`. Please, confirm your intention by clicking `Delete`. Optionally you can delete following:' => 'Вы собираетесь удалить приложение `{app}`. Для подтверждения нажмите `Удалить`. Дополнительно вы можете удалить:',
+	'Back to Application' => 'Вернуться к приложению',
 	'Schedule' => 'Расписание',
 	'Nothing has been planned for this week' => 'На этой неделе ничего не запланировано',
 	'Previous week' => 'Предыдущая неделя',

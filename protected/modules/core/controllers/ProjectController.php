@@ -57,6 +57,7 @@ class ProjectController extends AdminController
 	{
 		$model = new Project('create');
 		if ($this->saveModel($model)) {
+			Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Project has been created'));
 			$this->redirect(array('view', 'id' => $model->id));
 		}
 		$this->render('create', array(
@@ -71,6 +72,7 @@ class ProjectController extends AdminController
 			throw new CHttpException(403, 'Forbidden');
 		}
 		if ($this->saveModel($model)) {
+			Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Project has been updated'));
 			$this->redirect(array('view', 'id' => $model->id));
 		}
 		$this->render('update', array(

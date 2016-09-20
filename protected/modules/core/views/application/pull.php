@@ -55,6 +55,12 @@ $('#pull-form').on('submit', function() {
 });
 ");
 
+if (null !== $response) {
+	$this->renderPartial('../layouts/include/httpsh-response', array(
+		'response' => $response,
+	));
+}
+
 ?>
 <div class="panel panel-default">
 	<div class="panel-heading">
@@ -68,25 +74,12 @@ $('#pull-form').on('submit', function() {
 		),
 	)); ?>
 	<div class="panel-body">
-		<?php if ($response): ?>
-			<?php if (!$response->getIsSuccess()): ?>
-				<div class="alert alert-danger">
-					<?php echo CHtml::encode($response->getMessage()); ?>
-				</div>
-				<pre><?php echo CHtml::encode($response->getRaw()); ?></pre>
-			<?php else: ?>
-				<div class="alert alert-success">
-					<?php echo Yii::t('core.crud', 'Pull has been successfully completed'); ?>
-				</div>
-			<?php endif; ?>
-		<?php else: ?>
-			<form action="" method="post" id="pull-form">
-				<input name="make_pull" type="hidden" value="1" />
-				<div style="display: none;" class="preloader">
-					<p><?php echo Yii::t('core.crud', 'Operation in process... Please, be patient.'); ?></p>
-				</div>
-				<button type="submit" class="btn btn-primary"><?php echo Yii::t('core.crud', 'Make Pull'); ?></button>
-			</form>
-		<?php endif; ?>
+		<form action="" method="post" id="pull-form">
+			<input name="make_pull" type="hidden" value="1" />
+			<div style="display: none;" class="preloader">
+				<p><?php echo Yii::t('core.crud', 'Operation in process... Please, be patient.'); ?></p>
+			</div>
+			<button type="submit" class="btn btn-primary"><?php echo Yii::t('core.crud', 'Make Pull'); ?></button>
+		</form>
 	</div>
 </div>

@@ -25,6 +25,7 @@ class ActivityController extends AdminController
 					),
 				));
 			} else {
+				Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Activity has been created'));
 				$this->redirect(array('view', 'id' => $model->id));
 			}
 		}
@@ -49,6 +50,7 @@ class ActivityController extends AdminController
 					),
 				));
 			} else {
+				Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Activity has been updated'));
 				$this->redirect(array('view', 'id' => $model->id));
 			}
 		}

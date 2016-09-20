@@ -12,6 +12,7 @@ class CleanupHttpShCommand extends HttpShCommand
 				case 'git':
 				case 'db':
 				case 'dbuser':
+				case 'tmpgit':
 					$args["delete_{$option}"] = 1;
 					break;
 			}
@@ -20,6 +21,7 @@ class CleanupHttpShCommand extends HttpShCommand
 		$args['db_name'] = $params['db_name'];
 		$args['db_user'] = $params['db_user'];
 		$args['repo_name'] = $params['repo_name'];
+		$args['workdir'] = $params['workdir'];
 		return $this->query('cleanup.sh', $args);
 	}
 }

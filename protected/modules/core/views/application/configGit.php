@@ -48,8 +48,8 @@ $this->menu = array(
 	),
 );
 
-if (null !== $response) {
-	$this->renderPartial('_httpsh_response', array(
+if (null !== $response && !$response->getIsSuccess()) {
+	$this->renderPartial('../layouts/include/httpsh-response', array(
 		'response' => $response,
 	));
 }

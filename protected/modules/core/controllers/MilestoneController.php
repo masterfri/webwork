@@ -52,6 +52,7 @@ class MilestoneController extends AdminController
 		$model = new Milestone('create');
 		$model->project = $project;
 		if ($this->saveModel($model)) {
+			Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Milestone has been created'));
 			$this->redirect(array('view', 'id' => $model->id));
 		}
 		$this->render('create', array(
@@ -67,6 +68,7 @@ class MilestoneController extends AdminController
 			throw new CHttpException(403, 'Forbidden');
 		}
 		if ($this->saveModel($model)) {
+			Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Milestone has been updated'));
 			$this->redirect(array('view', 'id' => $model->id));
 		}
 		$this->render('update', array(

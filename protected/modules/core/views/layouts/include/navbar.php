@@ -64,10 +64,21 @@
 						'data-toggle' => 'dropdown',
 					),
 					'items' => CMap::mergeArray(array_map(function($project) {
-							return array(
+							$item = array(
 								'label' => '<i class="glyphicon glyphicon-file"></i> ' . CHtml::encode($project->name),
 								'url' => array('project/view', 'id' => $project->id),
 							);
+							if (Yii::app()->user->checkAccess('create_task', array('project' => $project))) {
+								$item['addon'] = array(
+									'label' => '<i class="glyphicon glyphicon-plus"></i>',
+									'url' => array('task/create', 'project' => $project->id),
+									'options' => array(
+										'title' => Yii::t('core.crud', 'Create Task'),
+										'class' => 'menu-addon',
+									),
+								);
+							}
+							return $item;
 						}, Project::getUserBundle()), array(
 							array(
 								'label' => '<i class="glyphicon glyphicon-briefcase"></i> ' . Yii::t('core.crud', 'Manage Projects'),

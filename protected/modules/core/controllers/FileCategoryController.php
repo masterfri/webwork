@@ -16,6 +16,7 @@ class FileCategoryController extends AdminController
 	{
 		$model = new FileCategory('create');
 		if ($this->saveModel($model)) {
+			Yii::app()->user->setFlash('message', Yii::t('core.crud', 'File category has been created'));
 			$this->redirect(array('view', 'id' => $model->id));
 		}
 		$this->render('create', array(
@@ -27,6 +28,7 @@ class FileCategoryController extends AdminController
 	{
 		$model = $this->loadModel($id, 'FileCategory');
 		if ($this->saveModel($model)) {
+			Yii::app()->user->setFlash('message', Yii::t('core.crud', 'File category has been updated'));
 			$this->redirect(array('view', 'id' => $model->id));
 		}
 		$this->render('update', array(

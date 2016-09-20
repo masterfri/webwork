@@ -1313,6 +1313,7 @@ return array(
 			'delete_shared_application',
 			'design_shared_application',
 			'pull_shared_application',
+			'push_shared_application',
 			'view_user_schedule',
 			'update_shared_project_schedule',
 			'create_entity_template',

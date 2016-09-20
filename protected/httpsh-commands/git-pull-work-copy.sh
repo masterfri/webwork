@@ -6,7 +6,7 @@ THISDIR=$(dirname $0)
 . "$THISDIR/helpers.sh"
 
 # Input vars
-DOMAIN=""
+WORK_PATH=""
 REPO_URL=""
 BRANCH=""
 
@@ -14,8 +14,8 @@ BRANCH=""
 while true
 do
 	case "$1" in
-		--domain ) 
-			DOMAIN="$2"
+		--workpath ) 
+			WORK_PATH="$2"
 			shift 2
 			;;
 		--branch ) 
@@ -32,22 +32,27 @@ do
 	esac
 done
 
-SITE_DIR="$WWW_DATA_DIR/$DOMAIN"
-if [ ! -d "$SITE_DIR/.git" ]
+if [ ! -d "$WORK_PATH" ]
 then
-	echo ">RETURN: 204 Can not find working copy"
-	echo ">DATA: location $SITE_DIR"
+	echo ">RETURN: 7 No such file or directory"
+	echo ">DATA: dir $WORK_PATH"
 	exit
-fi	
+fi
 
-cd "$SITE_DIR"
-git-set-branch "$BRANCH"
-git-pull "$REPO_URL" "$BRANCH"
+cd "$WORK_PATH"
 
-# run setup/upgrade script
-if [ -x "$SITE_DIR/update" ]
+if [ ! -d "$WORK_PATH/.git" ]
 then
-	"$SITE_DIR/update"
+	git-init-repo
+fi
+
+git-set-branch "$BRANCH"
+
+# Check if remote branch exists
+BRANCH_TEST=$("$GIT" ls-remote --heads "$REPO_URL" "$BRANCH")
+if [ "$BRANCH_TEST" != "" ]
+then
+	git-pull "$REPO_URL" "$BRANCH"
 fi
 
 # Report success

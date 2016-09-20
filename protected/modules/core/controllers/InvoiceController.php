@@ -20,6 +20,7 @@ class InvoiceController extends AdminController
 		$model = new Invoice('create');
 		$model->from_id = Yii::app()->user->id;
 		if ($this->saveModel($model)) {
+			Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Invoice has been created'));
 			$this->redirect(array('update', 'id' => $model->id));
 		}
 		$this->render('create', array(
@@ -31,6 +32,7 @@ class InvoiceController extends AdminController
 	{
 		$model = $this->loadModel($id, 'Invoice');
 		if ($this->saveModel($model)) {
+			Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Invoice has been updated'));
 			$this->redirect(array('view', 'id' => $model->id));
 		}
 		$this->render('update', array(

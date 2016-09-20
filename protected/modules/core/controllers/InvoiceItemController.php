@@ -17,6 +17,7 @@ class InvoiceItemController extends AdminController
 					),
 				));
 			} else {
+				Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Item has been added'));
 				$this->redirect(array('invoice/update', 'id' => $invoice->id));
 			}
 		}
@@ -41,6 +42,7 @@ class InvoiceItemController extends AdminController
 					),
 				));
 			} else {
+				Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Item has been updated'));
 				$this->redirect(array('invoice/update', 'id' => $model->invoice_id));
 			}
 		}

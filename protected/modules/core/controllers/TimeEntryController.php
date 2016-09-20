@@ -62,6 +62,7 @@ class TimeEntryController extends AdminController
 	{
 		$model = new TimeEntry('create');
 		if ($this->saveModel($model)) {
+			Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Time entry has been created'));
 			$this->redirect(array('view', 'id' => $model->id));
 		}
 		$this->render('create', array(
@@ -92,6 +93,7 @@ class TimeEntryController extends AdminController
 					),
 				));
 			} else {
+				Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Time has been reported'));
 				$this->redirect(array('daily'));
 			}
 		}
@@ -111,6 +113,7 @@ class TimeEntryController extends AdminController
 			throw new CHttpException(403, 'Forbidden');
 		}
 		if ($this->saveModel($model)) {
+			Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Time entry has been updated'));
 			$this->redirect(array('view', 'id' => $model->id));
 		}
 		$this->render('update', array(

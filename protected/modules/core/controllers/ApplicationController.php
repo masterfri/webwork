@@ -49,6 +49,7 @@ class ApplicationController extends AdminController
 			throw new CHttpException(403, 'Forbidden');
 		}
 		if ($this->saveModel($model)) {
+			Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Application has been updated'));
 			$this->redirect(array('view', 'id' => $model->id));
 		}
 		$this->render('update', array(
@@ -75,6 +76,7 @@ class ApplicationController extends AdminController
 				if ($wizard == 1) {
 					$this->redirect(array('configGit', 'id' => $model->id, 'wizard' => 1));
 				} else {
+					Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Application configuration has been updated'));
 					$this->redirect(array('view', 'id' => $model->id));
 				}
 			} else {
@@ -107,6 +109,7 @@ class ApplicationController extends AdminController
 				if ($wizard == 1) {
 					$this->redirect(array('configDb', 'id' => $model->id, 'wizard' => 1));
 				} else {
+					Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Application configuration has been updated'));
 					$this->redirect(array('view', 'id' => $model->id));
 				}
 			} else {
@@ -137,6 +140,11 @@ class ApplicationController extends AdminController
 			$response = $model->setupDb();
 			if ($response->getIsSuccess()) {
 				$model->setStatus(Application::STATUS_HAS_DB);
+				if ($wizard == 1) {
+					Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Application has been created'));
+				} else {
+					Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Application configuration has been updated'));
+				}
 				$this->redirect(array('view', 'id' => $model->id));
 			} else {
 				$model->unsetStatus(Application::STATUS_HAS_DB);
@@ -157,10 +165,10 @@ class ApplicationController extends AdminController
 		}
 		$response = null;
 		if (isset($_POST['delete'])) {
-			if (isset($_POST['opts'])) {
-				$response = $model->cleanup(array_keys($_POST['opts']));
-			}
-			if (null === $response || $response->getIsSuccess()) {
+			$opts = isset($_POST['opts']) ? array_keys($_POST['opts']) : array();
+			$opts[] = 'tmpgit';
+			$response = $model->cleanup($opts);
+			if ($response->getIsSuccess()) {
 				$model->delete();
 				$this->redirect(array('index', 'project' => $model->project_id));
 			}
@@ -192,6 +200,10 @@ class ApplicationController extends AdminController
 		if (isset($_POST['make_pull'])) {
 			set_time_limit(0);
 			$response = $model->makePull();
+			if ($response->getIsSuccess()) {
+				Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Pull has been successfully completed'));
+				$this->redirect(array('view', 'id' => $model->id));
+			}
 		}
 		$this->render('pull', array(
 			'model' => $model,

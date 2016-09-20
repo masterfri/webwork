@@ -1,0 +1,39 @@
+General
+
+0 		Success
+1 		Can not create directory
+2 		Can not change file/directory mode
+3 		Can not change directory owner group
+4 		Can not create file
+5 		Can not delete directory
+6 		Can not delete file
+7 		No such file or directory
+8		Can not empty directory
+
+Apache related
+
+101 	Can not reload apache configuration
+
+Git related
+
+201		Can not init repository
+202 	Can not add remote url
+203 	Can not update remote url
+204 	Can not find working copy
+205 	Can not make pull
+206 	Can not checkout branch
+207 	Can not stage file
+208		Can not commit changes
+
+MySQL related
+
+301 	Can not create database
+302 	Can not grant access to user
+303 	Can not update user password
+304 	Can not drop database
+305 	Can not drop user
+
+CF related
+
+401		Can not make release
+402		Conflicted files have been detected

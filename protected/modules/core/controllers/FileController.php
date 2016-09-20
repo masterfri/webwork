@@ -47,6 +47,7 @@ class FileController extends AdminController
 	{
 		$model = $this->loadModel($id, 'File');
 		if ($this->saveModel($model)) {
+			Yii::app()->user->setFlash('message', Yii::t('core.crud', 'File has been updated'));
 			$this->redirect(array('view', 'id' => $model->id));
 		}
 		$this->render('update', array(

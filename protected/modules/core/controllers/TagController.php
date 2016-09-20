@@ -52,6 +52,7 @@ class TagController extends AdminController
 			$model = new Tag('createShared');
 		}
 		if ($this->saveModel($model)) {
+			Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Tag has been created'));
 			$this->redirect(array('view', 'id' => $model->id));
 		}
 		$this->render('create', array(
@@ -71,6 +72,7 @@ class TagController extends AdminController
 			$model->setScenario('updateShared');
 		}
 		if ($this->saveModel($model)) {
+			Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Tag has been updated'));
 			$this->redirect(array('view', 'id' => $model->id));
 		}
 		$this->render('update', array(

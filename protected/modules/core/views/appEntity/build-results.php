@@ -29,5 +29,8 @@ $this->menu = array(
 	<div class="panel-body">
 		<pre><?php echo CHtml::encode($result); ?></pre>
 		<a href="<?php echo $this->createUrl('download', array('application' => $application->id)); ?>" class="btn btn-default"><?php echo Yii::t('core.crud', 'Download as ZIP');?></a>
+		<?php if ($application->status & Application::STATUS_HAS_GIT && Yii::app()->user->checkAccess('push_application', array('application' => $application))): ?>
+			<a href="<?php echo $this->createUrl('push', array('application' => $application->id)); ?>" class="btn btn-default"><?php echo Yii::t('core.crud', 'Push to repository');?></a>
+		<?php endif; ?>
 	</div>
 </div>

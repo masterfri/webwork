@@ -57,7 +57,7 @@ $('#delete-form').on('submit', function() {
 ");
 
 if (null !== $response) {
-	$this->renderPartial('_httpsh_response', array(
+	$this->renderPartial('../layouts/include/httpsh-response', array(
 		'response' => $response,
 	));
 }

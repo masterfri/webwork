@@ -73,6 +73,7 @@ class TaskController extends AdminController
 					),
 				));
 			} else {
+				Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Task has been created'));
 				$this->redirect(array('view', 'id' => $model->id));
 			}
 		}
@@ -89,6 +90,7 @@ class TaskController extends AdminController
 			throw new CHttpException(403, 'Forbidden');
 		}
 		if ($this->saveModel($model)) {
+			Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Task has been updated'));
 			$this->redirect(array('view', 'id' => $model->id));
 		}
 		$this->render('update', array(

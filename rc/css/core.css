@@ -1008,3 +1008,23 @@ body:after {
 .app-entity-attr .form-control.invalid {
 	border: 1px solid #d9534f;
 }
+.httpsh-output-panel {
+	margin-bottom: 20px;
+}
+.navbar-nav .dropdown-menu > li {
+	position: relative;
+}
+.navbar-nav .dropdown-menu > li > .menu-addon {
+	position: absolute;
+	top: 0;
+	right: 5px;
+	padding: 6px;
+	margin: 0;
+	color: #999;
+}
+.navbar-nav .dropdown-menu > li > .menu-addon:hover {
+	color: #333;
+}
+.navbar-nav .dropdown-menu > li > .menu-addon + a {
+	padding-right: 40px;
+}

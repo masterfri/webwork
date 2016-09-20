@@ -2,7 +2,8 @@
 
 # Include extras
 THISDIR=$(dirname $0)
-. "$THISDIR/include.sh"
+. "$THISDIR/config.sh"
+. "$THISDIR/helpers.sh"
 
 # Input vars
 DOMAIN=""
@@ -33,64 +34,22 @@ done
 
 # Create necessary directories
 SITE_DIR="$WWW_DATA_DIR/$DOMAIN"
-safemkdir "$SITE_DIR"
-
-CWD=$(pwd)
+safe-create-dir "$SITE_DIR"
 
 # Create server repo
 if [ "$REPO_URL" == "" ]
 then
-	REPO_URL="$GIT_DIR/$REPO_NAME.git"
-	if [ ! -d "$REPO_URL" ]
-	then
-		safemkdir "$REPO_URL"
-		cd "$REPO_URL"
-		"$GIT" init --bare
-		if [ $? -ne 0 ]
-		then
-			cd "$CWD"
-			echo ">RETURN: 201 Can not init repository"
-			echo ">DATA: location $REPO_URL"
-			exit;
-		fi
-	fi
+	get-create-repo "$GIT_DIR/$REPO_NAME.git"
 fi
 
 # Create work repo
+cd "$SITE_DIR"
 if [ ! -d "$SITE_DIR/.git" ]
 then
-	cd "$SITE_DIR"
-	"$GIT" init
-	if [ $? -ne 0 ]
-	then
-		cd "$CWD"
-		echo ">RETURN: 201 Can not init repository"
-		echo ">DATA: location $SITE_DIR"
-		exit;
-	fi
-
-	"$GIT" remote add origin "$REPO_URL"
-	if [ $? -ne 0 ]
-	then
-		cd "$CWD"
-		echo ">RETURN: 202 Can not add remote url"
-		echo ">DATA: location $SITE_DIR"
-		echo ">DATA: url $REPO_URL"
-		exit;
-	fi
-	cd "$CWD"
+	git-init-repo
+	git-create-origin "$REPO_URL"
 else
-	cd "$SITE_DIR"
-	"$GIT" remote set-url origin "$REPO_URL"
-	if [ $? -ne 0 ]
-	then
-		cd "$CWD"
-		echo ">RETURN: 203 Can not update remote url"
-		echo ">DATA: location $SITE_DIR"
-		echo ">DATA: url $REPO_URL"
-		exit;
-	fi
-	cd "$CWD"
+	git-update-origin "$REPO_URL"
 fi
 
 # Report success

@@ -43,4 +43,18 @@ class Menu extends CMenu
 		}
 		return array_values($items);
 	}
+	
+	protected function renderMenuItem($item)
+	{
+		$addon = '';
+		if (isset($item['addon'])) {
+			$addon = CHtml::link($item['addon']['label'], $item['addon']['url'], isset($item['addon']['options']) ? $item['addon']['options'] : array());
+		}
+		if (isset($item['url'])) {
+			$label = $this->linkLabelWrapper === null ? $item['label'] : CHtml::tag($this->linkLabelWrapper, $this->linkLabelWrapperHtmlOptions, $item['label']);
+			return $addon . CHtml::link($label, $item['url'], isset($item['linkOptions']) ? $item['linkOptions'] : array());
+		} else {
+			return $addon . CHtml::tag('span', isset($item['linkOptions']) ? $item['linkOptions'] : array(), $item['label']);
+		}
+	}
 }

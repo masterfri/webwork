@@ -38,6 +38,7 @@ class AssignmentController extends AdminController
 					),
 				));
 			} else {
+				Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Team member has been added'));
 				$this->redirect(array('view', 'id' => $model->id));
 			}
 		}
@@ -66,6 +67,7 @@ class AssignmentController extends AdminController
 					),
 				));
 			} else {
+				Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Team member has been updated'));
 				$this->redirect(array('view', 'id' => $model->id));
 			}
 		}

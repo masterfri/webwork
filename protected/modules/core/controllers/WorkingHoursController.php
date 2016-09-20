@@ -16,6 +16,7 @@ class WorkingHoursController extends AdminController
 	{
 		$model = new WorkingHours('create');
 		if ($this->saveModel($model)) {
+			Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Working hours have been created'));
 			$this->redirect(array('view', 'id' => $model->id));
 		}
 		$this->render('create', array(
@@ -27,6 +28,7 @@ class WorkingHoursController extends AdminController
 	{
 		$model = $this->loadModel($id, 'WorkingHours');
 		if ($this->saveModel($model)) {
+			Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Working hours have been updated'));
 			$this->redirect(array('view', 'id' => $model->id));
 		}
 		$this->render('update', array(

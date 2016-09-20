@@ -19,6 +19,7 @@ class PaymentController extends AdminController
 		$model->invoice = $invoice;
 		$model->amount = max(0.01, $invoice->amount - $invoice->payd);
 		if ($this->saveModel($model)) {
+			Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Payment has been created'));
 			$this->redirect(array('view', 'id' => $model->id));
 		}
 		$this->render('create', array(
@@ -31,6 +32,7 @@ class PaymentController extends AdminController
 	{
 		$model = $this->loadModel($id, 'Payment');
 		if ($this->saveModel($model)) {
+			Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Payment has been updated'));
 			$this->redirect(array('view', 'id' => $model->id));
 		}
 		$this->render('update', array(

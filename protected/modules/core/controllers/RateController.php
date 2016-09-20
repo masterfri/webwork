@@ -16,6 +16,7 @@ class RateController extends AdminController
 	{
 		$model = new Rate('create');
 		if ($this->saveModel($model)) {
+			Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Rate has been created'));
 			$this->redirect(array('view', 'id' => $model->id));
 		}
 		$this->render('create', array(
@@ -27,6 +28,7 @@ class RateController extends AdminController
 	{
 		$model = $this->loadModel($id, 'Rate');
 		if ($this->saveModel($model)) {
+			Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Rate has been updated'));
 			$this->redirect(array('view', 'id' => $model->id));
 		}
 		$this->render('update', array(

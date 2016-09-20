@@ -6,16 +6,17 @@ THISDIR=$(dirname $0)
 . "$THISDIR/helpers.sh"
 
 # Input vars
-DOMAIN=""
+WORK_PATH=""
 REPO_URL=""
 BRANCH=""
+MESSAGE=""
 
 # Reading args
 while true
 do
 	case "$1" in
-		--domain ) 
-			DOMAIN="$2"
+		--workpath ) 
+			WORK_PATH="$2"
 			shift 2
 			;;
 		--branch ) 
@@ -26,29 +27,25 @@ do
 			REPO_URL="$2"
 			shift 2
 			;;
+		--message )
+			MESSAGE="$2"
+			shift 2
+			;;
 		* ) 
 			break 
 			;;
 	esac
 done
 
-SITE_DIR="$WWW_DATA_DIR/$DOMAIN"
-if [ ! -d "$SITE_DIR/.git" ]
+if [ ! -d "$WORK_PATH/.git" ]
 then
 	echo ">RETURN: 204 Can not find working copy"
-	echo ">DATA: location $SITE_DIR"
+	echo ">DATA: location $WORK_PATH"
 	exit
-fi	
-
-cd "$SITE_DIR"
-git-set-branch "$BRANCH"
-git-pull "$REPO_URL" "$BRANCH"
-
-# run setup/upgrade script
-if [ -x "$SITE_DIR/update" ]
-then
-	"$SITE_DIR/update"
 fi
 
+cd "$WORK_PATH"
+git-push "$REPO_URL" "$BRANCH" "$MESSAGE"
+
 # Report success
-echo ">RETURN: 0 Pull has been successfully completed"
+echo ">RETURN: 0 Push has been successfully completed"

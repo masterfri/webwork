@@ -2,18 +2,21 @@
 
 # Include extras
 THISDIR=$(dirname $0)
-. "$THISDIR/include.sh"
+. "$THISDIR/config.sh"
+. "$THISDIR/helpers.sh"
 
 # Input vars
 DOMAIN=""
 DB_NAME=""
 DB_USER=""
 REPO_NAME=""
+WORKDIR=""
 DELETE_FILES=0
 DELETE_VHOST=0
 DELETE_GIT=0
 DELETE_DB=0
 DELETE_DB_USER=0
+DELETE_TMPGIT=0
 
 # Reading args
 while true
@@ -33,6 +36,10 @@ do
 			;;
 		--repo_name ) 
 			REPO_NAME="$2"
+			shift 2
+			;;
+		--workdir ) 
+			WORKDIR="$2"
 			shift 2
 			;;
 		--delete_files ) 
@@ -55,6 +62,10 @@ do
 			DELETE_DB_USER=1
 			shift 2
 			;;
+		--delete_tmpgit ) 
+			DELETE_TMPGIT=1
+			shift 2
+			;;
 		* ) 
 			break 
 			;;
@@ -64,17 +75,7 @@ done
 # Delete application files
 if [ $DELETE_FILES -eq 1 ]
 then
-	SITE_DIR="$WWW_DATA_DIR/$DOMAIN"
-	if [ -d "$SITE_DIR" ]
-	then
-		rm -rf "$SITE_DIR"
-		if [ $? -ne 0 ]
-		then
-			echo ">RETURN: 5 Can not delete directory"
-			echo ">DATA: dir $SITE_DIR"
-			exit;
-		fi
-	fi
+	safe-remove-dir "$WWW_DATA_DIR/$DOMAIN"
 fi
 
 # Delete vhost configuration file
@@ -83,62 +84,33 @@ then
 	VHOST_FILE="$VHOST_DIR/$DOMAIN.conf"
 	if [ -f "$VHOST_FILE" ]
 	then
-		rm -f "$VHOST_FILE"
-		if [ $? -ne 0 ]
-		then
-			echo ">RETURN: 6 Can not delete file"
-			echo ">DATA: dir $VHOST_FILE"
-			exit;
-		fi
-		
-		# Reload apache config
-		sudo "$APACHECTL" graceful
-		if [ $? -ne 0 ]
-		then
-			echo ">RETURN: 101 Can not reload apache configuration"
-			exit;
-		fi
+		safe-remove-file "$VHOST_FILE"
+		webserver-reload
 	fi
 fi
 
 # Delete git repo
 if [ $DELETE_GIT -eq 1 ]
 then
-	REPO_URL="$GIT_DIR/$REPO_NAME.git"
-	if [ -d "$REPO_URL" ]
-	then
-		rm -rf "$REPO_URL"
-		if [ $? -ne 0 ]
-		then
-			echo ">RETURN: 5 Can not delete directory"
-			echo ">DATA: dir $REPO_URL"
-			exit;
-		fi
-	fi
+	safe-remove-dir "$GIT_DIR/$REPO_NAME.git"
 fi
 
 # Drop mysql database
 if [ $DELETE_DB -eq 1 ]
 then
-	echo "DROP DATABASE IF EXISTS \`$DB_NAME\`;" | "$MYSQL" -u"$MYSQL_USER" -p"$MYSQL_PASS"
-	if [ $? -ne 0 ]
-	then
-		echo ">RETURN: 304 Can not drop database"
-		echo ">DATA: db_name $DB_NAME"
-		exit;
-	fi
+	database-drop "$DB_NAME"
 fi
 
 # Delete mysql user
 if [ $DELETE_DB_USER -eq 1 ]
 then
-	echo "DROP USER '$DB_USER'@'localhost';" | "$MYSQL" -u"$MYSQL_USER" -p"$MYSQL_PASS"
-	if [ $? -ne 0 ]
-	then
-		echo ">RETURN: 305 Can not drop user"
-		echo ">DATA: db_user $DB_USER"
-		exit;
-	fi
+	database-drop-user "$DB_USER"
+fi
+
+# Cleanup work copy
+if [ $DELETE_TMPGIT -eq 1 ]
+then
+	cleanup-dir "$WORKDIR"
 fi
 
 # Report success

@@ -77,6 +77,7 @@ class AppEntityController extends AdminController
 					),
 				));
 			} else {
+				Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Application entity has been created'));
 				$this->redirect(array('view', 'id' => $model->id));
 			}
 		}
@@ -108,6 +109,7 @@ class AppEntityController extends AdminController
 					),
 				));
 			} else {
+				Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Application entity has been updated'));
 				$this->redirect(array('view', 'id' => $model->id));
 			}
 		}
@@ -154,6 +156,7 @@ class AppEntityController extends AdminController
 					),
 				));
 			} else {
+				Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Template has been updated'));
 				$this->redirect(array('view', 'id' => $model->id));
 			}
 		}
@@ -211,6 +214,7 @@ class AppEntityController extends AdminController
 		$template->json_schemes = $model->json_schemes;
 		$template->json_source = $model->json_source;
 		if ($this->saveModel($template)) {
+			Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Template has been created'));
 			$this->redirect(array('view', 'id' => $template->id));
 		}
 		$this->render('copyAsTemplate', array(
@@ -271,6 +275,37 @@ class AppEntityController extends AdminController
 		}
 	}
 	
+	public function actionCleanup($application)
+	{
+		$application = $this->loadModel($application, 'Application');
+		if (!Yii::app()->user->checkAccess('design_application', array('application' => $application))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
+		$response = null;
+		if (isset($_POST['cleanup'])) {
+			if (isset($_POST['git'])) {
+				$response = $application->cleanup(array('tmpgit'));
+			}
+			if (null === $response || $response->getIsSuccess()) {
+				if (isset($_POST['build'])) {
+					if ($_POST['build'] == 'compiled') {
+						$application->getCF()->cleanup();
+					} else {
+						$application->getCF()->cleanup(false);
+						$application->last_build_json = new CDbExpression('NULL');
+						$application->save(false);
+					}
+				}
+				Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Application has been cleaned up'));
+				$this->redirect(array('index', 'application' => $application->id));
+			}
+		}
+		
+		$this->render('cleanup', array(
+			'application' => $application,
+		));
+	}
+	
 	public function actionPush($application)
 	{
 		$application = $this->loadModel($application, 'Application');
@@ -281,6 +316,42 @@ class AppEntityController extends AdminController
 			throw new CHttpException(500, 'Application is not configured');
 		}
 		
+		$model = new PushApplicationForm();
+		$model->branch = $application->git_branch;
+		$response = null;
+		if (isset($_POST['PushApplicationForm'])) {
+			$model->attributes = $_POST['PushApplicationForm'];
+			if ($model->validate()) {
+				$response = $application->pullWorkCopy($model->branch);
+				if ($response->getIsSuccess()) {
+					if ($model->hasConflictedFiles()) {
+						$ignore = $model->getResolutionFiles(PushApplicationForm::RESOLVE_IGNORE);
+						$application->getCF()->updateIgnoreList($ignore);
+						$response = $application->releaseWorkCopy(true);
+					} else {
+						$response = $application->releaseWorkCopy();
+					}
+					if ($response->getIsSuccess()) {
+						$response = $application->pushWorkCopy($model->branch, $model->message);
+						if ($response->getIsSuccess()) {
+							Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Application has been pushed successfully'));
+							$this->redirect(array('index', 'application' => $application->id));
+						}
+					} elseif ($response->getCode() == HttpShResponse::CODE_ERR_CF_CONFLICTS) {
+						$model->setConflictedFiles($response->getData('conflict'));
+						$response = null;
+					}
+					
+					
+				}
+			}
+		}
+		
+		$this->render('push', array(
+			'application' => $application,
+			'model' => $model,
+			'response' => $response,
+		));
 	}
 	
 	public function actionDownload($application)
@@ -294,8 +365,8 @@ class AppEntityController extends AdminController
 		$zip->open($file, ZipArchive::CREATE);
 		try {
 			$added = array();
-			$this->writeToZip($zip, $application->getCFWorkdir() . '/compiled/', '', $added);
-			$this->writeToZip($zip, $application->getCFWorkdir() . '/static/', '', $added);
+			$this->writeToZip($zip, $application->getCFWorkdir() . '/' . CodeforgeComponent::PROJECT_DIR_NAME . '/compiled/', '', $added);
+			$this->writeToZip($zip, $application->getCFWorkdir() . '/' . CodeforgeComponent::PROJECT_DIR_NAME . '/static/', '', $added);
 			$zip->close();
 			header('Content-Type: application/zip');
 			header('Content-Size: ' . filesize($file));
@@ -365,7 +436,7 @@ class AppEntityController extends AdminController
 				'roles' => array('update_entity_template'),
 			),
 			array('allow',
-				'actions' => array('build', 'download'),
+				'actions' => array('build', 'download', 'cleanup'),
 				'roles' => array('design_application'),
 			),
 			array('allow',

@@ -16,6 +16,7 @@ class HolidayController extends AdminController
 	{
 		$model = new Holiday('create');
 		if ($this->saveModel($model)) {
+			Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Holiday has been created'));
 			$this->redirect(array('view', 'id' => $model->id));
 		}
 		$this->render('create', array(
@@ -27,6 +28,7 @@ class HolidayController extends AdminController
 	{
 		$model = $this->loadModel($id, 'Holiday');
 		if ($this->saveModel($model)) {
+			Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Holiday has been updated'));
 			$this->redirect(array('view', 'id' => $model->id));
 		}
 		$this->render('update', array(

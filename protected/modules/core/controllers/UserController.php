@@ -47,6 +47,7 @@ class UserController extends AdminController
 	{
 		$model = new User('create');
 		if ($this->saveModel($model)) {
+			Yii::app()->user->setFlash('message', Yii::t('core.crud', 'User has been created'));
 			$this->redirect(array('view', 'id' => $model->id));
 		}
 		$this->render('create', array(
@@ -62,6 +63,7 @@ class UserController extends AdminController
 			if ($model->id == $user->id) {
 				$user->setLocale($model->locale);
 			}
+			Yii::app()->user->setFlash('message', Yii::t('core.crud', 'User has been updated'));
 			$this->redirect(array('view', 'id' => $model->id));
 		}
 		$this->render('update', array(
@@ -112,6 +114,7 @@ class UserController extends AdminController
 		$model->setScenario('updateProfile');
 		if ($this->saveModel($model)) {
 			$user = Yii::app()->user->setLocale($model->locale);
+			Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Your profile has been updated'));
 			$this->redirect(array('profile'));
 		}
 		$this->render('updateProfile', array(

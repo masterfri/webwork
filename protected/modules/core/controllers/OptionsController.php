@@ -6,7 +6,7 @@ class OptionsController extends AdminController
 	{
 		$model = GeneralOptions::instance();
 		if ($this->saveModel($model)) {
-			Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Options have been updated'));
+			Yii::app()->user->setFlash('success', Yii::t('core.crud', 'Options have been updated'));
 			$this->refresh();
 		}
 		$this->render('generalOptions', array(

@@ -20,6 +20,15 @@ $this->menu = array(
 		'visible' => Yii::app()->user->checkAccess('design_application', array('application' => $application)),
 	),
 	array(
+		'label' => '<i class="glyphicon glyphicon-asterisk"></i>',
+		'linkOptions' => array(
+			'title' => Yii::t('core.crud', 'Make clean'), 
+			'class' => 'btn btn-default',
+		), 
+		'url' => array('cleanup', 'application' => $application->id),
+		'visible' => Yii::app()->user->checkAccess('design_application', array('application' => $application)),
+	),
+	array(
 		'label' => '<i class="glyphicon glyphicon-plus"></i>',
 		'linkOptions' => array(
 			'title' => Yii::t('core.crud', 'Create Application Entity'), 
@@ -45,6 +54,15 @@ $this->menu = array(
 		), 
 		'url' => array('templates'),
 		'visible' => Yii::app()->user->checkAccess('design_application'),
+	),
+	array(
+		'label' => '<i class="glyphicon glyphicon-arrow-left"></i>',
+		'linkOptions' => array(
+			'title' => Yii::t('core.crud', 'Back to Application'), 
+			'class' => 'btn btn-default',
+		), 
+		'url' => array('application/view', 'id' => $application->id),
+		'visible' => Yii::app()->user->checkAccess('view_application', array('application' => $application)),
 	),
 );
 

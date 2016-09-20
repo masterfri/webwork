@@ -2,26 +2,24 @@
 
 abstract class HttpShCommand
 {
-	const CODE_OK = 0;
-	const CODE_ERR_CURL = 1;
-	const CODE_ERR_HTTP_CODE = 2;
-	
 	protected $_host;
 	protected $_port;
 	protected $_login;
 	protected $_password;
+	protected $_namespace;
 	
-	public function __construct($login, $password, $host='127.0.0.1', $port=2424)
+	public function __construct($login, $password, $host='127.0.0.1', $port=2424, $namespace='pm')
 	{
 		$this->_host = $host;
 		$this->_port = $port;
 		$this->_login = $login;
 		$this->_password = $password;
+		$this->_namespace = $namespace;
 	}
 	
 	protected function handleResponse($response)
 	{
-		$code = 0;
+		$code = null;
 		$message = '';
 		$data = null;
 		foreach (explode("\n", $response) as $line) {
@@ -47,7 +45,11 @@ abstract class HttpShCommand
 				}
 			}
 		}
-		return new HttpShResponse($code, $message, $data);
+		if (null === $code) {
+			return new HttpShResponse(HttpShResponse::CODE_ERR_BAD_RESPONSE, 'Invalid response given', $data, $response);
+		} else {
+			return new HttpShResponse($code, $message, $data, $response);
+		}
 	}
 	
 	protected function normalizeParams($params)
@@ -58,7 +60,7 @@ abstract class HttpShCommand
 				if ('' != $param) {
 					$normalized[$name] = $param;
 				}
-			} else {
+			} elseif ($param !== null) {
 				$this->unwrapParam($param, $name, $normalized);
 			}
 		}
@@ -72,7 +74,7 @@ abstract class HttpShCommand
 				if ('' != $v) {
 					$normalized["$name-$k"] = $v;
 				}
-			} else {
+			} elseif ($v !== null) {
 				$this->unwrapParam($v, "$name-$k", $normalized);
 			}
 		}
@@ -85,7 +87,7 @@ abstract class HttpShCommand
 	
 	public function query($path, $params=array())
 	{
-		$url = sprintf('http://%s:%s/%s', $this->_host, $this->_port, $path);
+		$url = sprintf('http://%s:%s/%s/%s', $this->_host, $this->_port, $this->_namespace, $path);
 		$params = $this->normalizeParams($params);
 		if ($params !== array()) {
 			$url .= '?' . http_build_query($params);
@@ -98,16 +100,15 @@ abstract class HttpShCommand
 		if (false === $response) {
 			$error = curl_error($ch);
 			curl_close($ch);
-			return new HttpShResponse(self::CODE_ERR_CURL, $error);
+			return new HttpShResponse(HttpShResponse::CODE_ERR_CURL, $error);
 		} else {
 			$code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 			curl_close($ch);
 			if (200 == $code) {
 				$result = $this->handleResponse($response);
-				$result->setRaw($response);
 				return $result;
 			} else {
-				return new HttpShResponse(self::CODE_ERR_HTTP_CODE, Yii::t('core.httpsh', 'HTTPSH request has returned bad HTTP code: {code}', array(
+				return new HttpShResponse(HttpShResponse::CODE_ERR_HTTP_CODE, Yii::t('core.httpsh', 'HTTPSH request has returned bad HTTP code: {code}', array(
 					'{code}' => $code,
 				)), array(
 					'code' => $code,
