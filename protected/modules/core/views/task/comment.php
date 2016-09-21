@@ -12,7 +12,7 @@ $this->menu = array(
 	array(
 		'label' => '<i class="glyphicon glyphicon-arrow-left"></i>', 
 		'linkOptions' => array(
-			'title' => Yii::t('core.crud', 'Back to task'), 
+			'title' => Yii::t('core.crud', 'Back to Task'), 
 			'class' => 'btn btn-default',
 		), 
 		'url' => array('view', 'id' => $model->id),

@@ -10,7 +10,7 @@ class TranslateCommand extends CConsoleCommand
 	protected $translations;
 	protected $changes = array();
 	
-	public function actionScan($dir, $out='.', $lng='ru')
+	public function actionScan(array $dir, $out='.', $lng='ru')
 	{
 		$path = realpath($out);
 		if (!$path) {
@@ -19,10 +19,12 @@ class TranslateCommand extends CConsoleCommand
 		}
 		$this->output = rtrim($path, '/') . '/';
 		$this->language = $lng;
-		$files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir));
-		foreach ($files as $file) {
-			if (!$file->isDir() && in_array($file->getExtension(), $this->extensions)) {
-				$this->scanFile($file->getPathname());
+		foreach ($dir as $d) {
+			$files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($d));
+			foreach ($files as $file) {
+				if (!$file->isDir() && in_array($file->getExtension(), $this->extensions)) {
+					$this->scanFile($file->getPathname());
+				}
 			}
 		}
 		foreach ($this->translations as $category => $strings) {
@@ -107,6 +109,6 @@ class TranslateCommand extends CConsoleCommand
 			echo "Can not write file $fullpath\n";
 			exit;
 		}
-		echo "Translations for $category have been updated\n;";
+		echo "Translations for $category have been updated\n";
 	}
 }
