@@ -482,4 +482,10 @@ class Application extends CActiveRecord
 		}
 		$this->setBuildOptions($data);
 	}
+	
+	public function getGraphJOSN()
+	{
+		$cf = $this->getCF();
+		return $cf->buildGraph($this->entities);
+	}
 }

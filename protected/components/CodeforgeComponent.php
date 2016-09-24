@@ -172,4 +172,27 @@ class CodeforgeComponent extends CApplicationComponent
 			Codeforge\FileHelper::cleanup($dir, true, false);
 		}
 	}
+	
+	public function buildGraph($entities)
+	{
+		ob_start();
+		try {
+			$models = array();
+			foreach ($entities as $entity) {
+				$parser = new Codeforge\Parser();
+				$parser->parseText($entity->plain_source);
+				foreach ($parser->getModels() as $model) {
+					$models[] = $model;
+				}
+			}
+			$compile_dir = $this->prepareDir(CF_WORKDIR . '/' . self::PROJECT_DIR_NAME . '/compiled');
+			$this->layer->setModels($models);
+			$this->layer->setMode('_build');
+			$this->layer->build('debug', $compile_dir);
+		} catch (Exception $e) {
+			ob_clean();
+			return '[]; // Error: ' . $e->getMessage();
+		}
+		return ob_get_clean();
+	}
 }

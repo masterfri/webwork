@@ -354,6 +354,17 @@ class AppEntityController extends AdminController
 		));
 	}
 	
+	public function actionGraph($application)
+	{
+		$application = $this->loadModel($application, 'Application');
+		if (!Yii::app()->user->checkAccess('design_application', array('application' => $application))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
+		$this->render('graph', array(
+			'application' => $application,
+		));
+	}
+	
 	public function actionDownload($application)
 	{
 		$application = $this->loadModel($application, 'Application');
@@ -424,7 +435,7 @@ class AppEntityController extends AdminController
 				'roles' => array('design_application'),
 			),
 			array('allow',
-				'actions' => array('view', 'index', 'templates', 'chooseTemplate'),
+				'actions' => array('view', 'index', 'templates', 'chooseTemplate', 'graph'),
 				'roles' => array('design_application'),
 			),
 			array('allow',

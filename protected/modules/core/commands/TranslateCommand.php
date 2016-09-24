@@ -60,7 +60,10 @@ class TranslateCommand extends CConsoleCommand
 	protected function matchTranslator($line)
 	{
 		if (preg_match(self::RE, $line, $matches)) {
-			return array($matches[1], $matches[3]);
+			return array(
+				stripslashes($matches[1]), 
+				stripslashes($matches[3])
+			);
 		}
 		return null;
 	}

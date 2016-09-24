@@ -11,6 +11,15 @@ $this->breadcrumbs = array(
 
 $this->menu = array(
 	array(
+		'label' => '<i class="glyphicon glyphicon-th-large"></i>', 
+		'linkOptions' => array(
+			'title' => Yii::t('core.crud', 'Graph'),
+			'class' => 'btn btn-default',
+		),
+		'url' => array('graph', 'application' => $application->id),
+		'visible' => Yii::app()->user->checkAccess('design_application', array('application' => $application)),
+	),
+	array(
 		'label' => '<i class="glyphicon glyphicon-play-circle"></i>',
 		'linkOptions' => array(
 			'title' => Yii::t('core.crud', 'Build'), 
