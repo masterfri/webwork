@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Commands
-APACHECTL="apachectl"
+APACHECTL="apache2ctl"
 GIT="git"
 MYSQL="mysql"
 
