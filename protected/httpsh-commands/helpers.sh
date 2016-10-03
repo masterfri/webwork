@@ -2,6 +2,7 @@
 
 # Commands
 APACHECTL="apache2ctl"
+NGINX="nginx"
 GIT="git"
 MYSQL="mysql"
 
@@ -82,6 +83,15 @@ function webserver-reload {
 	if [ $? -ne 0 ]
 	then
 		echo ">RETURN: 101 Can not reload apache configuration"
+		exit
+	fi
+}
+
+function nginx-reload {
+	sudo "$NGINX" -s reload
+	if [ $? -ne 0 ]
+	then
+		echo ">RETURN: 501 Can not reload nginx configuration"
 		exit
 	fi
 }

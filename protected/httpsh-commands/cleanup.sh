@@ -87,6 +87,15 @@ then
 		safe-remove-file "$VHOST_FILE"
 		webserver-reload
 	fi
+	if [ $USE_NGINX -eq 1 ]
+	then
+		NGINX_VHOST_FILE="$NGINX_VHOST_DIR/$DOMAIN.conf"
+		if [ -f "$NGINX_VHOST_FILE" ]
+		then
+			safe-remove-file "$NGINX_VHOST_FILE"
+			nginx-reload
+		fi
+	fi
 fi
 
 # Delete git repo

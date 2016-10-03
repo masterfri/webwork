@@ -53,7 +53,12 @@ fi
 # Create vhost config
 VHOST_FILE="$VHOST_DIR/$DOMAIN.conf"
 {
-	echo "<VirtualHost *:80>"
+	if [ $USE_NGINX -eq 1 ]
+	then
+		echo "<VirtualHost *:$NGINX_PROXY_TO>"
+	else
+		echo "<VirtualHost *:80>"
+	fi
 	echo "	ServerName $DOMAIN"
 	echo "	DocumentRoot $DOC_ROOT"
 	echo "$VHOST_OPTS"
@@ -76,7 +81,6 @@ then
 	echo ">DATA: file $VHOST_FILE"
 	exit
 fi
-
 chmod "$VHMOD" "$VHOST_FILE"
 if [ $? -ne 0 ]
 then
@@ -86,8 +90,55 @@ then
 	exit
 fi
 
-# Restart apache
+# Reload apache config
 webserver-reload
+
+if [ $USE_NGINX -eq 1 ]
+then
+	# Create nginx vhost config
+	NGINX_VHOST_FILE="$NGINX_VHOST_DIR/$DOMAIN.conf"
+	{
+		echo "server {"
+		echo "	listen          80;"
+		echo "	server_name $DOMAIN;"
+		echo "	location / {"
+		echo "		proxy_pass http://127.0.0.1:$NGINX_PROXY_TO/;"
+		echo "		proxy_redirect off;"
+		echo "		proxy_set_header Host \$host;"
+		echo "		proxy_set_header X-Real-IP \$remote_addr;"
+		echo "		proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;"
+		echo "	}"
+		echo "	location ~* \.(jpg|jpeg|gif|bmp|png|js|css)\$ {"
+		echo "		root $DOC_ROOT;"
+		echo "		access_log off;"
+		echo "		expires 30d;"
+		echo "		gzip              on;"
+		echo "		gzip_buffers      16 8k;"
+		echo "		gzip_comp_level   4;"
+		echo "		gzip_http_version 1.0;"
+		echo "		gzip_min_length   1280;"
+		echo "		gzip_types        text/plain text/css application/x-javascript text/xml application/xml application/xml+rss text/javascript image/x-icon image/bmp;"
+		echo "		gzip_vary         on;"
+		echo "	}"
+		echo "}"
+	} > "$NGINX_VHOST_FILE"
+	if [ $? -ne 0 ]
+	then
+		echo ">RETURN: 4 Can not create file"
+		echo ">DATA: file $NGINX_VHOST_FILE"
+		exit
+	fi
+	chmod "$VHMOD" "$NGINX_VHOST_FILE"
+	if [ $? -ne 0 ]
+	then
+		echo ">RETURN: 2 Can not change file mode"
+		echo ">DATA: file $NGINX_VHOST_FILE"
+		echo ">DATA: mode $VHMOD"
+		exit
+	fi
+	# Reload nginx config
+	nginx-reload
+fi
 
 # Report success
 echo ">RETURN: 0 Vhost successfully created"

@@ -7,7 +7,7 @@
 # Config
 
 # directory for vhosts configurations, writable for working group
-# don'f forget to add following directive to apache2.conf (or httpd.conf)
+# don'f forget to add following directive to apache2.conf (or httpd.conf):
 # IncludeOptional /path/to/vhosts/*.conf
 VHOST_DIR="/path/to/vhosts"
 
@@ -28,6 +28,15 @@ MYSQL_PASS="mysql_password"
 
 # path to codeforge
 CODEFORGE="/path/to/codeforge.php"
+
+# whether nginx is enabled
+USE_NGINX=0
+# proxy to port if nginx is enabled
+NGINX_PROXY_TO=81
+# nginx vhost config files directory, writable for working group
+# don'f forget to add following directive to nginx.conf under "http" section:
+# include /path/to/nginx/vhosts/*;
+NGINX_VHOST_DIR="/path/to/nginx/vhosts"
 
 # exports
 # Path to yii framework, points to "framework" directory

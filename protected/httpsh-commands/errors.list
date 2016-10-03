@@ -37,3 +37,7 @@ CF related
 
 401		Can not make release
 402		Conflicted files have been detected
+
+Nginx related
+
+501		Can not reload nginx configuration

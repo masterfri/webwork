@@ -36,6 +36,8 @@ class HttpShResponse
 	const CODE_ERR_CF_RELEASE = 401;
 	const CODE_ERR_CF_CONFLICTS = 402;
 	
+	const CODE_ERR_NGINX_RELOAD = 501;
+	
 	protected $code;
 	protected $message;
 	protected $data;
