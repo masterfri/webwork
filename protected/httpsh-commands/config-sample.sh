@@ -19,7 +19,7 @@ GIT_DIR="/var/git/repos"
 
 # permissions settings
 GROUP="workgroup"
-DIRMOD="u=rwx,g=rx,o=rx"
+DIRMOD="u=rwx,g=rwx,o=rx"
 VHMOD="u=rwx,g=rx,o=rx"
 
 # mysql settings
