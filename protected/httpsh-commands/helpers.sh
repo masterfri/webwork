@@ -89,7 +89,7 @@ function webserver-reload {
 
 function nginx-reload {
 	sudo "$NGINX" reload
-	if [ $? -ne 0 ]
+	if [ $? -ne 129 ]
 	then
 		echo ">RETURN: 501 Can not reload nginx configuration"
 		exit
