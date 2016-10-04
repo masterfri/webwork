@@ -111,6 +111,22 @@ $this->breadcrumbs = array(
 			
 			<div class="form-group">
 				<div class="col-sm-offset-3 col-sm-9">
+					<h4><?php echo Yii::t('core.crud', 'Database management'); ?></h4>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<?php echo $form->labelEx($model, 'phpmyadmin_url', array('class'=>'col-sm-3 control-label')); ?>
+				<div class="col-sm-9">
+					<?php echo $form->textField($model, 'phpmyadmin_url', array(
+						'class' => 'form-control',
+					)); ?> 
+					<?php echo $form->error($model, 'phpmyadmin_url', array('class'=>'help-inline')); ?>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<div class="col-sm-offset-3 col-sm-9">
 					<?php echo CHtml::submitButton(Yii::t('core.crud', 'Update'), array('class'=>'btn btn-primary')); ?>
 				</div>
 			</div>

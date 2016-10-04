@@ -147,6 +147,15 @@ $this->menu = array(
 <?php if($model->status & Application::STATUS_HAS_DB): ?>
 <div class="panel panel-default">
 	<div class="panel-heading">
+		<?php if (!empty($phpmyadmin)): ?>
+			<form action="<?php echo $phpmyadmin; ?>" method="post" target="_blank">
+				<input type="hidden" name="pma_username" value="<?php echo CHtml::encode($model->db_user); ?>" />
+				<input type="hidden" name="pma_password" value="<?php echo CHtml::encode($model->db_password); ?>" />
+				<a href="#" onclick="$(this).parent().submit(); return false;" class="pull-right">
+					<span class="glyphicon glyphicon-cog"></span> <?php echo Yii::t('core.crud', 'Manage'); ?>
+				</a>
+			</form>
+		<?php endif; ?>
 		<h3 class="panel-title"><?php echo Yii::t('application', 'Database'); ?></h3>
 	</div>
 	<?php $this->widget('DetailView', array(

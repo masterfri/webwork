@@ -187,6 +187,7 @@ class ApplicationController extends AdminController
 		}
 		$this->render('view', array(
 			'model' => $model,
+			'phpmyadmin' => GeneralOptions::instance()->phpmyadmin_url,
 		));
 	}
 	

@@ -5,7 +5,8 @@ return array(
 	'Complexity Rate' => 'Коэффициент сложности',
 	'Estimate Error Rate' => 'Допстимая погрешность',
 	'Host' => 'Хост',
-	'Port' => 'Порт',
 	'Login' => 'Логин',
 	'Password' => 'Пароль',
+	'Port' => 'Порт',
+	'phpMyAdmin URL' => 'phpMyAdmin URL',
 );

@@ -22,6 +22,7 @@ class GeneralOptions extends OptionRecord
 			'httpsh_port' => Yii::t('core.generalOptions', 'Port'),
 			'httpsh_login' => Yii::t('core.generalOptions', 'Login'),
 			'httpsh_password' => Yii::t('core.generalOptions', 'Password'),
+			'phpmyadmin_url' => Yii::t('core.generalOptions', 'phpMyAdmin URL'),
 		);
 	}
 	
@@ -36,7 +37,8 @@ class GeneralOptions extends OptionRecord
 					httpsh_login,
 					httpsh_password', 
 					'required'),
-			array(' app_domain',
+			array(' app_domain,
+					phpmyadmin_url',
 					'filter', 'filter' => 'trim'),
 			array(' complexity_rate,
 					estimate_error_rate,
@@ -54,7 +56,8 @@ class GeneralOptions extends OptionRecord
 			'httpsh_host',
 			'httpsh_port',
 			'httpsh_login',
-			'httpsh_password'
+			'httpsh_password',
+			'phpmyadmin_url',
 		);
 	}
 }
