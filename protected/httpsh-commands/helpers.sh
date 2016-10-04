@@ -2,7 +2,7 @@
 
 # Commands
 APACHECTL="apache2ctl"
-NGINX="nginx"
+NGINX="/etc/init.d/nginx"
 GIT="git"
 MYSQL="mysql"
 
@@ -88,7 +88,7 @@ function webserver-reload {
 }
 
 function nginx-reload {
-	sudo "$NGINX" -s reload
+	sudo "$NGINX" reload
 	if [ $? -ne 0 ]
 	then
 		echo ">RETURN: 501 Can not reload nginx configuration"
