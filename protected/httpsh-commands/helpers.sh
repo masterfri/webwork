@@ -253,13 +253,19 @@ function get-create-repo {
 	REPO_URL="$1"
 	if [ ! -d "$REPO_URL" ]
 	then
-		safe-create-dir "$REPO_URL"
-		cd "$REPO_URL"
-		"$GIT" init --bare --shared=group
+		"$GIT" init --bare --shared=group "$REPO_URL"
 		if [ $? -ne 0 ]
 		then
 			echo ">RETURN: 201 Can not init repository"
 			echo ">DATA: location $(pwd)"
+			exit
+		fi
+		chgrp -R "$GROUP" "$REPO_URL"
+		if [ $? -ne 0 ]
+		then
+			echo ">RETURN: 3 Can not change directory owner group"
+			echo ">DATA: dir $REPO_URL"
+			echo ">DATA: group $GROUP"
 			exit
 		fi
 	fi
