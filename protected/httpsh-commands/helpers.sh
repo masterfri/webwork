@@ -255,7 +255,7 @@ function get-create-repo {
 	then
 		safe-create-dir "$REPO_URL"
 		cd "$REPO_URL"
-		"$GIT" init --bare
+		"$GIT" init --bare --shared="$GROUP"
 		if [ $? -ne 0 ]
 		then
 			echo ">RETURN: 201 Can not init repository"
