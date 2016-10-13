@@ -230,7 +230,7 @@ class AppEntityController extends AdminController
 			throw new CHttpException(403, 'Forbidden');
 		}
 		
-		$entities = CHtml::listData($application->entities, 'id', 'name');
+		$entities = $application->getEntitiesList();
 		$cf = $application->getCF();
 		$schemes = $cf->getBuildSchemes();
 		$schemes = array_combine($schemes, $schemes);

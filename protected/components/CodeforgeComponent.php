@@ -195,4 +195,23 @@ class CodeforgeComponent extends CApplicationComponent
 		}
 		return ob_get_clean();
 	}
+	
+	public function getEntityReferences($entities, $to=null)
+	{
+		$result = array();
+		foreach ($entities as $entity) {
+			try {
+				$parser = new Codeforge\Parser();
+				$parser->parseText($entity->plain_source);
+				foreach ($parser->getModels() as $model) {
+					foreach ($model->getAttributes() as $attribute) {
+						if ($attribute->getIsCustomType() && ($to === null || $to === $attribute->getCustomType())) {
+							$result[$attribute->getCustomType()][$model->getName()][$attribute->getName()] = $attribute->getIsCollection();
+						}
+					}
+				}
+			} catch (Exception $e) {}
+		}
+		return $result;
+	}
 }

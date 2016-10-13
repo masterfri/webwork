@@ -1,8 +1,9 @@
-AppEntityAttribute = function(json, types) {
+AppEntityAttribute = function(json, types, refs) {
 	this.view = {};
 	this.data = {};
 	this.ondelete = function() {};
 	this.types = types;
+	this.refs = refs;
 	this.fromJSON(json);
 	this.render();
 	this.afterTypeChange();
@@ -18,6 +19,13 @@ AppEntityAttribute.prototype.fromJSON = function(json) {
 
 AppEntityAttribute.prototype.getView = function() {
 	return this.view.root;
+}
+
+AppEntityAttribute.prototype.isRelation = function() {
+	if (('rel' in this.types) && (this.types.rel.length > 0)) {
+		return (this.types.rel.indexOf(this.data.type) != -1);
+	}
+	return false;
 }
 
 AppEntityAttribute.prototype.getData = function() {
@@ -72,6 +80,7 @@ AppEntityAttribute.prototype.render = function() {
 		.append('<option value="many-to-one">Belongs to</option>')
 		.append('<option value="one-to-many">Has many</option>')
 		.append('<option value="many-to-many">Many to many</option>');
+	this.view.backref = $('<select class="form-control"></select>');
 	this.view.default = $('<input type="text" class="form-control" />');
 	this.view.unsigned = $('<select class="form-control"></select>')
 		.append('<option value="0">No</option>')
@@ -79,6 +88,7 @@ AppEntityAttribute.prototype.render = function() {
 	this.view.options = $('<textarea class="form-control"></textarea>');
 	this.view.body.children('.more-container')
 		.append(this.renderRow(this.view.relation, 'Relation'))
+		.append(this.renderRow(this.view.backref, 'Back reference'))
 		.append(this.renderRow(this.view.unsigned, 'Unsigned'))
 		.append(this.renderRow(this.view.options, 'Options'))
 		.append(this.renderRow(this.view.default, 'Default value'))
@@ -176,6 +186,10 @@ AppEntityAttribute.prototype.render = function() {
 	this.view.relation.on('change', function() {
 		that.data.relation = that.view.relation.val();
 	});
+	this.view.backref.on('change', function() {
+		that.data.backref = that.view.backref.val();
+		that.afterBackrefChanged();
+	});
 	this.view.default.on('change', function() {
 		that.data.default = that.view.default.val();
 	});
@@ -217,6 +231,7 @@ AppEntityAttribute.prototype.render = function() {
 	this.view.size.val(this.data.size);
 	this.view.description.val(this.data.description);
 	this.view.relation.val(this.data.relation);
+	this.view.backref.val(this.data.backref);
 	this.view.default.val(this.data.default);
 	this.view.unsigned.val(this.data.unsigned ? 1 : 0);
 	this.view.options.val(this.data.options);
@@ -234,51 +249,61 @@ AppEntityAttribute.prototype.afterTypeChange = function() {
 		case 'int':
 			this.view.size.hide();
 			this.view.relation.closest('.form-group').hide();
+			this.view.backref.closest('.form-group').hide();
 			this.view.unsigned.closest('.form-group').show();
 			this.view.options.closest('.form-group').hide();
 			this.view.default.closest('.form-group').show();
 			delete this.data.size;
 			delete this.data.relation;
+			delete this.data.backref;
 			delete this.data.options;
 			return;
 		case 'decimal':
 			this.view.size.show();
 			this.view.relation.closest('.form-group').hide();
+			this.view.backref.closest('.form-group').hide();
 			this.view.unsigned.closest('.form-group').show();
 			this.view.options.closest('.form-group').hide();
 			this.view.default.closest('.form-group').show();
 			delete this.data.relation;
+			delete this.data.backref;
 			delete this.data.options;
 			return;
 		case 'char':
 			this.view.size.show();
 			this.view.relation.closest('.form-group').hide();
+			this.view.backref.closest('.form-group').hide();
 			this.view.unsigned.closest('.form-group').hide();
 			this.view.options.closest('.form-group').hide();
 			this.view.default.closest('.form-group').show();
 			delete this.data.relation;
+			delete this.data.backref;
 			delete this.data.unsigned;
 			delete this.data.options;
 			return;
 		case 'text':
 			this.view.size.hide();
 			this.view.relation.closest('.form-group').hide();
+			this.view.backref.closest('.form-group').hide();
 			this.view.unsigned.closest('.form-group').hide();
 			this.view.options.closest('.form-group').hide();
 			this.view.default.closest('.form-group').show();
 			delete this.data.size;
 			delete this.data.relation;
+			delete this.data.backref;
 			delete this.data.unsigned;
 			delete this.data.options;
 			return;
 		case 'bool':
 			this.view.size.hide();
 			this.view.relation.closest('.form-group').hide();
+			this.view.backref.closest('.form-group').hide();
 			this.view.unsigned.closest('.form-group').hide();
 			this.view.options.closest('.form-group').hide();
 			this.view.default.closest('.form-group').show();
 			delete this.data.size;
 			delete this.data.relation;
+			delete this.data.backref;
 			delete this.data.unsigned;
 			delete this.data.options;
 			return;
@@ -286,59 +311,113 @@ AppEntityAttribute.prototype.afterTypeChange = function() {
 		case 'enum':
 			this.view.size.hide();
 			this.view.relation.closest('.form-group').hide();
+			this.view.backref.closest('.form-group').hide();
 			this.view.unsigned.closest('.form-group').hide();
 			this.view.options.closest('.form-group').show();
 			this.view.default.closest('.form-group').show();
 			delete this.data.size;
 			delete this.data.relation;
+			delete this.data.backref;
 			delete this.data.unsigned;
 			return;
 	}
-	if (('rel' in this.types) && (this.types.rel.length > 0)) {
-		if (this.types.rel.indexOf(this.data.type) != -1) {
-			this.view.size.hide();
-			this.view.relation.closest('.form-group').show();
-			this.view.unsigned.closest('.form-group').hide();
-			this.view.options.closest('.form-group').hide();
-			this.view.default.closest('.form-group').hide();
-			delete this.data.size;
-			delete this.data.unsigned;
-			delete this.data.options;
-			delete this.data.default;
-			if (this.data.collection) {
-				this.view.relation.val('one-to-many');
-				this.data.relation = 'one-to-many';
-			} else {
-				this.view.relation.val('many-to-one');
-				this.data.relation = 'many-to-one';
-			}
-			return;
-		}
+	if (this.isRelation()) {
+		this.view.size.hide();
+		this.view.relation.closest('.form-group').show();
+		this.view.backref.closest('.form-group').show();
+		this.view.unsigned.closest('.form-group').hide();
+		this.view.options.closest('.form-group').hide();
+		this.view.default.closest('.form-group').hide();
+		delete this.data.size;
+		delete this.data.unsigned;
+		delete this.data.options;
+		delete this.data.default;
+		this.loadReferences();
+		this.fixRelationType();
+		return;
 	}
 	this.view.size.hide();
 	this.view.relation.closest('.form-group').hide();
+	this.view.backref.closest('.form-group').hide();
 	this.view.unsigned.closest('.form-group').hide();
 	this.view.options.closest('.form-group').hide();
 	this.view.default.closest('.form-group').hide();
 	delete this.data.size;
 	delete this.data.relation;
+	delete this.data.backref;
 	delete this.data.unsigned;
 	delete this.data.options;
 	delete this.data.default;
 }
 
+AppEntityAttribute.prototype.loadReferences = function() {
+	if (this.refs !== false) {
+		var has = false;
+		this.view.backref.children().remove();
+		var opt = $('<option value="">None</option>');
+		this.view.backref.append(opt);
+		for (var type in this.refs) {
+			if (type === this.data.type) {
+				for (var attr in this.refs[type]) {
+					opt = $('<option></option>');
+					opt.text(attr).attr('value', attr);
+					this.view.backref.append(opt);
+					has = true;
+				}
+			}
+		}
+		if (has) {
+			if (this.data.backref) {
+				this.view.backref.val(this.data.backref);
+			}
+		} else {
+			this.view.backref.closest('.form-group').hide();
+		}
+	}
+}
+
 AppEntityAttribute.prototype.afterCollectionChange = function() {
 	if (this.data.collection) {
-		if (this.data.relation == 'many-to-one') {
-			this.view.relation.val('many-to-many');
-			this.data.relation = 'many-to-many';
-		} else if (this.data.relation == 'one-to-one') {
-			this.view.relation.val('one-to-many');
-			this.data.relation = 'one-to-many';
-		}
+		this.fixRelationType();
 		this.view.relation.children('[value="many-to-one"],[value="one-to-one"]').attr('disabled', 'disabled');
 	} else {
 		this.view.relation.children().removeAttr('disabled');
+	}
+}
+
+AppEntityAttribute.prototype.afterBackrefChanged = function() {
+	this.fixRelationType();
+}
+
+AppEntityAttribute.prototype.fixRelationType = function() {
+	if (this.isRelation()) {
+		var backrefcol = undefined;
+		if (this.data.backref && (this.data.type in this.refs)) {
+			backrefcol = this.refs[this.data.type][this.data.backref];
+		}
+		if (this.data.collection) {
+			if (backrefcol === true) {
+				this.view.relation.val('many-to-many');
+				this.data.relation = 'many-to-many';
+			} else if (backrefcol === false) {
+				this.view.relation.val('one-to-many');
+				this.data.relation = 'one-to-many';
+			} else if (this.data.relation == 'many-to-one') {
+				this.view.relation.val('many-to-many');
+				this.data.relation = 'many-to-many';
+			}
+		} else {
+			if (backrefcol === true) {
+				this.view.relation.val('many-to-one');
+				this.data.relation = 'many-to-one';
+			} else if (backrefcol === false) {
+				this.view.relation.val('one-to-one');
+				this.data.relation = 'one-to-one';
+			} else if (this.data.relation == 'many-to-many') {
+				this.view.relation.val('many-to-one');
+				this.data.relation = 'many-to-one';
+			}
+		}
 	}
 }
 

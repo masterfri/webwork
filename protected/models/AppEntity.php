@@ -159,6 +159,9 @@ class AppEntity extends CActiveRecord
 				if (isset($attribute['relation'])) {
 					$lines[] = sprintf('    /// @relation %s', $attribute['relation']);
 				}
+				if (isset($attribute['backref'])) {
+					$lines[] = sprintf('    /// @backreference %s', $attribute['backref']);
+				}
 				if (isset($attribute['description']) && '' != trim($attribute['description'])) {
 					$lines[] = '    ///';
 					foreach (explode("\n", $attribute['description']) as $line) {

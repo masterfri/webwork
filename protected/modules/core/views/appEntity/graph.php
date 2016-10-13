@@ -56,11 +56,11 @@ graphData.forEach(function(entity) {
 	entity.attributes.forEach(function(attribute) {
 		if (attribute.relation && graph.hasNode(attribute.type)) {
 			if (attribute.relation == 'many-to-many') {
-				graph.connect(entity.name, attribute.type, attribute.name, undefined, AppGraph.LINK_CONNECTED);
+				graph.connect(entity.name, attribute.type, attribute.name, attribute.backReference ? attribute.backReference : undefined, AppGraph.LINK_CONNECTED);
 			} else if (attribute.relation == 'many-to-one') {
-				graph.connect(entity.name, attribute.type, attribute.name, undefined, AppGraph.LINK_BELONG);
+				graph.connect(entity.name, attribute.type, attribute.name, attribute.backReference ? attribute.backReference : undefined, AppGraph.LINK_BELONG);
 			} else {
-				graph.connect(entity.name, attribute.type, attribute.name, undefined, AppGraph.LINK_HAS);
+				graph.connect(entity.name, attribute.type, attribute.name, attribute.backReference ? attribute.backReference : undefined, AppGraph.LINK_HAS);
 			}
 		}
 	});

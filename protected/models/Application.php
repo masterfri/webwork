@@ -488,4 +488,15 @@ class Application extends CActiveRecord
 		$cf = $this->getCF();
 		return $cf->buildGraph($this->entities);
 	}
+	
+	public function getEntitiesList()
+	{
+		return CHtml::listData($this->entities, 'id', 'name');
+	}
+	
+	public function getEntityReferences($to=null)
+	{
+		$cf = $this->getCF();
+		return $cf->getEntityReferences($this->entities, $to);
+	}
 }

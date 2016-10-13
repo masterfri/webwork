@@ -113,8 +113,14 @@ $cf = $model->application->getCF();
 $types = CJSON::encode(array(
 	'std' => $cf->getStandardTypes(),
 	'custom' => $cf->getCustomTypes(),
-	'rel' => array_values(CHtml::listData($model->application->entities, 'name', 'name')),
+	'rel' => array_values($model->application->getEntitiesList()),
 ));
+if ($model->getIsNewRecord()) {
+	$refs = 'false';
+} else {
+	$refs = $model->application->getEntityReferences($model->name);
+	$refs = CJSON::encode(empty($refs) ? false : $refs[$model->name]);
+}
 $src = empty($model->json_source) ? 'false' : $model->json_source;
 
 $cs = Yii::app()->clientScript;
@@ -125,9 +131,10 @@ $cs->registerScript('appdesign',
 var list = $('#attributes-list');
 var jsrc = $src;
 var types = $types;
+var refs = $refs;
 
 $('#add-attribute').on('click', function() {
-	var attr = new AppEntityAttribute(null, types);
+	var attr = new AppEntityAttribute(null, types, refs);
 	list.append(attr.getView());
 	list.sortable('refresh');
 	attr.getView().find('.attrname').get(0).focus();
@@ -159,7 +166,7 @@ $('#submit-button').on('click', function() {
 
 if (jsrc) {
 	jsrc.attributes.forEach(function(d) {
-		var attr = new AppEntityAttribute(d, types);
+		var attr = new AppEntityAttribute(d, types, refs);
 		list.append(attr.getView());
 		attr.getView().data('model', attr);
 	});

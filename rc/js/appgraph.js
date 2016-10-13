@@ -3,7 +3,9 @@ AppGraph = function(element, settings) {
 		'width': 800,
 		'titleFont': {'fill': '#444477', 'size': 14},
 		'titleMargin': 5,
-		'attributesFont': {'fill': '#447744', 'size': 12},
+		'attributesFont': {'fill': '#447744', 'size': 12, 'leading': 1.9},
+		'boxSeparator': {'width': 1, 'color': '#eeeeee'},
+		'boxSeparatorOffset': 1,
 		'typeFill': '#999999',
 		'boxFill': '#fafafa',
 		'boxStroke': {'width': 2, 'color': '#aaaaaa'},
@@ -12,7 +14,7 @@ AppGraph = function(element, settings) {
 		'boxSpacing': {'x': 30, 'y': 40},
 		'graphPadding': {'x': 30, 'y': 30},
 		'markerSize': 8,
-		'attributeMarkerOffset': 3,
+		'attributeMarkerOffset': -4,
 		'nodeMarkerOffset': 20,
 		'linkColor1': '#fafafa',
 		'linkColor2': '#aaaaaa',
@@ -32,6 +34,7 @@ AppGraph = function(element, settings) {
 		'h': 0
 	};
 	this.nodes = {};
+	this.connections = [];
 	this.svg = new SVG(element).width(this.settings.width);
 	this.linksGroup = this.svg.group();
 	this.nodesGroup = this.svg.group();
@@ -77,12 +80,20 @@ AppGraph.prototype.connect = function(node1, node2, attr1, attr2, type) {
 	if (node1 == undefined || node2 == undefined) {
 		return false;
 	}
+	if (this.connected(node1, node2, attr1, attr2)) {
+		return;
+	}
+	
+	this.connections.push([[node1, attr1], [node2, attr2]]);
 	
 	type = type || AppGraph.LINK_ASSOCIATED;
 	
 	var that = this;
 	var p1 = node1.getConnectPoint(attr1);
 	var p2 = node2.getConnectPoint(attr2);
+	var nearest = this.getNearestPoints(p1, p2);
+	p1 = nearest[0];
+	p2 = nearest[1];
 	var cp1 = this.markersGroup
 		.circle(this.settings.markerSize)
 		.center(p1.x, p1.y);
@@ -117,6 +128,9 @@ AppGraph.prototype.connect = function(node1, node2, attr1, attr2, type) {
 	var updatepath = function() {
 		p1 = node1.getConnectPoint(attr1, p1.n);
 		p2 = node2.getConnectPoint(attr2, p2.n);
+		nearest = that.getNearestPoints(p1, p2);
+		p1 = nearest[0];
+		p2 = nearest[1];
 		cp1.center(p1.x, p1.y);
 		cp2.center(p2.x, p2.y);
 		path.plot(that.makePath(p1.x, p1.y, p1.x + p1.cx, p1.y + p1.cy, p2.x + p2.cx, p2.y + p2.cy, p2.x, p2.y));
@@ -130,6 +144,47 @@ AppGraph.prototype.connect = function(node1, node2, attr1, attr2, type) {
 	node2.on('dragend', function() {
 		node2.memorizePosition();
 	});
+}
+
+AppGraph.prototype.connected = function(node1, node2, attr1, attr2) {
+	for (var i = 0; i < this.connections.length; i++) {
+		var con = this.connections[i];
+		if (con[0][0] === node1 && con[1][0] === node2 && con[0][1] === attr1 && con[1][1] === attr2) {
+			return true;
+		}
+		if (con[0][0] === node2 && con[1][0] === node1 && con[0][1] === attr2 && con[1][1] === attr1) {
+			return true;
+		}
+	}
+	return false;
+} 
+
+AppGraph.prototype.getNearestPoints = function(p1, p2) {
+	var vars = [];
+	vars.push({
+		'p': [p1[0], p2[0]],
+		'd': this.getDistance(p1[0], p2[0])
+	});
+	vars.push({
+		'p': [p1[0], p2[1]],
+		'd': this.getDistance(p1[0], p2[1])
+	});
+	vars.push({
+		'p': [p1[1], p2[0]],
+		'd': this.getDistance(p1[1], p2[0])
+	});
+	vars.push({
+		'p': [p1[1], p2[1]],
+		'd': this.getDistance(p1[1], p2[1])
+	});
+	vars.sort(function(a, b) {
+		return a.d - b.d;
+	});
+	return vars[0].p;
+}
+
+AppGraph.prototype.getDistance = function(p1, p2) {
+	return (p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y);
 }
 
 AppGraph.prototype.makePath = function(x1, y1, cx1, cy1, cx2, cy2, x2, y2) {
@@ -170,7 +225,7 @@ AppGraph.Node = function(parent, data, x, y) {
 	}).font(parent.settings.attributesFont);
 	var contentbox = this.content.bbox();
 	var boxw = Math.max(contentbox.w, titlebox.w) + 2 * parent.settings.boxPadding.x;
-	var boxh = contentbox.h + titlebox.h + parent.settings.titleMargin + 2 * parent.settings.boxPadding.y;
+	var boxh = contentbox.y + contentbox.h + titlebox.h + parent.settings.titleMargin + 2 * parent.settings.boxPadding.y;
 	this.group.rect(boxw, boxh)
 		.fill(parent.settings.boxFill)
 		.stroke(parent.settings.boxStroke)
@@ -178,6 +233,13 @@ AppGraph.Node = function(parent, data, x, y) {
 		.translate(titlebox.x, titlebox.y);
 		this.group.add(this.title);
 		this.group.add(this.content);
+	for (var attr in this.attributes) {
+		var node = this.attributes[attr].node;
+		var extent = node.getExtentOfChar(0);
+		var y = node.hasAttribute('dy') ? parseInt(node.getAttribute('dy'), 10) : 0;
+		y += extent.y + contentbox.y - parent.settings.boxSeparatorOffset;
+		this.group.line(contentbox.x + 1, y, contentbox.x + boxw - 1, y).stroke(parent.settings.boxSeparator);
+	}
 }
 
 AppGraph.Node.prototype.bbox = function() {
@@ -197,26 +259,39 @@ AppGraph.Node.prototype.getConnectPoint = function(attr, numcon) {
 		var node = this.attributes[attr].node;
 		var extent = node.getExtentOfChar(0);
 		var tbox = this.content.tbox();
-		return {
+		var y = tbox.y + extent.y + this.parent.settings.attributeMarkerOffset;
+		return [{
 			'x': tbox.x - this.parent.settings.boxPadding.x,
-			'y': tbox.y + extent.y + this.parent.settings.attributeMarkerOffset,
+			'y': y,
 			'cx': -50,
 			'cy': 0,
 			'n': numcon
-		};
+		}, {
+			'x': tbox.x + tbox.w + this.parent.settings.boxPadding.x,
+			'y': y,
+			'cx': 50,
+			'cy': 0,
+			'n': numcon
+		}];
 	} else {
 		var tbox = this.group.tbox();
 		if (numcon === undefined) {
 			numcon = this.connections++;
 		}
 		var offset = this.parent.settings.nodeMarkerOffset + (this.parent.settings.markerSize + 1) * numcon;
-		return {
+		return [{
 			'x': tbox.x + offset,
 			'y': tbox.y,
 			'cx': 0,
 			'cy': -50,
 			'n': numcon
-		};
+		}, {
+			'x': tbox.x + offset,
+			'y': tbox.y + tbox.h,
+			'cx': 0,
+			'cy': 50,
+			'n': numcon
+		}];
 	}
 }
 
