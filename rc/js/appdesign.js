@@ -76,10 +76,10 @@ AppEntityAttribute.prototype.render = function() {
 	});
 	this.view.description = $('<textarea class="form-control"></textarea>');
 	this.view.relation = $('<select class="form-control"></select>')
-		.append('<option value="one-to-one">Has one</option>')
-		.append('<option value="many-to-one">Belongs to</option>')
-		.append('<option value="one-to-many">Has many</option>')
-		.append('<option value="many-to-many">Many to many</option>');
+		.append('<option value="has-one">Has one</option>')
+		.append('<option value="belongs-to-one">Belongs to</option>')
+		.append('<option value="has-many">Has many</option>')
+		.append('<option value="belongs-to-many">Many to many</option>');
 	this.view.backref = $('<select class="form-control"></select>');
 	this.view.default = $('<input type="text" class="form-control" />');
 	this.view.unsigned = $('<select class="form-control"></select>')
@@ -379,7 +379,7 @@ AppEntityAttribute.prototype.loadReferences = function() {
 AppEntityAttribute.prototype.afterCollectionChange = function() {
 	if (this.data.collection) {
 		this.fixRelationType();
-		this.view.relation.children('[value="many-to-one"],[value="one-to-one"]').attr('disabled', 'disabled');
+		this.view.relation.children('[value="belongs-to-one"],[value="has-one"]').attr('disabled', 'disabled');
 	} else {
 		this.view.relation.children().removeAttr('disabled');
 	}
@@ -397,25 +397,25 @@ AppEntityAttribute.prototype.fixRelationType = function() {
 		}
 		if (this.data.collection) {
 			if (backrefcol === true) {
-				this.view.relation.val('many-to-many');
-				this.data.relation = 'many-to-many';
+				this.view.relation.val('belongs-to-many');
+				this.data.relation = 'belongs-to-many';
 			} else if (backrefcol === false) {
-				this.view.relation.val('one-to-many');
-				this.data.relation = 'one-to-many';
-			} else if (this.data.relation == 'many-to-one') {
-				this.view.relation.val('many-to-many');
-				this.data.relation = 'many-to-many';
+				this.view.relation.val('has-many');
+				this.data.relation = 'has-many';
+			} else if (this.data.relation == 'belongs-to-one') {
+				this.view.relation.val('belongs-to-many');
+				this.data.relation = 'belongs-to-many';
 			}
 		} else {
 			if (backrefcol === true) {
-				this.view.relation.val('many-to-one');
-				this.data.relation = 'many-to-one';
-			} else if (backrefcol === false) {
-				this.view.relation.val('one-to-one');
-				this.data.relation = 'one-to-one';
-			} else if (this.data.relation == 'many-to-many') {
-				this.view.relation.val('many-to-one');
-				this.data.relation = 'many-to-one';
+				this.view.relation.val('belongs-to-one');
+				this.data.relation = 'belongs-to-one';
+			} else if (this.data.relation == 'has-many') {
+				this.view.relation.val('has-one');
+				this.data.relation = 'has-one';
+			} else if (this.data.relation == 'belongs-to-many') {
+				this.view.relation.val('belongs-to-one');
+				this.data.relation = 'belongs-to-one';
 			}
 		}
 	}

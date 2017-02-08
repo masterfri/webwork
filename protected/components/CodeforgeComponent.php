@@ -96,6 +96,7 @@ class CodeforgeComponent extends CApplicationComponent
 				$parser = new Codeforge\Parser();
 				$parser->parseText($entity->plain_source);
 				foreach ($parser->getModels() as $model) {
+					$model->addComment(sprintf('@timeCreated %d', strtotime($entity->time_created)));
 					$models[] = $model;
 				}
 			}
@@ -165,11 +166,18 @@ class CodeforgeComponent extends CApplicationComponent
 	{
 		if ($compiledOnly) {
 			$dir = CF_WORKDIR . '/' . self::PROJECT_DIR_NAME . '/compiled';
+			if (is_dir($dir)) {
+				Codeforge\FileHelper::cleanup($dir, true, false);
+			}
+			$dir = CF_WORKDIR . '/' . self::PROJECT_DIR_NAME . '/partial';
+			if (is_dir($dir)) {
+				Codeforge\FileHelper::cleanup($dir, true, false);
+			}
 		} else {
 			$dir = CF_WORKDIR . '/' . self::PROJECT_DIR_NAME;
-		}
-		if (is_dir($dir)) {
-			Codeforge\FileHelper::cleanup($dir, true, false);
+			if (is_dir($dir)) {
+				Codeforge\FileHelper::cleanup($dir, true, false);
+			}
 		}
 	}
 	

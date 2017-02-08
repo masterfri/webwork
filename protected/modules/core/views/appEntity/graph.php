@@ -55,9 +55,9 @@ graphData.forEach(function(entity) {
 graphData.forEach(function(entity) {
 	entity.attributes.forEach(function(attribute) {
 		if (attribute.relation && graph.hasNode(attribute.type)) {
-			if (attribute.relation == 'many-to-many') {
+			if (attribute.relation == 'belongs-to-many') {
 				graph.connect(entity.name, attribute.type, attribute.name, attribute.backReference ? attribute.backReference : undefined, AppGraph.LINK_CONNECTED);
-			} else if (attribute.relation == 'many-to-one') {
+			} else if (attribute.relation == 'belongs-to-one') {
 				graph.connect(entity.name, attribute.type, attribute.name, attribute.backReference ? attribute.backReference : undefined, AppGraph.LINK_BELONG);
 			} else {
 				graph.connect(entity.name, attribute.type, attribute.name, attribute.backReference ? attribute.backReference : undefined, AppGraph.LINK_HAS);

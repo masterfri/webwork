@@ -100,7 +100,7 @@ AppGraph.prototype.connect = function(node1, node2, attr1, attr2, type) {
 	var cp2 = this.markersGroup
 		.circle(this.settings.markerSize)
 		.center(p2.x, p2.y);
-	if (type == AppGraph.LINK_HAS || type == AppGraph.LINK_CONNECTED) {
+	if (type == AppGraph.LINK_HAS) {
 		cp1.fill(this.settings.linkColor1).stroke({
 			'width': this.settings.linkLineWidth,
 			'color': this.settings.linkColor2
@@ -108,7 +108,7 @@ AppGraph.prototype.connect = function(node1, node2, attr1, attr2, type) {
 	} else {
 		cp1.fill(this.settings.linkColor2)
 	}
-	if (type == AppGraph.LINK_BELONG || type == AppGraph.LINK_CONNECTED) {
+	if (type == AppGraph.LINK_BELONG) {
 		cp2.fill(this.settings.linkColor1).stroke({
 			'width': this.settings.linkLineWidth,
 			'color': this.settings.linkColor2
