@@ -77,9 +77,9 @@ AppEntityAttribute.prototype.render = function() {
 	this.view.description = $('<textarea class="form-control"></textarea>');
 	this.view.relation = $('<select class="form-control"></select>')
 		.append('<option value="has-one">Has one</option>')
-		.append('<option value="belongs-to-one">Belongs to</option>')
+		.append('<option value="belongs-to-one">Belongs to one</option>')
 		.append('<option value="has-many">Has many</option>')
-		.append('<option value="belongs-to-many">Many to many</option>');
+		.append('<option value="belongs-to-many">Belongs to many</option>');
 	this.view.backref = $('<select class="form-control"></select>');
 	this.view.default = $('<input type="text" class="form-control" />');
 	this.view.unsigned = $('<select class="form-control"></select>')
