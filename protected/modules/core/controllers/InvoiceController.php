@@ -7,8 +7,10 @@ class InvoiceController extends AdminController
 		$model = $this->createSearchModel('Invoice');
 		$provider = $model->search();
 		if (!Yii::app()->user->checkAccess('view_invoice', array('invoice' => '*'))) {
-			$provider->criteria->scopes[] = 'my';
+                    $provider->criteria->scopes[] = 'my';
 		}
+                $criteria = clone($provider->criteria);
+                
 		$this->render('index', array(
 			'model' => $model,
 			'provider' => $provider,
