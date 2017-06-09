@@ -176,6 +176,15 @@ class AppEntity extends CActiveRecord
 				if (isset($attribute['unsigned']) && $attribute['unsigned'] && ($attribute['type'] == 'int' || $attribute['type'] == 'decimal')) {
 					$attrcode .= ' unsigned';
 				}
+				if (isset($attribute['tableview']) && $attribute['tableview']) {
+					$lines[] = '    /// @tableview';
+				}
+				if (isset($attribute['detailview']) && $attribute['detailview']) {
+					$lines[] = '    /// @detailedview';
+				}
+				if (isset($attribute['subordinate']) && $attribute['subordinate']) {
+					$lines[] = '    /// @subordinate';
+				}
 				$attrcode .= sprintf(' %s', $attribute['type']);
 				switch ($attribute['type']) {
 					case 'int':

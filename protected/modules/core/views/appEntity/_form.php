@@ -84,6 +84,16 @@ $cf = $model->application->getCF();
 							'linkOptions' => array(
 								'title' => Yii::t('core.crud', 'Add'), 
 								'class' => 'btn btn-default',
+								'id' => 'add-attribute',
+							), 
+							'url' => '#',
+						),
+						array(
+							'label' => '<label class="file-btn-wrapper"><i class="glyphicon glyphicon-import"></i><input type="file" /></label>', 
+							'linkOptions' => array(
+								'title' => Yii::t('core.crud', 'Import attributes from CSV'), 
+								'class' => 'btn btn-default',
+								'id' => 'import-attributes',
 							), 
 							'url' => '#',
 						),
@@ -91,7 +101,6 @@ $cf = $model->application->getCF();
 					'encodeLabel' => false,
 					'htmlOptions' => array(
 						'class' => 'nav nav-pills context-menu',
-						'id' => 'add-attribute',
 					),
 				)); ?>
 			</div>
@@ -126,6 +135,7 @@ $src = empty($model->json_source) ? 'false' : $model->json_source;
 $cs = Yii::app()->clientScript;
 $cs->registerCoreScript('jquery.ui');
 $cs->registerScriptFile('/rc/js/appdesign.js');
+$cs->registerScriptFile('/rc/js/papaparse.min.js');
 $cs->registerScript('appdesign', 
 <<<EOS
 var list = $('#attributes-list');
@@ -140,6 +150,34 @@ $('#add-attribute').on('click', function() {
 	attr.getView().find('.attrname').get(0).focus();
 	attr.getView().data('model', attr);
 	return false;
+});
+
+$('#import-attributes').on('change', 'input[type=file]', function() {
+	var input = $(this);
+	if (this.files.length > 0) {
+		var file = this.files[0];
+		if (file.type == 'text/plain' || file.type == 'text/csv') {
+			Papa.parse(file, {
+				'complete': function(result) {
+					if (result.data.length > 1) {
+						var i, map = result.data[0].map(function(v) {return v.toLowerCase();}), pool = {};
+						for (i = 1; i < result.data.length; i++) {
+							var attr = new AppEntityAttribute(convertCsvAttribute(result.data[i], map, pool, types), types, refs);
+							list.append(attr.getView());
+							attr.getView().data('model', attr);
+						}
+						list.sortable();
+					}
+				},
+				'error': function() {
+					alert('Invalid CSV file!');
+				},
+			});
+		} else {
+			alert('Invalid CSV file!');
+		}
+		input.replaceWith(input.clone());
+	}
 });
 
 $('#submit-button').on('click', function() {
@@ -173,5 +211,46 @@ if (jsrc) {
 }
 
 list.sortable();
+
+function convertCsvAttribute(row, map, pool, types) {
+	var result = {}, tmp = {}, i;
+	for (i = 0; i < map.length; i++) {
+		tmp[map[i]] = row[i];
+	}
+	result.label = tmp.label;
+	result.name = tmp.name;
+	if (!result.name) {
+		result.name = result.label.toLowerCase()
+			.replace(/[^a-zA-Z0-9_]/g, '_')
+			.replace(/_+/g, '_')
+			.replace(/^_+/, '')
+			.replace(/_+$/, '')
+			.substr(0, 60);
+	}
+	if (pool[result.name] === undefined) {
+		pool[result.name] = 1;
+	} else {
+		pool[result.name]++;
+		result.name += '_' + pool[result.name];
+	}
+	if (types.std && types.std.indexOf(tmp.type) != -1) {
+		result.type = tmp.type;
+		if (result.type == 'char') {
+			result.size = tmp.size ? tmp.size : '255';
+		} else if (result.type == 'decimal') {
+			result.size = tmp.size ? tmp.size : '10,3';
+		}
+	} else if (types.custom && types.custom.indexOf(tmp.type) != -1 || types.rel && types.rel.indexOf(tmp.type) != -1) {
+		result.type = tmp.type;
+	} else if (tmp.type && tmp.type.indexOf('\\n') != -1) {
+		result.type = 'enum';
+		result.options = tmp.type;
+	} else { 
+		result.type = 'char';
+		result.size = '255';
+	}
+	result.required = ['1', 'y', 'Y'].indexOf(tmp.required) != -1;
+	return result;
+}
 EOS
 );

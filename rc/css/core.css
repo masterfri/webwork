@@ -1008,6 +1008,19 @@ body:after {
 .app-entity-attr .form-control.invalid {
 	border: 1px solid #d9534f;
 }
+
+.app-entity-attr .h .btn-group .btn {
+	padding-left: 8px;
+	padding-right: 8px;
+}
+.file-btn-wrapper {
+	font-weight: normal;
+	margin: 0;
+	cursor: pointer;
+}
+.file-btn-wrapper input[type=file] {
+	display: none;
+}
 .httpsh-output-panel {
 	margin-bottom: 20px;
 }

@@ -46,6 +46,8 @@ AppEntityAttribute.prototype.render = function() {
 	this.view.sortable = $('<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-sort-by-attributes" title="Sortable" href="#"></span></button>');
 	this.view.searchable = $('<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-search" title="Searchable" href="#"></span></button>');
 	this.view.collection = $('<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-th-large" title="Collection" href="#"></span></button>');
+	this.view.tableview = $('<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-align-justify" title="Table view" href="#"></span></button>');
+	this.view.detailview = $('<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-list-alt" title="Detailed view" href="#"></span></button>');
 	this.view.name = $('<input type="text" class="form-control mleft attrname" placeholder="Name" />');
 	this.view.label = $('<input type="text" class="form-control mleft" placeholder="Label" />');
 	this.view.type = $('<select class="form-control mleft"></select>');
@@ -57,7 +59,9 @@ AppEntityAttribute.prototype.render = function() {
 		.append(this.view.readonly)
 		.append(this.view.sortable)
 		.append(this.view.searchable)
-		.append(this.view.collection);
+		.append(this.view.collection)
+		.append(this.view.tableview)
+		.append(this.view.detailview);
 	this.view.body.children('.h')
 		.append(this.view.name)
 		.append(this.view.label)
@@ -74,6 +78,9 @@ AppEntityAttribute.prototype.render = function() {
 			that.view.morecont.slideDown();
 		}
 	});
+	this.view.subordinate = $('<select class="form-control"></select>')
+		.append('<option value="0">No</option>')
+		.append('<option value="1">Yes</option>');
 	this.view.description = $('<textarea class="form-control"></textarea>');
 	this.view.relation = $('<select class="form-control"></select>')
 		.append('<option value="has-one">Has one</option>')
@@ -88,6 +95,7 @@ AppEntityAttribute.prototype.render = function() {
 	this.view.options = $('<textarea class="form-control"></textarea>');
 	this.view.body.children('.more-container')
 		.append(this.renderRow(this.view.relation, 'Relation'))
+		.append(this.renderRow(this.view.subordinate, 'Subordinate'))
 		.append(this.renderRow(this.view.backref, 'Back reference'))
 		.append(this.renderRow(this.view.unsigned, 'Unsigned'))
 		.append(this.renderRow(this.view.options, 'Options'))
@@ -161,6 +169,24 @@ AppEntityAttribute.prototype.render = function() {
 		}
 		that.afterCollectionChange();
 	});
+	this.view.tableview.on('click', function() {
+		if (that.data.tableview) {
+			that.data.tableview = false;
+			that.view.tableview.removeClass('active');
+		} else {
+			that.data.tableview = true;
+			that.view.tableview.addClass('active');
+		}
+	});
+	this.view.detailview.on('click', function() {
+		if (that.data.detailview) {
+			that.data.detailview = false;
+			that.view.detailview.removeClass('active');
+		} else {
+			that.data.detailview = true;
+			that.view.detailview.addClass('active');
+		}
+	});
 	this.view.name.on('change', function() {
 		that.data.name = $.trim(that.view.name.val());
 		if (that.view.label.val() == '') {
@@ -185,6 +211,7 @@ AppEntityAttribute.prototype.render = function() {
 	});
 	this.view.relation.on('change', function() {
 		that.data.relation = that.view.relation.val();
+		that.afterRelationChanged();
 	});
 	this.view.backref.on('change', function() {
 		that.data.backref = that.view.backref.val();
@@ -195,6 +222,9 @@ AppEntityAttribute.prototype.render = function() {
 	});
 	this.view.unsigned.on('change', function() {
 		that.data.unsigned = that.view.unsigned.val() == 1;
+	});
+	this.view.subordinate.on('change', function() {
+		that.data.subordinate = that.view.subordinate.val() == 1;
 	});
 	this.view.options.on('change', function() {
 		that.data.options = that.view.options.val();
@@ -225,6 +255,12 @@ AppEntityAttribute.prototype.render = function() {
 	if (this.data.collection) {
 		this.view.collection.addClass('active');
 	}
+	if (this.data.tableview) {
+		this.view.tableview.addClass('active');
+	}
+	if (this.data.detailview) {
+		this.view.detailview.addClass('active');
+	}
 	this.view.name.val(this.data.name);
 	this.view.label.val(this.data.label);
 	this.view.type.val(this.data.type);
@@ -235,6 +271,7 @@ AppEntityAttribute.prototype.render = function() {
 	this.view.default.val(this.data.default);
 	this.view.unsigned.val(this.data.unsigned ? 1 : 0);
 	this.view.options.val(this.data.options);
+	this.view.subordinate.val(this.data.subordinate ? 1 : 0);
 }
 
 AppEntityAttribute.prototype.renderRow = function(input, label) {
@@ -253,10 +290,12 @@ AppEntityAttribute.prototype.afterTypeChange = function() {
 			this.view.unsigned.closest('.form-group').show();
 			this.view.options.closest('.form-group').hide();
 			this.view.default.closest('.form-group').show();
+			this.view.subordinate.closest('.form-group').hide();
 			delete this.data.size;
 			delete this.data.relation;
 			delete this.data.backref;
 			delete this.data.options;
+			delete this.data.subordinate;
 			return;
 		case 'decimal':
 			this.view.size.show();
@@ -265,9 +304,11 @@ AppEntityAttribute.prototype.afterTypeChange = function() {
 			this.view.unsigned.closest('.form-group').show();
 			this.view.options.closest('.form-group').hide();
 			this.view.default.closest('.form-group').show();
+			this.view.subordinate.closest('.form-group').hide();
 			delete this.data.relation;
 			delete this.data.backref;
 			delete this.data.options;
+			delete this.data.subordinate;
 			return;
 		case 'char':
 			this.view.size.show();
@@ -276,10 +317,12 @@ AppEntityAttribute.prototype.afterTypeChange = function() {
 			this.view.unsigned.closest('.form-group').hide();
 			this.view.options.closest('.form-group').hide();
 			this.view.default.closest('.form-group').show();
+			this.view.subordinate.closest('.form-group').hide();
 			delete this.data.relation;
 			delete this.data.backref;
 			delete this.data.unsigned;
 			delete this.data.options;
+			delete this.data.subordinate;
 			return;
 		case 'text':
 			this.view.size.hide();
@@ -288,11 +331,13 @@ AppEntityAttribute.prototype.afterTypeChange = function() {
 			this.view.unsigned.closest('.form-group').hide();
 			this.view.options.closest('.form-group').hide();
 			this.view.default.closest('.form-group').show();
+			this.view.subordinate.closest('.form-group').hide();
 			delete this.data.size;
 			delete this.data.relation;
 			delete this.data.backref;
 			delete this.data.unsigned;
 			delete this.data.options;
+			delete this.data.subordinate;
 			return;
 		case 'bool':
 			this.view.size.hide();
@@ -301,11 +346,13 @@ AppEntityAttribute.prototype.afterTypeChange = function() {
 			this.view.unsigned.closest('.form-group').hide();
 			this.view.options.closest('.form-group').hide();
 			this.view.default.closest('.form-group').show();
+			this.view.subordinate.closest('.form-group').hide();
 			delete this.data.size;
 			delete this.data.relation;
 			delete this.data.backref;
 			delete this.data.unsigned;
 			delete this.data.options;
+			delete this.data.subordinate;
 			return;
 		case 'option':
 		case 'enum':
@@ -315,10 +362,12 @@ AppEntityAttribute.prototype.afterTypeChange = function() {
 			this.view.unsigned.closest('.form-group').hide();
 			this.view.options.closest('.form-group').show();
 			this.view.default.closest('.form-group').show();
+			this.view.subordinate.closest('.form-group').hide();
 			delete this.data.size;
 			delete this.data.relation;
 			delete this.data.backref;
 			delete this.data.unsigned;
+			delete this.data.subordinate;
 			return;
 	}
 	if (this.isRelation()) {
@@ -334,6 +383,7 @@ AppEntityAttribute.prototype.afterTypeChange = function() {
 		delete this.data.default;
 		this.loadReferences();
 		this.fixRelationType();
+		this.afterRelationChanged();
 		return;
 	}
 	this.view.size.hide();
@@ -342,12 +392,23 @@ AppEntityAttribute.prototype.afterTypeChange = function() {
 	this.view.unsigned.closest('.form-group').hide();
 	this.view.options.closest('.form-group').hide();
 	this.view.default.closest('.form-group').hide();
+	this.view.subordinate.closest('.form-group').hide();
 	delete this.data.size;
 	delete this.data.relation;
 	delete this.data.backref;
 	delete this.data.unsigned;
 	delete this.data.options;
 	delete this.data.default;
+	delete this.data.subordinate;
+}
+
+AppEntityAttribute.prototype.afterRelationChanged = function() {
+	if (this.data.relation == 'has-many' || this.data.relation == 'belongs-to-many') {
+		this.view.subordinate.closest('.form-group').show();
+	} else {
+		this.view.subordinate.closest('.form-group').hide();
+		delete this.data.subordinate;
+	}
 }
 
 AppEntityAttribute.prototype.loadReferences = function() {

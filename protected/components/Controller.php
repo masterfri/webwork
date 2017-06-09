@@ -57,7 +57,7 @@ class Controller extends CController
 			$model = $class::model()->findByPk($id);
 		}
 		if (!$model) {
-			throw new CHttpException(404, Yii::t('site', "$class not found"));
+			throw new CHttpException(404, Yii::t('site', 'Not found'));
 		}
 		return $model;
 	}
