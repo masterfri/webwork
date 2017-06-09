@@ -184,4 +184,14 @@ class Invoice extends CActiveRecord
 	{
 		return $this->getNumber();
 	}
+        
+        public function getRest()
+        {
+            return $this->amount - $this->payd;
+        }
+        
+        public function getRowCssClass()
+        {
+            return $this->getRest()? 'warning' : null;
+        }
 }

@@ -43,11 +43,17 @@ $this->menu = array(
 
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<h3 class="panel-title"><?php echo $this->pageHeading; ?></h3>
+            <h3 class="panel-title"><?php echo $this->pageHeading; ?></h3>
+            <?php if ($rest){?>
+                <div class="pull-right text-danger">
+                    Задолженность: <?php echo $rest ?>
+                </div>
+            <?php } ?>
 	</div>
 	<?php $this->widget('GridView', array(
 		'id' => 'invoice-grid',
 		'dataProvider' => $provider,
+                'rowCssClassExpression' => '$data->getRowCssClass();',
 		'columns' => array(
 			array(
 				'class' => 'LinkColumn',
@@ -64,6 +70,11 @@ $this->menu = array(
 			),
 			'amount:money',
 			'payd:money',
+                        array(
+                            'header' => 'Остаток',
+                            'value' => '$data->getRest()',
+                            'type' => 'money'
+			),
 			'draft:boolean',
 			'time_created:datetime',
 			array(
