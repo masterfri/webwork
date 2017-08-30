@@ -60,12 +60,18 @@ class AppEntityController extends AdminController
 		$model->application_id = $application->id;
 		if ($template !== null) {
 			$template = $this->loadModel($template, 'AppEntity');
-			$model->name = $template->name;
-			$model->module = $template->module;
-			$model->label = $template->label;
-			$model->description = $template->description;
-			$model->json_schemes = $template->json_schemes;
-			$model->json_source = $template->json_source;
+			$model->expert_mode = $template->expert_mode;
+			if ($template->expert_mode == 1) {
+				$model->setScenario('createExpert');
+				$model->plain_source = $template->plain_source;
+			} else {
+				$model->name = $template->name;
+				$model->module = $template->module;
+				$model->label = $template->label;
+				$model->description = $template->description;
+				$model->json_schemes = $template->json_schemes;
+				$model->json_source = $template->json_source;
+			}
 		}
 		if ($this->saveModel($model)) {
 			if ($this->isAjax()) {
@@ -98,6 +104,9 @@ class AppEntityController extends AdminController
 		}
 		if (!Yii::app()->user->checkAccess('design_application', array('application' => $model->application))) {
 			throw new CHttpException(403, 'Forbidden');
+		}
+		if ($model->expert_mode == 1) {
+			$model->setScenario('updateExpert');
 		}
 		if ($this->saveModel($model)) {
 			if ($this->isAjax()) {
@@ -134,6 +143,24 @@ class AppEntityController extends AdminController
 		if(!isset($_GET['ajax'])) {
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index', 'application' => $model->application->id));
 		}
+	}
+	
+	public function actionExpertMode($id)
+	{
+		$model = $this->loadModel($id, 'AppEntity');
+		if ($model->application === null) {
+			throw new CHttpException(403, 'Forbidden');
+		}
+		if (!Yii::app()->user->checkAccess('design_application', array('application' => $model->application))) {
+			throw new CHttpException(403, 'Forbidden');
+		}
+		if ($model->expert_mode == 0) {
+			$model->updateByPk($model->id, array(
+				'expert_mode' => 1,
+			));
+			Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Expert mode has been engaged'));
+		}
+		$this->redirect(array('view', 'id' => $model->id));
 	}
 	
 	public function actionUpdateTemplate($id)
@@ -209,10 +236,15 @@ class AppEntityController extends AdminController
 		$template = new AppEntity('copyAsTemplate');
 		$template->name = $model->name;
 		$template->module = $model->module;
-		$template->label = $model->label;
+		$template->label = empty($model->label) ? $model->name : $model->label;
 		$template->description = $model->description;
-		$template->json_schemes = $model->json_schemes;
-		$template->json_source = $model->json_source;
+		$template->expert_mode = $model->expert_mode;
+		if ($model->expert_mode == 1) {
+			$template->plain_source = $model->plain_source;
+		} else {
+			$template->json_schemes = $model->json_schemes;
+			$template->json_source = $model->json_source;
+		}
 		if ($this->saveModel($template)) {
 			Yii::app()->user->setFlash('message', Yii::t('core.crud', 'Template has been created'));
 			$this->redirect(array('view', 'id' => $template->id));
@@ -423,7 +455,7 @@ class AppEntityController extends AdminController
 	{
 		return array(
 			'accessControl',
-			'postOnly + delete', 
+			'postOnly + delete, expertMode', 
 		);
 	}
 	
@@ -460,6 +492,10 @@ class AppEntityController extends AdminController
 			),
 			array('allow',
 				'actions' => array('delete'),
+				'roles' => array('design_application'),
+			),
+			array('allow',
+				'actions' => array('expertMode'),
 				'roles' => array('design_application'),
 			),
 			array('allow',

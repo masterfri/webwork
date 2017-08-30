@@ -29,7 +29,7 @@ $this->menu = array(
 	</div>
 	<div class="panel-body">
 		<div data-marker="ajax-body">
-			<?php $this->renderPartial('_form', array(
+			<?php $this->renderPartial($model->expert_mode == 1 ? '_form_expert' : '_form', array(
 				'model' => $model,
 			)); ?>
 		</div>

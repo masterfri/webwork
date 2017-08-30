@@ -28,6 +28,8 @@ class CodeforgeComponent extends CApplicationComponent
 		define('CF_WORKDIR', $workdir);
 		define('CF_LIB_DIR', CF_THISDIR . '/lib');
 		
+		$custom_dir = Yii::getPathOfAlias('application.cf-custom');
+		
 		require_once CF_LIB_DIR . '/WebLayer.php';
 		require_once CF_LIB_DIR . '/Parser.php';
 		require_once CF_LIB_DIR . '/Attribute.php';
@@ -37,9 +39,11 @@ class CodeforgeComponent extends CApplicationComponent
 		$this->layer = new Codeforge\WebLayer();
 		$this->layer->setSchemesDir(array(
 			CF_THISDIR . '/schemes',
+			$custom_dir . '/schemes',
 		));
 		$this->layer->setExtensionsDir(array(
 			CF_THISDIR . '/extensions',
+			$custom_dir . '/extensions',
 		));
 		$this->prepareDir(CF_WORKDIR . '/' . self::PROJECT_DIR_NAME);
 		$this->layer->setCacheDir($this->prepareDir(CF_WORKDIR . '/' . self::PROJECT_DIR_NAME . '/cache'));
@@ -221,5 +225,12 @@ class CodeforgeComponent extends CApplicationComponent
 			} catch (Exception $e) {}
 		}
 		return $result;
+	}
+	
+	public function parseEntity($entity)
+	{
+		$parser = new Codeforge\Parser();
+		$parser->parseText($entity->plain_source);
+		return $parser->getModels();
 	}
 }

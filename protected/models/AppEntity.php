@@ -31,26 +31,29 @@ class AppEntity extends CActiveRecord
 			array(' schemes',
 					'required', 'on' => 'create, update'),
 			array(' name',
-					'required', 'on' => 'create, update, copyAsTemplate, updateTemplate'),
+					'required', 'on' => 'create, update'),
+			array(' label',
+					'required', 'on' => 'copyAsTemplate, updateTemplate'),
 			array(' module,
 					name', 
-					'match', 'pattern' => '/^[a-z_][a-z0-9_]*$/i', 'on' => 'create, update, copyAsTemplate, updateTemplate'),
+					'match', 'pattern' => '/^[a-z_][a-z0-9_]*$/i', 'on' => 'create, update'),
 			array(' name', 
 					'unique', 'criteria' => array('condition' => 'application_id = :application_id', 'params' => array(':application_id' => $this->application_id)), 'on' => 'create'),
 			array(' name', 
 					'unique', 'criteria' => array('condition' => 'id != :id AND application_id = :application_id', 'params' => array(':id' => $this->id, ':application_id' => $this->application_id)), 'on' => 'update'),
-			array(' name', 
-					'unique', 'criteria' => array('condition' => 'application_id = 0'), 'on' => 'copyAsTemplate'),
-			array(' name', 
-					'unique', 'criteria' => array('condition' => 'id != :id AND application_id = 0', 'params' => array(':id' => $this->id)), 'on' => 'updateTemplate'),
 			array(' module,
-					label,
 					name', 
+					'length', 'max' => 100, 'on' => 'create, update'),
+			array(' label', 
 					'length', 'max' => 100, 'on' => 'create, update, copyAsTemplate, updateTemplate'),
 			array(' json_source', 
-					'length', 'max' => 16000, 'on' => 'create, update'),
+					'required', 'on' => 'create, update'),
 			array(' description', 
 					'length', 'max' => 16000, 'on' => 'create, update, copyAsTemplate, updateTemplate'),
+			array(' plain_source',
+					'required', 'on' => 'updateExpert, createExpert'),
+			array(' plain_source',
+					'validateSource', 'on' => 'updateExpert, createExpert'),
 			array('	name', 
 					'safe', 'on' => 'search'),
 		);
@@ -125,7 +128,9 @@ class AppEntity extends CActiveRecord
 	{
 		$lines = array();
 		
-		$lines[] = sprintf('/// %s', $this->name);
+		if ('' != trim($this->label)) {
+			$lines[] = sprintf('/// %s', $this->label);
+		}
 		if ('' != trim($this->module)) {
 			$lines[] = sprintf('/// @module %s', $this->module);
 		}
@@ -251,5 +256,39 @@ class AppEntity extends CActiveRecord
 		}
 		
 		$this->plain_source = implode("\n", $lines);
+	}
+	
+	public function getEntityAttributes()
+	{
+		$src = CJSON::decode($this->json_source);
+		return isset($src['attributes']) ? $src['attributes'] : array();
+	}
+	
+	public function validateSource()
+	{
+		if ($this->plain_source != '') {
+			try {
+				$models = $this->application->getCF()->parseEntity($this);
+				if (count($models) != 1) {
+					$this->addError('plain_source', Yii::t('appEntity', 'You must define exact one model'));
+				} else {
+					$model = current($models);
+					$this->name = $model->getName();
+					$criteria = new CDbCriteria();
+					$criteria->addCondition('name = :name AND application_id = :application_id');
+					$criteria->params[':name'] = $this->name;
+					$criteria->params[':application_id'] = $this->application_id;
+					if (!$this->isNewRecord) {
+						$criteria->addCondition('id != :id');
+						$criteria->params[':id'] = $this->id;
+					}
+					if ($this->count($criteria) > 0) {
+						$this->addError('plain_source', Yii::t('appEntity', 'This model name is already in use'));
+					}
+				}
+			} catch (Exception $e) {
+				$this->addError('plain_source', $e->getMessage());
+			}
+		}
 	}
 }

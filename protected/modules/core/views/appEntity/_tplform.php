@@ -18,24 +18,6 @@
 	<?php echo $form->errorSummary($model, null, null, array('class' => 'alert alert-danger')); ?>
 	
 	<div class="form-group">
-		<?php echo $form->labelEx($model, 'name', array('class'=>'col-sm-3 control-label')); ?>
-		<div class="col-sm-9">
-			<?php echo $form->textField($model, 'name', array(
-				'class' => 'form-control',
-			)); ?> 
-			<?php echo $form->error($model, 'name', array('class'=>'help-inline')); ?>
-		</div>
-	</div>
-	<div class="form-group">
-		<?php echo $form->labelEx($model, 'module', array('class'=>'col-sm-3 control-label')); ?>
-		<div class="col-sm-9">
-			<?php echo $form->textField($model, 'module', array(
-				'class' => 'form-control',
-			)); ?> 
-			<?php echo $form->error($model, 'module', array('class'=>'help-inline')); ?>
-		</div>
-	</div>
-	<div class="form-group">
 		<?php echo $form->labelEx($model, 'label', array('class'=>'col-sm-3 control-label')); ?>
 		<div class="col-sm-9">
 			<?php echo $form->textField($model, 'label', array(

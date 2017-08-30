@@ -106,11 +106,32 @@ $cf = $model->application->getCF();
 			</div>
 		</div>
 	</div>
-	<div id="attributes-list"></div>
+	<div id="attributes-list" class="panel panel-default"></div>
 	
 	<div class="form-group">
-		<div class="col-sm-offset-3 col-sm-9">
+		<div class="col-sm-offset-3 col-sm-5">
 			<?php echo CHtml::button(Yii::t('core.crud', $model->isNewRecord ? 'Create' : 'Update'), array('class'=>'btn btn-primary', 'id' => 'submit-button')); ?>
+		</div>
+		<div class="col-sm-4">
+			<div class="pull-right">
+				<?php $this->widget('zii.widgets.CMenu', array(
+					'items' => array(
+						array(
+							'label' => '<i class="glyphicon glyphicon-plus"></i>', 
+							'linkOptions' => array(
+								'title' => Yii::t('core.crud', 'Add'), 
+								'class' => 'btn btn-default',
+								'id' => 'add-attribute-secondary',
+							), 
+							'url' => '#',
+						),
+					),
+					'encodeLabel' => false,
+					'htmlOptions' => array(
+						'class' => 'nav nav-pills context-menu',
+					),
+				)); ?>
+			</div>
 		</div>
 	</div>
 	
@@ -131,6 +152,38 @@ if ($model->getIsNewRecord()) {
 	$refs = CJSON::encode(empty($refs) ? false : $refs[$model->name]);
 }
 $src = empty($model->json_source) ? 'false' : $model->json_source;
+$strings = CJSON::encode(array(
+	'required' => Yii::t('appEntity', 'Required'),
+	'readonly' => Yii::t('appEntity', 'Readonly'),
+	'sortable' => Yii::t('appEntity', 'Sortable'),
+	'searchable' => Yii::t('appEntity', 'Searchable'),
+	'collection' => Yii::t('appEntity', 'Collection'),
+	'table_view' => Yii::t('appEntity', 'Table view'),
+	'detailed_view' => Yii::t('appEntity', 'Detailed view'),
+	'name' => Yii::t('appEntity', 'Name'),
+	'label' => Yii::t('appEntity', 'Label'),
+	'size' => Yii::t('appEntity', 'Size'),
+	'delete' => Yii::t('core.crud', 'Delete'),
+	'more' => Yii::t('core.crud', 'More'),
+	'no' => Yii::t('core.crud', 'No'),
+	'yes' => Yii::t('core.crud', 'Yes'),
+	'none' => Yii::t('core.crud', 'None'),
+	'has_one' => Yii::t('appEntity', 'Has one'),
+	'belongs_to_one' => Yii::t('appEntity', 'Belongs to one'),
+	'has_many' => Yii::t('appEntity', 'Has many'),
+	'belongs_to_many' => Yii::t('appEntity', 'Belongs to many'),
+	'relation' => Yii::t('appEntity', 'Relation'),
+	'subordinate' => Yii::t('appEntity', 'Subordinate'),
+	'back_reference' => Yii::t('appEntity', 'Back reference'),
+	'unsigned' => Yii::t('appEntity', 'Unsigned'),
+	'options' => Yii::t('appEntity', 'Options'),
+	'default_value' => Yii::t('appEntity', 'Default value'),
+	'description' => Yii::t('appEntity', 'Description'),
+	'standard' => Yii::t('appEntity', 'Standard'),
+	'custom' => Yii::t('appEntity', 'Custom'),
+	'relations' => Yii::t('appEntity', 'Relations'),
+	'confirm' => Yii::t('appEntity', 'Confirm'),
+));
 
 $cs = Yii::app()->clientScript;
 $cs->registerCoreScript('jquery.ui');
@@ -142,8 +195,9 @@ var list = $('#attributes-list');
 var jsrc = $src;
 var types = $types;
 var refs = $refs;
+AppEntityAttribute.strings = $strings;
 
-$('#add-attribute').on('click', function() {
+$('#add-attribute, #add-attribute-secondary').on('click', function() {
 	var attr = new AppEntityAttribute(null, types, refs);
 	list.append(attr.getView());
 	list.sortable('refresh');
@@ -233,6 +287,8 @@ function convertCsvAttribute(row, map, pool, types) {
 		pool[result.name]++;
 		result.name += '_' + pool[result.name];
 	}
+	result.required = ['1', 'y', 'Y'].indexOf(tmp.required) != -1;
+	result.collection = ['1', 'y', 'Y'].indexOf(tmp.collection) != -1;
 	if (types.std && types.std.indexOf(tmp.type) != -1) {
 		result.type = tmp.type;
 		if (result.type == 'char') {
@@ -240,8 +296,15 @@ function convertCsvAttribute(row, map, pool, types) {
 		} else if (result.type == 'decimal') {
 			result.size = tmp.size ? tmp.size : '10,3';
 		}
-	} else if (types.custom && types.custom.indexOf(tmp.type) != -1 || types.rel && types.rel.indexOf(tmp.type) != -1) {
+	} else if (types.custom && types.custom.indexOf(tmp.type) != -1) {
 		result.type = tmp.type;
+	} else if (types.rel && types.rel.indexOf(tmp.type) != -1) {
+		result.type = tmp.type;
+		if (result.collection) {
+			result.relation = 'has-many';
+		} else {
+			result.relation = 'belongs-to-one';
+		}
 	} else if (tmp.type && tmp.type.indexOf('\\n') != -1) {
 		result.type = 'enum';
 		result.options = tmp.type;
@@ -249,7 +312,6 @@ function convertCsvAttribute(row, map, pool, types) {
 		result.type = 'char';
 		result.size = '255';
 	}
-	result.required = ['1', 'y', 'Y'].indexOf(tmp.required) != -1;
 	return result;
 }
 EOS

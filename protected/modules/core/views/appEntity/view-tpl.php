@@ -51,9 +51,15 @@ $this->menu = array(
 	<div class="panel-heading">
 		<h3 class="panel-title"><?php echo CHtml::encode($model->name); ?></h3>
 	</div>
-	<div class="panel-body">
-		<pre><?php echo CHtml::encode($model->plain_source); ?></pre>
-	</div>
+	<?php if ($model->expert_mode == 1): ?>
+		<div class="panel-body">
+			<pre><?php echo CHtml::encode($model->plain_source); ?></pre>
+		</div>
+	<?php else: ?>
+		<?php $this->renderPartial('_view', array(
+			'model' => $model,
+		)); ?>
+	<?php endif; ?>
 	<div class="panel-footer foot-details">
 		<?php echo Yii::t('activity', 'Created by'); ?>
 		<?php echo CHtml::encode($model->created_by); ?>,

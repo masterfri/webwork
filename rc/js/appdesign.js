@@ -38,22 +38,22 @@ AppEntityAttribute.prototype.onDelete = function(fn) {
 
 AppEntityAttribute.prototype.render = function() {
 	var that = this;
-	this.view.root = $('<div class="panel panel-default app-entity-attr"><div class="panel-body"></div></div>');
+	this.view.root = $('<div class="app-entity-attr"><div class="panel-body"></div></div>');
 	this.view.body = this.view.root.children('.panel-body');
 	this.view.body.append('<div class="h"><div class="btn-group" role="group"></div>');
-	this.view.required = $('<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-asterisk" title="Required" href="#"></span></button>');
-	this.view.readonly = $('<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-lock" title="Readonly" href="#"></span></button>');
-	this.view.sortable = $('<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-sort-by-attributes" title="Sortable" href="#"></span></button>');
-	this.view.searchable = $('<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-search" title="Searchable" href="#"></span></button>');
-	this.view.collection = $('<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-th-large" title="Collection" href="#"></span></button>');
-	this.view.tableview = $('<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-align-justify" title="Table view" href="#"></span></button>');
-	this.view.detailview = $('<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-list-alt" title="Detailed view" href="#"></span></button>');
-	this.view.name = $('<input type="text" class="form-control mleft attrname" placeholder="Name" />');
-	this.view.label = $('<input type="text" class="form-control mleft" placeholder="Label" />');
+	this.view.required = $('<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-asterisk" title="' + this.t('required') + '" href="#"></span></button>');
+	this.view.readonly = $('<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-lock" title="' + this.t('readonly') + '" href="#"></span></button>');
+	this.view.sortable = $('<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-sort-by-attributes" title="' + this.t('sortable') + '" href="#"></span></button>');
+	this.view.searchable = $('<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-search" title="' + this.t('searchable') + '" href="#"></span></button>');
+	this.view.collection = $('<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-th-large" title="' + this.t('collection') + '" href="#"></span></button>');
+	this.view.tableview = $('<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-align-justify" title="' + this.t('table_view') + '" href="#"></span></button>');
+	this.view.detailview = $('<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-list-alt" title="' + this.t('detailed_view') + '" href="#"></span></button>');
+	this.view.name = $('<input type="text" class="form-control mleft attrname" placeholder="' + this.t('name') + '" />');
+	this.view.label = $('<input type="text" class="form-control mleft" placeholder="' + this.t('label') + '" />');
 	this.view.type = $('<select class="form-control mleft"></select>');
-	this.view.size = $('<input type="text" class="form-control mleft short" placeholder="Size" />');
-	this.view.remove = $('<button type="button" class="btn btn-danger pull-right mleft"><span class="glyphicon glyphicon-trash" title="Delete" href="#"></span></button>');
-	this.view.more = $('<button type="button" class="btn btn-default pull-right"><span class="glyphicon glyphicon-cog" title="More" href="#"></span></button>');
+	this.view.size = $('<input type="text" class="form-control mleft short" placeholder="' + this.t('size') + '" />');
+	this.view.remove = $('<button type="button" class="btn btn-danger pull-right mleft"><span class="glyphicon glyphicon-trash" title="' + this.t('delete') + '" href="#"></span><span class="confirm-msg">' + this.t('confirm') + '</span></button>');
+	this.view.more = $('<button type="button" class="btn btn-default pull-right"><span class="glyphicon glyphicon-cog" title="' + this.t('more') + '" href="#"></span></button>');
 	this.view.body.children('.h').children('.btn-group')
 		.append(this.view.required)
 		.append(this.view.readonly)
@@ -79,45 +79,45 @@ AppEntityAttribute.prototype.render = function() {
 		}
 	});
 	this.view.subordinate = $('<select class="form-control"></select>')
-		.append('<option value="0">No</option>')
-		.append('<option value="1">Yes</option>');
+		.append('<option value="0">' + this.t('no') + '</option>')
+		.append('<option value="1">' + this.t('yes') + '</option>');
 	this.view.description = $('<textarea class="form-control"></textarea>');
 	this.view.relation = $('<select class="form-control"></select>')
-		.append('<option value="has-one">Has one</option>')
-		.append('<option value="belongs-to-one">Belongs to one</option>')
-		.append('<option value="has-many">Has many</option>')
-		.append('<option value="belongs-to-many">Belongs to many</option>');
+		.append('<option value="has-one">' + this.t('has_one') + '</option>')
+		.append('<option value="belongs-to-one">' + this.t('belongs_to_one') + '</option>')
+		.append('<option value="has-many">' + this.t('has_many') + '</option>')
+		.append('<option value="belongs-to-many">' + this.t('belongs_to_many') + '</option>');
 	this.view.backref = $('<select class="form-control"></select>');
 	this.view.default = $('<input type="text" class="form-control" />');
 	this.view.unsigned = $('<select class="form-control"></select>')
-		.append('<option value="0">No</option>')
-		.append('<option value="1">Yes</option>');
+		.append('<option value="0">' + this.t('no') + '</option>')
+		.append('<option value="1">' + this.t('yes') + '</option>');
 	this.view.options = $('<textarea class="form-control"></textarea>');
 	this.view.body.children('.more-container')
-		.append(this.renderRow(this.view.relation, 'Relation'))
-		.append(this.renderRow(this.view.subordinate, 'Subordinate'))
-		.append(this.renderRow(this.view.backref, 'Back reference'))
-		.append(this.renderRow(this.view.unsigned, 'Unsigned'))
-		.append(this.renderRow(this.view.options, 'Options'))
-		.append(this.renderRow(this.view.default, 'Default value'))
-		.append(this.renderRow(this.view.description, 'Description'));
+		.append(this.renderRow(this.view.relation, this.t('relation')))
+		.append(this.renderRow(this.view.subordinate, this.t('subordinate')))
+		.append(this.renderRow(this.view.backref, this.t('back_reference')))
+		.append(this.renderRow(this.view.unsigned, this.t('unsigned')))
+		.append(this.renderRow(this.view.options, this.t('options')))
+		.append(this.renderRow(this.view.default, this.t('default_value')))
+		.append(this.renderRow(this.view.description, this.t('description')));
 	var groupt;
 	if (('std' in this.types) && (this.types.std.length > 0)) {
-		group = $('<optgroup label="Standard"></optgroup>');
+		group = $('<optgroup label="' + this.t('standard') + '"></optgroup>');
 		this.view.type.append(group);
 		this.types.std.forEach(function(item) {
 			group.append($('<option></option>').attr('value', item).text(item));
 		});
 	}
 	if (('custom' in this.types) && (this.types.custom.length > 0)) {
-		group = $('<optgroup label="Custom"></optgroup>');
+		group = $('<optgroup label="' + this.t('custom') + '"></optgroup>');
 		this.view.type.append(group);
 		this.types.custom.forEach(function(item) {
 			group.append($('<option></option>').attr('value', item).text(item));
 		});
 	}
 	if (('rel' in this.types) && (this.types.rel.length > 0)) {
-		group = $('<optgroup label="Relations"></optgroup>');
+		group = $('<optgroup label="' + this.t('relations') + '"></optgroup>');
 		this.view.type.append(group);
 		this.types.rel.forEach(function(item) {
 			group.append($('<option></option>').attr('value', item).text(item));
@@ -415,7 +415,7 @@ AppEntityAttribute.prototype.loadReferences = function() {
 	if (this.refs !== false) {
 		var has = false;
 		this.view.backref.children().remove();
-		var opt = $('<option value="">None</option>');
+		var opt = $('<option value="">' + this.t('none') + '</option>');
 		this.view.backref.append(opt);
 		for (var type in this.refs) {
 			if (type === this.data.type) {
@@ -515,4 +515,41 @@ AppEntityAttribute.prototype.markInvalid = function(field) {
 		root.removeClass('invalid');
 		field.removeClass('invalid');
 	});
+}
+
+AppEntityAttribute.strings = {
+	'required' : 'Required',
+	'readonly' : 'Readonly',
+	'sortable' : 'Sortable',
+	'searchable' : 'Searchable',
+	'collection' : 'Collection',
+	'table_view' : 'Table view',
+	'detailed_view' : 'Detailed view',
+	'name' : 'Name',
+	'label' : 'Label',
+	'size': 'Size',
+	'delete' : 'Delete',
+	'more': 'More',
+	'no' : 'No',
+	'yes' : 'Yes',
+	'none' : 'None',
+	'has_one' : 'Has one',
+	'belongs_to_one' : 'Belongs to one',
+	'has_many' : 'Has many',
+	'belongs_to_many' : 'Belongs to many',
+	'relation' : 'Relation',
+	'subordinate' : 'Subordinate',
+	'back_reference' : 'Back reference',
+	'unsigned' : 'Unsigned',
+	'options' : 'Options',
+	'default_value' : 'Default value',
+	'description' : 'Description',
+	'standard' : 'Standard',
+	'custom' : 'Custom',
+	'relations' : 'Relations',
+	'confirm' : 'Confirm'
+};
+
+AppEntityAttribute.prototype.t = function(str) {
+	return AppEntityAttribute.strings[str] || str;
 }

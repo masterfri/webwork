@@ -18,7 +18,6 @@ $this->breadcrumbs = array(
 		'id' => 'activity-grid',
 		'dataProvider' => $provider,
 		'columns' => array(
-			'name',
 			'label',
 			'description',
 			array(

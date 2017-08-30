@@ -50,6 +50,15 @@ $this->menu = array(
 				'visible' => Yii::app()->user->checkAccess('create_entity_template'),
 			),
 			array(
+				'label' => '<i class="glyphicon glyphicon-star"></i> ' . Yii::t('core.crud', 'Engage expert mode'), 
+				'url' => '#',
+				'linkOptions' => array(
+					'submit' => array('expertMode', 'id' => $model->id),
+					'confirm' => Yii::t('core.crud', 'Are you sure you want to use expert mode? You will not be able to switch back to GUI mode!'),
+				),
+				'visible' => $model->expert_mode == 0 && Yii::app()->user->checkAccess('design_application'),
+			),
+			array(
 				'label' => '<i class="glyphicon glyphicon-trash"></i> ' . Yii::t('core.crud', 'Delete Application Entity'), 
 				'url' => '#', 
 				'linkOptions' => array(
@@ -67,9 +76,15 @@ $this->menu = array(
 	<div class="panel-heading">
 		<h3 class="panel-title"><?php echo CHtml::encode($model->name); ?></h3>
 	</div>
-	<div class="panel-body">
-		<pre><?php echo CHtml::encode($model->plain_source); ?></pre>
-	</div>
+	<?php if ($model->expert_mode == 1): ?>
+		<div class="panel-body">
+			<pre><?php echo CHtml::encode($model->plain_source); ?></pre>
+		</div>
+	<?php else: ?>
+		<?php $this->renderPartial('_view', array(
+			'model' => $model,
+		)); ?>
+	<?php endif; ?>
 	<div class="panel-footer foot-details">
 		<?php echo Yii::t('activity', 'Created by'); ?>
 		<?php echo CHtml::encode($model->created_by); ?>,

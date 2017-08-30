@@ -202,6 +202,14 @@ ul.tags li {
 .single-task .tags-control ul.tags {
 	margin-top: .8em;
 }
+ul.compact {
+	margin: 0;
+	padding: 0;
+	list-style-position: inside;
+}
+.attributes-table thead th {
+	background: #f9f9f9;
+}
 @media (max-width: 767px) {
 	.task-list .task-details {
 		padding-top: 15px;
@@ -969,6 +977,39 @@ body:after {
 	background-color: #f9f9f9;
 	color: #d9534f;
 }
+.app-entity-attr {
+	border-top: 1px solid #dddddd;
+	border-bottom: 1px solid #dddddd;
+	margin-top: -1px;
+}
+.app-entity-attr > .panel-body {
+	padding: 10px 15px 10px 25px;
+	position: relative;
+}
+.app-entity-attr > .panel-body::before {
+	content: '\e150';
+	position: absolute;
+	top: 17px;
+	left: 6px;
+	font-family: 'Glyphicons Halflings';
+	font-style: normal;
+	font-weight: 400;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	color: #dddddd;
+}
+.app-entity-attr:first-child {
+	border-top: 0;
+	margin-top: 0;
+}
+.app-entity-attr:last-child {
+	border-bottom: 0;
+}
+.app-entity-attr.ui-sortable-helper {
+	border: 1px solid #dddddd;
+	background: #fff;
+}
 .app-entity-attr .h .form-control {
 	display: inline;
 	width: 200px;
@@ -992,13 +1033,16 @@ body:after {
 }
 .app-entity-attr .h .btn-danger.confirmation {
 	height: 28px;
-    line-height: 10px;
+	line-height: 10px;
 }
-.app-entity-attr .h .btn-danger.confirmation span {
+.app-entity-attr .h .btn-danger.confirmation span.glyphicon {
 	display: none;
 }
-.app-entity-attr .h .btn-danger.confirmation:before {
-	content: 'confirm';
+.app-entity-attr .h .btn-danger span.confirm-msg {
+	display: none;
+}
+.app-entity-attr .h .btn-danger.confirmation span.confirm-msg {
+	display: block;
 	font-size: 12px;
 	font-weight: bold;
 }
@@ -1008,7 +1052,6 @@ body:after {
 .app-entity-attr .form-control.invalid {
 	border: 1px solid #d9534f;
 }
-
 .app-entity-attr .h .btn-group .btn {
 	padding-left: 8px;
 	padding-right: 8px;
@@ -1040,4 +1083,23 @@ body:after {
 }
 .navbar-nav .dropdown-menu > li > .menu-addon + a {
 	padding-right: 40px;
+}
+.table > tbody > tr > td.inline-table {
+	padding: 0;
+}
+.table > tbody > tr > td.inline-table > table {
+	margin: 0 0 -1px 0;
+	border: 0;
+}
+.table > tbody > tr > td.inline-table > table > tbody > tr:first-child > td,
+.table > tbody > tr > td.inline-table > table > tbody > tr:first-child > th {
+	border-top: 0;
+}
+.table > tbody > tr > td.inline-table > table > tbody > tr > td:first-child,
+.table > tbody > tr > td.inline-table > table > tbody > tr > th:first-child {
+	border-left: 0;
+}
+.table > tbody > tr > td.inline-table > table > tbody > tr > td:last-child,
+.table > tbody > tr > td.inline-table > table > tbody > tr > th:last-child {
+	border-right: 0;
 }
