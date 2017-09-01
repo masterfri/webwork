@@ -274,12 +274,7 @@ function convertCsvAttribute(row, map, pool, types) {
 	result.label = tmp.label;
 	result.name = tmp.name;
 	if (!result.name) {
-		result.name = result.label.toLowerCase()
-			.replace(/[^a-zA-Z0-9_]/g, '_')
-			.replace(/_+/g, '_')
-			.replace(/^_+/, '')
-			.replace(/_+$/, '')
-			.substr(0, 60);
+		result.name = AppEntityAttribute.labelToName(result.label);
 	}
 	if (pool[result.name] === undefined) {
 		pool[result.name] = 1;

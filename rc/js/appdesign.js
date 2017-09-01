@@ -190,14 +190,16 @@ AppEntityAttribute.prototype.render = function() {
 	this.view.name.on('change', function() {
 		that.data.name = $.trim(that.view.name.val());
 		if (that.view.label.val() == '') {
-			that.data.label = that.data.name.split('_').map(function(v) {
-				return v.substr(0, 1).toUpperCase() + v.substr(1).toLowerCase();
-			}).join(' ');
+			that.data.label = AppEntityAttribute.nameToLabel(that.data.name);
 			that.view.label.val(that.data.label);
 		}
 	});
 	this.view.label.on('change', function() {
 		that.data.label = $.trim(that.view.label.val());
+		if (that.view.name.val() == '') {
+			that.data.name = AppEntityAttribute.labelToName(that.data.label);
+			that.view.name.val(that.data.name);
+		}
 	});
 	this.view.type.on('change', function() {
 		that.data.type = that.view.type.val();
@@ -403,7 +405,7 @@ AppEntityAttribute.prototype.afterTypeChange = function() {
 }
 
 AppEntityAttribute.prototype.afterRelationChanged = function() {
-	if (this.data.relation == 'has-many' || this.data.relation == 'belongs-to-many') {
+	if (this.data.relation == 'has-many' || this.data.relation == 'belongs-to-many' || this.data.relation == 'has-one') {
 		this.view.subordinate.closest('.form-group').show();
 	} else {
 		this.view.subordinate.closest('.form-group').hide();
@@ -553,3 +555,29 @@ AppEntityAttribute.strings = {
 AppEntityAttribute.prototype.t = function(str) {
 	return AppEntityAttribute.strings[str] || str;
 }
+
+AppEntityAttribute.labelToName = function(label) {
+	var name = label.toLowerCase()
+		.replace(/[(][^)]*[)]/g, '_')
+		.replace(/[^a-zA-Z0-9_]/g, '_')
+		.replace(/_+/g, '_')
+		.replace(/^_+/, '')
+		.replace(/_+$/, '')
+		.split('_')
+		.filter(function(v) {
+			return ['a', 'an', 'the', 'are', 'is', 'do', 'does', 'will'].indexOf(v) == -1;
+		})
+		.join('_');
+	while (name.length > 60) {
+		var tmp = name.split('_');
+		tmp.pop();
+		name = tmp.join('_');
+	}
+	return name;
+};
+
+AppEntityAttribute.nameToLabel = function(name) {
+	return name.split('_').map(function(v) {
+		return v.substr(0, 1).toUpperCase() + v.substr(1).toLowerCase();
+	}).join(' ');
+};
