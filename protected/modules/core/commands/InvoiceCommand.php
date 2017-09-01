@@ -17,7 +17,7 @@ class InvoiceCommand extends CConsoleCommand
 	
 	protected $_silent = false;
 	
-	public function actionGenerate($month=null, $silent=null)
+	public function actionGenerate($month=null, $silent=null, $forUser=null)
 	{
 		if ($silent == '1') {
 			$this->_silent = true;
@@ -36,6 +36,9 @@ class InvoiceCommand extends CConsoleCommand
 		$builder = Yii::app()->db->commandBuilder;
 		$criteria = new CDbCriteria();
 		$criteria->compare('status', User::STATUS_ENABLED);
+		if ($forUser !== null) {
+			$criteria->compare('id', $forUser);
+		}
 		$usermodel = User::model();
 		$reader = $builder->createFindCommand($usermodel->tableName(), $criteria)->query();
 		while ($row = $reader->read()) {

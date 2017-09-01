@@ -43,12 +43,7 @@ $this->menu = array(
 
 <div class="panel panel-default">
 	<div class="panel-heading">
-            <h3 class="panel-title"><?php echo $this->pageHeading; ?></h3>
-            <?php if ($rest){?>
-                <div class="pull-right text-danger">
-                    Задолженность: <?php echo $rest ?>
-                </div>
-            <?php } ?>
+		<h3 class="panel-title"><?php echo $this->pageHeading; ?></h3>
 	</div>
 	<?php $this->widget('GridView', array(
 		'id' => 'invoice-grid',
