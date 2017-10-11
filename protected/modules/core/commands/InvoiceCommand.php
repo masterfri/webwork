@@ -37,7 +37,8 @@ class InvoiceCommand extends CConsoleCommand
 		$criteria = new CDbCriteria();
 		$criteria->compare('status', User::STATUS_ENABLED);
 		if ($forUser !== null) {
-			$criteria->compare('id', $forUser);
+			$criteria->addCondition('id = :userID OR username = :userID');
+			$criteria->params[':userID'] = $forUser;
 		}
 		$usermodel = User::model();
 		$reader = $builder->createFindCommand($usermodel->tableName(), $criteria)->query();
@@ -127,13 +128,14 @@ class InvoiceCommand extends CConsoleCommand
 		while ($row = $items->read()) {
 			$label = !empty($row['task_name']) ? $row['task_name'] : $row['description'];
 			$label = !empty($label) ? sprintf('%s (%s)', $label, $row['activity_name']) : $row['activity_name'];
+			$label = mb_substr($label, 0, 200);
 			$item = new InvoiceItem('create');
 			$item->invoice = $invoice;
 			$item->task_id = $row['task_id'];
 			$item->hours = $row['amount'];
 			$item->value = isset($matrix[$row['activity_id']]) ? $matrix[$row['activity_id']]->hour_rate * $row['amount'] : 0;
 			$item->name = $label;
-			$item->save();
+			$item->save(false);
 		}
 	}
 	

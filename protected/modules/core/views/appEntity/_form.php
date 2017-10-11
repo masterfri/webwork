@@ -307,6 +307,9 @@ function convertCsvAttribute(row, map, pool, types) {
 		result.type = 'char';
 		result.size = '255';
 	}
+	if (tmp.description) {
+		result.description = tmp.description;
+	}
 	return result;
 }
 EOS
