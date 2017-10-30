@@ -105,6 +105,7 @@ class CodeforgeComponent extends CApplicationComponent
 				}
 			}
 			$compile_dir = $this->prepareDir(CF_WORKDIR . '/' . self::PROJECT_DIR_NAME . '/compiled');
+			$this->layer->resetCachedResults();
 			$this->layer->setEnv($options);
 			$this->layer->setModels($models);
 			$this->layer->compile($compile_dir);
@@ -232,5 +233,10 @@ class CodeforgeComponent extends CApplicationComponent
 		$parser = new Codeforge\Parser();
 		$parser->parseText($entity->plain_source);
 		return $parser->getModels();
+	}
+	
+	public function getLayer()
+	{
+		return $this->layer;
 	}
 }

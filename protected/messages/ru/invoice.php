@@ -13,6 +13,7 @@ return array(
 	'Number' => 'Номер',
 	'Other' => 'Прочее',
 	'Payd' => 'Выплачено',
+	'Balance' => 'Остаток',
 	'Project' => 'Проект',
 	'Salary for {month}, {year}' => 'Зарплата за {month}, {year}',
 	'To' => 'Получатель',

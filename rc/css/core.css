@@ -1103,3 +1103,9 @@ body:after {
 .table > tbody > tr > td.inline-table > table > tbody > tr > th:last-child {
 	border-right: 0;
 }
+.positive-balance {
+	color: #468847;
+}
+.negative-balance {
+	color: #ff1c17;
+}

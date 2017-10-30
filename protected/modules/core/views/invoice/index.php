@@ -48,7 +48,7 @@ $this->menu = array(
 	<?php $this->widget('GridView', array(
 		'id' => 'invoice-grid',
 		'dataProvider' => $provider,
-                'rowCssClassExpression' => '$data->getRowCssClass();',
+		//'rowCssClassExpression' => '$data->getRowCssClass();',
 		'columns' => array(
 			array(
 				'class' => 'LinkColumn',
@@ -65,11 +65,7 @@ $this->menu = array(
 			),
 			'amount:money',
 			'payd:money',
-                        array(
-                            'header' => 'Остаток',
-                            'value' => '$data->getRest()',
-                            'type' => 'money'
-			),
+			'balance:balance',
 			'draft:boolean',
 			'time_created:datetime',
 			array(

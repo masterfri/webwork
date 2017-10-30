@@ -26,6 +26,7 @@ class Invoice extends CActiveRecord
 			'number' => Yii::t('invoice', 'Number'),
 			'items' => Yii::t('invoice', 'Items'),
 			'payd' => Yii::t('invoice', 'Payd'),
+			'balance' => Yii::t('invoice', 'Balance'),
 			'project_id' => Yii::t('invoice', 'Project'),
 			'project' => Yii::t('invoice', 'Project'),
 			'time_created' => Yii::t('invoice', 'Date Created'),
@@ -184,14 +185,9 @@ class Invoice extends CActiveRecord
 	{
 		return $this->getNumber();
 	}
-        
-        public function getRest()
-        {
-            return $this->amount - $this->payd;
-        }
-        
-        public function getRowCssClass()
-        {
-            return $this->getRest()? 'warning' : null;
-        }
+	
+	public function getBalance()
+	{
+		return $this->payd - $this->amount;
+	}
 }

@@ -291,8 +291,16 @@ class AppEntityController extends AdminController
 				$result .= Yii::t('core.crud', 'Deploying package') . ': ' . $package . "\n";
 				$cf->deployPackage($package);
 			}
+			$start_time = microtime(true);
 			$result .= $cf->build($to_build, $application->getSchemesToBuild(), $application->getBuildOptions());
-			$result .= Yii::t('core.crud', 'Build finished');
+			$end_time = microtime(true);
+			$stats = $cf->getLayer()->getCacheStats();
+			$result .= Yii::t('core.crud', 'Build finished') . "\n";
+			$result .= Yii::t('core.crud', 'Time: {time} ms, cache puts: {puts}, cache hits: {hits}', array(
+				'{time}' => number_format(($end_time - $start_time) * 1000, 3),
+				'{puts}' => $stats['puts'],
+				'{hits}' => $stats['hits'],
+			));
 			$this->render('build-results', array(
 				'application' => $application,
 				'result' => $result,

@@ -51,6 +51,17 @@ class Formatter extends CFormatter
 		return number_format($value, 2, $this->numberFormat['decimalSeparator'], $this->numberFormat['thousandSeparator']) . ' ' . $this->currency;
 	}
 	
+	public function formatBalance($value)
+	{
+		if ($value > 0) {
+			return sprintf('<span class="positive-balance">%s</span>', $this->formatMoney($value));
+		} elseif ($value < 0) {
+			return sprintf('<span class="negative-balance">%s</span>', $this->formatMoney(-$value));
+		} else {
+			return '';
+		}
+	}
+	
 	public function formatNumber($value)
 	{
 		if ($this->numberFormat['decimals'] > 0) {
