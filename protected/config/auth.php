@@ -589,6 +589,12 @@ return array(
 		'bizRule' => null,
 		'data' => null,
 	),
+	'view_project_stats' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'View project statistics',
+		'bizRule' => null,
+		'data' => null,
+	),
 	'view_shared_project' => array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'View shared project',
@@ -647,6 +653,16 @@ return array(
 		'data' => null,
 		'children' => array(
 			'activate_project',
+		),
+	),
+	'view_shared_project_stats' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'View shared project statistics',
+		'bizRule' => 'return (!isset($params["project"])) || 
+							 ($params["project"]->isUserAssigned($params["userId"], array(Assignment::ROLE_OWNER, Assignment::ROLE_MANAGER)));',
+		'data' => null,
+		'children' => array(
+			'view_project_stats',
 		),
 	),
 	/**
@@ -1319,6 +1335,7 @@ return array(
 			'create_entity_template',
 			'update_my_entity_template',
 			'delete_my_entity_template',
+			'view_shared_project_stats',
 		),
 		'bizRule' => null,
 		'data' => null
@@ -1367,6 +1384,7 @@ return array(
 			'delete_project',
 			'archive_project',
 			'activate_project',
+			'view_project_stats',
 			'view_task',
 			'query_task',
 			'create_task',

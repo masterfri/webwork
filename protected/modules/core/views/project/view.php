@@ -168,43 +168,162 @@ $this->menu = array(
 		<?php echo Yii::app()->format->formatDatetime($model->date_created); ?>
 	</div>
 </div>
-<?php if (false !== $notes): ?>
-	<div class="row">
-		<div class="col-sm-8">
-			<h3><?php echo Yii::t('core.crud', 'Notes'); ?></h3>
-		</div>
-		<div class="col-sm-4">
-			<div class="pull-right">
-				<?php $this->widget('zii.widgets.CMenu', array(
-					'items' => array(
-						array(
-							'label' => '<i class="glyphicon glyphicon-plus"></i>', 
-							'linkOptions' => array(
-								'title' => Yii::t('core.crud', 'Create Note'), 
-								'class' => 'btn btn-default',
-								'data-raise' => 'ajax-modal',
-							), 
-							'url' => array('note/create', 'project' => $model->id),
-							'visible' => Yii::app()->user->checkAccess('create_note', array('project' => $model)),
-						),
-					),
-					'encodeLabel' => false,
-					'htmlOptions' => array(
-						'class' => 'nav nav-pills context-menu',
-					),
-				)); ?>
+
+<?php if(Yii::app()->user->checkAccess('view_project_stats', array('project' => $model))): ?>
+<div class="row">
+	<div class="col-sm-6">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title"><?php echo Yii::t('project', 'Activity') ?></h3>
+			</div>
+			<div class="panel-body">
+				<canvas id="activity_chart" style="width: 100%; height: 200px;"></canvas>
 			</div>
 		</div>
 	</div>
-	<div class="row">
-		<?php $this->widget('ListView', array(
-			'id' => 'notes-list',
-			'dataProvider' => $notes,
-			'itemView' => '../note/view',
-			'emptyText' => Yii::app()->user->checkAccess('create_note', array('project' => $model)) ?
-				('<div class="col-xs-12"><div class="create-first-item"><a href="' . $this->createUrl('note/create', array('project' => $model->id)) . '" data-raise="ajax-modal">' . Yii::t('core.crud', 'Create first note') . '</a></div></div>') : 
-				('<div class="col-xs-12"><span class="empty">' . Yii::t('core.crud', 'There are no notes yet') . '</span></div>'),
-		)); ?>
+	<div class="col-sm-6">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title"><?php echo Yii::t('project', 'Trend') ?></h3>
+			</div>
+			<div class="panel-body">
+				<canvas id="trend_chart" style="width: 100%; height: 200px;"></canvas>
+			</div>
+		</div>
+	</div>
+</div>
+
+<?php 
+
+$activitiy_title = CJSON::encode(Yii::t('project', 'Activity (hrs)'));
+$activitiy = $model->getActivityLevel(31);
+$activitiy_values = CJSON::encode(array_values($activitiy));
+$activitiy_labels = CJSON::encode(array_map(function($v) {return date('d/m', strtotime($v));}, array_keys($activitiy)));
+$trend_title = CJSON::encode(Yii::t('project', 'Trend'));
+$trend = $model->getTrend(31);
+$trend_values = CJSON::encode(array_values($trend));
+$trend_labels = CJSON::encode(array_map(function($v) {return date('d/m', strtotime($v));}, array_keys($trend)));
+Yii::app()->clientScript->registerScriptFile('/rc/js/Chart.min.js');
+Yii::app()->clientScript->registerScript('charts',
+<<<EOS
+$(function() {
+	Chart.defaults.trendline = Chart.helpers.clone(Chart.defaults.line);
+	Chart.controllers.trendline = Chart.controllers.line.extend({
+		update: function() {
+			var min = Math.min.apply(null, this.chart.data.datasets[0].data);
+			var max = Math.max.apply(null, this.chart.data.datasets[0].data);
+			var yScale = this.getScaleForId(this.getDataset().yAxisID);
+			var top = yScale.getPixelForValue(max);
+			var zero = yScale.getPixelForValue(0);
+			var bottom = yScale.getPixelForValue(min);
+			var ctx = this.chart.chart.ctx;
+			var gradient = ctx.createLinearGradient(0, top, 0, bottom);
+			var ratio = Math.max(Math.min((zero - top) / (bottom - top), 1), 0);
+			gradient.addColorStop(0, 'rgba(92,148,92, 1)');
+			gradient.addColorStop(ratio, 'rgba(92,148,92, 1)');
+			gradient.addColorStop(ratio, 'rgba(217,83,79, 1)');
+			gradient.addColorStop(1, 'rgba(217,83,79, 1)');
+			this.chart.data.datasets[0].backgroundColor = gradient;
+			return Chart.controllers.line.prototype.update.apply(this, arguments);
+		}
+	});
+
+	new Chart(document.getElementById("activity_chart").getContext("2d"), {
+		'type': 'line',
+		'data': {
+			'labels': $activitiy_labels,
+			'datasets': [{
+				'label': $activitiy_title,
+				'borderColor': 'rgba(92,148,92, 1)',
+				'pointColor': 'rgba(92,148,92, 1)',
+				'backgroundColor': 'rgba(92,148,92, 0.8)',
+				'data': $activitiy_values,
+				'lineTension': 0
+			}]
+		},
+		'options': {
+			'legend': {
+				'display': false
+			}
+		}
+	});
+	
+	new Chart(document.getElementById("trend_chart").getContext("2d"), {
+		'type': 'trendline',
+		'data': {
+			'labels': $trend_labels,
+			'datasets': [{
+				'label': $trend_title,
+				'strokeColor': 'rgba(92,148,92, 1)',
+				'pointColor': 'rgba(92,148,92, 1)',
+				'pointStrokeColor': '#5cb85c',
+				'data': $trend_values,
+				'pointStyle': 'line'
+			}]
+		},
+		'options': {
+			elements: {
+				line: {
+					tension: 0
+				}
+			},
+			'legend': {
+				'display': false
+			},
+			'scales': {
+				yAxes: [{
+					ticks: {
+						stepSize: 1
+					}
+				}]
+			}
+		}
+	});
+});
+EOS
+);
+
+endif; ?>
+
+<?php if (false !== $notes): ?>
+	<div class="project-notes">
+		<div class="row">
+			<div class="col-sm-8">
+				<h3><?php echo Yii::t('core.crud', 'Notes'); ?></h3>
+			</div>
+			<div class="col-sm-4">
+				<div class="pull-right">
+					<?php $this->widget('zii.widgets.CMenu', array(
+						'items' => array(
+							array(
+								'label' => '<i class="glyphicon glyphicon-plus"></i>', 
+								'linkOptions' => array(
+									'title' => Yii::t('core.crud', 'Create Note'), 
+									'class' => 'btn btn-default',
+									'data-raise' => 'ajax-modal',
+								), 
+								'url' => array('note/create', 'project' => $model->id),
+								'visible' => Yii::app()->user->checkAccess('create_note', array('project' => $model)),
+							),
+						),
+						'encodeLabel' => false,
+						'htmlOptions' => array(
+							'class' => 'nav nav-pills context-menu',
+						),
+					)); ?>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<?php $this->widget('ListView', array(
+				'id' => 'notes-list',
+				'dataProvider' => $notes,
+				'itemView' => '../note/view',
+				'emptyText' => Yii::app()->user->checkAccess('create_note', array('project' => $model)) ?
+					('<div class="col-xs-12"><div class="create-first-item"><a href="' . $this->createUrl('note/create', array('project' => $model->id)) . '" data-raise="ajax-modal">' . Yii::t('core.crud', 'Create first note') . '</a></div></div>') : 
+					('<div class="col-xs-12"><span class="empty">' . Yii::t('core.crud', 'There are no notes yet') . '</span></div>'),
+			)); ?>
+		</div>
 	</div>
 <?php
 

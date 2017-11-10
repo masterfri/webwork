@@ -282,4 +282,82 @@ class Project extends CActiveRecord
 		}
 		return null;
 	}
+
+	public function getActivityLevel($days=10)
+	{
+		$activity = array();
+		$time = mktime(12, 0, 0);
+		for ($i = 0; $i < $days; $i++) {
+			$activity[date('Y-m-d', $time)] = 0;
+			$time -= 86400;
+		}
+		$criteria = new CDbCriteria();
+		$criteria->select = 'DATE(date_created) AS date_created, SUM(amount) as amount';
+		$criteria->group = 'DATE(date_created)';
+		$criteria->addCondition('date_created >= DATE_sub(NOW(), INTERVAL :days DAY)');
+		$criteria->compare('project_id', $this->id);
+		$criteria->params[':days'] = $days;
+		$data = TimeEntry::model()->findAll($criteria);
+		foreach ($data as $record) {
+			$activity[$record->date_created] = $record->amount;
+		}
+		return array_reverse($activity, true);
+	}
+	
+	public function getTrend($days=10)
+	{
+		$criteria = new CDbCriteria();
+		$criteria->select = new CDbExpression('COUNT(id) AS cnt, DATE(time_created) AS date');
+		$criteria->group = 'DATE(time_created)';
+		$criteria->addCondition('time_created >= DATE_sub(NOW(), INTERVAL :days DAY)');
+		$criteria->compare('project_id', $this->id);
+		$criteria->params[':days'] = $days;
+		$cb = $this->dbConnection->commandBuilder;
+		$command = $cb->createFindCommand(Task::model()->tableName(), $criteria);
+		$new_tasks = CHtml::listData($command->queryAll(), 'date', 'cnt');
+		
+		$criteria = new CDbCriteria();
+		$criteria->alias = 'c';
+		$criteria->select = new CDbExpression('COUNT(c.id) AS cnt, DATE(c.time_created) AS date');
+		$criteria->group = 'DATE(c.time_created)';
+		$criteria->join = 'INNER JOIN ' . Task::model()->tableName() . ' t ON t.id = c.task_id';
+		$criteria->addCondition('c.time_created >= DATE_sub(NOW(), INTERVAL :days DAY)');
+		$criteria->compare('t.project_id', $this->id);
+		$criteria->compare('c.action', Task::ACTION_REOPEN);
+		$criteria->params[':days'] = $days;
+		$command = $cb->createFindCommand(Comment::model()->tableName(), $criteria);
+		$reopened_tasks = CHtml::listData($command->queryAll(), 'date', 'cnt');
+		
+		$criteria = new CDbCriteria();
+		$criteria->alias = 'c';
+		$criteria->select = new CDbExpression('COUNT(c.id) AS cnt, DATE(c.time_created) AS date');
+		$criteria->group = 'DATE(c.time_created)';
+		$criteria->join = 'INNER JOIN ' . Task::model()->tableName() . ' t ON t.id = c.task_id';
+		$criteria->addCondition('c.time_created >= DATE_sub(NOW(), INTERVAL :days DAY)');
+		$criteria->compare('t.project_id', $this->id);
+		$criteria->compare('c.action', Task::ACTION_CLOSE);
+		$criteria->params[':days'] = $days;
+		$command = $cb->createFindCommand(Comment::model()->tableName(), $criteria);
+		$closed_tasks = CHtml::listData($command->queryAll(), 'date', 'cnt');
+		
+		$trend_value = 0;
+		$trend = array();
+		$time = mktime(12, 0, 0) - 86400 * $days;
+		for ($i = 0; $i < $days; $i++) {
+			$date = date('Y-m-d', $time);
+			if (isset($new_tasks[$date])) {
+				$trend_value -= $new_tasks[$date];
+			}
+			if (isset($reopened_tasks[$date])) {
+				$trend_value -= $reopened_tasks[$date];
+			}
+			if (isset($closed_tasks[$date])) {
+				$trend_value += $closed_tasks[$date];
+			}
+			$trend[$date] = $trend_value;
+			$time += 86400;
+		}
+		
+		return $trend;
+	}
 }

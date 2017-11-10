@@ -146,4 +146,28 @@ class ViewHelper
 		$html .= CHtml::closeTag('span');
 		return $html;
 	}
+	
+	public static function miniGraph($data, $padding=1, $showOvergrow=true, $additionalClass='')
+	{
+		$html = '';
+		if (count($data) > 0) {
+			$html = sprintf('<div class="mini-graph %s">', CHtml::encode($additionalClass));
+			$width = 100 / count($data);
+			$max = max($data);
+			$max = max($max, $padding);
+			$i = 0;
+			foreach ($data as $value) {
+				$label = CHtml::encode(Yii::t('core.crud', '{hours} h.', array('{hours}' => self::formatDuration($value))));
+				if ($value > $padding && $showOvergrow) {
+					$html .= sprintf('<div style="width: %s%%; height: %s%%; left: %s%%" class="v-bar overgrown" title="%s"></div>', $width, 100 * $value / $max, $i * $width, $label);
+					$html .= sprintf('<div style="width: %s%%; height: %s%%; left: %s%%" class="v-bar" title="%s"></div>', $width, 100 * $padding / $max, $i * $width, $label);
+				} else {
+					$html .= sprintf('<div style="width: %s%%; height: %s%%; left: %s%%" class="v-bar" title="%s"></div>', $width, 100 * $value / $max, $i * $width, $label);
+				}
+				$i++;
+			}
+			$html .= '</div>';
+		}
+		return $html;
+	}
 }

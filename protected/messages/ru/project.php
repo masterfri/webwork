@@ -1,6 +1,8 @@
 <?php
 
 return array(
+	'Activity' => 'Активность',
+	'Activity (hrs)' => 'Выработка (часы)',
 	'Assignments' => 'Участники',
 	'Attachments' => 'Вложения',
 	'Created by' => 'Создал',
@@ -10,4 +12,5 @@ return array(
 	'Scope' => 'Описание',
 	'Tasks' => 'Задачи',
 	'Responsible Persons' => 'Ответственные лица',
+	'Trend' => 'Тренд',
 );

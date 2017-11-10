@@ -60,13 +60,19 @@ $this->menu = array(
 			array('class' => 'LinkColumn', 'name' => 'name'),
 			array(
 				'name' => 'count_milestones',
-				'value' => 'CHtml::link($data->count_milestones, array("milestone/index", "project" => $data->id), array("class" => "btn btn-xs btn-default"))',
+				'value' => 'Yii::app()->user->checkAccess("view_milestone", array("project" => $data)) ? CHtml::link($data->count_milestones, array("milestone/index", "project" => $data->id), array("class" => "btn btn-xs btn-default")) : ""',
 				'type' => 'raw',
 				'visible' => Yii::app()->user->checkAccess('view_milestone'),
 			),
 			array(
+				'value' => 'Yii::app()->user->checkAccess("view_project_stats", array("project" => $data)) ? ViewHelper::miniGraph($data->getActivityLevel(30), 8, true, "project-activity") : ""',
+				'type' => 'raw',
+				'header' => Yii::t('project', 'Activity'),
+				'visible' => Yii::app()->user->checkAccess('view_project_stats'),
+			),
+			array(
 				'name' => 'count_tasks',
-				'value' => 'CHtml::link(ViewHelper::progerss($data->count_tasks, $data->count_closed_tasks), array("task/index", "project" => $data->id), array("class" => "progress-container"))',
+				'value' => 'Yii::app()->user->checkAccess("view_task", array("project" => $data)) ? CHtml::link(ViewHelper::progerss($data->count_tasks, $data->count_closed_tasks), array("task/index", "project" => $data->id), array("class" => "progress-container")) : ""',
 				'type' => 'raw',
 				'visible' => Yii::app()->user->checkAccess('view_task'),
 			),

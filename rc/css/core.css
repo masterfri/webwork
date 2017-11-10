@@ -1109,3 +1109,32 @@ body:after {
 .negative-balance {
 	color: #ff1c17;
 }
+.mini-graph {
+	width: 100%;
+	background: #777;
+	position: relative;
+	height: 22px;
+	border-radius: 3px;
+	overflow: hidden;
+}
+.mini-graph .v-bar {
+	background: #5cb85c;
+	position: absolute;
+	bottom: 0;
+}
+.mini-graph .v-bar.overgrown {
+	background: #f0ad4e;
+}
+.mini-graph.project-activity {
+	max-width: 150px;
+}
+.project-notes {
+	margin-top: 15px;
+	padding-bottom: 200px;
+}
+.project-notes > div > div > h3 {
+	margin-top: 0;
+}
+.project-notes .context-menu {
+	margin-bottom: 0;
+}
