@@ -157,7 +157,7 @@ class ViewHelper
 			$max = max($max, $padding);
 			$i = 0;
 			foreach ($data as $value) {
-				$label = CHtml::encode(Yii::t('core.crud', '{hours} h.', array('{hours}' => self::formatDuration($value))));
+				$label = Yii::t('core.crud', '{hours} h.', array('{hours}' => self::formatDuration($value)));
 				if ($value > $padding && $showOvergrow) {
 					$html .= sprintf('<div style="width: %s%%; height: %s%%; left: %s%%" class="v-bar overgrown" title="%s"></div>', $width, 100 * $value / $max, $i * $width, $label);
 					$html .= sprintf('<div style="width: %s%%; height: %s%%; left: %s%%" class="v-bar" title="%s"></div>', $width, 100 * $padding / $max, $i * $width, $label);
