@@ -283,12 +283,14 @@ class Project extends CActiveRecord
 		return null;
 	}
 
-	public function getActivityLevel($days=10)
+	public function getActivityLevel($days=10, $skipWeekend=true)
 	{
 		$activity = array();
 		$time = mktime(12, 0, 0);
 		for ($i = 0; $i < $days; $i++) {
-			$activity[date('Y-m-d', $time)] = 0;
+			if (!$skipWeekend || !WorkingHours::isWeekend($time)) {
+				$activity[date('Y-m-d', $time)] = 0;
+			}
 			$time -= 86400;
 		}
 		$criteria = new CDbCriteria();
@@ -304,7 +306,7 @@ class Project extends CActiveRecord
 		return array_reverse($activity, true);
 	}
 	
-	public function getTrend($days=10)
+	public function getTrend($days=10, $skipWeekend=true)
 	{
 		$criteria = new CDbCriteria();
 		$criteria->select = new CDbExpression('COUNT(id) AS cnt, DATE(time_created) AS date');
@@ -354,7 +356,9 @@ class Project extends CActiveRecord
 			if (isset($closed_tasks[$date])) {
 				$trend_value += $closed_tasks[$date];
 			}
-			$trend[$date] = $trend_value;
+			if ($trend_value > 0 || !$skipWeekend || !WorkingHours::isWeekend($time)) {
+				$trend[$date] = $trend_value;
+			}
 			$time += 86400;
 		}
 		

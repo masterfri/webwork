@@ -157,4 +157,9 @@ class WorkingHours extends CActiveRecord
 		}
 		return self::$userhours[$user_id][$day];
 	}
+	
+	public static function isWeekend($time)
+	{
+		return in_array(date('N', $time), array(6, 7));
+	}
 }
