@@ -219,6 +219,7 @@ $(function() {
 			var ctx = this.chart.chart.ctx;
 			var gradient = ctx.createLinearGradient(0, top, 0, bottom);
 			var ratio = Math.max(Math.min((zero - top) / (bottom - top), 1), 0);
+			ratio = isNaN(ratio) ? 0 : ratio;
 			gradient.addColorStop(0, 'rgba(92,148,92, 1)');
 			gradient.addColorStop(ratio, 'rgba(92,148,92, 1)');
 			gradient.addColorStop(ratio, 'rgba(217,83,79, 1)');
