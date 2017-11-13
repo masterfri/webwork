@@ -158,12 +158,14 @@ class ViewHelper
 			$i = 0;
 			foreach ($data as $value) {
 				$label = Yii::t('core.crud', '{hours} h.', array('{hours}' => self::formatDuration($value)));
+				$html .= sprintf('<div class="v-bar" title="%s" style="width: %s%%">', $label, $width);
 				if ($value > $padding && $showOvergrow) {
-					$html .= sprintf('<div style="width: %s%%; height: %s%%; left: %s%%" class="v-bar overgrown" title="%s"></div>', $width, 100 * $value / $max, $i * $width, $label);
-					$html .= sprintf('<div style="width: %s%%; height: %s%%; left: %s%%" class="v-bar" title="%s"></div>', $width, 100 * $padding / $max, $i * $width, $label);
+					$html .= sprintf('<div style="height: %s%%;" class="v-val overgrown"></div>', 100 * $value / $max);
+					$html .= sprintf('<div style="height: %s%%;" class="v-val"></div>', 100 * $padding / $max);
 				} else {
-					$html .= sprintf('<div style="width: %s%%; height: %s%%; left: %s%%" class="v-bar" title="%s"></div>', $width, 100 * $value / $max, $i * $width, $label);
+					$html .= sprintf('<div style="height: %s%%;" class="v-val"></div>', 100 * $value / $max);
 				}
+				$html .= '</div>';
 				$i++;
 			}
 			$html .= '</div>';

@@ -1112,17 +1112,25 @@ body:after {
 .mini-graph {
 	width: 100%;
 	background: #777;
-	position: relative;
+	display: flex;
 	height: 22px;
 	border-radius: 3px;
 	overflow: hidden;
+	flex-direction: row;
+	flex-wrap: nowrap;
 }
 .mini-graph .v-bar {
+	height: 22px;
+	position: relative;
+}
+.mini-graph .v-val {
 	background: #5cb85c;
 	position: absolute;
 	bottom: 0;
+	left: 0;
+	right: 0;
 }
-.mini-graph .v-bar.overgrown {
+.mini-graph .v-val.overgrown {
 	background: #f0ad4e;
 }
 .mini-graph.project-activity {
