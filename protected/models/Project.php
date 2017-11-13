@@ -340,11 +340,11 @@ class Project extends CActiveRecord
 		$command = $cb->createFindCommand(Comment::model()->tableName(), $criteria);
 		$closed_tasks = CHtml::listData($command->queryAll(), 'date', 'cnt');
 		
-		$trend_value = 0;
 		$trend = array();
 		$time = mktime(12, 0, 0) - 86400 * $days;
 		for ($i = 0; $i < $days; $i++) {
 			$date = date('Y-m-d', $time);
+			$trend_value = 0;
 			if (isset($new_tasks[$date])) {
 				$trend_value -= $new_tasks[$date];
 			}
