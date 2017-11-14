@@ -199,12 +199,12 @@ $activitiy_title = CJSON::encode(Yii::t('project', 'Activity (hrs)'));
 $activitiy = $model->getActivityLevel(31);
 $activitiy_values = CJSON::encode(array_values($activitiy));
 $activitiy_labels = CJSON::encode(array_map(function($v) {return date('d/m', strtotime($v));}, array_keys($activitiy)));
-$activitiy_ticks = ceil(max($activitiy) / 10);
+$activitiy_ticks = max(1, ceil(max($activitiy) / 10));
 $trend_title = CJSON::encode(Yii::t('project', 'Trend'));
 $trend = $model->getTrend(31);
 $trend_values = CJSON::encode(array_values($trend));
 $trend_labels = CJSON::encode(array_map(function($v) {return date('d/m', strtotime($v));}, array_keys($trend)));
-$trend_ticks = ceil((max($trend) - min($trend)) / 10);
+$trend_ticks = max(1, ceil((max($trend) - min($trend)) / 10));
 Yii::app()->clientScript->registerScriptFile('/rc/js/Chart.min.js');
 Yii::app()->clientScript->registerScript('charts',
 <<<EOS
@@ -245,23 +245,24 @@ $(function() {
 			}]
 		},
 		'options': {
-			elements: {
-				line: {
-					tension: 0
+			'elements': {
+				'line': {
+					'tension': 0
 				}
 			},
 			'legend': {
 				'display': false
 			},
 			'scales': {
-				yAxes: [{
-					ticks: {
-						stepSize: $activitiy_ticks
+				'yAxes': [{
+					'ticks': {
+						'stepSize': $activitiy_ticks,
+						'min': 0
 					}
 				}],
-				xAxes: [{
-					ticks: {
-						autoSkip: false
+				'xAxes': [{
+					'ticks': {
+						'autoSkip': false
 					}
 				}]
 			}
@@ -282,23 +283,23 @@ $(function() {
 			}]
 		},
 		'options': {
-			elements: {
-				line: {
-					tension: 0
+			'elements': {
+				'line': {
+					'tension': 0
 				}
 			},
 			'legend': {
 				'display': false
 			},
 			'scales': {
-				yAxes: [{
-					ticks: {
-						stepSize: $trend_ticks
+				'yAxes': [{
+					'ticks': {
+						'stepSize': $trend_ticks
 					}
 				}],
-				xAxes: [{
-					ticks: {
-						autoSkip: false
+				'xAxes': [{
+					'ticks': {
+						'autoSkip': false
 					}
 				}]
 			}
