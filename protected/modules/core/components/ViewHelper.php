@@ -103,11 +103,11 @@ class ViewHelper
 	public static function formatDuration($value)
 	{
 		$value = round($value * 4) / 4;
-		return ltrim(strtr($value, array(
+		return $value > 0 ? ltrim(strtr($value, array(
 			'.25' => '&frac14;',
 			'.5' => '&frac12;',
 			'.75' => '&frac34;',
-		)), '0');
+		)), '0') : '0';
 	}
 	
 	public static function formatEstimate($value)
@@ -157,7 +157,7 @@ class ViewHelper
 			$max = max($max, $padding);
 			$i = 0;
 			foreach ($data as $value) {
-				$label = Yii::t('core.crud', '{hours} h.', array('{hours}' => self::formatDuration($value)));
+				$label = $value > 0 ? Yii::t('core.crud', '{hours} h.', array('{hours}' => self::formatDuration($value))) : '';
 				$html .= sprintf('<div class="v-bar" title="%s" style="width: %s%%">', $label, $width);
 				if ($value > $padding && $showOvergrow) {
 					$html .= sprintf('<div style="height: %s%%;" class="v-val overgrown"></div>', 100 * $value / $max);

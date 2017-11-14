@@ -199,10 +199,12 @@ $activitiy_title = CJSON::encode(Yii::t('project', 'Activity (hrs)'));
 $activitiy = $model->getActivityLevel(31);
 $activitiy_values = CJSON::encode(array_values($activitiy));
 $activitiy_labels = CJSON::encode(array_map(function($v) {return date('d/m', strtotime($v));}, array_keys($activitiy)));
+$activitiy_ticks = ceil(max($activitiy) / 10);
 $trend_title = CJSON::encode(Yii::t('project', 'Trend'));
 $trend = $model->getTrend(31);
 $trend_values = CJSON::encode(array_values($trend));
 $trend_labels = CJSON::encode(array_map(function($v) {return date('d/m', strtotime($v));}, array_keys($trend)));
+$trend_ticks = ceil((max($trend) - min($trend)) / 10);
 Yii::app()->clientScript->registerScriptFile('/rc/js/Chart.min.js');
 Yii::app()->clientScript->registerScript('charts',
 <<<EOS
@@ -220,10 +222,10 @@ $(function() {
 			var gradient = ctx.createLinearGradient(0, top, 0, bottom);
 			var ratio = Math.max(Math.min((zero - top) / (bottom - top), 1), 0);
 			ratio = isNaN(ratio) ? 0 : ratio;
-			gradient.addColorStop(0, 'rgba(92,148,92, 1)');
-			gradient.addColorStop(ratio, 'rgba(92,148,92, 1)');
-			gradient.addColorStop(ratio, 'rgba(217,83,79, 1)');
-			gradient.addColorStop(1, 'rgba(217,83,79, 1)');
+			gradient.addColorStop(0, 'rgba(92,148,92, 0.8)');
+			gradient.addColorStop(ratio, 'rgba(92,148,92, 0.8)');
+			gradient.addColorStop(ratio, 'rgba(217,83,79, 0.8)');
+			gradient.addColorStop(1, 'rgba(217,83,79, 0.8)');
 			this.chart.data.datasets[0].backgroundColor = gradient;
 			return Chart.controllers.line.prototype.update.apply(this, arguments);
 		}
@@ -239,12 +241,29 @@ $(function() {
 				'pointColor': 'rgba(92,148,92, 1)',
 				'backgroundColor': 'rgba(92,148,92, 0.8)',
 				'data': $activitiy_values,
-				'lineTension': 0
+				'pointStyle': 'line'
 			}]
 		},
 		'options': {
+			elements: {
+				line: {
+					tension: 0
+				}
+			},
 			'legend': {
 				'display': false
+			},
+			'scales': {
+				yAxes: [{
+					ticks: {
+						stepSize: $activitiy_ticks
+					}
+				}],
+				xAxes: [{
+					ticks: {
+						autoSkip: false
+					}
+				}]
 			}
 		}
 	});
@@ -274,7 +293,12 @@ $(function() {
 			'scales': {
 				yAxes: [{
 					ticks: {
-						stepSize: 1
+						stepSize: $trend_ticks
+					}
+				}],
+				xAxes: [{
+					ticks: {
+						autoSkip: false
 					}
 				}]
 			}

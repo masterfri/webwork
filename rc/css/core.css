@@ -1146,3 +1146,6 @@ body:after {
 .project-notes .context-menu {
 	margin-bottom: 0;
 }
+.project-notes .list-view {
+	margin-top: 15px;
+}

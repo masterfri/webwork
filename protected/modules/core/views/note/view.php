@@ -1,4 +1,4 @@
-<div class="sticky-note col-md-6 col-lg-3">
+<div class="sticky-note col-sm-6 col-lg-3">
 	<div class="panel <?php echo $data->private ? 'panel-success' : 'panel-default'; ?>">
 		<div class="panel-heading">
 			<em>
