@@ -12,5 +12,7 @@ return array(
 	'Scope' => 'Описание',
 	'Tasks' => 'Задачи',
 	'Responsible Persons' => 'Ответственные лица',
-	'Trend' => 'Тренд',
+	'Load Balance' => 'Баланс загрузки',
+	'Opened' => 'Открыто',
+	'Closed' => 'Закрыто',
 );

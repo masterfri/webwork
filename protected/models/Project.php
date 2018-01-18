@@ -306,7 +306,7 @@ class Project extends CActiveRecord
 		return array_reverse($activity, true);
 	}
 	
-	public function getTrend($days=10, $skipWeekend=true)
+	public function getBalance($days=10, $skipWeekend=true)
 	{
 		$criteria = new CDbCriteria();
 		$criteria->select = new CDbExpression('COUNT(id) AS cnt, DATE(time_created) AS date');
@@ -342,26 +342,27 @@ class Project extends CActiveRecord
 		$command = $cb->createFindCommand(Comment::model()->tableName(), $criteria);
 		$closed_tasks = CHtml::listData($command->queryAll(), 'date', 'cnt');
 		
-		$trend = array();
+		$balance = array();
 		$time = mktime(12, 0, 0) - 86400 * ($days - 1);
 		for ($i = 0; $i < $days; $i++) {
 			$date = date('Y-m-d', $time);
-			$trend_value = 0;
+			$open = 0;
+			$close = 0;
 			if (isset($new_tasks[$date])) {
-				$trend_value -= $new_tasks[$date];
+				$open += $new_tasks[$date];
 			}
 			if (isset($reopened_tasks[$date])) {
-				$trend_value -= $reopened_tasks[$date];
+				$open += $reopened_tasks[$date];
 			}
 			if (isset($closed_tasks[$date])) {
-				$trend_value += $closed_tasks[$date];
+				$close += $closed_tasks[$date];
 			}
-			if ($trend_value > 0 || !$skipWeekend || !WorkingHours::isWeekend($time)) {
-				$trend[$date] = $trend_value;
+			if ($open > 0 || $close > 0 || !$skipWeekend || !WorkingHours::isWeekend($time)) {
+				$balance[$date] = array($open, $close);
 			}
 			$time += 86400;
 		}
 		
-		return $trend;
+		return $balance;
 	}
 }

@@ -184,10 +184,10 @@ $this->menu = array(
 	<div class="col-sm-6">
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				<h3 class="panel-title"><?php echo Yii::t('project', 'Trend') ?></h3>
+				<h3 class="panel-title"><?php echo Yii::t('project', 'Load Balance') ?></h3>
 			</div>
 			<div class="panel-body">
-				<canvas id="trend_chart" style="width: 100%; height: 200px;"></canvas>
+				<canvas id="balance_chart" style="width: 100%; height: 200px;"></canvas>
 			</div>
 		</div>
 	</div>
@@ -200,37 +200,17 @@ $activitiy = $model->getActivityLevel(31);
 $activitiy_values = CJSON::encode(array_values($activitiy));
 $activitiy_labels = CJSON::encode(array_map(function($v) {return date('d/m', strtotime($v));}, array_keys($activitiy)));
 $activitiy_ticks = max(1, ceil(max($activitiy) / 10));
-$trend_title = CJSON::encode(Yii::t('project', 'Trend'));
-$trend = $model->getTrend(31);
-$trend_values = CJSON::encode(array_values($trend));
-$trend_labels = CJSON::encode(array_map(function($v) {return date('d/m', strtotime($v));}, array_keys($trend)));
-$trend_ticks = max(1, ceil((max($trend) - min($trend)) / 10));
+$balance_title_open = CJSON::encode(Yii::t('project', 'Opened'));
+$balance_title_close = CJSON::encode(Yii::t('project', 'Closed'));
+$balance = $model->getBalance(31);
+$balance_open = CJSON::encode(array_values(array_map(function($v) {return $v[0];}, $balance)));
+$balance_close = CJSON::encode(array_values(array_map(function($v) {return $v[1];}, $balance)));
+$balance_labels = CJSON::encode(array_map(function($v) {return date('d/m', strtotime($v));}, array_keys($balance)));
+$balance_ticks = max(1, ceil(max(array_map(function($v) {return max($v[0], $v[1]);}, $balance)) / 10));
 Yii::app()->clientScript->registerScriptFile('/rc/js/Chart.min.js');
 Yii::app()->clientScript->registerScript('charts',
 <<<EOS
 $(function() {
-	Chart.defaults.trendline = Chart.helpers.clone(Chart.defaults.line);
-	Chart.controllers.trendline = Chart.controllers.line.extend({
-		update: function() {
-			var min = Math.min.apply(null, this.chart.data.datasets[0].data);
-			var max = Math.max.apply(null, this.chart.data.datasets[0].data);
-			var yScale = this.getScaleForId(this.getDataset().yAxisID);
-			var top = yScale.getPixelForValue(max);
-			var zero = yScale.getPixelForValue(0);
-			var bottom = yScale.getPixelForValue(min);
-			var ctx = this.chart.chart.ctx;
-			var gradient = ctx.createLinearGradient(0, top, 0, bottom);
-			var ratio = Math.max(Math.min((zero - top) / (bottom - top), 1), 0);
-			ratio = isNaN(ratio) ? 0 : ratio;
-			gradient.addColorStop(0, 'rgba(92,148,92, 0.8)');
-			gradient.addColorStop(ratio, 'rgba(92,148,92, 0.8)');
-			gradient.addColorStop(ratio, 'rgba(217,83,79, 0.8)');
-			gradient.addColorStop(1, 'rgba(217,83,79, 0.8)');
-			this.chart.data.datasets[0].backgroundColor = gradient;
-			return Chart.controllers.line.prototype.update.apply(this, arguments);
-		}
-	});
-
 	new Chart(document.getElementById("activity_chart").getContext("2d"), {
 		'type': 'line',
 		'data': {
@@ -269,32 +249,29 @@ $(function() {
 		}
 	});
 	
-	new Chart(document.getElementById("trend_chart").getContext("2d"), {
-		'type': 'trendline',
+	new Chart(document.getElementById("balance_chart").getContext("2d"), {
+		'type': 'bar',
 		'data': {
-			'labels': $trend_labels,
+			'labels': $balance_labels,
 			'datasets': [{
-				'label': $trend_title,
-				'strokeColor': 'rgba(92,148,92, 1)',
-				'pointColor': 'rgba(92,148,92, 1)',
-				'pointStrokeColor': '#5cb85c',
-				'data': $trend_values,
-				'pointStyle': 'line'
+				'label': $balance_title_open,
+				'backgroundColor': 'rgba(217,83,79, 0.8)',
+				'data': $balance_open
+			}, {
+				'label': $balance_title_close,
+				'backgroundColor': 'rgba(92,148,92, 0.8)',
+				'data': $balance_close
 			}]
 		},
 		'options': {
-			'elements': {
-				'line': {
-					'tension': 0
-				}
-			},
 			'legend': {
 				'display': false
 			},
 			'scales': {
 				'yAxes': [{
 					'ticks': {
-						'stepSize': $trend_ticks
+						'stepSize': $balance_ticks,
+						'min': 0
 					}
 				}],
 				'xAxes': [{
