@@ -595,6 +595,12 @@ return array(
 		'bizRule' => null,
 		'data' => null,
 	),
+	'set_project_bonus' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Set project bonus',
+		'bizRule' => null,
+		'data' => null,
+	),
 	'view_shared_project' => array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'View shared project',
@@ -663,6 +669,16 @@ return array(
 		'data' => null,
 		'children' => array(
 			'view_project_stats',
+		),
+	),
+	'set_shared_project_bonus' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Set shared project bonus',
+		'bizRule' => 'return (!isset($params["project"])) || 
+							 ($params["project"]->isUserAssigned($params["userId"], Assignment::ROLE_OWNER));',
+		'data' => null,
+		'children' => array(
+			'set_project_bonus',
 		),
 	),
 	/**
@@ -1385,6 +1401,7 @@ return array(
 			'archive_project',
 			'activate_project',
 			'view_project_stats',
+			'set_project_bonus',
 			'view_task',
 			'query_task',
 			'create_task',

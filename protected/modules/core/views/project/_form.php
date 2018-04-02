@@ -37,6 +37,24 @@
 			<?php echo $form->error($model, 'scope', array('class'=>'help-inline')); ?>
 		</div>
 	</div>
+	<?php if (Yii::app()->user->checkAccess('set_project_bonus', array('project' => $model))): ?>
+		<div class="form-group">
+			<?php echo $form->labelEx($model, 'bonus', array('class'=>'col-sm-3 control-label')); ?>
+			<div class="col-sm-3">
+				<?php echo $form->textField($model, 'bonus', array(
+					'class' => 'form-control',
+				)); ?> 
+				<?php echo $form->error($model, 'bonus', array('class'=>'help-inline')); ?>
+			</div>
+			<?php echo $form->labelEx($model, 'bonus_type', array('class'=>'col-sm-3 control-label')); ?>
+			<div class="col-sm-3">
+				<?php echo $form->dropdownList($model, 'bonus_type', Project::getListBonusTypes(), array(
+					'class' => 'form-control',
+				)); ?> 
+				<?php echo $form->error($model, 'bonus_type', array('class'=>'help-inline')); ?>
+			</div>
+		</div>
+	<?php endif ?>
 	<div class="form-group">
 		<?php echo $form->labelEx($model, 'attachments', array('class'=>'col-sm-3 control-label')); ?>
 		<div class="col-sm-9">

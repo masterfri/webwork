@@ -2,6 +2,11 @@
 
 class Project extends CActiveRecord  
 {
+	const BONUS_ABSOLUTE = 0;
+	const BONUS_PERCENT = 1;
+	
+	protected static $bonus_types;
+	
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
@@ -26,12 +31,15 @@ class Project extends CActiveRecord
 			'scope' => Yii::t('project', 'Scope'),
 			'tasks' => Yii::t('project', 'Tasks'),
 			'count_tasks' => Yii::t('project', 'Tasks'),
+			'bonus' => Yii::t('project', 'Bonus'),
+			'bonusValue' => Yii::t('project', 'Bonus'),
+			'bonus_type' => Yii::t('project', 'Bonus Type'),
 		);
 	}
 	
 	public function rules()
 	{
-		return array(
+		$rules = array(
 			array('	name', 
 					'length', 'max' => 200, 'on' => 'create, update'),
 			array('	name', 
@@ -43,6 +51,13 @@ class Project extends CActiveRecord
 			array('	name', 
 					'safe', 'on' => 'search'),
 		);
+		if (Yii::app()->user->checkAccess('set_project_bonus', array('project' => $this))) {
+			$rules[] = array(' bonus',
+							   'numerical', 'on' => 'create, update');
+			$rules[] = array(' bonus_type',
+							   'in', 'range' => array_keys(self::getListBonusTypes()) , 'on' => 'create, update');
+		}
+		return $rules;
 	}
 	
 	public function relations()
@@ -364,5 +379,32 @@ class Project extends CActiveRecord
 		}
 		
 		return $balance;
+	}
+	
+	public static function getListBonusTypes()
+	{
+		if (null === self::$bonus_types) {
+			self::$bonus_types = array(
+				self::BONUS_ABSOLUTE => Yii::t('project', 'Amount'),
+				self::BONUS_PERCENT => Yii::t('project', 'Percent'),
+			);
+		}
+		return self::$bonus_types;
+	}
+	
+	public function getBonusType()
+	{
+		return array_key_exists($this->bonus_type, self::getListBonusTypes()) ? self::$bonus_types[$this->bonus_type] : '';
+	}
+	
+	public function getBonusValue()
+	{
+		if ($this->bonus_type == self::BONUS_ABSOLUTE) {
+			return Yii::t('core.crud', '{amount} per hour', array('{amount}' => Yii::app()->format->formatMoney($this->bonus)));
+		} elseif ($this->bonus_type == self::BONUS_PERCENT) {
+			return sprintf('%s%%', (float) $this->bonus);
+		} else {
+			return '';
+		}
 	}
 }

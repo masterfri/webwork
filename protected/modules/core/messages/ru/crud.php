@@ -409,4 +409,5 @@ return array(
 	'{hours} h.' => '{hours} ч.',
 	'{min} - {max} hours' => '{min} - {max} часов',
 	'{min} hours' => '{min} часов',
+	'{amount} per hour' => '{amount} в час',
 );

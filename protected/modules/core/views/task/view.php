@@ -111,7 +111,7 @@ $this->menu = array(
 				'data-update-on' => 'task.updated',
 				'class' => 'table table-striped table-bordered table-condensed detailed-view',
 			),
-			'data' => $model,		
+			'data' => $model,
 			'attributes' => array(
 				'complexity:number',
 				array(

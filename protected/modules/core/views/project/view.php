@@ -126,6 +126,7 @@ $this->menu = array(
 		'data' => $model,		
 		'attributes' => array(
 			'assignments:array',
+			'bonusValue',
 		),
 	)); ?>
 	<div class="panel-body">

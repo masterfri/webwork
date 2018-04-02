@@ -63,7 +63,7 @@ class InvoiceCommand extends CConsoleCommand
 						'{month}' => $monthName,
 						'{year}' => $y,
 					));
-					$this->createInvoice($user->id, null, $comments, 0, $reader, $user->rate->getCompleteMatrix());
+					$this->createInvoice($user->id, null, $comments, 0, $reader, $user->rate->getCompleteMatrix(), true);
 				}
 				$reader->close();
 			}
@@ -75,7 +75,7 @@ class InvoiceCommand extends CConsoleCommand
 						'{month}' => $monthName,
 						'{year}' => $y,
 					), null, $user->locale);
-					$this->createInvoice(null, $user->id, $comments, 1, $reader, $user->rate->getCompleteMatrix());
+					$this->createInvoice(null, $user->id, $comments, 1, $reader, $user->rate->getCompleteMatrix(), false);
 				}
 				$reader->close();
 			}
@@ -89,9 +89,11 @@ class InvoiceCommand extends CConsoleCommand
 		$criteria->compare('timeentry.user_id', $user->id);
 		$criteria->select = 'timeentry.activity_id, SUM(timeentry.amount) AS amount, '.
 							'GROUP_CONCAT(DISTINCT timeentry.description SEPARATOR ";") AS description, '.
-							'timeentry.task_id, task.name AS task_name, activity.name AS activity_name';
+							'timeentry.task_id, task.name AS task_name, activity.name AS activity_name, '.
+							'project.bonus, project.bonus_type';
 		$criteria->group = 'timeentry.task_id, timeentry.activity_id';
 		$criteria->join = 'LEFT JOIN {{task}} task ON task.id = timeentry.task_id '.
+						  'LEFT JOIN {{project}} project ON project.id = task.project_id '.
 						  'LEFT JOIN {{activity}} activity ON activity.id = timeentry.activity_id';
 		$criteria->compare('YEAR(timeentry.date_created)', $y);
 		$criteria->compare('MONTH(timeentry.date_created)', $m);
@@ -117,7 +119,7 @@ class InvoiceCommand extends CConsoleCommand
 		return $builder->createFindCommand(TimeEntry::model()->tableName(), $criteria)->query();
 	}
 	
-	protected function createInvoice($from, $to, $comments, $draft, $items, $matrix) 
+	protected function createInvoice($from, $to, $comments, $draft, $items, $matrix, $apply_bonus) 
 	{
 		$invoice = new Invoice('create');
 		$invoice->from_id = $from;
@@ -134,6 +136,15 @@ class InvoiceCommand extends CConsoleCommand
 			$item->task_id = $row['task_id'];
 			$item->hours = $row['amount'];
 			$item->value = isset($matrix[$row['activity_id']]) ? $matrix[$row['activity_id']]->hour_rate * $row['amount'] : 0;
+			if ($apply_bonus && $row['bonus'] != 0) {
+				if ($row['bonus_type'] == Project::BONUS_ABSOLUTE) {
+					$item->bonus = $row['amount'] * $row['bonus'];
+					$item->value += $item->bonus;
+				} elseif ($row['bonus_type'] == Project::BONUS_PERCENT) {
+					$item->bonus = $item->value * ($row['bonus'] / 100);
+					$item->value += $item->bonus;
+				}
+			}
 			$item->name = $label;
 			$item->save(false);
 		}
