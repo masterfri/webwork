@@ -129,7 +129,13 @@ $this->menu = array(
 						<td><?php echo $n++; ?></td>
 						<td><?php echo CHtml::encode($item->name) ?></td>
 						<td><?php echo $format->formatHours($item->hours); ?></td>
-						<td><?php echo $format->formatMoney($item->value); ?></td>
+						<td>
+							<?php if ($item->bonus != 0): ?>
+								<span class="text-info" title="<?php echo Yii::t('core.crud', 'Including bonus of {bonus}', array('{bonus}' => $format->formatMoney($item->bonus))) ?>"><?php echo $format->formatMoney($item->value); ?> *</span>
+							<?php else: ?>
+								<?php echo $format->formatMoney($item->value); ?>
+							<?php endif ?>
+						</td>
 					</tr>
 				<?php endforeach; ?>
 				<tr class="row-total">

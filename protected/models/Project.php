@@ -399,7 +399,9 @@ class Project extends CActiveRecord
 	
 	public function getBonusValue()
 	{
-		if ($this->bonus_type == self::BONUS_ABSOLUTE) {
+		if ($this->bonus == 0) {
+			return Yii::t('core.crud', 'None');
+		} elseif ($this->bonus_type == self::BONUS_ABSOLUTE) {
 			return Yii::t('core.crud', '{amount} per hour', array('{amount}' => Yii::app()->format->formatMoney($this->bonus)));
 		} elseif ($this->bonus_type == self::BONUS_PERCENT) {
 			return sprintf('%s%%', (float) $this->bonus);

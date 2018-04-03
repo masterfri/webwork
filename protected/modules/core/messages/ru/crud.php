@@ -410,4 +410,6 @@ return array(
 	'{min} - {max} hours' => '{min} - {max} часов',
 	'{min} hours' => '{min} часов',
 	'{amount} per hour' => '{amount} в час',
+	'None' => 'Нет',
+	'Including bonus of {bonus}' => 'Включая бонус в размере {bonus}',
 );

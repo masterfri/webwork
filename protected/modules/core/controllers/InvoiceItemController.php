@@ -32,6 +32,7 @@ class InvoiceItemController extends AdminController
 	public function actionUpdate($id)
 	{
 		$model = $this->loadModel($id, 'InvoiceItem');
+		$model->bonus = 0;
 		if ($this->saveModel($model)) {
 			if ($this->isAjax()) {
 				$this->ajaxSuccess(array(
