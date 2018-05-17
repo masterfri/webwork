@@ -32,21 +32,21 @@ return array (
 		),
 		'db' => array(
 			'class' => 'CDbConnection',
-			'connectionString' => 'mysql:host=localhost;dbname=pm',
-			'username' => 'user',
-			'password' => 'password',
+			'connectionString' => 'mysql:host=localhost;dbname=__DBNAME__',
+			'username' => '__DBUSER__',
+			'password' => '__DBPASS__',
 			'tablePrefix' => '',
 			'charset' => 'utf8',
 			'enableProfiling'=>true,
-            'enableParamLogging'=>true,
+			'enableParamLogging'=>true,
 		),
 		'cache' => array(
 			'class' => 'CFileCache',
 		),
 		'errorHandler'=>array(
-            'errorAction'=>'core/default/error',
-        ),
-        'format' => array(
+			'errorAction'=>'core/default/error',
+		),
+		'format' => array(
 			'class' => 'Formatter',
 			'booleanFormat' => array('Нет', 'Да'),
 			'datetimeFormat' => 'd/m/Y H:i',
@@ -57,16 +57,16 @@ return array (
 				'decimalSeparator' => '.',
 				'thousandSeparator' => '',
 			),
-        ),
-        'log' => array(
-            'class' => 'CLogRouter',
-            'routes' => array(
-                array(
-                    'class' => 'CFileLogRoute',
-                    'levels' => 'error, warning',
-                ),
-            ),
-        ),
+		),
+		'log' => array(
+			'class' => 'CLogRouter',
+			'routes' => array(
+				array(
+					'class' => 'CFileLogRoute',
+					'levels' => 'error, warning',
+				),
+			),
+		),
 	),
 	'modules' => array(
 		'core',

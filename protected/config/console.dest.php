@@ -6,9 +6,9 @@ return array (
 	'components' => array(
 		'db' => array(
 			'class' => 'CDbConnection',
-			'connectionString' => 'mysql:host=localhost;dbname=pm',
-			'username' => 'user',
-			'password' => 'password',
+			'connectionString' => 'mysql:host=localhost;dbname=__DBNAME__',
+			'username' => '__DBUSER__',
+			'password' => '__DBPASS__',
 			'tablePrefix' => '',
 			'charset' => 'utf8',
 		),
