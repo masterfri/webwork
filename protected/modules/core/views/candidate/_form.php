@@ -37,6 +37,16 @@
 		</div>
 	</div>
 	<div class="form-group">
+		<?php echo $form->labelEx($model, 'lang', array('class'=>'col-sm-3 control-label')); ?>
+		<div class="col-sm-9">
+			<?php echo $form->dropdownList($model, 'lang', Candidate::getListLocales(), array(
+				'class'=>'form-control',
+				'prompt' => Yii::t('core.crud', 'Select Value'),
+			)); ?>
+			<?php echo $form->error($model, 'lang', array('class'=>'help-inline')); ?>
+		</div>
+	</div>
+	<div class="form-group">
 		<?php echo $form->labelEx($model, 'level', array('class'=>'col-sm-3 control-label')); ?>
 		<div class="col-sm-9">
 			<?php echo $form->dropdownList($model, 'level', Candidate::getListLevels(), array(

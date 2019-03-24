@@ -14,11 +14,14 @@ return array (
 				'/ww/logout' => '/core/default/logout',
 				'/ww/me' => '/core/user/profile',
 				'/ww/me/update' => '/core/user/updateProfile',
+				'/ww/download/<id:\d+>/<title:.*>' => 'core/file/download',
 				'/ww/<controller:\w+>/<id:\d+>' => 'core/<controller>/view',
 				'/ww/<controller:\w+>/<id:\d+>/<action:\w+>' => 'core/<controller>/<action>',
 				'/ww/project/<project:\d+>/<controller:\w+>/<action:\w+>' => 'core/<controller>/<action>',
 				'/ww/<controller:\w+>/<action:\w+>' => 'core/<controller>/<action>',
 				'/ww/<controller:\w+>' => 'core/<controller>/index',
+				'/examine/go/<token:.+>' => 'examine/default/index',
+				'/examine/<action:\w+>/<token:.+>' => 'examine/default/<action>',
 			),
 		),
 		'authManager' => array(
@@ -67,9 +70,14 @@ return array (
 				),
 			),
 		),
+		'cf' => array(
+			'class' => 'CodeforgeComponent',
+			'cf_dir' => realpath(dirname(__FILE__) . '/../cf'),
+		),
 	),
 	'modules' => array(
 		'core',
+		'examine',
 	),
 	'import' => array(
 		'application.components.*',

@@ -126,6 +126,7 @@ class DefaultController extends CController
 			throw new CHttpException(404, Yii::t('site', 'Not found'));
 		}
 		$this->candidate = $model;
+		Yii::app()->language = $model->lang;
 		return $model;
 	}
 	

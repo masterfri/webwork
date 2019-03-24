@@ -102,6 +102,7 @@ $this->menu = array(
 					'update' => array(
 						'options' => array(
 							'data-raise' => 'ajax-modal',
+							'data-modal-css-class' => 'answer-form-modal',
 							'class' => 'btn btn-default btn-sm update',
 							'title' => Yii::t('core.crud', 'Update'),
 						),

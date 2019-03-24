@@ -40,6 +40,7 @@ class m190320_155631_upgrade_to_1_5 extends CDbMigration
 			'token' => 'VarChar( 200 ) NOT NULL',
 			'notes' => 'Text NULL',
 			'level' => 'Int( 10 ) UNSIGNED NULL',
+			'lang' => 'VarChar( 10 ) NOT NULL DEFAULT \'en\'',
 			'questions_limit' => 'Int( 10 ) UNSIGNED NOT NULL',
 			'time_examine_started' => 'DateTime NULL',
 			'time_examine_ended' => 'DateTime NULL',

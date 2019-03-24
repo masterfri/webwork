@@ -8,6 +8,7 @@ class Candidate extends CActiveRecord
 	const LEVEL_TOP = 4;
 	
 	protected static $levels;
+	protected static $locales;
 	
 	public static function model($className=__CLASS__)
 	{
@@ -26,6 +27,7 @@ class Candidate extends CActiveRecord
 			'created_by' => Yii::t('candidate', 'Created by'),
 			'examination_link' => Yii::t('candidate', 'Examination Link'),
 			'level' => Yii::t('candidate', 'Level'),
+			'levelName' => Yii::t('candidate', 'Level'),
 			'name' => Yii::t('candidate', 'Name'),
 			'notes' => Yii::t('candidate', 'Notes'),
 			'questions_limit' => Yii::t('candidate', 'Questions Limit'),
@@ -35,6 +37,11 @@ class Candidate extends CActiveRecord
 			'examineEnded' => Yii::t('candidate', 'Examine Ended'),
 			'examineStarted' => Yii::t('candidate', 'Examine Started'),
 			'score' => Yii::t('candidate', 'Score'),
+			'categories' => Yii::t('candidate', 'Categories'),
+			'abandoned' => Yii::t('candidate', 'Abandoned'),
+			'lang' => Yii::t('candidate', 'Language'),
+			'localeName' => Yii::t('candidate', 'Language'),
+			'questionsAvailable' => Yii::t('candidate', 'Questions Available'),
 		);
 	}
 	
@@ -48,7 +55,8 @@ class Candidate extends CActiveRecord
 			array('	name,
 					level,
 					questions_limit,
-					categories', 
+					categories,
+					lang', 
 					'required', 'on' => 'create, update'),
 			array('	questions_limit', 
 					'numerical', 'min' => 1, 'max' => 100, 'integerOnly' => true, 'on' => 'create, update'),
@@ -138,9 +146,25 @@ class Candidate extends CActiveRecord
 		return self::$levels;
 	}
 	
+	public static function getListLocales()
+	{
+		if (null === self::$locales) {
+			self::$locales = array(
+				'en' => 'English',
+				'ru' => 'Русский',
+			);
+		}
+		return self::$locales;
+	}
+	
 	public function getLevelName()
 	{
 		return array_key_exists($this->level, self::getListLevels()) ? self::$levels[$this->level] : '';
+	}
+	
+	public function getLocaleName()
+	{
+		return array_key_exists($this->lang, self::getListLocales()) ? self::$locales[$this->lang] : '';
 	}
 	
 	public function getExamineStarted()
@@ -331,5 +355,14 @@ class Candidate extends CActiveRecord
 		return count(array_filter($this->results, function($answer) {
 			return $answer->time_answered != null;
 		}));
-	} 
+	}
+	
+	public function getQuestionsAvailable()
+	{
+		$criteria = new CDbCriteria();
+		$criteria->alias = 'question';
+		$criteria->compare('question.level', $this->level);
+		$criteria->addInCondition('question.category_id', $this->getCategoryIds());
+		return Question::model()->count($criteria);
+	}
 }

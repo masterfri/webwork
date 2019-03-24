@@ -26,6 +26,7 @@ class Question extends CActiveRecord
 			'created_by_id' => Yii::t('question', 'Created by'),
 			'created_by' => Yii::t('question', 'Created by'),
 			'level' => Yii::t('question', 'Level'),
+			'levelName' => Yii::t('question', 'Level'),
 			'category_id' => Yii::t('question', 'Category'),
 			'category' => Yii::t('question', 'Category'),
 			'text' => Yii::t('question', 'Question'),
@@ -103,6 +104,10 @@ class Question extends CActiveRecord
 					'category' => array(
 						'asc' => 'category.name ASC',
 						'desc' => 'category.name DESC',
+					),
+					'levelName' => array(
+						'asc' => 'question.level ASC',
+						'desc' => 'question.level DESC',
 					),
 					'*',
 				),

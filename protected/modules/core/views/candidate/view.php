@@ -72,9 +72,11 @@ $this->menu = array(
 		'attributes' => array(
 			'name',
 			'notes:ntext',
+			'localeName',
 			'levelName',
-			'questions_limit',
 			'categories:array',
+			'questions_limit',
+			'questionsAvailable',
 			'examineStarted',
 			'examineEnded',
 			'score',
