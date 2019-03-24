@@ -2,6 +2,9 @@
 
 return array(
 	'Active' => 'Активен',
+	'Activity' => 'Активность',
+	'Activity (hrs)' => 'Выработка (часы)',
+	'Current tasks' => 'Текущие задачи',
 	'Inactive' => 'Неактивен',
 	'Locked' => 'Заблокирован',
 	'Undefined' => 'Не определено',

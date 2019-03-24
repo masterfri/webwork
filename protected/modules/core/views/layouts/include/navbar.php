@@ -51,6 +51,11 @@
 							'url' => array('activity/index'),
 							'visible' => Yii::app()->user->checkAccess('view_activity'),
 						),
+						array(
+							'label' => '<i class="glyphicon glyphicon-user"></i> ' . Yii::t('core.crud', 'Candidates'),
+							'url' => array('candidate/index'),
+							'visible' => Yii::app()->user->checkAccess('view_candidate'),
+						),
 					),
 				),
 				array(
@@ -64,12 +69,23 @@
 						'data-toggle' => 'dropdown',
 					),
 					'items' => CMap::mergeArray(array_map(function($project) {
+							$addons = array();
 							$item = array(
 								'label' => '<i class="glyphicon glyphicon-file"></i> ' . CHtml::encode($project->name),
 								'url' => array('project/view', 'id' => $project->id),
 							);
+							if (Yii::app()->user->checkAccess('view_task', array('project' => $project))) {
+								$addons[] = array(
+									'label' => '<i class="glyphicon glyphicon-tasks"></i>',
+									'url' => array('task/index', 'project' => $project->id),
+									'options' => array(
+										'title' => Yii::t('core.crud', 'Tasks'),
+										'class' => 'menu-addon',
+									),
+								);
+							}
 							if (Yii::app()->user->checkAccess('create_task', array('project' => $project))) {
-								$item['addon'] = array(
+								$addons[] = array(
 									'label' => '<i class="glyphicon glyphicon-plus"></i>',
 									'url' => array('task/create', 'project' => $project->id),
 									'options' => array(
@@ -77,6 +93,10 @@
 										'class' => 'menu-addon',
 									),
 								);
+							}
+							if (!empty($addons)) {
+								$item['addon'] = $addons;
+								$item['itemOptions'] = array('class' => 'has-addon');
 							}
 							return $item;
 						}, Project::getUserBundle()), array(
@@ -152,6 +172,11 @@
 							'label' => '<i class="glyphicon glyphicon-folder-open"></i> ' . Yii::t('core.crud', 'File Categories'),
 							'url' => array('fileCategory/index'),
 							'visible' => Yii::app()->user->checkAccess('view_file_category'),
+						),
+						array(
+							'label' => '<i class="glyphicon glyphicon-list-alt"></i> ' . Yii::t('core.crud', 'Examination'),
+							'url' => array('question/index'),
+							'visible' => Yii::app()->user->checkAccess('view_question'),
 						),
 					),
 				),

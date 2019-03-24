@@ -172,4 +172,15 @@ class ViewHelper
 		}
 		return $html;
 	}
+	
+	public static function candidateResultClass($result)
+	{
+		if ($result->answer && $result->answer->score > 0) {
+			if (!$result->isExpired()) {
+				return 'panel-success';
+			}
+			return 'panel-warning';
+		}
+		return 'panel-danger';
+	}
 }

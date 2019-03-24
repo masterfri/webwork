@@ -168,4 +168,33 @@ class TimeEntry extends CActiveRecord
 	{
 		$this->amount = Yii::app()->format->parseHours($value);
 	}
+	
+	public function getActivityLevel($project_id, $user_id = null, $days=10, $skipWeekend=true)
+	{
+		$activity = array();
+		$time = mktime(12, 0, 0);
+		for ($i = 0; $i < $days; $i++) {
+			if (!$skipWeekend || !WorkingHours::isWeekend($time)) {
+				$activity[date('Y-m-d', $time)] = 0;
+			}
+			$time -= 86400;
+		}
+		$criteria = new CDbCriteria();
+		$criteria->select = 'DATE(date_created) AS date_created, SUM(amount) as amount';
+		$criteria->group = 'DATE(date_created)';
+		$criteria->addCondition('date_created >= DATE_sub(NOW(), INTERVAL :days DAY)');
+		if ($project_id !== null) {
+			$criteria->compare('project_id', $project_id);
+		}
+		if ($user_id !== null) {
+			$criteria->compare('user_id', $user_id);
+		}
+		$criteria->params[':days'] = $days;
+		$data = $this->findAll($criteria);
+		foreach ($data as $record) {
+			$activity[$record->date_created] = $record->amount;
+		}
+		ksort($activity);
+		return $activity;
+	}
 }

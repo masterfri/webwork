@@ -76,3 +76,97 @@ $this->menu = array(
 		),
 	)); ?>
 </div>
+
+<div class="row">
+	<div class="col-sm-4">
+		<?php $this->renderPartial('_working_hours', array(
+			'model' => $model,
+		)); ?>
+		<?php $this->renderPartial('_working_days_col', array(
+			'model' => $model,
+			'monthnum' => $monthnum,
+			'month1' => $month1,
+			'month2' => $month2,
+			'month1i' => $month1i,
+			'month2i' => $month2i,
+			'month1days' => $month1days,
+			'month2days' => $month2days,
+		)); ?>
+	</div>
+	
+	<div class="col-sm-8">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title"><?php echo Yii::t('user', 'Activity') ?></h3>
+			</div>
+			<div class="panel-body">
+				<canvas id="activity_chart" style="width: 100%;" height="100"></canvas>
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title"><?php echo Yii::t('user', 'Current tasks') ?></h3>
+			</div>
+			<div class="panel-body">
+				<?php $this->widget('TaskListView', array(
+					'id' => 'task-grid',
+					'dataProvider' => $currentTasks,
+					'group_by_date' => true,
+					'template' => '{items} {pager}',
+				)); ?>
+			</div>
+		</div>
+	</div>
+</div>
+
+<?php 
+
+$activitiy_title = CJSON::encode(Yii::t('user', 'Activity (hrs)'));
+$activitiy = $model->getActivityLevel(31);
+$activitiy_values = CJSON::encode(array_values($activitiy));
+$activitiy_labels = CJSON::encode(array_map(function($v) {return date('d/m', strtotime($v));}, array_keys($activitiy)));
+$activitiy_ticks = max(1, ceil(max($activitiy) / 10));
+Yii::app()->clientScript->registerScriptFile('/rc/js/Chart.min.js');
+Yii::app()->clientScript->registerScript('charts',
+<<<EOS
+$(function() {
+	new Chart(document.getElementById("activity_chart").getContext("2d"), {
+		'type': 'line',
+		'data': {
+			'labels': $activitiy_labels,
+			'datasets': [{
+				'label': $activitiy_title,
+				'borderColor': 'rgba(92,148,92, 1)',
+				'pointColor': 'rgba(92,148,92, 1)',
+				'backgroundColor': 'rgba(92,148,92, 0.8)',
+				'data': $activitiy_values,
+				'pointStyle': 'line'
+			}]
+		},
+		'options': {
+			'elements': {
+				'line': {
+					'tension': 0
+				}
+			},
+			'legend': {
+				'display': false
+			},
+			'scales': {
+				'yAxes': [{
+					'ticks': {
+						'stepSize': $activitiy_ticks,
+						'min': 0
+					}
+				}],
+				'xAxes': [{
+					'ticks': {
+						'autoSkip': false
+					}
+				}]
+			}
+		}
+	});
+});
+EOS
+);

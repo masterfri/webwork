@@ -284,6 +284,33 @@ return array(
 		),
 	),
 	/**
+	 * Candidate 
+	 */
+	'view_candidate' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'View candidate',
+		'bizRule' => null,
+		'data' => null,
+	),
+	'create_candidate' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Create candidate',
+		'bizRule' => null,
+		'data' => null,
+	),
+	'update_candidate' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Edit candidate',
+		'bizRule' => null,
+		'data' => null,
+	),
+	'delete_candidate' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Delete candidate',
+		'bizRule' => null,
+		'data' => null,
+	),
+	/**
 	 * File
 	 */
 	'view_file' => array(
@@ -732,6 +759,60 @@ return array(
 	'delete_holiday' => array(
 		'type' => CAuthItem::TYPE_OPERATION,
 		'description' => 'Delete holiday',
+		'bizRule' => null,
+		'data' => null,
+	),
+	/**
+	 * Question 
+	 */
+	'view_question' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'View question',
+		'bizRule' => null,
+		'data' => null,
+	),
+	'create_question' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Create question',
+		'bizRule' => null,
+		'data' => null,
+	),
+	'update_question' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Edit question',
+		'bizRule' => null,
+		'data' => null,
+	),
+	'delete_question' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Delete question',
+		'bizRule' => null,
+		'data' => null,
+	),
+	/**
+	 * Question category
+	 */
+	'view_question_category' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'View question category',
+		'bizRule' => null,
+		'data' => null,
+	),
+	'create_question_category' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Create question category',
+		'bizRule' => null,
+		'data' => null,
+	),
+	'update_question_category' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Edit question category',
+		'bizRule' => null,
+		'data' => null,
+	),
+	'delete_question_category' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Delete question category',
 		'bizRule' => null,
 		'data' => null,
 	),
@@ -1384,6 +1465,15 @@ return array(
 			'create_shared_assignment',
 			'update_shared_assignment',
 			'delete_shared_assignment',
+			'view_candidate',
+			'view_question',
+			'create_question',
+			'update_question',
+			'delete_question',
+			'view_question_category',
+			'create_question_category',
+			'update_question_category',
+			'delete_question_category',
 		),
 		'bizRule' => null,
 		'data' => null
@@ -1466,6 +1556,9 @@ return array(
 			'delete_working_hours',
 			'update_entity_template',
 			'delete_entity_template',
+			'create_candidate',
+			'update_candidate',
+			'delete_candidate',
 			'client',
 			'teamlead',
 		),

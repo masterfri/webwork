@@ -300,25 +300,7 @@ class Project extends CActiveRecord
 
 	public function getActivityLevel($days=10, $skipWeekend=true)
 	{
-		$activity = array();
-		$time = mktime(12, 0, 0);
-		for ($i = 0; $i < $days; $i++) {
-			if (!$skipWeekend || !WorkingHours::isWeekend($time)) {
-				$activity[date('Y-m-d', $time)] = 0;
-			}
-			$time -= 86400;
-		}
-		$criteria = new CDbCriteria();
-		$criteria->select = 'DATE(date_created) AS date_created, SUM(amount) as amount';
-		$criteria->group = 'DATE(date_created)';
-		$criteria->addCondition('date_created >= DATE_sub(NOW(), INTERVAL :days DAY)');
-		$criteria->compare('project_id', $this->id);
-		$criteria->params[':days'] = $days;
-		$data = TimeEntry::model()->findAll($criteria);
-		foreach ($data as $record) {
-			$activity[$record->date_created] = $record->amount;
-		}
-		return array_reverse($activity, true);
+		return TimeEntry::model()->getActivityLevel($this->id, null, $days, $skipWeekend);
 	}
 	
 	public function getBalance($days=10, $skipWeekend=true)

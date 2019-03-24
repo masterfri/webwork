@@ -82,8 +82,29 @@ class UserController extends AdminController
 	
 	public function actionView($id)
 	{
+		$model = $this->loadModel($id, 'User');
+		$monthnum = date('m');
+		$month1 = date('F');
+		$month2 = date('F', mktime(0,0,0, $monthnum + 1, 1));
+		$month1start = 2 - date('N', mktime(0,0,0, $monthnum, 1));
+		$month2start = 2 - date('N', mktime(0,0,0, $monthnum + 1, 1));
+		$month1days = date('t', mktime(0,0,0, $monthnum, 1));
+		$month2days = date('t', mktime(0,0,0, $monthnum + 1, 1));
+		$currentTasks = Task::model()->search(array(
+			'scopes' => array('scheduled'),
+			'condition' => 'task.assigned_id = :assigned_id',
+			'params' => array(':assigned_id' => $model->id),
+		));
 		$this->render('view', array(
-			'model' => $this->loadModel($id, 'User'),
+			'model' => $model,
+			'monthnum' => $monthnum,
+			'month1' => $month1,
+			'month2' => $month2,
+			'month1i' => $month1start,
+			'month2i' => $month2start,
+			'month1days' => $month1days,
+			'month2days' => $month2days,
+			'currentTasks' => $currentTasks,
 		));
 	}
 	

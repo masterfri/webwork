@@ -3,6 +3,9 @@
 class Formatter extends CFormatter
 {
 	public $currency = 'USD';
+	public $excerptMaxLength = 500;
+	public $excerptMinLength = 350;
+	public $excerptEnding = '...';
 	
 	public function formatDate($value)
 	{
@@ -46,6 +49,21 @@ class Formatter extends CFormatter
 		return sprintf('%d:%02d', $hours, $minutes);
 	}
 	
+	public function formatSeconds($value)
+	{
+		$minutes = intval($value / 60);
+		$seconds = $value % 60;
+		if ($minutes > 0) {
+			return Yii::t('core.crud', '{m} min, {s} sec', array(
+				'{m}' => $minutes,
+				'{s}' => $seconds,
+			));
+		}
+		return Yii::t('core.crud', '{s} sec', array(
+			'{s}' => $seconds,
+		));
+	}
+	
 	public function formatMoney($value)
 	{
 		return number_format($value, 2, $this->numberFormat['decimalSeparator'], $this->numberFormat['thousandSeparator']) . ' ' . $this->currency;
@@ -69,6 +87,24 @@ class Formatter extends CFormatter
 		} else {
 			return parent::formatNumber($value);
 		}
+	}
+	
+	public function formatExcerpt($value)
+	{
+		$value = strip_tags($value);
+		if (mb_strlen($value) > $this->excerptMaxLength) {
+			$value = mb_substr($value, 0, $this->excerptMaxLength);
+			$stops = array('.', '?', '!', ' ');
+			foreach ($stops as $stop) {
+				$pos = strrpos($value, $stop, $this->excerptMinLength);
+				if ($pos !== false) {
+					$value = substr($value, 0, $pos);
+					break;
+				}
+			}
+			$value .= $this->excerptEnding;
+		}
+		return CHtml::encode($value);
 	}
 	
 	protected function normalizeDateValue($time)

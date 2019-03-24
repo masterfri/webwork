@@ -478,6 +478,9 @@
 				{'dataType' : 'html'}
 			));
 			modal.addClass(opts.loadingCssClass);
+			if (opts.modalCssClass) {
+				modal.addClass(opts.modalCssClass);
+			}
 			$.ajax(settings)
 				.done(function(response) {
 					updateModal(modal, response, opts);
