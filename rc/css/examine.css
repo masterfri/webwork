@@ -16,17 +16,17 @@ body:after {
     height: 80px;
 }
 .footer {
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	height: 70px;
-	background-color: #f9f9f9;
-	border-top: 1px solid #eee;
-	text-align: center;
-	width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 70px;
+    background-color: #f9f9f9;
+    border-top: 1px solid #eee;
+    text-align: center;
+    width: 100%;
 }
 .footer p {
-	padding-top: 20px;
+    padding-top: 20px;
 }
 #header {
     height: 65px;
@@ -42,14 +42,15 @@ body:after {
     background: #fff;
     border-bottom: 1px solid #f0f0f0;
 }
-.question .answer {
-    border-left: 4px solid #777;
+.question .answer > label {
+    border-left: 5px solid #8372ff;
     margin-top: 15px;
     padding: 5px 0 5px 15px;
     background: #fefefe;
     cursor: pointer;
+    display: block;
 }
-.question .answer:hover {
+.question .answer > label:hover {
     background: #f0f0f0;
 }
 .question p {
@@ -57,6 +58,14 @@ body:after {
 }
 .question p + p {
     margin-top: 5px;
+}
+.question pre {
+    background-color: transparent;
+    margin: 5px 0;
+    border-radius: 0;
+    border-style: dotted dotted dotted solid;
+    border-width: 1px 1px 1px 3px;
+    border-color: #777 #777 #777 #4cae4c;
 }
 .question label {
     font-weight: normal;
@@ -70,4 +79,12 @@ body:after {
 }
 .timer .out {
     color: #ffa2a2;
+}
+.answers:before {
+    display: block;
+    margin: 0 auto;
+    content: ' ';
+    width: 100px;
+    border-top: 2px solid #f0f0f0; 
+    margin-top: 15px;
 }

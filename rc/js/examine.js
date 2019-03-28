@@ -46,6 +46,32 @@ Timer.prototype.shutdown = function() {
 
 var recentTimer = null;
 
+function processCode(selector) {
+	$(selector).each(function() {
+		var lang = false;
+		var innerHTML = this.innerHTML.replace(new RegExp('@codeblock:[a-zA-Z0-9-]+'), function(res) {
+			lang = res.split(':')[1];
+			return '';
+		}).replace(new RegExp('^(\\n)+|(\\n)+$', 'g'), '');
+		if (lang) {
+			var code = document.createElement('code');
+			code.className = 'language-' + lang;
+			code.innerHTML = innerHTML;
+			Prism.highlightElement(code);
+			this.innerHTML = '';
+			$(this).append(code);
+		} else {
+			this.innerHTML = innerHTML;
+		}
+	});
+}
+
+function sendAnswer(answer) {
+	setTimeout(function() {
+		$(answer.form).submit();
+	}, 100);
+}
+
 $.ajaxBindings.on('question.loaded', function() {
 	var data = $('#content > .question').data();
 	var start = new Date(data.timeQuestioned);
@@ -60,6 +86,8 @@ $.ajaxBindings.on('question.loaded', function() {
 	recentTimer.run();
 
 	$('#header-content').show();
+	
+	processCode('#content > .question pre');
 });
 
 $.ajaxBindings.on('exam.finished', function() {

@@ -26,7 +26,7 @@
 						<?php echo CHtml::radioButton('answer', false, array(
 							'style' => 'display: none;',
 							'value' => $answer->id,
-							'onchange' => '$(this.form).submit()',
+							'onclick' => 'sendAnswer(this)',
 						)); ?>
 						<?php 
 							$this->beginWidget('MarkdownWidget'); 

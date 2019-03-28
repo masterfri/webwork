@@ -5,6 +5,7 @@
 		<title><?php echo Yii::t('examine.core', 'Gandalf') ?></title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<link rel="stylesheet" href="/rc/bootstrap/css/bootstrap.css" type="text/css">
+		<link rel="stylesheet" href="/rc/prism/prism.css" type="text/css">
 		<link rel="stylesheet" href="/rc/css/examine.css" type="text/css">
 		<?php
 			$cs = Yii::app()->clientScript;
@@ -12,6 +13,7 @@
 			$cs->registerCoreScript('bbq');
 			$cs->registerScriptFile('/rc/bootstrap/js/bootstrap.js', CClientScript::POS_END);
 			$cs->registerScriptFile('/rc/ajax-bindings/ajax-bindings.js', CClientScript::POS_END);
+			$cs->registerScriptFile('/rc/prism/prism.js', CClientScript::POS_END);
 			$cs->registerScriptFile('/rc/js/examine.js', CClientScript::POS_END);
 		?>
 	</head>
