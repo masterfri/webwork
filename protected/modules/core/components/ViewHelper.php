@@ -183,4 +183,26 @@ class ViewHelper
 		}
 		return 'panel-danger';
 	}
+	
+	public static function processAttachments($text, $attachments)
+	{
+		return preg_replace_callback('#\[attachment:([^\]]+)\]#', function($matches) use($attachments) {
+			foreach ($attachments as $attachment) {
+				if ($matches[1] == $attachment->title) {
+					if ($attachment->getIsImage()) {
+						return CHtml::image($attachment->getUrl(), '', array(
+							'class' => 'inline-attachment', 
+							'title' => $attachment->title
+						));
+					} else {
+						return CHtml::link($attachment->title, $attachment->getUrl(), array(
+							'target' => '_blank',
+							'class' => 'inline-attachment',
+						));
+					}
+				}
+			}
+			return '[Attachment not found]';
+		}, $text);
+	}
 }

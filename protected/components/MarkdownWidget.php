@@ -2,9 +2,15 @@
 
 class MarkdownWidget extends CMarkdown
 {
+	public $attachments = null;
+	
 	public function transform($output)
 	{
-		return parent::transform($this->sanitizeHtml($output));
+		$output = $this->sanitizeHtml($output);
+		if (is_array($this->attachments)) {
+			$output = ViewHelper::processAttachments($output, $this->attachments);
+		}
+		return parent::transform($output);
 	}
 	
 	protected function sanitizeHtml($text)

@@ -13,7 +13,7 @@
 		<?php if (!empty($comment->content)): ?>
 			<div class="panel-body">
 				<?php 
-					$this->beginWidget('MarkdownWidget'); 
+					$this->beginWidget('MarkdownWidget', array('attachments' => $comment->attachments)); 
 					echo $comment->content;
 					$this->endWidget(); 
 				?>

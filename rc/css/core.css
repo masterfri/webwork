@@ -1196,3 +1196,9 @@ body:after {
 .candidate-result.panel-danger .answer {
 	border-color: #b94a48;
 }
+img.inline-attachment {
+	display: block;
+	max-width: 100%;
+	margin: 10px 0;
+	border: 1px solid #ccc;
+}

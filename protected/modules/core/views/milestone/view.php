@@ -88,7 +88,7 @@ $this->menu = array(
 	<div class="panel-body">
 		<?php if ('' != $model->description): ?>
 			<?php 
-				$this->beginWidget('MarkdownWidget'); 
+				$this->beginWidget('MarkdownWidget', array('attachments' => $model->attachments)); 
 				echo $model->description;
 				$this->endWidget(); 
 			?>

@@ -11,6 +11,7 @@ class FileSelect extends CInputWidget
 	public $maxfiles = false;
 	public $accept = false;
 	public $previewImages = false;
+	public $pasteTarget = false;
 	
 	public function run()
 	{
@@ -68,6 +69,7 @@ class FileSelect extends CInputWidget
 			'maxfiles' => $this->maxfiles,
 			'accept' => $this->accept,
 			'previewImages' => $this->previewImages,
+			'pasteTarget' => $this->pasteTarget,
 		));
 		$cs->registerScript(__CLASS__. "#{$id}", 
 			"$('#{$id}').fileSelect({$options});".
@@ -86,13 +88,19 @@ class FileSelect extends CInputWidget
 				));
 				echo CHtml::image($file->getUrlResized(150, 100), '', array(
 					'title' => $file->title,
+					'class' => 'file-select-thumb',
 				));
 			} else {
 				echo CHtml::openTag('span', array(
 					'class' => $this->itemCssClass,
 					'data-type' => $file->mime,
 				));
+				echo CHtml::openTag('span', array(
+					'title' => $file->title,
+					'class' => 'file-select-thumb',
+				));
 				echo CHtml::encode($file->title);
+				echo CHtml::closeTag('span');
 			}
 			echo CHtml::hiddenField($name, $file->id, array('id' => false));
 			echo CHtml::link('&times', '#', array('class' => 'delete'));

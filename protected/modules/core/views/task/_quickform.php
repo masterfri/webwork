@@ -6,6 +6,7 @@
 		'htmlOptions' => array(
 			'class'=>'form-horizontal',
 			'data-raise'=>'ajax-request',
+			'enctype' => 'multipart/form-data',
 		),
 		'enableClientValidation' => false,
 	)); ?>
@@ -46,6 +47,19 @@
 				'prompt' => Yii::t('core.crud', 'Select Value'),
 			)); ?> 
 			<?php echo $form->error($model, 'priority', array('class'=>'help-inline')); ?>
+		</div>
+	</div>
+	<div class="form-group">
+		<?php echo $form->labelEx($model, 'attachments', array('class'=>'col-sm-3 control-label')); ?>
+		<div class="col-sm-9">
+			<?php echo $form->fileSelectField($model, 'attachments', array(
+				'multiple' => true,
+				'maxfiles' => 10,
+				'buttonText' => '<span class="glyphicon glyphicon-paperclip"></span> ' . Yii::t('core.crud', 'Attach files'),
+				'buttonCssClass' => 'btn btn-default',
+				'pasteTarget' => '#Task_description',
+			)); ?>
+			<?php echo $form->error($model, 'attachments', array('class'=>'help-inline')); ?>
 		</div>
 	</div>
 	

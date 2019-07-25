@@ -45,6 +45,7 @@
 				'maxfiles' => 10,
 				'buttonText' => '<span class="glyphicon glyphicon-paperclip"></span> ' . Yii::t('core.crud', 'Attach files'),
 				'buttonCssClass' => 'btn btn-default',
+				'pasteTarget' => '#Milestone_description',
 			)); ?>
 			<?php echo $form->error($model, 'attachments', array('class'=>'help-inline')); ?>
 		</div>

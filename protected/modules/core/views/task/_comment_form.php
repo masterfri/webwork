@@ -31,6 +31,7 @@
 						'maxfiles' => 5,
 						'buttonText' => '<span class="glyphicon glyphicon-paperclip"></span> ' . Yii::t('core.crud', 'Attach files'),
 						'buttonCssClass' => 'btn btn-default',
+						'pasteTarget' => '#Comment_content',
 					)); ?>
 				</div>
 			</div>

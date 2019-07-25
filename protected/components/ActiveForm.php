@@ -139,6 +139,7 @@ class ActiveForm extends CActiveForm
 			'buttonCssClass' => 'button-wrapper',
 			'maxfiles' => false,
 			'accept' => false,
+			'pasteTarget' => false,
 		), $htmlOptions);
 
 		return $this->controller->widget('FileSelect', array_merge($options, array(

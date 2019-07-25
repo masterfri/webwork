@@ -132,7 +132,7 @@ $this->menu = array(
 	<div class="panel-body">
 		<?php if ('' != $model->scope): ?>
 			<?php 
-				$this->beginWidget('MarkdownWidget'); 
+				$this->beginWidget('MarkdownWidget', array('attachments' => $model->attachments)); 
 				echo $model->scope;
 				$this->endWidget(); 
 			?>
