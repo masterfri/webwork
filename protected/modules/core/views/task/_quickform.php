@@ -80,6 +80,7 @@ $cs->registerScript('quick-create',
 $.ajaxBindings.on('task.created', function() {
 	$.fn.yiiListView.update('task-grid');
 	$('#task-form').get(0).reset();
+	$('#file-select-Task_attachments .file-select-item').remove();
 });
 ENDJS
 );
