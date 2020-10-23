@@ -33,6 +33,41 @@ $(function() {
 		return false;
 	});
 
+	var activeConvertPopover = null;
+
+	$(document.body).on('click', '[data-money-value]', function() {
+		if (activeConvertPopover === this) {
+			$(this).popover('hide');
+			activeConvertPopover = null;
+		} else {
+			var value = $(this).attr('data-money-value');
+			var html = $(this).html();
+			if (!isNaN(value)) {
+				if (activeConvertPopover !== null) {
+					$(activeConvertPopover).popover('hide');
+				}
+				activeConvertPopover = this;
+				var moneyRate = getRecentMoneyRate();
+				var $this = $(this);
+				$this.popover({
+					trigger: 'manual',
+					html: true,
+					content: function() {
+						return '<div class="convert-money"><span>' + html + '</span><em>×</em>' + 
+							'<input type="text" class="convert-rate" onchange="updateMoneyConversion(this, ' + value + ')"/>' +
+							'<em>=</em><span class="convert-result"></span></div>';
+					},
+				});
+				$this.off('shown.bs.popover').on('shown.bs.popover', function() {
+					var popver = $this.data('bs.popover');
+					if (popver) {
+						popver.$tip.find('.convert-rate').val(moneyRate).trigger('change');
+					}
+				});
+				$this.popover('show');
+			}
+		}
+	});
 });
 
 $.fn.tagval = function() {
@@ -90,4 +125,18 @@ $.fn.notifier = function(url, interval) {
 			}
 		}
 	});
+}
+
+const getRecentMoneyRate = function() {
+	var rate = parseFloat(localStorage.getItem('recentMoneyRate'));
+	return isNaN(rate) ? 0 : rate;
+}
+
+const updateMoneyConversion = function(el, moneyValue) {
+	var value = parseFloat(el.value);
+	if (!isNaN(value)) {
+		localStorage.setItem('recentMoneyRate', el.value);
+		let conversion = (moneyValue * value).toFixed(2);
+		$(el).parent().children('.convert-result').html(conversion);
+	}
 }

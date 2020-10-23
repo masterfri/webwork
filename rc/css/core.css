@@ -1202,3 +1202,31 @@ img.inline-attachment {
 	margin: 10px 0;
 	border: 1px solid #ccc;
 }
+span.money-value {
+	display: inline-block;
+	border-bottom: 1px dotted #ccc;
+	cursor: pointer;
+}
+div.convert-money {
+	display: flex;
+	align-items: center;
+}
+div.convert-money * {
+	height: 20px;
+	color: #777;
+}
+div.convert-money input {
+	border: 0;
+	border-bottom: 1px solid #ccc;
+	width: 50px;
+	outline: none !important;
+	margin-bottom: -1px;
+}
+div.convert-money em {
+	display: inline-block;
+	margin: 0 5px;
+	font-weight: normal;
+}
+div.convert-money .convert-result {
+	color: #333;
+}

@@ -66,7 +66,8 @@ class Formatter extends CFormatter
 	
 	public function formatMoney($value)
 	{
-		return number_format($value, 2, $this->numberFormat['decimalSeparator'], $this->numberFormat['thousandSeparator']) . ' ' . $this->currency;
+		$formatted = number_format($value, 2, $this->numberFormat['decimalSeparator'], $this->numberFormat['thousandSeparator']);
+		return sprintf('<span class="money-value" data-money-value="%f">%s %s</span>', floatval($value), $formatted, $this->currency);
 	}
 	
 	public function formatBalance($value)
