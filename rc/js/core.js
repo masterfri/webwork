@@ -15,6 +15,15 @@ $(function() {
 		$('.quick-create-form').toggle();
 		return false;
 	});
+
+	$(document.body).on('click', '[data-show-if]', function() {
+		var target = $(this).attr('data-show-if');
+		if (this.value == 1) {
+			$(target).show();
+		} else {
+			$(target).hide();
+		}
+	});
 	
 	$(document.body).on('submit', '[role=search-form]', function() {
 		var target = $(this).attr('data-target');

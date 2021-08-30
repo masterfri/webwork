@@ -150,6 +150,11 @@
 							'url' => array('invoice/index'),
 							'visible' => Yii::app()->user->checkAccess('view_invoice'),
 						),
+						array(
+							'label' => '<i class="glyphicon glyphicon-check"></i> ' . Yii::t('core.crud', 'Completion Reports'),
+							'url' => array('completionReport/index'),
+							'visible' => Yii::app()->user->checkAccess('view_completion_report'),
+						),
 					),
 				),
 				array(

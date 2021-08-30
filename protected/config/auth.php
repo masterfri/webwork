@@ -311,6 +311,72 @@ return array(
 		'data' => null,
 	),
 	/**
+	 * CompletionReport 
+	 */
+	'view_completion_report' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'View completion report',
+		'bizRule' => null,
+		'data' => null,
+	),
+	'create_completion_report' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Create completion report',
+		'bizRule' => null,
+		'data' => null,
+	),
+	'update_completion_report' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Edit completion report',
+		'bizRule' => null,
+		'data' => null,
+	),
+	'delete_completion_report' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Delete completion report',
+		'bizRule' => null,
+		'data' => null,
+	),
+	'view_my_completion_report' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'View my completion report',
+		'bizRule' => 'return (!isset($params["report"])) ||
+							 ($params["report"] === "*" ? false :
+								(($params["report"]->performer_id == $params["userId"]) ||
+								($params["report"]->created_by_id == $params["userId"]) ||
+								($params["report"]->contragent_id == $params["userId"])));',
+		'data' => null,
+		'children' => array(
+			'view_completion_report',
+		),
+	),
+	'update_my_completion_report' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Edit my completion report',
+		'bizRule' => 'return (!isset($params["report"])) || 
+							 ($params["report"] === "*" ? false :
+								(($params["report"]->performer_id == $params["userId"]) ||
+								($params["report"]->created_by_id == $params["userId"]) ||
+								($params["report"]->contragent_id == $params["userId"])));',
+		'data' => null,
+		'children' => array(
+			'update_completion_report',
+		),
+	),
+	'delete_my_completion_report' => array(
+		'type' => CAuthItem::TYPE_OPERATION,
+		'description' => 'Delete my completion report',
+		'bizRule' => 'return (!isset($params["report"])) || 
+							 ($params["report"] === "*" ? false :
+								(($params["report"]->performer_id == $params["userId"]) ||
+								($params["report"]->created_by_id == $params["userId"]) ||
+								($params["report"]->contragent_id == $params["userId"])));',
+		'data' => null,
+		'children' => array(
+			'delete_completion_report',
+		),
+	),
+	/**
 	 * File
 	 */
 	'view_file' => array(
@@ -396,8 +462,8 @@ return array(
 		'description' => 'View my invoice',
 		'bizRule' => 'return (!isset($params["invoice"])) ||
 							 ($params["invoice"] === "*" ? false :
-								(($params["invoice"]->from_id == $params["userId"]) ||
-								($params["invoice"]->to_id == $params["userId"] && !$params["invoice"]->draft)));',
+								(($params["invoice"]->created_by_id == $params["userId"]) ||
+								(($params["invoice"]->from_id == $params["userId"] || $params["invoice"]->to_id == $params["userId"]) && !$params["invoice"]->draft)));',
 		'data' => null,
 		'children' => array(
 			'view_invoice',
@@ -1397,6 +1463,7 @@ return array(
 		'children' => array(
 			'create_project',
 			'view_shared_project_schedule',
+			'view_my_completion_report',
 			'user',
 		),
 		'bizRule' => null,
@@ -1433,6 +1500,10 @@ return array(
 			'update_my_entity_template',
 			'delete_my_entity_template',
 			'view_shared_project_stats',
+			'create_completion_report',
+			'update_my_completion_report',
+			'delete_my_completion_report',
+			'view_my_completion_report',
 		),
 		'bizRule' => null,
 		'data' => null

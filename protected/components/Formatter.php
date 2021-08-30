@@ -69,6 +69,136 @@ class Formatter extends CFormatter
 		$formatted = number_format($value, 2, $this->numberFormat['decimalSeparator'], $this->numberFormat['thousandSeparator']);
 		return sprintf('<span class="money-value" data-money-value="%f">%s %s</span>', floatval($value), $formatted, $this->currency);
 	}
+
+	public function formatAbstractMoney($value)
+	{
+		return number_format($value, 2, $this->numberFormat['decimalSeparator'], $this->numberFormat['thousandSeparator']);
+	}
+
+	public function formatMoneySpellout($value)
+	{
+		$n = intval($value);
+		$c = intval(($value - $n) * 100);
+
+		$result = [];
+
+		if ($n > 0) {
+			$result[] = Yii::t('core.crud', '{sum} {cur}', array(
+				'{sum}' => $this->formatNumberSpellout($n),
+				'{cur}' => Yii::t('core.crud', 'USD|USD|USD|USD', $n),
+			));
+
+			if ($c > 0) {
+				$result[] = Yii::t('core.crud', 'and');
+			}
+		}
+
+		$result[] = Yii::t('core.crud', '{csum} {ccur}', array(
+			'{csum}' => $c,
+			'{ccur}' => Yii::t('core.crud', 'cent|cents|cents|cents', $c),
+		));
+
+		return implode(' ', $result);
+	}
+
+	public function formatNumberSpellout($value)
+	{
+		if ($value >= 1000000000) {
+			$billions = intval($value / 1000000000);
+			$rest = $value - $billions * 1000000000;
+			return trim(implode(' ', array(
+				$this->formatNumberSpellout($billions),
+				Yii::t('core.crud', 'billion|billion|billion|billion', $billions),
+				$this->formatNumberSpellout($rest),
+			)));
+		}
+
+		if ($value >= 1000000) {
+			$millions = intval($value / 1000000);
+			$rest = $value - $millions * 1000000;
+			return trim(implode(' ', array(
+				$this->formatNumberSpellout($millions),
+				Yii::t('core.crud', 'million|million|million|million', $millions),
+				$this->formatNumberSpellout($rest),
+			)));
+		}
+		
+		if ($value >= 1000) {
+			$thousands = intval($value / 1000);
+			$rest = $value - $thousands * 1000;
+			return trim(implode(' ', array(
+				$this->formatNumberSpellout($thousands),
+				Yii::t('core.crud', 'thousand|thousand|thousand|thousand', $thousands),
+				$this->formatNumberSpellout($rest),
+			)));
+		}
+
+		if ($value >= 100) {
+			$hundreds = intval($value / 100);
+			$rest = $value - $hundreds * 100;
+			$hundredWords = [
+				'',
+				'one hundred',
+				'two hundred',
+				'three hundred',
+				'four hundred',
+				'five hundred',
+				'six hundred',
+				'seven hundred',
+				'eight hundred',
+				'nine hundred',
+			];
+			return trim(implode(' ', array(
+				Yii::t('core.crud', $hundredWords[$hundreds]),
+				$this->formatNumberSpellout($rest),
+			)));
+		}		
+
+		if ($value >= 20) {
+			$dozens = intval($value / 10);
+			$rest = $value - $dozens * 10;
+			$dozenWords = [
+				'',
+				'',
+				'twenty',
+				'thirty',
+				'forty',
+				'fifty',
+				'sixty',
+				'seventy',
+				'eighty',
+				'ninety',
+			];
+			return trim(implode(' ', array(
+				Yii::t('core.crud', $dozenWords[$dozens]),
+				$this->formatNumberSpellout($rest),
+			)));
+		}
+
+		$words = [
+			'',
+			'one',
+			'two',
+			'three',
+			'four',
+			'five',
+			'six',
+			'seven',
+			'eight',
+			'nine',
+			'ten',
+			'eleven',
+			'twelve',
+			'thirteen',
+			'fourteen',
+			'fifteen',
+			'sixteen',
+			'seventeen',
+			'eighteen',
+			'nineteen',
+		];
+		return Yii::t('core.crud', $words[$value]);
+	}
 	
 	public function formatBalance($value)
 	{

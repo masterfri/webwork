@@ -12,6 +12,6 @@ class CoreModule extends CWebModule
 	
 	public function getVersion()
 	{
-		return '1.5';
+		return '1.6';
 	}
 }

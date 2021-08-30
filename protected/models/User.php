@@ -5,12 +5,16 @@ class User extends CActiveRecord
 	const STATUS_DISABLED = 0;
 	const STATUS_ENABLED = 1;
 	const STATUS_LOCKED = 2;
+
+	const LEGAL_INDIVIDUAL = 1;
+	const LEGAL_LLC = 2;
 	
 	public $password_plain;
 	public $password_confirm;
 	
 	protected static $locales;
 	protected static $statuses;
+	protected static $legalTypes;
 	
 	public static function model($className=__CLASS__)
 	{
@@ -38,8 +42,16 @@ class User extends CActiveRecord
 			'password_confirm' => Yii::t('user', 'Confirm Password'),
 			'locale' => Yii::t('user', 'Locale'),
 			'localeName' => Yii::t('user', 'Locale'),
+			'document_locale' => Yii::t('user', 'Locale for documents'),
+			'documentLocaleName' => Yii::t('user', 'Locale for documents'),
 			'working_hours' => Yii::t('user', 'Working Hours'),
 			'working_hours_id' => Yii::t('user', 'Working Hours'),
+			'legal_signer_name' => Yii::t('user', 'Signer Name'),
+			'legal_name' => Yii::t('user', 'Legal Name'),
+        	'legal_type' => Yii::t('user', 'Legal Type'),
+			'legalTypeName' => Yii::t('user', 'Legal Type'),
+        	'legal_number' => Yii::t('user', 'Registration Number'),
+        	'legal_address' => Yii::t('user', 'Legal Address'),
 		);
 	}
 	
@@ -50,7 +62,8 @@ class User extends CActiveRecord
 					'email', 'on' => 'create, update, updateProfile'),
 			array('	email,
 					username,
-					locale', 
+					locale,
+					document_locale', 
 					'required', 'on' => 'create, update, updateProfile'),
 			array('	role,
 					status', 
@@ -59,6 +72,15 @@ class User extends CActiveRecord
 					username,
 					real_name',
 					'length', 'max' => 100, 'on' => 'create, update, updateProfile'),
+			array('	legal_signer_name,
+					legal_name', 
+					'length', 'max' => 200, 'on' => 'create, update, updateProfile'),
+			array('	legal_number', 
+					'length', 'max' => 50, 'on' => 'create, update, updateProfile'),
+			array('	legal_address', 
+					'length', 'max' => 16000, 'on' => 'create, update, updateProfile'),
+			array('	legal_type', 
+					'in', 'range' => array_keys(self::getListLegalTypes()), 'on' => 'create, update, updateProfile'),
 			array(' username', 
 					'match', 'pattern' => '/^[a-z0-9 _.-]+$/i', 'message' => 'В логине можно использовать только латинские буквы, цыфры, пробелы, тире, точки и символ подчеркивания', 'on' => 'create, update, updateProfile'),
 			array(' username', 
@@ -199,6 +221,7 @@ class User extends CActiveRecord
 			self::$locales = array(
 				'en' => 'English',
 				'ru' => 'Русский',
+				'ua' => 'Українська',
 			);
 		}
 		return self::$locales;
@@ -215,6 +238,17 @@ class User extends CActiveRecord
 		}
 		return self::$statuses;
 	}
+
+	public static function getListLegalTypes()
+	{
+		if (null === self::$legalTypes) {
+			self::$legalTypes = array(
+				self::LEGAL_INDIVIDUAL => Yii::t('user', 'Individual Entrepreneur'),
+				self::LEGAL_LLC => Yii::t('user', 'Limited Liability Company'),
+			);
+		}
+		return self::$legalTypes;
+	}
 	
 	public function getRoleName()
 	{
@@ -225,10 +259,26 @@ class User extends CActiveRecord
 	{
 		return array_key_exists($this->locale, self::getListLocales()) ? self::$locales[$this->locale] : '';
 	}
+
+	public function getDocumentLocaleName()
+	{
+		return array_key_exists($this->document_locale, self::getListLocales()) ? self::$locales[$this->document_locale] : '';
+	}
 	
 	public function getStatusName()
 	{
 		return array_key_exists($this->status, self::getListStatuses()) ? self::$statuses[$this->status] : '';
+	}
+
+	public function getLegalTypeName()
+	{
+		return array_key_exists($this->legal_type, self::getListLegalTypes()) ? self::$legalTypes[$this->legal_type] : '';
+	}
+
+	public function getLegalName()
+	{
+		return $this->legal_type == self::LEGAL_INDIVIDUAL 
+			? $this->legal_name : "«{$this->legal_name}‎»";
 	}
 	
 	public function __toString()

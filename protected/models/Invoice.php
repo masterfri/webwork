@@ -74,7 +74,7 @@ class Invoice extends CActiveRecord
 	{
 		return array(
 			'my' => array(
-				'condition' => 'invoice.from_id = :current_user_id OR (invoice.to_id = :current_user_id AND invoice.draft != 1)',
+				'condition' => 'invoice.created_by_id = :current_user_id OR ((invoice.from_id = :current_user_id OR invoice.to_id = :current_user_id) AND invoice.draft != 1)',
 				'params' => array(
 					':current_user_id' => Yii::app()->user->id,
 				),

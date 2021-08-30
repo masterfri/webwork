@@ -12,3 +12,5 @@ table .heading td, table .heading th {background: #444; color: #fff;}
 table .group1 td, table .group1 th {background: #ccc;}
 table .total1 td, table .total1 th {background: #eee;}
 table .total2 td, table .total2 th {background: #444; color: #fff;}
+.hr {border-top: 1px solid #000;}
+.hr-thik {border-top: 3px solid #000;}

@@ -149,7 +149,7 @@ class ProjectController extends AdminController
 			throw new CHttpException(403, 'Forbidden');
 		}
 		if (null !== ($owner = $model->getOwner())) {
-			Yii::app()->language = $owner->locale;
+			Yii::app()->language = $owner->document_locale;
 		}
 		$this->renderPartial('pdf', array(
 			'model' => $model,

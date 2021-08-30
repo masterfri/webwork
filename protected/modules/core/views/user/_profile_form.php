@@ -65,12 +65,71 @@
 	</div>
 	<div class="form-group">
 		<?php echo $form->labelEx($model, 'locale', array('class'=>'col-sm-3 control-label')); ?>
-		<div class="col-sm-9">
+		<div class="col-sm-3">
 			<?php echo $form->dropdownList($model, 'locale', User::getListLocales(), array(
 				'class'=>'form-control',
 				'prompt' => Yii::t('core.crud', 'Select Value'),
 			)); ?>
 			<?php echo $form->error($model, 'status', array('class'=>'help-inline')); ?>
+		</div>
+		<?php echo $form->labelEx($model, 'document_locale', array('class'=>'col-sm-3 control-label')); ?>
+		<div class="col-sm-3">
+			<?php echo $form->dropdownList($model, 'document_locale', User::getListLocales(), array(
+				'class'=>'form-control',
+				'prompt' => Yii::t('core.crud', 'Select Value'),
+			)); ?>
+			<?php echo $form->error($model, 'document_locale', array('class'=>'help-inline')); ?>
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="col-sm-9 col-sm-offset-3">
+			<h4><?php echo Yii::t('user', 'Legal Entity') ?></h4>
+		</div>
+	</div>
+	<div class="form-group">
+		<?php echo $form->labelEx($model, 'legal_name', array('class'=>'col-sm-3 control-label')); ?>
+		<div class="col-sm-9">
+			<?php echo $form->textField($model, 'legal_name', array(
+				'class'=>'form-control',
+			)); ?>
+			<?php echo $form->error($model, 'legal_name', array('class'=>'help-inline')); ?>
+		</div>
+	</div>
+	<div class="form-group">
+		<?php echo $form->labelEx($model, 'legal_type', array('class'=>'col-sm-3 control-label')); ?>
+		<div class="col-sm-9">
+			<?php echo $form->dropdownList($model, 'legal_type', User::getListLegalTypes(), array(
+				'class'=>'form-control',
+				'prompt' => Yii::t('core.crud', 'Select Value'),
+			)); ?>
+			<?php echo $form->error($model, 'legal_type', array('class'=>'help-inline')); ?>
+		</div>
+	</div>
+	<div class="form-group">
+		<?php echo $form->labelEx($model, 'legal_signer_name', array('class'=>'col-sm-3 control-label')); ?>
+		<div class="col-sm-9">
+			<?php echo $form->textField($model, 'legal_signer_name', array(
+				'class'=>'form-control',
+			)); ?>
+			<?php echo $form->error($model, 'legal_signer_name', array('class'=>'help-inline')); ?>
+		</div>
+	</div>
+	<div class="form-group">
+		<?php echo $form->labelEx($model, 'legal_number', array('class'=>'col-sm-3 control-label')); ?>
+		<div class="col-sm-9">
+			<?php echo $form->textField($model, 'legal_number', array(
+				'class'=>'form-control',
+			)); ?>
+			<?php echo $form->error($model, 'legal_number', array('class'=>'help-inline')); ?>
+		</div>
+	</div>
+	<div class="form-group">
+		<?php echo $form->labelEx($model, 'legal_address', array('class'=>'col-sm-3 control-label')); ?>
+		<div class="col-sm-9">
+			<?php echo $form->textArea($model, 'legal_address', array(
+				'class' => 'form-control',
+			)); ?> 
+			<?php echo $form->error($model, 'legal_address', array('class'=>'help-inline')); ?>
 		</div>
 	</div>
 	

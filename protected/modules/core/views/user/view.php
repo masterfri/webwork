@@ -73,9 +73,27 @@ $this->menu = array(
 			),
 			'statusName',
 			'localeName',
+			'documentLocaleName',
 		),
 	)); ?>
 </div>
+<?php if ($model->legal_type): ?>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title"><?php echo Yii::t('user', 'Legal Entity'); ?></h3>
+		</div>
+		<?php $this->widget('DetailView', array(
+			'data' => $model,
+			'attributes' => array(
+				'legal_name',
+				'legalTypeName',
+				'legal_signer_name',
+				'legal_number',
+				'legal_address',
+			),
+		)); ?>
+	</div>
+<?php endif; ?>
 
 <div class="row">
 	<div class="col-sm-4">
