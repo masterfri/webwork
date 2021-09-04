@@ -33,6 +33,19 @@ class Formatter extends CFormatter
 		$timestamp = $this->normalizeDateValue($value);
 		return $timestamp ? date($this->datetimeFormat, $timestamp) : null;
 	}
+
+	public function formatDateFull($value)
+	{
+		if (empty($value)) {
+			return null;
+		}
+		$timestamp = $this->normalizeDateValue($value);
+		return $timestamp ? Yii::t('core.crud', '{m} {d}, {y}', array(
+			'{d}' => date('j', $timestamp),
+			'{m}' => Yii::t('monthNamesAlt', date('F', $timestamp)),
+			'{y}' => date('Y', $timestamp),
+		)) : null;
+	}
 	
 	public function formatArray($value)
 	{
@@ -84,24 +97,20 @@ class Formatter extends CFormatter
 
 		if ($n > 0) {
 			$result[] = Yii::t('core.crud', '{sum} {cur}', array(
-				'{sum}' => $this->formatNumberSpellout($n),
+				'{sum}' => $this->formatNumberSpellout($n, Yii::app()->language === 'uk'),
 				'{cur}' => Yii::t('core.crud', 'USD|USD|USD|USD', $n),
 			));
-
-			if ($c > 0) {
-				$result[] = Yii::t('core.crud', 'and');
-			}
 		}
 
 		$result[] = Yii::t('core.crud', '{csum} {ccur}', array(
-			'{csum}' => $c,
+			'{csum}' => sprintf('%02d', $c),
 			'{ccur}' => Yii::t('core.crud', 'cent|cents|cents|cents', $c),
 		));
 
 		return implode(' ', $result);
 	}
 
-	public function formatNumberSpellout($value)
+	public function formatNumberSpellout($value, $feminitive = false)
 	{
 		if ($value >= 1000000000) {
 			$billions = intval($value / 1000000000);
@@ -109,7 +118,7 @@ class Formatter extends CFormatter
 			return trim(implode(' ', array(
 				$this->formatNumberSpellout($billions),
 				Yii::t('core.crud', 'billion|billion|billion|billion', $billions),
-				$this->formatNumberSpellout($rest),
+				$this->formatNumberSpellout($rest, $feminitive),
 			)));
 		}
 
@@ -119,7 +128,7 @@ class Formatter extends CFormatter
 			return trim(implode(' ', array(
 				$this->formatNumberSpellout($millions),
 				Yii::t('core.crud', 'million|million|million|million', $millions),
-				$this->formatNumberSpellout($rest),
+				$this->formatNumberSpellout($rest, $feminitive),
 			)));
 		}
 		
@@ -127,9 +136,9 @@ class Formatter extends CFormatter
 			$thousands = intval($value / 1000);
 			$rest = $value - $thousands * 1000;
 			return trim(implode(' ', array(
-				$this->formatNumberSpellout($thousands),
+				$this->formatNumberSpellout($thousands, true),
 				Yii::t('core.crud', 'thousand|thousand|thousand|thousand', $thousands),
-				$this->formatNumberSpellout($rest),
+				$this->formatNumberSpellout($rest, $feminitive),
 			)));
 		}
 
@@ -150,7 +159,7 @@ class Formatter extends CFormatter
 			];
 			return trim(implode(' ', array(
 				Yii::t('core.crud', $hundredWords[$hundreds]),
-				$this->formatNumberSpellout($rest),
+				$this->formatNumberSpellout($rest, $feminitive),
 			)));
 		}		
 
@@ -171,13 +180,13 @@ class Formatter extends CFormatter
 			];
 			return trim(implode(' ', array(
 				Yii::t('core.crud', $dozenWords[$dozens]),
-				$this->formatNumberSpellout($rest),
+				$this->formatNumberSpellout($rest, $feminitive),
 			)));
 		}
 
 		$words = [
 			'',
-			'one',
+			'n==0#one|n==1#one',
 			'two',
 			'three',
 			'four',
@@ -197,7 +206,10 @@ class Formatter extends CFormatter
 			'eighteen',
 			'nineteen',
 		];
-		return Yii::t('core.crud', $words[$value]);
+
+		return intval($value === 1) 
+			? Yii::t('core.crud', $words[$value], $feminitive ? 1 : 0)
+			: Yii::t('core.crud', $words[$value]);
 	}
 	
 	public function formatBalance($value)

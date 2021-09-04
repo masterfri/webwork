@@ -1,8 +1,8 @@
 <?php
 
 return array(
-	'Activity' => 'Активность',
+	'Activity' => 'Активність',
 	'Hour Rate' => 'Рейт',
-	'Hour Rates' => 'Рейты',
+	'Hour Rates' => 'Рейти',
 	'Rate' => 'Рейт',
 );

@@ -4,7 +4,7 @@ h3 {margin: 6mm 0 3mm 0;}
 h4 {margin: 6mm 0 3mm 0;}
 p {margin: 0 0 3mm 0;}
 li {padding-bottom: 3mm;}
-p, li {line-height: 140%;}
+p, li, h1, h2, h3 {line-height: 140%;}
 table {border-collapse: collapse; border-spacing: 0;}
 table td, table th {padding: 0 0 3mm 0;}
 table.bordered td, table.bordered th {border: 1px solid #ccc;}

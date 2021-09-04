@@ -1,9 +1,9 @@
 <?php
 
 return array(
-	'Attachments' => 'Attachments',
+	'Attachments' => 'Вложения',
 	'Content' => 'Текст',
-	'Created by' => 'Created by',
-	'Task' => 'Task',
-	'Date Created' => 'Date Created',
+	'Created by' => 'Создал',
+	'Date Created' => 'Дата создания',
+	'Task' => 'Задача',
 );

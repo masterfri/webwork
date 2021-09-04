@@ -221,7 +221,7 @@ class User extends CActiveRecord
 			self::$locales = array(
 				'en' => 'English',
 				'ru' => 'Русский',
-				'ua' => 'Українська',
+				'uk' => 'Українська',
 			);
 		}
 		return self::$locales;

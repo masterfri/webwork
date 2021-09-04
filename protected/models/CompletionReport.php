@@ -195,8 +195,7 @@ class CompletionReport extends CActiveRecord
 		$items = $this->collectCompletedJobs();
 		$matrix = $this->performer->rate->getCompleteMatrix();
 		while ($row = $items->read()) {
-			$label = !empty($row['task_name']) ? $row['task_name'] : $row['description'];
-			$label = !empty($label) ? sprintf('%s (%s)', $label, $row['activity_name']) : $row['activity_name'];
+			$label = $row['description'];
 			$label = mb_substr($label, 0, 200);
 			$item = new CompletedJob('create');
 			$item->report_id = $this->id;
@@ -222,13 +221,13 @@ class CompletionReport extends CActiveRecord
 		$criteria->alias = 'timeentry';
 		$criteria->compare('timeentry.user_id', $this->performer_id);
 		$criteria->select = 'timeentry.activity_id, SUM(timeentry.amount) AS amount, '.
-							'GROUP_CONCAT(DISTINCT timeentry.description SEPARATOR ";") AS description, '.
-							'timeentry.task_id, task.name AS task_name, activity.name AS activity_name, '.
-							'project.bonus, project.bonus_type';
-		$criteria->group = 'timeentry.task_id, timeentry.activity_id';
+							'IF (milestone.id IS NOT NULL, milestone.name, IF(task.id IS NOT NULL, task.name, activity.name)) AS description, '.
+							'timeentry.task_id, project.bonus, project.bonus_type';
+		$criteria->group = 'IF (milestone.id IS NOT NULL, CONCAT("m", milestone.id), IF(task.id IS NOT NULL, CONCAT("t", task.id), timeentry.activity_id))';
 		$criteria->join = 'LEFT JOIN {{task}} task ON task.id = timeentry.task_id '.
 						  'LEFT JOIN {{project}} project ON project.id = task.project_id '.
-						  'LEFT JOIN {{activity}} activity ON activity.id = timeentry.activity_id';
+						  'LEFT JOIN {{activity}} activity ON activity.id = timeentry.activity_id '.
+						  'LEFT JOIN {{milestone}} milestone ON milestone.id = task.milestone_id';
 		$criteria->compare('timeentry.project_id', $this->projects);
 		if ($this->date_from) {
 			$criteria->compare('timeentry.date_created', ">={$this->date_from} 00:00:00");

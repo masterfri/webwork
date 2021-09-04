@@ -1,6 +1,6 @@
 <?php
 
 return array(
-	'Comment' => 'Комментарий',
+	'Comment' => 'Коментар',
 	'File' => 'Файл',
 );
