@@ -16,6 +16,15 @@
 	
 	<?php echo $form->errorSummary($model, null, null, array('class' => 'alert alert-danger')); ?>
 
+	<div class="form-group">
+		<?php echo $form->label($model, 'number', array('class'=>'col-sm-3 control-label')); ?>
+		<div class="col-sm-9">
+			<?php echo $form->textField($model, 'number', array(
+				'class' => 'form-control',
+			)); ?>
+			<?php echo $form->error($model, 'number', array('class'=>'help-inline')); ?>
+		</div>
+	</div>
 	<?php if($model->getIsNewRecord()): ?>
 		<div class="form-group">
 			<?php echo $form->labelEx($model, 'performer_id', array('class'=>'col-sm-3 control-label')); ?>

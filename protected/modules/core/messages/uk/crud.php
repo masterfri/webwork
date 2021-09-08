@@ -2,7 +2,7 @@
 
 return array(
 	'#{number}' => '№{number}',
-	'{m} {d}, {y}' => '{d} {m} {y} р.',
+	'{m} {d}, {y}' => '{d}&nbsp;{m}&nbsp;{y}&nbsp;р.',
 	'(delayed for {time})' => '(затримка {time})',
 	'Actions marked with * require a comment' => 'Дії, помічені *, вимагають коментаря',
 	'Activate Project' => 'Повернути з архіву',
@@ -541,7 +541,7 @@ return array(
 	'eighty' => 'вісімдесят',
 	'ninety' => 'дев\'яносто',
 	'n==0#one|n==1#one' => 'n==0#один|n==1#одна',
-	'two' => 'два',
+	'n==0#two|n==1#two' => 'n==0#два|n==1#дві',
 	'three' => 'три',
 	'four' => 'чотири',
 	'five' => 'п\'ять',

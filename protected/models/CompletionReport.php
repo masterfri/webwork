@@ -48,6 +48,12 @@ class CompletionReport extends CActiveRecord
 					'required', 'on' => 'update'),
 			array('	draft', 
 					'boolean', 'on' => 'update'),
+			array('	number', 
+					'numerical', 'min' => 1, 'integerOnly' => true, 'on' => 'create, update'),
+			array('	number', 
+					'required', 'on' => 'update'),
+			array('	number', 
+					'unique', 'on' => 'create, update', 'criteria' => $this->getUniqueCriteria()),
 			array(' contract_number,
 					performer_id,
 					contragent_id,
@@ -126,7 +132,7 @@ class CompletionReport extends CActiveRecord
 	protected function beforeSave()
 	{
 		if (parent::beforeSave()) {
-			if ($this->isNewRecord) {
+			if ($this->isNewRecord && empty($this->number)) {
 				$this->number = $this->pickNextNumber();
 			}
 			return true;
@@ -262,5 +268,17 @@ class CompletionReport extends CActiveRecord
 			$this->contract_date = $last->contract_date;
 			$this->contragent_id = $last->contragent_id;
 		}
+	}
+
+	protected function getUniqueCriteria()
+	{
+		$criteria = new CDbCriteria();
+		$criteria->compare('contract_number', $this->contract_number);
+		$criteria->compare('contragent_id', $this->contragent_id);
+		$criteria->compare('performer_id', $this->performer_id);
+		if (!$this->isNewRecord) {
+			$criteria->compare('id', "<>{$this->id}");
+		}
+		return $criteria;
 	}
 }

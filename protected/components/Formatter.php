@@ -187,7 +187,7 @@ class Formatter extends CFormatter
 		$words = [
 			'',
 			'n==0#one|n==1#one',
-			'two',
+			'n==0#two|n==1#two',
 			'three',
 			'four',
 			'five',
@@ -207,7 +207,7 @@ class Formatter extends CFormatter
 			'nineteen',
 		];
 
-		return intval($value === 1) 
+		return (intval($value) === 1 || intval($value) === 2)
 			? Yii::t('core.crud', $words[$value], $feminitive ? 1 : 0)
 			: Yii::t('core.crud', $words[$value]);
 	}
