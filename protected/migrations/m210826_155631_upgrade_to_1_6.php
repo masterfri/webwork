@@ -9,6 +9,7 @@ class m210826_155631_upgrade_to_1_6 extends CDbMigration
         $this->addColumn('user', 'legal_type', 'Int( 10 ) UNSIGNED NULL');
         $this->addColumn('user', 'legal_number', 'VarChar( 50 ) NULL');
         $this->addColumn('user', 'legal_address', 'Text NULL');
+		$this->addColumn('user', 'legal_bank', 'Text NULL');
 		$this->addColumn('user', 'document_locale', 'VarChar( 5 ) NULL DEFAULT \'en\'');
 		
 		$this->createTable('completion_reports', array(
@@ -48,6 +49,7 @@ class m210826_155631_upgrade_to_1_6 extends CDbMigration
         $this->dropColumn('user', 'legal_type');
         $this->dropColumn('user', 'legal_number');
         $this->dropColumn('user', 'legal_address');
+		$this->dropColumn('user', 'legal_bank');
 		$this->dropColumn('user', 'document_locale');
 	}
 }

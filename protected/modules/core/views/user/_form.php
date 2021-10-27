@@ -172,6 +172,15 @@
 			<?php echo $form->error($model, 'legal_address', array('class'=>'help-inline')); ?>
 		</div>
 	</div>
+	<div class="form-group">
+		<?php echo $form->labelEx($model, 'legal_bank', array('class'=>'col-sm-3 control-label')); ?>
+		<div class="col-sm-9">
+			<?php echo $form->textArea($model, 'legal_bank', array(
+				'class' => 'form-control',
+			)); ?> 
+			<?php echo $form->error($model, 'legal_bank', array('class'=>'help-inline')); ?>
+		</div>
+	</div>
 	
 	<div class="form-group">
 		<div class="col-sm-offset-3 col-sm-9">

@@ -1,3 +1,4 @@
+body, p, td, th {font-size: 12px;}
 h1 {margin: 6mm 0 3mm 0;}
 h2 {margin: 8mm 0 3mm 0;}
 h3 {margin: 6mm 0 3mm 0;}

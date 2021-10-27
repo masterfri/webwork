@@ -30,6 +30,7 @@ return array(
 	'Legal Type' => 'Тип',
     'Registration Number' => 'Регистрационный номер',
     'Legal Address' => 'Адрес',
+	'Bank' => 'Банк',
 	'Legal Entity' => 'Юридическое лицо',
 	'Individual Entrepreneur' => 'Частный предприниматель',
 	'Limited Liability Company' => 'Общество с ограниченной ответственностью',

@@ -13,27 +13,11 @@ $format = Yii::app()->format; ?>
 				<p>
 					<?php echo mb_strtoupper(Yii::t('core.crud', 'Approve')); ?>
 					<br /><br />
+					<?php echo Yii::t('core.crud', 'Manager'); ?>
+					<br />
 					<?php echo $model->performer->legalTypeName; ?>
 					<br />
 					<?php echo CHtml::encode($model->performer->legalName); ?>
-					<br />
-					<?php if ($model->performer->legal_type == User::LEGAL_INDIVIDUAL): ?>
-						<?php echo Yii::t('core.crud', 'Tax ID'); ?>: 
-						<?php echo CHtml::encode($model->performer->legal_number); ?>
-						<br />
-						<?php echo Yii::t('core.crud', 'Address of registration'); ?>:
-						<?php echo nl2br(CHtml::encode($model->performer->legal_address)); ?>
-					<?php else: ?>
-						<?php echo Yii::t('core.crud', 'Employer Identification Number'); ?>: 
-						<?php echo CHtml::encode($model->performer->legal_number); ?>
-						<br />
-						<?php echo Yii::t('core.crud', 'Legal address'); ?>:
-						<?php echo nl2br(CHtml::encode($model->performer->legal_address)); ?>
-						<br /><br />
-						<?php echo Yii::t('core.crud', 'Manager'); ?>
-						<br />
-						<?php echo CHtml::encode($model->performer->legal_signer_name); ?>
-					<?php endif ?>
 				</p>
 			</td>
 			<td style="width: 10%;">&nbsp;</td>
@@ -41,27 +25,28 @@ $format = Yii::app()->format; ?>
 				<p>
 					<?php echo mb_strtoupper(Yii::t('core.crud', 'Approve')); ?>
 					<br /><br />
+					<?php echo Yii::t('core.crud', 'Manager'); ?>
+					<br />
 					<?php echo $model->contragent->legalTypeName; ?>
 					<br />
 					<?php echo CHtml::encode($model->contragent->legalName); ?>
-					<br />
-					<?php if ($model->contragent->legal_type == User::LEGAL_INDIVIDUAL): ?>
-						<?php echo Yii::t('core.crud', 'Tax ID'); ?>: 
-						<?php echo CHtml::encode($model->contragent->legal_number); ?>
-						<br />
-						<?php echo Yii::t('core.crud', 'Address of registration'); ?>:
-						<?php echo nl2br(CHtml::encode($model->contragent->legal_address)); ?>
-					<?php else: ?>
-						<?php echo Yii::t('core.crud', 'Employer Identification Number'); ?>: 
-						<?php echo CHtml::encode($model->contragent->legal_number); ?>
-						<br />
-						<?php echo Yii::t('core.crud', 'Legal address'); ?>:
-						<?php echo nl2br(CHtml::encode($model->contragent->legal_address)); ?>
-						<br /><br />
-						<?php echo Yii::t('core.crud', 'Manager'); ?>
-						<br />
-						<?php echo CHtml::encode($model->contragent->legal_signer_name); ?>
-					<?php endif ?>
+				</p>
+			</td>
+		</tr>
+		<tr>
+			<td style="width: 45%; vertical-align: top;">
+				<p>
+					<br /><br />
+					<div class="hr" style="width: 70%;"/>
+					<?php echo CHtml::encode($model->performer->legal_signer_name); ?>
+				</p>
+			</td>
+			<td style="width: 10%;">&nbsp;</td>
+			<td style="width: 45%; vertical-align: top;">
+				<p>
+					<br /><br />
+					<div class="hr" style="width: 70%;"/>
+					<?php echo CHtml::encode($model->contragent->legal_signer_name); ?>
 				</p>
 			</td>
 		</tr>
@@ -79,8 +64,10 @@ $format = Yii::app()->format; ?>
 		<?php echo Yii::t('core.crud', 'We, the undersigned, representative of customer {customerType} {customerName} on one side, and representative of performer {performerType} {performerName} on another side made this statement about the fact, that performer have completed the work according to contract #{contractNumber} from {contractDate}.', array(
 			'{customerType}' => $model->contragent->legalTypeName,
 			'{customerName}' => CHtml::encode($model->contragent->legalName),
+			'{customerSignerName}' => CHtml::encode($model->contragent->legal_signer_name),
 			'{performerType}' => $model->performer->legalTypeName, 
 			'{performerName}' => CHtml::encode($model->performer->legalName),
+			'{performerSignerName}' => CHtml::encode($model->performer->legal_signer_name),
 			'{contractNumber}' => CHtml::encode($model->contract_number),
 			'{contractDate}' => mb_strtolower($format->formatDateFull($model->contract_date)),
 		)); ?>
@@ -129,36 +116,76 @@ $format = Yii::app()->format; ?>
 	<table style="width: 100%;">
 		<tr>
 			<td style="width: 45%;">
-				<?php echo Yii::t('core.crud', 'Handed over the work'); ?>
-				<br />
 				<?php echo Yii::t('core.crud', 'Representative of performer'); ?> <sup>*</sup>
-				<br /><br />
-				<?php echo CHtml::encode($model->performer->legal_signer_name); ?>
 				<br /><br /><br /><br />
-				<div class="hr" />
+				<div class="hr" style="width: 70%;"/>
+				<?php echo CHtml::encode($model->performer->legal_signer_name); ?>
 			</td>
 			<td style="width: 10%;">&nbsp;</td>
 			<td style="width: 45%;">
-				<?php echo Yii::t('core.crud', 'Accepted the work'); ?>
-				<br />
 				<?php echo Yii::t('core.crud', 'Representative of customer'); ?>
-				<br /><br />
-				<?php echo CHtml::encode($model->contragent->legal_signer_name); ?>
 				<br /><br /><br /><br />
-				<div class="hr" />
+				<div class="hr" style="width: 70%;"/>
+				<?php echo CHtml::encode($model->contragent->legal_signer_name); ?>
 			</td>
 		</tr>
 	</table>
 	<table style="width: 100%;">
 		<tr>
 			<td style="width: 45%;">
-				<p>
+				<p style="font-size: 80%;">
 					<sup>*</sup> <?php echo Yii::t('core.crud', 'Responsible for the implementation of the business transaction and the correctness of its design'); ?>
 				</p>
 			</td>
 			<td style="width: 10%;">&nbsp;</td>
 			<td style="width: 45%;">
 				&nbsp;
+			</td>
+		</tr>
+	</table>
+	<table style="width: 100%;">
+		<tr style="vertical-align: top;">
+			<td style="width: 45%;">
+				<?php echo str_replace('/', '.', $format->formatDate($model->date)); ?>
+				<br /><br />
+				<?php echo $model->performer->legalTypeName; ?>
+				<br />
+				<?php echo CHtml::encode($model->performer->legalName); ?>
+				<br />
+				<?php if ($model->performer->legal_type == User::LEGAL_INDIVIDUAL): ?>
+					<?php echo Yii::t('core.crud', 'Tax ID'); ?>: 
+				<?php else: ?>
+					<?php echo Yii::t('core.crud', 'Employer Identification Number'); ?>: 
+				<?php endif ?>
+				<?php echo CHtml::encode($model->performer->legal_number); ?>
+			</td>
+			<td style="width: 10%;">&nbsp;</td>
+			<td style="width: 45%;">
+				<?php echo str_replace('/', '.', $format->formatDate($model->date)); ?>
+				<br /><br />
+				<?php echo $model->contragent->legalTypeName; ?>
+				<br />
+				<?php echo CHtml::encode($model->contragent->legalName); ?>
+				<br />
+				<?php if ($model->contragent->legal_type == User::LEGAL_INDIVIDUAL): ?>
+					<?php echo Yii::t('core.crud', 'Tax ID'); ?>: 
+				<?php else: ?>
+					<?php echo Yii::t('core.crud', 'Employer Identification Number'); ?>: 
+				<?php endif ?>
+				<?php echo CHtml::encode($model->contragent->legal_number); ?>
+			</td>
+		</tr>
+		<tr style="vertical-align: top;">
+			<td style="width: 45%;">
+				<?php echo nl2br(CHtml::encode($model->performer->legal_bank)); ?>
+				<br />
+				<?php echo nl2br(CHtml::encode($model->performer->legal_address)); ?>
+			</td>
+			<td style="width: 10%;">&nbsp;</td>
+			<td style="width: 45%;">
+				<?php echo nl2br(CHtml::encode($model->contragent->legal_bank)); ?>
+				<br />
+				<?php echo nl2br(CHtml::encode($model->contragent->legal_address)); ?>
 			</td>
 		</tr>
 	</table>

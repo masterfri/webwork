@@ -52,6 +52,7 @@ class User extends CActiveRecord
 			'legalTypeName' => Yii::t('user', 'Legal Type'),
         	'legal_number' => Yii::t('user', 'Registration Number'),
         	'legal_address' => Yii::t('user', 'Legal Address'),
+			'legal_bank' => Yii::t('user', 'Bank'),
 		);
 	}
 	
@@ -77,7 +78,8 @@ class User extends CActiveRecord
 					'length', 'max' => 200, 'on' => 'create, update, updateProfile'),
 			array('	legal_number', 
 					'length', 'max' => 50, 'on' => 'create, update, updateProfile'),
-			array('	legal_address', 
+			array('	legal_address,
+					legal_bank', 
 					'length', 'max' => 16000, 'on' => 'create, update, updateProfile'),
 			array('	legal_type', 
 					'in', 'range' => array_keys(self::getListLegalTypes()), 'on' => 'create, update, updateProfile'),
